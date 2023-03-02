@@ -2,13 +2,16 @@ package model;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public abstract class Task {
+	
+	//TODO: Add private String title;
 
 	private String taskID;
-	private Date startDate;
-	private Date finishDate;
+	private Calendar startDate;
+	private Calendar finishDate;
 	private TaskStatus status;
 	private String description;
 	private int priority;
@@ -16,13 +19,13 @@ public abstract class Task {
 	
 	//Assosiations
 	private List<SparePart> spareParts;
-	private Technician assignedTechnician;
+	private Employee assignedTechnician;
 	private List<Measurement> measurements;
 	
 	//Constructor
 	//Full constructor, this will be used to create this model from the database.
-	public Task(String taskID, Date startDate, Date finishDate, TaskStatus status, String description, int priority,
-			List<String> notes, List<SparePart> spareParts, Technician assignedTechnician,
+	public Task(String taskID, Calendar startDate, Calendar finishDate, TaskStatus status, String description, int priority,
+			List<String> notes, List<SparePart> spareParts, Employee assignedTechnician,
 			List<Measurement> measurements) {
 		this.taskID = taskID;
 		this.startDate = startDate;
@@ -44,16 +47,16 @@ public abstract class Task {
 	public void setTaskID(String taskID) {
 		this.taskID = taskID;
 	}
-	public Date getStartDate() {
+	public Calendar getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(Date startDate) {
+	public void setStartDate(Calendar startDate) {
 		this.startDate = startDate;
 	}
-	public Date getFinishDate() {
+	public Calendar getFinishDate() {
 		return finishDate;
 	}
-	public void setFinishDate(Date finishDate) {
+	public void setFinishDate(Calendar finishDate) {
 		this.finishDate = finishDate;
 	}
 	public TaskStatus getStatus() {
@@ -86,10 +89,10 @@ public abstract class Task {
 	public void setSpareParts(List<SparePart> spareParts) {
 		this.spareParts = spareParts;
 	}
-	public Technician getAssignedTechnician() {
+	public Employee getAssignedTechnician() {
 		return assignedTechnician;
 	}
-	public void setAssignedTechnician(Technician assignedTechnician) {
+	public void setAssignedTechnician(Employee assignedTechnician) {
 		this.assignedTechnician = assignedTechnician;
 	}
 	public List<Measurement> getMeasurements() {
