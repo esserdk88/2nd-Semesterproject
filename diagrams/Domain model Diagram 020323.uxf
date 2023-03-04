@@ -11,7 +11,6 @@
     </coordinates>
     <panel_attributes>Enhed
 -
-id
 Navn
 Anskafelsesdato
 Beskrivelse
@@ -58,7 +57,7 @@ Pris
       <w>150</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>Tekniker
+    <panel_attributes>Ansat
 -
 Medarbejdernummer
 CPR nummer
@@ -105,7 +104,7 @@ Reference
     </coordinates>
     <panel_attributes>Opgave
 -
-id
+Titel
 Startdato
 Slutdato
 Status
@@ -147,8 +146,7 @@ Notat</panel_attributes>
     <panel_attributes>Vedligeholdelse
 -
 Gentages
-Dag
-Måned</panel_attributes>
+Frekvens</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -202,7 +200,7 @@ m2=*
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=-
-m1=1..*
+m1=*
 m2=*
 Udfører &gt;</panel_attributes>
     <additional_attributes>10.0;20.0;360.0;20.0</additional_attributes>
@@ -257,7 +255,7 @@ opholder sig &gt;</panel_attributes>
       <w>120</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>Stamdata
+    <panel_attributes>Person
 -
 Navn
 Adresse
@@ -367,5 +365,36 @@ Udløbdato</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>220</x>
+      <y>550</y>
+      <w>150</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Certifikater
+-
+Navn
+Udstedelssesdato
+Udløbsdato
+CertifikatNummer
+Udsteder</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>460</y>
+      <w>90</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=*
+m2=1
+Udfører &gt;</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
