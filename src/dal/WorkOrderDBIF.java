@@ -8,7 +8,7 @@ import model.AssetStatus;
 import model.Location;
 import model.TaskStatus;
 
-public interface TaskDBIF {
+public interface WorkOrderDBIF {
 	//TODO: How do we get the task and Asset assosiated in the database? - AssetID?
 
 	//CRUD
