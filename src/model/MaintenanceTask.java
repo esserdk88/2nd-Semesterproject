@@ -4,13 +4,13 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
 
-public class MaintenanceTask extends Task {
+public class MaintenanceTask extends Workorder {
 
 	private boolean repeatable;
 	private int repeatIntervalDay;
 	private int repeatIntervalMonth;
 	
-	public MaintenanceTask(String taskID, Calendar startDate, Calendar finishDate, TaskStatus status, String description,
+	public MaintenanceTask(String taskID, Calendar startDate, Calendar finishDate, WorkorderStatus status, String description,
 			int priority, List<String> notes, List<SparePart> spareParts, Employee assignedTechnician,
 			List<Measurement> measurements, boolean repeatable, int repeatIntervalDay, int repeatIntervalMonth) {
 		super(taskID, startDate, finishDate, status, description, priority, notes, spareParts, assignedTechnician,

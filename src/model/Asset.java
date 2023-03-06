@@ -14,7 +14,7 @@ public class Asset {
 	
 	//Assosiations
 	
-	private List<Task> tasks;
+	private List<Workorder> tasks;
 	private Location location;
 
 }

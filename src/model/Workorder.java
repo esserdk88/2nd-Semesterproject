@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public abstract class Task {
+public abstract class Workorder {
 	
 	//TODO: Add private String title;
 
 	private String taskID;
 	private Calendar startDate;
 	private Calendar finishDate;
-	private TaskStatus status;
+	private WorkorderStatus status;
 	private String description;
 	private int priority;
 	private List<String> notes;
@@ -24,7 +24,7 @@ public abstract class Task {
 	
 	//Constructor
 	//Full constructor, this will be used to create this model from the database.
-	public Task(String taskID, Calendar startDate, Calendar finishDate, TaskStatus status, String description, int priority,
+	public Workorder(String taskID, Calendar startDate, Calendar finishDate, WorkorderStatus status, String description, int priority,
 			List<String> notes, List<SparePart> spareParts, Employee assignedTechnician,
 			List<Measurement> measurements) {
 		this.taskID = taskID;
@@ -59,10 +59,10 @@ public abstract class Task {
 	public void setFinishDate(Calendar finishDate) {
 		this.finishDate = finishDate;
 	}
-	public TaskStatus getStatus() {
+	public WorkorderStatus getStatus() {
 		return status;
 	}
-	public void setStatus(TaskStatus status) {
+	public void setStatus(WorkorderStatus status) {
 		this.status = status;
 	}
 	public String getDescription() {

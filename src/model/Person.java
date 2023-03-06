@@ -4,19 +4,18 @@ public abstract class Person {
 	
 	private String name;
 	private String streetName;
-	private String houseNumber;
-	private String zipcode;
+	private int streetNumber;
+	private String postalcode;
 	private String cityName;
 	private String phoneNumber;
 	private String email;
 	
-	public Person(String name, String streetName, String houseNumber, String zipcode, String cityName,
+	public Person(String name, String streetName, int streetNumber, String postalcode, String cityName,
 			String phoneNumber, String email) {
-		super();
 		this.name = name;
 		this.streetName = streetName;
-		this.houseNumber = houseNumber;
-		this.zipcode = zipcode;
+		this.streetNumber = streetNumber;
+		this.postalcode = postalcode;
 		this.cityName = cityName;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
@@ -38,20 +37,20 @@ public abstract class Person {
 		this.streetName = streetName;
 	}
 
-	public String getHouseNumber() {
-		return houseNumber;
+	public int getHouseNumber() {
+		return streetNumber;
 	}
 
-	public void setHouseNumber(String houseNumber) {
-		this.houseNumber = houseNumber;
+	public void setHouseNumber(int streetNumber) {
+		this.streetNumber = streetNumber;
 	}
 
 	public String getZipcode() {
-		return zipcode;
+		return postalcode;
 	}
 
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
+	public void setZipcode(String postalcode) {
+		this.postalcode = postalcode;
 	}
 
 	public String getCityName() {

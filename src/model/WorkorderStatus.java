@@ -1,6 +1,6 @@
 package model;
 
-public enum TaskStatus {
+public enum WorkorderStatus {
 	NOT_STARTED,
 	STARTED,
 	HALTED,

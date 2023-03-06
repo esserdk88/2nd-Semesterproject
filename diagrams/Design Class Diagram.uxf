@@ -1,1 +1,232 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><umlet_diagram></umlet_diagram>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>990</x>
+      <y>170</y>
+      <w>280</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Model::Department
+-
+-id:int
+-streetName:String
+-streetNumber:int
+-postalcode:String
+-cityName:String
+-
+&lt;&lt;create&gt;&gt; (id:int,streetName:String,streetNumber:int,postalcode:String,cityName:String)
+-
+Get/Set for all fields
+-
++toString():String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1350</x>
+      <y>170</y>
+      <w>280</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Model::Location
+-
+-id:int
+-buildingName:String
+-floor:String
+-room:String
+-department:Deparrtment
+-
+&lt;&lt;create&gt;&gt; (id:int,buildingName:String,floor:String,room:String,department:Department)
+-
+Get/Set for all fields</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1090</x>
+      <y>410</y>
+      <w>280</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Model::Asset
+-
+TODO</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>420</y>
+      <w>370</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Model::Employee
+-
+-id:int
+-employeeNumber:String
+-socialSecurityNumber:String
+-dateOfEmployment:Calender
+-jobTitle:String
+-certificates:List&lt;Certificate&gt;
+-
+&lt;&lt;create&gt;&gt; 
+(id:int,name:String,
+streetName:String,streetNumber:int,
+postalcode:String,cityName:String,
+phoneNumber:String,email:String,
+employeeNumber:String,socialSecurityNumber:String,
+dateOfEmployment:Calender,jobTitle:String,
+certificates:List&lt;Certificate&gt;)
+-
+Get/set for all fields and superclass
+-
++addCertificate(c:Certificate):boolean
++getCertificateByIndex(index:int):Certificate
++removeCertifficateByIndex(index:int):Certificate</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1400</x>
+      <y>650</y>
+      <w>280</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Model::MaintenanceTask
+-
+TODO</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>410</y>
+      <w>280</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Model::SparePart
+-
+TODO</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>380</x>
+      <y>0</y>
+      <w>310</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+&lt;&lt;Abstract&gt;&gt;
+Model::Person
+-
+-name:String
+-streetName:String
+-streetNumber:int
+-postalcode:String
+-cityName:String
+-phoneNumber:String
+-email:String
+-
+&lt;&lt;create&gt;&gt; (name:String,streetName:String,streetNumber:int,postalcode:String,cityName:String,phoneNumber:String,email:String)
+-
+Get/set for all fields
+-</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>650</y>
+      <w>280</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Model::Supplier
+-
+TODO</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1400</x>
+      <y>880</y>
+      <w>280</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Model::Workorder
+-
+TODO</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1110</x>
+      <y>880</y>
+      <w>280</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Model::Measurement
+-
+TODO</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>250</y>
+      <w>30</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>830</y>
+      <w>330</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Model::Certificate
+-
+-id:int
+-name:String
+-issuanceDate:Calender
+-expirationDate:Calender
+-number:String
+-issurer:String
+-
+&lt;&lt;create&gt;&gt; (id:int,name:String,
+issuanceDate:Calender,expirationDate:Calender,
+number:String,issurer:String)
+
+-
+Get/set for all fields
+-</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

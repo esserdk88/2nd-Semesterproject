@@ -3,7 +3,7 @@ package dal;
 import java.util.Calendar;
 import java.util.List;
 import model.Employee;
-import model.TaskStatus;
+import model.WorkorderStatus;
 
 public interface EmployeeDBIF {
 
