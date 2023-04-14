@@ -26,7 +26,10 @@ public class EmployeeDB implements EmployeeDBIF {
 	private String EMPLOYEE_TABLE = "Employee";
 	private String QUERY_EMPLOYEE_BY_ID = "Select " + EMPLOYEE_COLUMNS +" From " + EMPLOYEE_TABLE +" Where Employee_ID = ?";
 	private String UPDATE_EMPLOYEE = "Update " + EMPLOYEE_TABLE + " SET " + EMPLOYEE_COLUMNS + " Values (?,?,?,?,?,?,?,?) Where Employee_ID = ?";
-
+	
+	private final String FIND_EMPLOYEE_BY_ID = "unfinished String"; //TODO finish string when skema is done.
+	
+	
 	private String listToString(ArrayList<String> list, boolean keepID) {
 		String outputString = "";
 		
@@ -85,6 +88,14 @@ public class EmployeeDB implements EmployeeDBIF {
 		System.out.println("Columns: "+EMPLOYEE_COLUMNS);
 		System.out.println("Select by ID: "+QUERY_EMPLOYEE_BY_ID);
 		System.out.println("Update: "+UPDATE_EMPLOYEE);
+	}
+
+	@Override
+	public Employee findEmployeeByID(int EmployeeID, boolean withRelations) {
+		Employee employee = null;
+		Connection con = DBConnection.getInstance().getDBcon();
+		
+		return null;
 	}
 
 }
