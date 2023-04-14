@@ -9,13 +9,20 @@ public abstract class Workorder {
 	
 	//TODO: Add private String title;
 
-	private String taskID;
+	private int workOrderID; //changed from taskId to workOrderID. Datatype also changed to int from String
 	private Calendar startDate;
-	private Calendar finishDate;
+	private Calendar endDate; //changed from finishedDate to endDate;
 	private WorkorderStatus status;
 	private String description;
-	private int priority;
+	private short  priority; //datatype changed from int to short
 	private List<String> notes;
+	
+	//DCD implemented fields
+	//Old fields mey need to be removed
+	private Asset asset;
+	private String title;
+	private String type;
+	private boolean finished;
 	
 	//Assosiations
 	private List<SparePart> spareParts;
@@ -24,12 +31,12 @@ public abstract class Workorder {
 	
 	//Constructor
 	//Full constructor, this will be used to create this model from the database.
-	public Workorder(String taskID, Calendar startDate, Calendar finishDate, WorkorderStatus status, String description, int priority,
+	public Workorder(int taskID, Calendar startDate, Calendar finishDate, WorkorderStatus status, String description, short priority,
 			List<String> notes, List<SparePart> spareParts, Employee assignedTechnician,
 			List<Measurement> measurements) {
-		this.taskID = taskID;
+		this.workOrderID = taskID;
 		this.startDate = startDate;
-		this.finishDate = finishDate;
+		this.endDate = finishDate;
 		this.status = status;
 		this.description = description;
 		this.priority = priority;
@@ -40,24 +47,45 @@ public abstract class Workorder {
 		this.measurements = measurements;
 	}
 	
-	//Getters and Setters
-	public String getTaskID() {
-		return taskID;
+	public Workorder(Asset asset, String title, String type, String description) {
+		this.asset = asset;
+		this.title = title;
+		this.type = type;
+		this.description = description;
 	}
-	public void setTaskID(String taskID) {
-		this.taskID = taskID;
+	
+	public Workorder(int id, Asset asset, String title, String type, String description, boolean finished,
+			Calendar startDate, Calendar endDate, short priority) {
+		this.workOrderID = id;
+		this.asset = asset;
+		this.title = title;
+		this.type = type;
+		this.description = description;
+		this.finished = finished;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.priority = priority;
+	}
+	
+	
+	
+	public Calendar getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Calendar endDate) {
+		this.endDate = endDate;
+	}
+	public boolean isFinished() {
+		return finished;
+	}
+	public void setFinished(boolean finished) {
+		this.finished = finished;
 	}
 	public Calendar getStartDate() {
 		return startDate;
 	}
 	public void setStartDate(Calendar startDate) {
 		this.startDate = startDate;
-	}
-	public Calendar getFinishDate() {
-		return finishDate;
-	}
-	public void setFinishDate(Calendar finishDate) {
-		this.finishDate = finishDate;
 	}
 	public WorkorderStatus getStatus() {
 		return status;
@@ -74,7 +102,7 @@ public abstract class Workorder {
 	public int getPriority() {
 		return priority;
 	}
-	public void setPriority(int priority) {
+	public void setPriority(short priority) {
 		this.priority = priority;
 	}
 	public List<String> getNotes() {
