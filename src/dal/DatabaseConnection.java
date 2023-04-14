@@ -18,9 +18,6 @@ public class DatabaseConnection {
     		other.Login.DATABASENAME,
     		other.Login.USERNAME,
     		other.Login.PASSWORD);
-    
-    private String url = String.format("jdbc:sqlserver://localhost:1433;databaseName=%s;encrypt=true;trustServerCertificate=true;",other.Login.DATABASENAME);
-
     // Method for getting the singleton instance of the class
     public static  DatabaseConnection getInstance() {
         if (instance == null) {
@@ -32,8 +29,7 @@ public class DatabaseConnection {
     // Method for getting the database connection
     public Connection getConnection() throws SQLException {
     	Connection connection;
-            connection = DriverManager.getConnection(url,other.Login.USERNAME,other.Login.PASSWORD);
-//        	connection = DriverManager.getConnection(CONNECTION_STRING);
+        	connection = DriverManager.getConnection(CONNECTION_STRING);
         return connection;
     }
 
