@@ -15,4 +15,7 @@ public interface EmployeeDBIF {
 	
 	//More
 	public List<Employee> getAllEmployees();
+	
+	//find Specific employee
+	public Employee findEmployeeByID(int EmployeeID, boolean withRelations);
 }
