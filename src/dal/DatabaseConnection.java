@@ -13,7 +13,8 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
 
     // Connection string for connecting to SQL Server
-    private static final String CONNECTION_STRING = String.format("jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCertificate=true;databaseName=%s;user=%s;password=%s;",
+    private static final String CONNECTION_STRING = String.format("jdbc:sqlserver://%s:1433;encrypt=true;trustServerCertificate=true;databaseName=%s;user=%s;password=%s;",
+    		other.Login.HOSTNAME,
     		other.Login.DATABASENAME,
     		other.Login.USERNAME,
     		other.Login.PASSWORD);
