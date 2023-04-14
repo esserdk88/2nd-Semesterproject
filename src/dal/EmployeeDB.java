@@ -1,6 +1,9 @@
 package dal;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -93,9 +96,43 @@ public class EmployeeDB implements EmployeeDBIF {
 	@Override
 	public Employee findEmployeeByID(int EmployeeID, boolean withRelations) {
 		Employee employee = null;
-		Connection con = DBConnection.getInstance().getDBcon();
+		Connection con = null;
+		ResultSet rs = null;
+		try {
+			con = DatabaseConnection.getInstance().getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Failed connecting to database in EmployeeDB. Cause "+ e.getMessage());
+			e.printStackTrace();
+		}
+		
+		try (PreparedStatement psFindEmployee = con.prepareStatement(FIND_EMPLOYEE_BY_ID)) {
+			psFindEmployee.setInt(1, EmployeeID);
+			rs = psFindEmployee.executeQuery();
+			
+			if(rs != null && rs.next()) {
+				employee = buildObject(rs);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Failed connecting to database in EmployeeDB. Cause "+ e.getMessage());
+			e.printStackTrace();
+		}
 		
 		return null;
+	}
+	
+	//TODO update resultset get String to match actual database coloums
+	private Employee buildObject(ResultSet rs) {
+		Employee employee = null;
+		try {
+			String name = rs.getString("name");
+			String phone = rs.getString("phone");
+		}
+		catch (Exception e) {
+			System.out.println("Failed connecting to database in EmployeeDB. Cause "+ e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 }
