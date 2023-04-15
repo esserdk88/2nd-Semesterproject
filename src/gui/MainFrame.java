@@ -12,10 +12,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
+	private JPanel currentCenterPanel;
 
 	/**
 	 * Launch the application.
@@ -45,11 +48,14 @@ public class MainFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new BorderLayout(5, 5));
 		
 		JPanel topPanel = new JPanel();
 		contentPane.add(topPanel, BorderLayout.NORTH);
 		
+		JPanel centerPanel = new JPanel();
+		contentPane.add(centerPanel, BorderLayout.CENTER);
+		currentCenterPanel = centerPanel;
 		JLabel menulabel = new JLabel("Mainmenu");
 		menulabel.setFont(new Font("Tahoma", Font.BOLD, 24));
 		topPanel.add(menulabel);
@@ -64,6 +70,12 @@ public class MainFrame extends JFrame {
 		leftPanel.setLayout(gbl_leftPanel);
 		
 		JButton assetButton = new JButton("Asset");
+		assetButton.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+			        JPanel center = new AssetOverview();
+			        setNewCenterPanel(center);
+			    }
+		});
 		assetButton.setMargin(new Insets(4, 26, 4, 26));
 		GridBagConstraints gbc_assetButton = new GridBagConstraints();
 		gbc_assetButton.gridwidth = 2;
@@ -83,18 +95,18 @@ public class MainFrame extends JFrame {
 		leftPanel.add(workOrderButton, gbc_workOrderButton);
 		
 		JButton employeeButton = new JButton("Ansatte");
+		employeeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JPanel center = new EmployeeOverview();
+		        setNewCenterPanel(center);
+			}
+		});
 		employeeButton.setMargin(new Insets(4, 26, 4, 26));
 		GridBagConstraints gbc_employeeButton = new GridBagConstraints();
 		gbc_employeeButton.fill = GridBagConstraints.BOTH;
 		gbc_employeeButton.gridx = 0;
 		gbc_employeeButton.gridy = 2;
 		leftPanel.add(employeeButton, gbc_employeeButton);
-		
-		JPanel centerPanel = new JPanel();
-		contentPane.add(centerPanel, BorderLayout.CENTER);
-		
-		JPanel rightPanel = new JPanel();
-		contentPane.add(rightPanel, BorderLayout.EAST);
 		
 		JPanel bottomPanel = new JPanel();
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
@@ -119,7 +131,13 @@ public class MainFrame extends JFrame {
 		gbc_exitButton.fill = GridBagConstraints.BOTH;
 		gbc_exitButton.gridx = 58;
 		gbc_exitButton.gridy = 0;
-		bottomPanel.add(exitButton, gbc_exitButton);
+		bottomPanel.add(exitButton, gbc_exitButton);	
 	}
-
+	private void setNewCenterPanel(JPanel newPanel) {
+        contentPane.remove(currentCenterPanel);
+        contentPane.add(newPanel, BorderLayout.CENTER);
+        contentPane.revalidate();
+        contentPane.repaint();
+        currentCenterPanel = newPanel;
+	}
 }
