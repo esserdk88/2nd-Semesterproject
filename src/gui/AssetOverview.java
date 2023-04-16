@@ -11,6 +11,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import java.awt.Component;
+import java.awt.Dimension;
+
+import javax.swing.Box;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AssetOverview extends JPanel {
 	private JTextField txtSg;
@@ -48,12 +54,18 @@ public class AssetOverview extends JPanel {
 		add(centerPanel, BorderLayout.CENTER);
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
 		
-		JScrollPane assetPanel = new JScrollPane();
-		
+		JPanel assetPanel = new JPanel();
 		centerPanel.add(assetPanel);
+		assetPanel.setLayout(new BorderLayout(0, 0));
+		JScrollPane assetSrollPanel = new JScrollPane();
+		assetPanel.add(assetSrollPanel, BorderLayout.CENTER);
 		String[] columns1 = new String[] { "Column", "Column1", "Column2", "Column3" };
 		DefaultTable assetTable = new DefaultTable(null, columns1);
-		assetPanel.setViewportView(assetTable);
+		assetSrollPanel.setViewportView(assetTable);
+		
+		JPanel fillerPanel = new JPanel();
+		fillerPanel.setLayout(new GridLayout(15, 1, 5, 5));
+		assetPanel.add(fillerPanel, BorderLayout.EAST);
 		JPanel textFieldPanel = new JPanel();
 		centerPanel.add(textFieldPanel);
 		textFieldPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -124,16 +136,27 @@ public class AssetOverview extends JPanel {
 		
 		JPanel workOrderButtonPanel = new JPanel();
 		workOrderPanel.add(workOrderButtonPanel, BorderLayout.EAST);
-		workOrderButtonPanel.setLayout(new GridLayout(15, 1, 5, 5));
+		workOrderButtonPanel.setLayout(new BoxLayout(workOrderButtonPanel, BoxLayout.Y_AXIS));
 		
 		JButton addNewButton = new JButton("Tilføj ny");
 		workOrderButtonPanel.add(addNewButton);
+		addNewButton.setMaximumSize(new Dimension(80, 23));
+		addNewButton.setPreferredSize(new Dimension(80, 23));
+		addNewButton.setMinimumSize(new Dimension(30, 5));
 		
 		JButton editButton = new JButton("Rediger");
 		workOrderButtonPanel.add(editButton);
+		editButton.setMaximumSize(new Dimension(80, 23));
+		editButton.setPreferredSize(new Dimension(80, 23));
+		editButton.setMinimumSize(new Dimension(30, 5));
 		
 		JButton deleteButton = new JButton("Slet");
 		workOrderButtonPanel.add(deleteButton);
+		deleteButton.setMaximumSize(new Dimension(80, 23));
+		deleteButton.setPreferredSize(new Dimension(80, 23));
+		deleteButton.setMinimumSize(new Dimension(30, 5));
+		
+		
 		
 		
 	}

@@ -9,6 +9,9 @@ import java.awt.Component;
 import javax.swing.Box;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
+import java.awt.Dimension;
 
 public class EmployeeOverview extends JPanel {
 
@@ -20,22 +23,34 @@ public class EmployeeOverview extends JPanel {
 		
 		JPanel rightPanel = new JPanel();
 		add(rightPanel, BorderLayout.EAST);
-		rightPanel.setLayout(new GridLayout(30, 1, 1, 5));
 		
 		JButton createButton = new JButton("Opret");
+		createButton.setMaximumSize(new Dimension(80, 23));
+		createButton.setPreferredSize(new Dimension(80, 23));
+		createButton.setMinimumSize(new Dimension(30, 5));
 		createButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		rightPanel.add(createButton);
 		
 		JButton editButton = new JButton("Rediger");
+		editButton.setMaximumSize(new Dimension(80, 23));
+		editButton.setPreferredSize(new Dimension(80, 23));
+		editButton.setMinimumSize(new Dimension(30, 5));
 		rightPanel.add(editButton);
 		
 		JButton showButton = new JButton("Se");
+		showButton.setMaximumSize(new Dimension(80, 23));
+		showButton.setPreferredSize(new Dimension(80, 23));
+		showButton.setMinimumSize(new Dimension(30, 5));
 		rightPanel.add(showButton);
 		
 		JButton deleteButton = new JButton("Slet");
+		deleteButton.setMaximumSize(new Dimension(80, 23));
+		deleteButton.setPreferredSize(new Dimension(80, 23));
+		deleteButton.setMinimumSize(new Dimension(30, 5));
 		rightPanel.add(deleteButton);
 		
 		
