@@ -95,7 +95,7 @@ setLayout(new BorderLayout(0, 0));
 		gbc_btnFindEmployee.gridy = 1;
 		centerLeftPanel.add(btnFindEmployee, gbc_btnFindEmployee);
 		
-		JLabel lblAssetID = new JLabel("ID");
+		JLabel lblAssetID = new JLabel("Maskine ID");
 		GridBagConstraints gbc_lblAssetID = new GridBagConstraints();
 		gbc_lblAssetID.fill = GridBagConstraints.BOTH;
 		gbc_lblAssetID.weighty = 0;
