@@ -1,22 +1,28 @@
 package model;
 
 import java.util.Calendar;
+import java.util.List;
+
+/*
+ * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
+ */
 
 public class Maintenance extends Workorder {
 	
 	private boolean repeated;
 	private int intervalDayCount;
 	
-	public Maintenance(Asset asset, String title, String description, boolean repeated, int intervalDayCount) {
-		super(asset, title, "Maintenance", description); 
-		this.repeated = repeated;
-		this.intervalDayCount = intervalDayCount;
+	public Maintenance() {
+		super();
 	}
-	
-	public Maintenance(int id, Asset a, String title, String description, boolean finished, Calendar startDate, Calendar endDate, 
-			short priority, boolean repeaded, int intervalDayCount) {
-		super(id, a, title, "Maintenance", description, finished, startDate, endDate, priority);
-		this.repeated = repeaded;
+
+	public Maintenance(boolean repeated, int intervalDayCount, int workOrderID, String title, String type, 
+			Calendar startDate, Calendar endDate, short priority, String description, boolean finished, 
+			List<SparepartUsed> sparepartsUsed, Asset asset, Employee employee,
+			List<Measurement> measurements) {
+		super(workOrderID, title, type, startDate, endDate, priority, description, 
+				finished, sparepartsUsed, asset, employee, measurements);
+		this.repeated = repeated;
 		this.intervalDayCount = intervalDayCount;
 	}
 
@@ -35,6 +41,5 @@ public class Maintenance extends Workorder {
 	public void setIntervalDayCount(int intervalDayCount) {
 		this.intervalDayCount = intervalDayCount;
 	}
-	
 
 }

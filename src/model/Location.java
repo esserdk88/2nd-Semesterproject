@@ -1,5 +1,10 @@
 package model;
 
+/*
+ * 19-04-2023: Review done by Rasmus and Mikkel - DCD vs. Code.
+ * No changes done.
+ */
+
 public class Location {
 	
 	private String building;

@@ -1,0 +1,871 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>651</x>
+      <y>868</y>
+      <w>273</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Asset
+--
+-assetID:int
+-name:String
+-description:String
+-acqusitionDate:Calendar
+-status:String
+-manufacturer:String
+--
++&lt;&lt;create&gt;&gt; Asset(assetID:int, name:String,description:String,
+ acqusitionDate:Calendar, status:String, manufacturer:String, 
+ location:Location)
++&lt;&lt;create&gt;&gt; Asset()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>301</x>
+      <y>868</y>
+      <w>266</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>/WorkOrder/
+--
+-workOrderID:int
+-title:String
+-type:String
+-startDate:Calendar
+-endDate:Calendar
+-priority:short
+-description:String
+-finished:boolean
+--
++&lt;&lt;create&gt;&gt;Workorder()
++&lt;&lt;create&gt;&gt; WorkOrder(workOrderID:int, title:String,
+type:String, startDate:Calendar, endDate:Calendar,
+priority:short, description:String, finished:boolean,
+sparepartsUsed:List&lt;SparepartUsed&gt;, asset:Asset,
+employee:Employee, measurements:List&lt;Measurement&gt;)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1127</x>
+      <y>826</y>
+      <w>329</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>Employee
+--
+-employeeID:int
+-departmentNumber:String
+-cprNumber:String
+-startDate:Calendar
+-position:String
+--
++&lt;&lt;create&gt;&gt;Employee()
++&lt;&lt;create&gt;&gt; Employee(employeeID:int, departmentNumber:String,
+cprNumber:String, startDate:Calendar, position:String, name:String,
+phone:String, email:String, address:Address)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>651</x>
+      <y>161</y>
+      <w>252</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>AssetController 
+--
+-assetDB:AssetDBIF
+--
++&lt;&lt;create&gt;&gt; AssetController(assetDB:AssetDBIF)
++findAssetByID(id:int):Asset
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>245</x>
+      <y>161</y>
+      <w>371</w>
+      <h>175</h>
+    </coordinates>
+    <panel_attributes>WorkOrdreController 
+--
+-workOrderDB:WorkOrderDBIF
+--
++ &lt;&lt;create&gt;&gt; WorkOrdreController(workOrderDB:WorkOrderDBIF)
++ addRepairWorkOrder(a:Asset, title:String, description:String,
+    price:double, reference:Reference):boolean
++ addServiceWorkOrder(a:Asset, title:String,
+    description:String, reference:Reference):boolean
++ addMaintenaceWorkOrder(a:Asset, title:String,
+    description:String, repeated:boolean, intervalDayCount:int):boolean
++findWorkOrderByID(id:int):WorkOrder
++findEmployeeByID(id:int):Employee
++assignEmployeeToWorkOrder(e:Employee, w:WorkOrder):boolean
++updateWorkOrderStatus(newStatus:boolean, w:WorkOrder):boolean
++ createWorkOrder(a:Asset, title:String, type:TaskType, description:String):boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>987</x>
+      <y>161</y>
+      <w>273</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>EmployeeController 
+--
+-employeeDB:EmployeeDBIF
+--
++ &lt;&lt;create&gt;&gt; EmployeeController(employeeDB:EmployeeDBIF)
++ findEmployeeByID(id:int):Employee
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>987</x>
+      <y>364</y>
+      <w>182</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>EmployeeDB
+--
+
+--
++ &lt;&lt;create&gt;&gt; EmployeeDB()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>707</x>
+      <y>364</y>
+      <w>133</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>AssetDB
+--
+
+--
++ &lt;&lt;create&gt;&gt; AssetDB()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>343</x>
+      <y>364</y>
+      <w>189</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>WorkOrderDB
+--
+
+--
++ &lt;&lt;create&gt;&gt; WorkOrderDB()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1071</x>
+      <y>217</y>
+      <w>21</w>
+      <h>161</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;210.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1064</x>
+      <y>413</y>
+      <w>98</w>
+      <h>427</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>120.0;590.0;120.0;310.0;10.0;310.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>329</y>
+      <w>21</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>413</y>
+      <w>21</w>
+      <h>469</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;650.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>763</x>
+      <y>217</y>
+      <w>21</w>
+      <h>161</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;210.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>763</x>
+      <y>413</y>
+      <w>21</w>
+      <h>469</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;650.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>609</x>
+      <y>189</y>
+      <w>56</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>609</x>
+      <y>0</y>
+      <w>392</w>
+      <h>203</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>540.0;270.0;500.0;270.0;500.0;10.0;40.0;10.0;40.0;260.0;10.0;260.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>525</x>
+      <y>385</y>
+      <w>196</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>260.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>196</x>
+      <y>273</y>
+      <w>231</w>
+      <h>609</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>310.0;850.0;310.0;240.0;10.0;240.0;10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>77</x>
+      <y>1120</y>
+      <w>252</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>Repair
+--
+-price:double
+--
++&lt;&lt;create&gt;&gt; Repair()
++&lt;&lt;create&gt;&gt; Repair(price:double, reference:Reference, 
+workOrderID:int, title:String, 
+type:String, startDate:Calendar, endDate:Calendar, 
+priority:short, description:String, 
+finished:boolean, sparepartsUsed:List&lt;SparepartUsed&gt;, 
+asset:Asset, employee:Employee, 
+measurements:List&lt;Measurement&gt;)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>343</x>
+      <y>1120</y>
+      <w>259</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>Service
+--
++&lt;&lt;create&gt;&gt; Service()
++&lt;&lt;create&gt;&gt; Service(reference:Reference, 
+workOrderID:int, title:String, 
+type:String, startDate:Calendar, endDate:Calendar, 
+priority:short, description:String, 
+finished:boolean, sparepartsUsed:List&lt;SparepartUsed&gt;, 
+asset:Asset, employee:Employee, 
+measurements:List&lt;Measurement&gt;)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>616</x>
+      <y>1120</y>
+      <w>259</w>
+      <h>161</h>
+    </coordinates>
+    <panel_attributes>Maintenace
+--
+-repeated:boolean
+-intervalDayCount:int
+--
++&lt;&lt;create&gt;&gt; Maintenace()
++&lt;&lt;create&gt;&gt; Maintenace(repeated:boolean, 
+intervalDayCount:int, workOrderID:int, title:String, 
+type:String, startDate:Calendar, endDate:Calendar, 
+priority:short, description:String, 
+finished:boolean, sparepartsUsed:List&lt;SparepartUsed&gt;, 
+asset:Asset, employee:Employee, 
+measurements:List&lt;Measurement&gt;)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>469</x>
+      <y>1057</y>
+      <w>21</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>469</x>
+      <y>1057</y>
+      <w>294</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;400.0;50.0;400.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>196</x>
+      <y>1057</y>
+      <w>294</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>400.0;10.0;400.0;50.0;10.0;50.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1078</x>
+      <y>1120</y>
+      <w>238</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>Address
+--
+-cityName:String
+-zipCode:String
+-streetName:String
+-streetNumber:String
+--
++&lt;&lt;create&gt;&gt; Address(cityName:String, zipCode:String,
+   streetName:String, streetNumber:String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>882</x>
+      <y>1120</y>
+      <w>161</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>Location
+--
+-building:String
+-floor:String
+-room:String
+--
++&lt;&lt;create&gt;&gt; Location(building:String,
+   floor:String, room:String, 
+   address:Address)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>777</x>
+      <y>1001</y>
+      <w>154</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m2=-location:Location</panel_attributes>
+    <additional_attributes>200.0;170.0;200.0;110.0;10.0;110.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>833</x>
+      <y>378</y>
+      <w>273</w>
+      <h>756</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>370.0;1060.0;370.0;400.0;120.0;400.0;120.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>924</x>
+      <y>378</y>
+      <w>196</w>
+      <h>756</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>260.0;1060.0;260.0;380.0;10.0;380.0;10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>987</x>
+      <y>1211</y>
+      <w>154</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m2=-address:Address</panel_attributes>
+    <additional_attributes>200.0;10.0;200.0;50.0;10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>273</x>
+      <y>28</y>
+      <w>315</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+:WorkOrderDBIF
+--
+
+--
++ findWorkOrderByID(id:int):WorkOrder
++ addWorkOrder(w:WorkOrder):boolean
++ assignEmployeeToWorkOrder(e:Employee, w:WorkOrder):boolean
++ updateWorkOrderStatus(newStatus:boolean, w:WorkOrder):boolean
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>42</y>
+      <w>147</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+:AssetDBIF
+--
+
+--
++ findAssetByID(id:int):Asset</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>994</x>
+      <y>35</y>
+      <w>182</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+:EmployeeDBIF
+--
+
+--
++ findEmployeeByID(id:int):Employee
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>427</x>
+      <y>119</y>
+      <w>21</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>763</x>
+      <y>98</y>
+      <w>21</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1071</x>
+      <y>91</y>
+      <w>21</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>161</x>
+      <y>77</y>
+      <w>196</w>
+      <h>329</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>260.0;450.0;10.0;450.0;10.0;10.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>798</x>
+      <y>63</y>
+      <w>140</w>
+      <h>315</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;430.0;10.0;320.0;180.0;320.0;180.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1162</x>
+      <y>56</y>
+      <w>133</w>
+      <h>350</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;480.0;170.0;480.0;170.0;10.0;20.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>588</x>
+      <y>329</y>
+      <w>1253</w>
+      <h>518</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>1770.0;720.0;1770.0;400.0;10.0;400.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>462</x>
+      <y>910</y>
+      <w>1477</w>
+      <h>441</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m2=-reference:Reference</panel_attributes>
+    <additional_attributes>2090.0;10.0;2090.0;600.0;10.0;610.0;10.0;480.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>189</x>
+      <y>910</y>
+      <w>1722</w>
+      <h>427</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m2=-reference:Reference</panel_attributes>
+    <additional_attributes>2440.0;10.0;2440.0;580.0;10.0;590.0;10.0;490.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1176</x>
+      <y>910</y>
+      <w>707</w>
+      <h>406</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m2=-address:Address</panel_attributes>
+    <additional_attributes>10.0;440.0;10.0;560.0;880.0;560.0;880.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>875</y>
+      <w>231</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>Measurement
+--
+-title:String
+-value:double
+--
++ &lt;&lt;create&gt;&gt; Measurement(titel:String, value:double)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>112</x>
+      <y>945</y>
+      <w>203</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=-measurements:List&lt;Measurement&gt;</panel_attributes>
+    <additional_attributes>270.0;60.0;10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>560</x>
+      <y>952</y>
+      <w>763</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=-employee:Employee</panel_attributes>
+    <additional_attributes>10.0;150.0;1070.0;150.0;1070.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>560</x>
+      <y>931</y>
+      <w>105</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=-asset:Asset</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1246</x>
+      <y>630</y>
+      <w>231</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>/MasterData/
+--
+-name:String
+-phone:String
+-email:String
+--
++&lt;&lt;create&gt;&gt; MasterData()
++ &lt;&lt;create&gt;&gt; MasterData(name:String, phone:String, 
+email:String, address:Address)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1309</x>
+      <y>672</y>
+      <w>763</w>
+      <h>511</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=-address:Address</panel_attributes>
+    <additional_attributes>240.0;10.0;1070.0;10.0;1070.0;710.0;10.0;710.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1358</x>
+      <y>721</y>
+      <w>21</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1477</x>
+      <y>826</y>
+      <w>259</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>Supplier
+--
+-cvr:String
+-contact:String
+--
++&lt;&lt;create&gt;&gt; Supplier()
++&lt;&lt;create&gt;&gt; Supplier(cvr:String, contact:String, 
+name:String, phone:String, email:String, address:Address)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1358</x>
+      <y>777</y>
+      <w>168</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;220.0;10.0;220.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1477</x>
+      <y>952</y>
+      <w>231</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Sparepart
+--
+-name:String
+-stockAmount:int
+-price:double
+--
++&lt;&lt;create&gt;&gt; Sparepart(name:String, stockAmount:int
+price:double, supplier:Supplier)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1505</x>
+      <y>910</y>
+      <w>98</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=-supplier:Supplier</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1477</x>
+      <y>1085</y>
+      <w>182</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>SparepartUsed
+--
+-amount:int
+--
++&lt;&lt;create&gt;&gt; SparepartUsed(amount:int, 
+sparepart:Sparepart)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1505</x>
+      <y>1029</y>
+      <w>112</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=-sparepart:Sparepart</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>511</x>
+      <y>819</y>
+      <w>980</w>
+      <h>308</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=-sparepartsUsed:List&lt;SparepartUsed&gt;</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0;670.0;10.0;670.0;270.0;1210.0;270.0;1210.0;420.0;1380.0;420.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1764</x>
+      <y>833</y>
+      <w>273</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Reference
+--
+-cvr:String
+-contact:String
+--
++&lt;&lt;create&gt;&gt; Reference()
++&lt;&lt;create&gt;&gt; Reference(cvr:String, contact:String, 
+name:String, phone:String, email:String, address:Address)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1498</x>
+      <y>777</y>
+      <w>399</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;550.0;10.0;550.0;80.0</additional_attributes>
+  </element>
+</diagram>

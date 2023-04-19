@@ -2,31 +2,31 @@ package model;
 
 import java.util.Calendar;
 
-public class Employee extends Person {	
+/*
+ * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
+ */
+
+public class Employee extends MasterData {	
 	
-	private int employeeID;
-	private String name;
-	private String phone;
-	private String email;
-	private String departmentNumber;
-	private String cprNumber;
-	private String position;
-	private Address address;
+	private int employeeID; 
+	private String departmentNumber; 
+	private String cprNumber; 
 	private Calendar startDate;
+	private String position; 
 	
-	public Employee(String name, String streetName, int streetNumber, String postalcode, String cityName,
-			String phoneNumber, String email, int employeeID, String name2, String phone, String email2,
-			String departmentNumber, String cprNumber, String position, Address address, Calendar startDate) {
-		super(name, streetName, streetNumber, postalcode, cityName, phoneNumber, email);
+	public Employee() {
+		super();
+		
+	}
+
+	public Employee(int employeeID, String departmentNumber, String cprNumber, Calendar startDate, String position,
+					String name, String phone, String email, Address address) {
+		super(name, phone, email, address);
 		this.employeeID = employeeID;
-		name = name2;
-		this.phone = phone;
-		email = email2;
 		this.departmentNumber = departmentNumber;
 		this.cprNumber = cprNumber;
-		this.position = position;
-		this.address = address;
 		this.startDate = startDate;
+		this.position = position;
 	}
 
 	public int getEmployeeID() {
@@ -35,30 +35,6 @@ public class Employee extends Person {
 
 	public void setEmployeeID(int employeeID) {
 		this.employeeID = employeeID;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getDepartmentNumber() {
@@ -77,28 +53,20 @@ public class Employee extends Person {
 		this.cprNumber = cprNumber;
 	}
 
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
 	public Calendar getStartDate() {
 		return startDate;
 	}
 
 	public void setStartDate(Calendar startDate) {
 		this.startDate = startDate;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
 	}
 	
 }

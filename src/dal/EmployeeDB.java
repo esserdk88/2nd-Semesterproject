@@ -122,7 +122,7 @@ public class EmployeeDB implements EmployeeDBIF {
 		return null;
 	}
 	
-	//TODO update resultset get String to match actual database coloums
+	//TODO update resultset get String to match actual database coloums. Not Finished.
 	private Employee buildObject(ResultSet rs) {
 		Employee employee = null;
 		try {
@@ -133,6 +133,6 @@ public class EmployeeDB implements EmployeeDBIF {
 			System.out.println("Failed connecting to database in EmployeeDB. Cause "+ e.getMessage());
 			e.printStackTrace();
 		}
+		return employee;
 	}
-
 }

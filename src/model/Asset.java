@@ -3,78 +3,34 @@ package model;
 import java.util.Calendar;
 import java.util.List;
 
+/*
+ * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
+ */
+
 public class Asset {
 	
-	//new DCD fields
-	private Address address;
-	private Calendar aquisitionDate;
-	private String manufacturer;
-	private String status;
 	private int assetID;
 	private String name;
 	private String description;
+	private Calendar aquisitionDate;
+	private String status;
+	private String manufacturer;
 	private Location location;
 	
-	//Old fields
-	private Calendar dateOfAcquire;
-	private AssetStatus statusOLD;
-	private String manufacturerName;
-	private List<Workorder> tasks;
 	
-	public Asset(int id, String name, Location location, Calendar aquisitionDate, String description,
-			String status, String manufacturer) {
-		this.assetID = id;
-		this.name = name;
-		this.manufacturer = manufacturer;
-		this.status = status;
-		this.description = description;
-		this.aquisitionDate = aquisitionDate;
-		this.location = location;
+	public Asset() {
+
 	}
 	
-	//modular constructor for possible future use
-	public Asset(int id, String name, Location location, Calendar aquisitionDate, String description,
-			String status, String manufacturer, Address address) {
-		this.assetID = id;
+	public Asset(int assetID, String name, String description, Calendar aquisitionDate, String status,
+			String manufacturer, Location location) {
+		this.assetID = assetID;
 		this.name = name;
-		this.manufacturer = manufacturer;
-		this.status = status;
 		this.description = description;
 		this.aquisitionDate = aquisitionDate;
-		this.location = location;
-		this.address = address;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public Calendar getAquisitionDate() {
-		return aquisitionDate;
-	}
-
-	public void setAquisitionDate(Calendar aquisitionDate) {
-		this.aquisitionDate = aquisitionDate;
-	}
-
-	public String getManufacturer() {
-		return manufacturer;
-	}
-
-	public void setManufacturer(String manufacturer) {
-		this.manufacturer = manufacturer;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
 		this.status = status;
+		this.manufacturer = manufacturer;
+		this.location = location;
 	}
 
 	public int getAssetID() {
@@ -101,44 +57,36 @@ public class Asset {
 		this.description = description;
 	}
 
+	public Calendar getAquisitionDate() {
+		return aquisitionDate;
+	}
+
+	public void setAquisitionDate(Calendar aquisitionDate) {
+		this.aquisitionDate = aquisitionDate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getManufacturer() {
+		return manufacturer;
+	}
+
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+
 	public Location getLocation() {
 		return location;
 	}
 
 	public void setLocation(Location location) {
 		this.location = location;
-	}
-
-	public Calendar getDateOfAcquire() {
-		return dateOfAcquire;
-	}
-
-	public void setDateOfAcquire(Calendar dateOfAcquire) {
-		this.dateOfAcquire = dateOfAcquire;
-	}
-
-	public AssetStatus getStatusOLD() {
-		return statusOLD;
-	}
-
-	public void setStatusOLD(AssetStatus statusOLD) {
-		this.statusOLD = statusOLD;
-	}
-
-	public String getManufacturerName() {
-		return manufacturerName;
-	}
-
-	public void setManufacturerName(String manufacturerName) {
-		this.manufacturerName = manufacturerName;
-	}
-
-	public List<Workorder> getTasks() {
-		return tasks;
-	}
-
-	public void setTasks(List<Workorder> tasks) {
-		this.tasks = tasks;
 	}
 	
 }

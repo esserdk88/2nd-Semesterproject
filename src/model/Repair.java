@@ -1,21 +1,27 @@
 package model;
 
 import java.util.Calendar;
+import java.util.List;
+
+/*
+ * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
+ */
 
 public class Repair extends Workorder {
 	
 	private double price;
 	private Reference reference;
 	
-	public Repair(Asset a, String title, String description, double price, Reference reference) {
-		super(a, title, "Repair", description);
+	public Repair() {
+		super();
+	}
+
+	public Repair(double price, Reference reference, int workOrderID, String title, String type, Calendar startDate, 
+			Calendar endDate, short priority, String description, boolean finished, List<SparepartUsed> sparepartsUsed, 
+			Asset asset, Employee employee, List<Measurement> measurements) {
+		super(workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, employee, measurements);
 		this.price = price;
 		this.reference = reference;
-	}
-	
-	public Repair(int id, Asset a, String title, String description, boolean finished, Calendar startDate,
-	Calendar endDate, short priority, double price, Reference ereference) {
-		super(id, a, title, "Repair", description, finished, startDate, endDate, priority);
 	}
 
 	public double getPrice() {

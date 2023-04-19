@@ -1,16 +1,21 @@
 package model;
 
+/*
+ * 19-04-2023: Review done by Rasmus and Mikkel - DCD vs. Code
+ * Small adjustments done in code and DCD.
+ */
+
 public class Address {
 	
 	private String cityName;
 	private String zipCode;
-	private String roadName;
+	private String streetName;
 	private String streetNumber;
 	
-	public Address(String cityName, String zipCode, String roadName, String streetNumber) {
+	public Address(String cityName, String zipCode, String streetName, String streetNumber) {
 		this.cityName = cityName;
 		this.zipCode = zipCode;
-		this.roadName = roadName;
+		this.streetName = streetName;
 		this.streetNumber = streetNumber;
 	}
 
@@ -30,12 +35,12 @@ public class Address {
 		this.zipCode = zipCode;
 	}
 
-	public String getRoadName() {
-		return roadName;
+	public String getStreetName() {
+		return streetName;
 	}
 
-	public void setRoadName(String roadName) {
-		this.roadName = roadName;
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
 	}
 
 	public String getStreetNumber() {
