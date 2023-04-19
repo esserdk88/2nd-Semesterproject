@@ -17,6 +17,8 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class AssetOverview extends JPanel {
 	private JTextField txtSg;
@@ -26,6 +28,7 @@ public class AssetOverview extends JPanel {
 	private JTextField subgroupTextField;
 	private JTextField serialNumberTextField;
 	private JTextField departmentTextField;
+	private JTextField textField;
 	/**
 	 * Create the panel.
 	 */
@@ -68,7 +71,8 @@ public class AssetOverview extends JPanel {
 		assetPanel.add(fillerPanel, BorderLayout.EAST);
 		JPanel textFieldPanel = new JPanel();
 		centerPanel.add(textFieldPanel);
-		textFieldPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		FlowLayout fl_textFieldPanel = new FlowLayout(FlowLayout.CENTER, 5, 5);
+		textFieldPanel.setLayout(fl_textFieldPanel);
 		
 		JPanel informationTextFieldPanel = new JPanel();
 		textFieldPanel.add(informationTextFieldPanel);
@@ -80,6 +84,7 @@ public class AssetOverview extends JPanel {
 		
 		idTextField = new JTextField();
 		informationTextFieldPanel.add(idTextField);
+		idTextField.setEnabled(false);
 		idTextField.setColumns(10);
 		
 		JLabel headGroupLabel = new JLabel("Hovedgruppe");
@@ -105,6 +110,7 @@ public class AssetOverview extends JPanel {
 		subgroupTextField.setColumns(10);
 		
 		JLabel serialNumberLabel = new JLabel("Serienr.");
+		serialNumberLabel.setOpaque(true);
 		serialNumberLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		informationTextFieldPanel.add(serialNumberLabel);
 		
@@ -121,7 +127,30 @@ public class AssetOverview extends JPanel {
 		
 		JPanel extraPanel = new JPanel();
 		textFieldPanel.add(extraPanel);
-		extraPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		extraPanel.setLayout(new GridLayout(2, 2, 6, 3));
+		
+		JLabel maintenanceIntervalLabel = new JLabel("Vedligeholdelsesinterval");
+		extraPanel.add(maintenanceIntervalLabel);
+		
+		JSpinner spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+		extraPanel.add(spinner);
+		
+		JLabel extraInfoLabel = new JLabel("Interval er i dage");
+		extraPanel.add(extraInfoLabel);
+		
+		JButton changeButton = new JButton("Ændre");
+		changeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		extraPanel.add(changeButton);
+		
+		
+		
+		
+		
+		
 		
 		JPanel workOrderPanel = new JPanel();
 		centerPanel.add(workOrderPanel);
