@@ -110,7 +110,7 @@ public class WorkOrder extends JPanel {
 		gbc_scrollPane_1.gridy = 1;
 		centerPanel.add(scrollPane_1, gbc_scrollPane_1);
 		
-		JLabel lblAssetID = new JLabel("ID");
+		JLabel lblAssetID = new JLabel("Maskine ID");
 		GridBagConstraints gbc_lblAssetID = new GridBagConstraints();
 		gbc_lblAssetID.anchor = GridBagConstraints.WEST;
 		gbc_lblAssetID.insets = new Insets(0, 0, 5, 5);
