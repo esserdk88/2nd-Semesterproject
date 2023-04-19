@@ -104,6 +104,11 @@ public class WorkOrderOverview extends JPanel {
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		
 		JButton openOrderButton = new JButton("Åben opgave");
+		openOrderButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setNewCenterPanel(new ReadWorkOrder()); //TODO add workorder to constructor
+			}
+		});
 		openOrderButton.setMinimumSize(new Dimension(110, 23));
 		openOrderButton.setMaximumSize(new Dimension(110, 23));
 		openOrderButton.setPreferredSize(new Dimension(110, 23));
