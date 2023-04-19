@@ -52,35 +52,6 @@ public class EmployeeDB implements EmployeeDBIF {
 		return outputString;
 	}
 	
-	@Override
-	public boolean createEmployee(Employee e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Employee readEmployeeByID(int id,boolean fullPull) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Employee updateEmployee(int id, Employee e) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean deleteEmployeeByID(int id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public List<Employee> getAllEmployees() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	private Employee objectBuilder(ResultSet rs) {
 		return null;

@@ -63,13 +63,12 @@ employee:Employee, measurements:List&lt;Measurement&gt;)
     <panel_attributes>Employee
 --
 -employeeID:int
--departmentNumber:String
 -cprNumber:String
 -startDate:Calendar
 -position:String
 --
 +&lt;&lt;create&gt;&gt;Employee()
-+&lt;&lt;create&gt;&gt; Employee(employeeID:int, departmentNumber:String,
++&lt;&lt;create&gt;&gt; Employee(employeeID:int,
 cprNumber:String, startDate:Calendar, position:String, name:String,
 phone:String, email:String, address:Address)</panel_attributes>
     <additional_attributes/>
