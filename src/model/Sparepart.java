@@ -6,6 +6,8 @@ package model;
 
 public class Sparepart {
 	
+	//TODO: does this need a field for the id from the DB
+	
 	private String name;
 	private int stockAmount;
 	private double price;

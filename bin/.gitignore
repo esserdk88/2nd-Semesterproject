@@ -1,6 +1,4 @@
-/model/
-/dal/
-/test/
-/other/
-/gui/
 /Controller/
+/dal/
+/other/
+/model/

@@ -8,8 +8,7 @@ import java.util.Calendar;
 
 public class Employee extends MasterData {	
 	
-	private int employeeID; 
-	private String departmentNumber; 
+	private int employeeID;
 	private String cprNumber; 
 	private Calendar startDate;
 	private String position; 
@@ -19,11 +18,10 @@ public class Employee extends MasterData {
 		
 	}
 
-	public Employee(int employeeID, String departmentNumber, String cprNumber, Calendar startDate, String position,
+	public Employee(int employeeID, String cprNumber, Calendar startDate, String position,
 					String name, String phone, String email, Address address) {
 		super(name, phone, email, address);
 		this.employeeID = employeeID;
-		this.departmentNumber = departmentNumber;
 		this.cprNumber = cprNumber;
 		this.startDate = startDate;
 		this.position = position;
@@ -35,14 +33,6 @@ public class Employee extends MasterData {
 
 	public void setEmployeeID(int employeeID) {
 		this.employeeID = employeeID;
-	}
-
-	public String getDepartmentNumber() {
-		return departmentNumber;
-	}
-
-	public void setDepartmentNumber(String departmentNumber) {
-		this.departmentNumber = departmentNumber;
 	}
 
 	public String getCprNumber() {
