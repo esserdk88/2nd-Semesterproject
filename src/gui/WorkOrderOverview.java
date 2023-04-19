@@ -104,15 +104,15 @@ public class WorkOrderOverview extends JPanel {
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		
 		JButton openOrderButton = new JButton("Åben opgave");
-		openOrderButton.setMinimumSize(new Dimension(140, 23));
-		openOrderButton.setMaximumSize(new Dimension(140, 23));
-		openOrderButton.setPreferredSize(new Dimension(140, 23));
+		openOrderButton.setMinimumSize(new Dimension(110, 23));
+		openOrderButton.setMaximumSize(new Dimension(110, 23));
+		openOrderButton.setPreferredSize(new Dimension(110, 23));
 		rightPanel.add(openOrderButton);
 		
-		JButton createNewWorkOrder = new JButton("Ny Arbejdsopgave");
-		createNewWorkOrder.setPreferredSize(new Dimension(140, 23));
-		createNewWorkOrder.setMinimumSize(new Dimension(140, 23));
-		createNewWorkOrder.setMaximumSize(new Dimension(140, 23));
+		JButton createNewWorkOrder = new JButton("Ny Opgave");
+		createNewWorkOrder.setPreferredSize(new Dimension(110, 23));
+		createNewWorkOrder.setMinimumSize(new Dimension(110, 23));
+		createNewWorkOrder.setMaximumSize(new Dimension(110, 23));
 		createNewWorkOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setNewCenterPanel(new WorkOrder());
