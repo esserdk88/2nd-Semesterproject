@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
 		forward = new Stack<>();
 		backwards = new Stack<>();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setMinimumSize(new Dimension(800, 500));
+		setMinimumSize(new Dimension(958, 500));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -96,6 +96,12 @@ public class MainFrame extends JFrame {
 		leftPanel.add(assetButton, gbc_assetButton);
 		
 		JButton workOrderButton = new JButton("Arbejdsordre");
+		workOrderButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JPanel center = new WorkOrderOverview();
+				setNewCenterPanel(center);
+			}
+		});
 		workOrderButton.setMargin(new Insets(4, 26, 4, 26));
 		GridBagConstraints gbc_workOrderButton = new GridBagConstraints();
 		gbc_workOrderButton.fill = GridBagConstraints.BOTH;
