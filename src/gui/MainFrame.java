@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 
 public class MainFrame extends JFrame {
 
+	private static MainFrame frame;
 	private JPanel contentPane;
 	private JPanel currentCenterPanel;
 	private JButton nextButton;
@@ -35,7 +36,7 @@ public class MainFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainFrame frame = new MainFrame();
+					frame = new MainFrame();
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -98,7 +99,7 @@ public class MainFrame extends JFrame {
 		JButton workOrderButton = new JButton("Arbejdsordre");
 		workOrderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JPanel center = new WorkOrderOverview();
+				JPanel center = new WorkOrderOverview(frame);
 				setNewCenterPanel(center);
 			}
 		});
@@ -200,7 +201,7 @@ public class MainFrame extends JFrame {
         setButtonStatus();
 	}
 	
-	private void setNewCenterPanel(JPanel newPanel) {
+	public void setNewCenterPanel(JPanel newPanel) {
         contentPane.remove(currentCenterPanel);
         backwards.add(currentCenterPanel);
         forward = new Stack<>();

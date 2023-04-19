@@ -53,9 +53,6 @@ public class EmployeeOverview extends JPanel {
 		deleteButton.setMinimumSize(new Dimension(30, 5));
 		rightPanel.add(deleteButton);
 		
-		
-		
-		
 		JScrollPane centerPanel = new JScrollPane();
 		add(centerPanel, BorderLayout.CENTER);
 		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };

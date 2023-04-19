@@ -5,11 +5,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -24,7 +27,7 @@ public class WorkOrderOverview extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public WorkOrderOverview() {
+	public WorkOrderOverview(MainFrame frame) {
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel topPanel = new JPanel();
@@ -101,7 +104,21 @@ public class WorkOrderOverview extends JPanel {
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		
 		JButton openOrderButton = new JButton("Åben opgave");
+		openOrderButton.setMinimumSize(new Dimension(140, 23));
+		openOrderButton.setMaximumSize(new Dimension(140, 23));
+		openOrderButton.setPreferredSize(new Dimension(140, 23));
 		rightPanel.add(openOrderButton);
+		
+		JButton createNewWorkOrder = new JButton("Ny Arbejdsopgave");
+		createNewWorkOrder.setPreferredSize(new Dimension(140, 23));
+		createNewWorkOrder.setMinimumSize(new Dimension(140, 23));
+		createNewWorkOrder.setMaximumSize(new Dimension(140, 23));
+		createNewWorkOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setNewCenterPanel(new WorkOrder());
+			}
+		});
+		rightPanel.add(createNewWorkOrder);
 		
 		JScrollPane centerScrollPane = new JScrollPane();
 		add(centerScrollPane, BorderLayout.CENTER);
