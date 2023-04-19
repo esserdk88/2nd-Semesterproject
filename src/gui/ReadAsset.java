@@ -25,7 +25,7 @@ import java.util.Date;
 import java.util.Calendar;
 import java.awt.Font;
 
-public class ReadWorkOrder extends JPanel {
+public class ReadAsset extends JPanel {
 	private JTextField txtTitle;
 	private JTextField txtInterval;
 	private JTextField txtAssetID;
@@ -39,7 +39,7 @@ public class ReadWorkOrder extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ReadWorkOrder() {
+	public ReadAsset() {
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel southPanel = new JPanel();
@@ -47,10 +47,7 @@ public class ReadWorkOrder extends JPanel {
 		fl_southPanel.setAlignment(FlowLayout.RIGHT);
 		add(southPanel, BorderLayout.SOUTH);
 		
-		JButton btnCancel = new JButton("Udskyd arbejdsordre");
-		southPanel.add(btnCancel);
-		
-		JButton btnSave = new JButton("Færddiggør arbejdsordre");
+		JButton btnSave = new JButton("Opret ny arbejdsordre");
 		southPanel.add(btnSave);
 		
 		JPanel centerPanel = new JPanel();
@@ -59,7 +56,7 @@ public class ReadWorkOrder extends JPanel {
 		gbl_centerPanel.columnWidths = new int[]{0, 0, 101, 39, 55, 101, 59, 88, 0, 0, 0};
 		gbl_centerPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_centerPanel.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_centerPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_centerPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		centerPanel.setLayout(gbl_centerPanel);
 		
 		JLabel lblNewLabel = new JLabel("Beskrivelse");
@@ -211,7 +208,7 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(txtRegNo, gbc_txtRegNo);
 		txtRegNo.setColumns(10);
 		
-		JCheckBox checkDate = new JCheckBox("Lukkes dato");
+		JCheckBox checkDate = new JCheckBox("Lukket dato");
 		checkDate.setHorizontalAlignment(SwingConstants.TRAILING);
 		checkDate.setSelected(true);
 		GridBagConstraints gbc_checkDate = new GridBagConstraints();
@@ -265,7 +262,7 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(txtPriority, gbc_txtPriority);
 		txtPriority.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("Lukkes af");
+		JLabel lblNewLabel_1 = new JLabel("Lukket af");
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
