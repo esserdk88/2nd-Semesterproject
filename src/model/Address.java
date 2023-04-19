@@ -3,13 +3,13 @@ package model;
 public class Address {
 	
 	private String cityName;
-	private String zipcode;
+	private String zipCode;
 	private String roadName;
 	private String streetNumber;
 	
-	public Address(String cityName, String zipcode, String roadName, String streetNumber) {
+	public Address(String cityName, String zipCode, String roadName, String streetNumber) {
 		this.cityName = cityName;
-		this.zipcode = zipcode;
+		this.zipCode = zipCode;
 		this.roadName = roadName;
 		this.streetNumber = streetNumber;
 	}
@@ -22,12 +22,12 @@ public class Address {
 		this.cityName = cityName;
 	}
 
-	public String getZipcode() {
-		return zipcode;
+	public String getZipCode() {
+		return zipCode;
 	}
 
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 
 	public String getRoadName() {
@@ -46,7 +46,4 @@ public class Address {
 		this.streetNumber = streetNumber;
 	}
 	
-	
-	
-
 }

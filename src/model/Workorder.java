@@ -7,27 +7,25 @@ import java.util.List;
 
 public abstract class Workorder {
 	
-	//TODO: Add private String title;
-
-	private int workOrderID; //changed from taskId to workOrderID. Datatype also changed to int from String
-	private Calendar startDate;
-	private Calendar endDate; //changed from finishedDate to endDate;
+	//Old fields
 	private WorkorderStatus status;
-	private String description;
-	private short  priority; //datatype changed from int to short
 	private List<String> notes;
+	private List<SparePart> spareParts;
+	private Employee assignedTechnician;
+	private List<Measurement> measurements;
 	
 	//DCD implemented fields
 	//Old fields mey need to be removed
 	private Asset asset;
 	private String title;
 	private String type;
-	private boolean finished;
+	private boolean finished;	
+	private int workOrderID; //changed from taskId to workOrderID. Datatype also changed to int from String
+	private Calendar startDate;
+	private Calendar endDate; //changed from finishedDate to endDate;
+	private String description;
+	private short  priority; //datatype changed from int to short
 	
-	//Assosiations
-	private List<SparePart> spareParts;
-	private Employee assignedTechnician;
-	private List<Measurement> measurements;
 	
 	//Constructor
 	//Full constructor, this will be used to create this model from the database.

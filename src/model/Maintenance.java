@@ -36,6 +36,5 @@ public class Maintenance extends Workorder {
 		this.intervalDayCount = intervalDayCount;
 	}
 	
-	
 
 }

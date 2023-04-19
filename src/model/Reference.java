@@ -65,7 +65,5 @@ public class Reference {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	
-	
 
 }
