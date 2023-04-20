@@ -1,26 +1,28 @@
-package dal;
+package Controller;
 
 import java.util.Calendar;
-import java.util.List;
 
 import model.Asset;
 import model.Employee;
-import model.Location;
 import model.Maintenance;
-import model.Measurement;
-import model.SparepartUsed;
 
 /*
  * 19-04-2023: Reworked with alignment from communication diagram.
  */
 
-public interface WorkOrderDBIF {
+public interface WorkOrderControllerIF {
 	
-	//Added from communication diagram Create Work Order
-	public boolean addWorkOrder (Maintenance workOrder); 
+	public Asset findAssetByID(int id);
+	
+	public boolean createWorkOrder(Asset asset, String title, String description,
+		      Calendar startDate, boolean repeated, int intervalDayCount, 
+		      short priority);
 	
 	public Maintenance findMaintenanceWorkOrderByID(int workOrderID);
 	
+	public Employee findEmployeeByID(int employeeID);
+	
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder);
+	
 	
 }

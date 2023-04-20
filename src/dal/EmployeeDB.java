@@ -52,35 +52,6 @@ public class EmployeeDB implements EmployeeDBIF {
 		return outputString;
 	}
 	
-	@Override
-	public boolean createEmployee(Employee e) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Employee readEmployeeByID(int id,boolean fullPull) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Employee updateEmployee(int id, Employee e) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean deleteEmployeeByID(int id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public List<Employee> getAllEmployees() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	private Employee objectBuilder(ResultSet rs) {
 		return null;
@@ -122,7 +93,7 @@ public class EmployeeDB implements EmployeeDBIF {
 		return null;
 	}
 	
-	//TODO update resultset get String to match actual database coloums
+	//TODO update resultset get String to match actual database coloums. Not Finished.
 	private Employee buildObject(ResultSet rs) {
 		Employee employee = null;
 		try {
@@ -133,6 +104,6 @@ public class EmployeeDB implements EmployeeDBIF {
 			System.out.println("Failed connecting to database in EmployeeDB. Cause "+ e.getMessage());
 			e.printStackTrace();
 		}
+		return employee;
 	}
-
 }
