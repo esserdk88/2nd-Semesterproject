@@ -1,19 +1,13 @@
 package dal;
 
-import java.util.List;
-
-import model.Asset;
 import model.Location;
+
+/*
+ * 20-04-2023: Rasmus/Mikkel - To get certain tuble in the tabel for Location.
+ */
 
 public interface LocationDBIF {
 	
-	//CRUD
-	public boolean createLocation(String building, String floor, String room);
-	public Location readLocationByID(int id);
-	public Location updateLocation(int id, String building, String floor, String room, Asset asset);
-	public boolean deleteLocationByID(int id);
-	
-	//More
-	public List<Location> getAllLocations();
+	public Location findLocationByID(int locationID);
 	
 }
