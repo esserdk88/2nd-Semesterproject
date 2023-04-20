@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /*
@@ -58,5 +59,17 @@ public class Employee extends MasterData {
 	public void setPosition(String position) {
 		this.position = position;
 	}
+	
+    private String calendarToString(Calendar calendar) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        return formatter.format(calendar.getTime());
+    }
+
+	@Override
+	public String toString() {
+		return "(" + getEmployeeID() + ") " + getName() + " " + getPhone() + " " + getEmail() + " " + getCprNumber() + " " + calendarToString(getStartDate()) + " " + getPosition() + " - " + getAddress().toString();
+	}
+	
+	
 	
 }

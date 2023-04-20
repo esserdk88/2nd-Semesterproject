@@ -15,7 +15,7 @@ import model.Location;
 
 public class EmployeeDB implements EmployeeDBIF {
 	
-	public static final String FIELDS = "employee_id_PK, employee_start_date, employee_cpr, employee_position, employee_phone"
+	public static final String FIELDS = "employee_id_PK, employee_start_date, employee_cpr, employee_position, employee_phone,"
 										+ "employee_email, employee_name, employee_address_id_FK";
 	public static final String SELECT_EMPLOYEE_BY_ID = "SELECT " + FIELDS + " FROM Employee Where employee_id_PK = ?";
 	public static final String SELECT_ALL_EMPLOYEES = "SELECT " + FIELDS + " FROM Employee";
@@ -70,14 +70,33 @@ public class EmployeeDB implements EmployeeDBIF {
 	@Override
 	public List<Employee> getAllEmployees() {
 		
+		List<Employee> list = new ArrayList<>();
 		
-		
-		return null;
+		// establish database connection
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psFindEmployee = con.prepareStatement(SELECT_ALL_EMPLOYEES)) {
+			
+			//prepare statement
+			// Left empty. 
+			
+			//execute statement
+			ResultSet rs = psFindEmployee.executeQuery();
+			
+			if (rs != null) {
+				//build Address object from result set
+				while(rs.next()) {
+					list.add(buildObject(rs));
+				}
+			} 
+		} catch (SQLException e) {
+		System.out.println("ERROR FROM RETRIEVING EMPLOYEE:" + e.getMessage());
+		}
+		return list;
 	}
 	
 	public static Calendar convertSqlDateToCalendar(Date sqlDate) { 
 		Calendar calendar = Calendar.getInstance(); calendar.setTime(sqlDate); 
 		
 		return calendar; 
-		}
+	}
 }
