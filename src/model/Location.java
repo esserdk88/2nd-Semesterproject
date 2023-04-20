@@ -7,17 +7,27 @@ package model;
 
 public class Location {
 	
+	private int locationID;
 	private String building;
 	private String floor;
 	private String room;
 	private Address address;
 	
 	//Construtor for Location-class
-	public Location (String building, String floor, String room, Address address){
+	public Location (int locationID, String building, String floor, String room, Address address){
+		this.locationID = locationID;
 		this.building = building;
 		this.floor = floor;
 		this.room = room;
 		this.address = address;
+	}
+	
+	public int getLocationID() {
+		return locationID;
+	}
+	
+	public void setLocationID(int locationID) {
+		this.locationID = locationID;
 	}
 	
 	public Address getAddress() {
