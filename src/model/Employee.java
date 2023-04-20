@@ -67,7 +67,7 @@ public class Employee extends MasterData {
 
 	@Override
 	public String toString() {
-		return "(" + getEmployeeID() + ") " + getName() + " " + getPhone() + " " + getEmail() + " " + getCprNumber() + " " + calendarToString(getStartDate()) + " " + getPosition() + " - " + getAddress().toString();
+		return "(" + getEmployeeID() + ") " + getCprNumber() + " " + calendarToString(getStartDate()) + " " + getPosition() + " - " + super.toString();
 	}
 	
 	
