@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import dal.*;
 import model.Employee;
 import model.Reference;
+import model.Sparepart;
 import model.Supplier;
 
 public class TryMe {
@@ -15,9 +16,10 @@ public class TryMe {
 		EmployeeDB employeeDB = new EmployeeDB();
 		ReferenceDB referenceDB = new ReferenceDB();
 		SupplierDB supplierDB = new SupplierDB();
+		SparepartDB sparepartDB = new SparepartDB();
 		
-//		System.out.println(supplierDB.findSupplierByID(12345678));
-		for(Supplier e : supplierDB.getAllSuppliers()) {
+//		System.out.println(sparepartDB.findSparePartbyID(1));
+		for(Sparepart e : sparepartDB.getAllSpareparts()) {
 			System.out.println(e);
 		}
 		
