@@ -1,5 +1,7 @@
 package dal;
 
+import java.util.List;
+
 import model.Supplier;
 
 /*
@@ -9,5 +11,6 @@ import model.Supplier;
 public interface SupplierDBIF {
 	
 	public Supplier findSupplierByID(int supplierID);
+	public List<Supplier> getAllSuppliers();
 	
 }
