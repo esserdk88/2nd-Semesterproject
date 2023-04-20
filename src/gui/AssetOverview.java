@@ -1,24 +1,25 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import java.awt.Component;
-import java.awt.Dimension;
-
-import javax.swing.Box;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 public class AssetOverview extends JPanel {
 	private JTextField txtSg;
@@ -29,10 +30,14 @@ public class AssetOverview extends JPanel {
 	private JTextField serialNumberTextField;
 	private JTextField departmentTextField;
 	private JTextField textField;
+	private JPopupMenu popUp;
+	private DefaultTable assetTable;
+	private MainFrame mainFrame;
 	/**
 	 * Create the panel.
 	 */
-	public AssetOverview() {
+	public AssetOverview(MainFrame mainFrame) {
+		this.mainFrame = mainFrame;
 		setLayout(new BorderLayout(0, 0));
 		JPanel topPanel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) topPanel.getLayout();
@@ -63,8 +68,9 @@ public class AssetOverview extends JPanel {
 		JScrollPane assetSrollPanel = new JScrollPane();
 		assetPanel.add(assetSrollPanel, BorderLayout.CENTER);
 		String[] columns1 = new String[] { "Column", "Column1", "Column2", "Column3" };
-		DefaultTable assetTable = new DefaultTable(null, columns1);
+		assetTable = new DefaultTable(null, columns1);
 		assetSrollPanel.setViewportView(assetTable);
+		assetTable.addRow(null);
 		
 		JPanel fillerPanel = new JPanel();
 		fillerPanel.setLayout(new GridLayout(15, 1, 5, 5));
@@ -145,13 +151,6 @@ public class AssetOverview extends JPanel {
 			}
 		});
 		extraPanel.add(changeButton);
-		
-		
-		
-		
-		
-		
-		
 		JPanel workOrderPanel = new JPanel();
 		centerPanel.add(workOrderPanel);
 		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
@@ -185,8 +184,49 @@ public class AssetOverview extends JPanel {
 		deleteButton.setPreferredSize(new Dimension(80, 23));
 		deleteButton.setMinimumSize(new Dimension(30, 5));
 		
-		
-		
+		setPopUpMenu();
 		
 	}
+	
+	private void showPopUp(MouseEvent e) {
+        if (e.isPopupTrigger()) {
+            popUp.show(e.getComponent(), e.getX(), e.getY());
+        }
+    }
+
+    private void popUpMenuAction(ActionEvent e) {
+        String s = e.getActionCommand();
+
+        if (s.equals("Se maskine")) {
+        	JPanel center = new ReadAsset();
+	        mainFrame.setNewCenterPanel(center);
+        }
+    }
+	
+	private void setPopUpMenu() {
+        popUp = new JPopupMenu();
+        JMenuItem details = new JMenuItem("Se maskine");
+
+        popUp.add(details);
+
+        ActionListener alDetails = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                popUpMenuAction(e);
+            }
+        };
+
+        details.addActionListener(alDetails);
+        MouseAdapter ma = new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.getButton() == 3) {
+                    showPopUp(e);
+                }
+            }
+        };
+        assetTable.addMouseListener(ma);
+    }
+
 }
