@@ -11,6 +11,7 @@ public class DatabaseConnection {
 
     // Singleton instance variable
     private static DatabaseConnection instance;
+	private static Connection connection;
 
     // Connection string for connecting to SQL Server
     private static final String CONNECTION_STRING = String.format("jdbc:sqlserver://%s:1433;encrypt=true;trustServerCertificate=true;databaseName=%s;user=%s;password=%s;",
@@ -19,7 +20,7 @@ public class DatabaseConnection {
     		other.Login.USERNAME,
     		other.Login.PASSWORD);
     // Method for getting the singleton instance of the class
-    public static  DatabaseConnection getInstance() {
+    public static DatabaseConnection getInstance() {
         if (instance == null) {
             instance = new DatabaseConnection();
         }
@@ -28,9 +29,18 @@ public class DatabaseConnection {
 
     // Method for getting the database connection
     public Connection getConnection() throws SQLException {
-    	Connection connection;
         	connection = DriverManager.getConnection(CONNECTION_STRING);
         return connection;
     }
+    
+    public boolean isConnected() {
+		boolean isOpen = false;
+		try {
+			isOpen = (!connection.isClosed());
+		} catch (Exception sclExc) {
+			isOpen = false;
+		}
+		return isOpen;
+	}
 
 }

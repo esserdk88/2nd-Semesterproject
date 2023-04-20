@@ -10,6 +10,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Stack;
 
 import javax.swing.JButton;
@@ -17,6 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import dal.DatabaseConnection;
 
 public class MainFrame extends JFrame {
 
@@ -83,7 +87,7 @@ public class MainFrame extends JFrame {
 		JButton assetButton = new JButton("Asset");
 		assetButton.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {
-			        JPanel center = new AssetOverview();
+			        JPanel center = new AssetOverview(frame);
 			        setNewCenterPanel(center);
 			    }
 		});
@@ -180,7 +184,7 @@ public class MainFrame extends JFrame {
 		gbc_exitButton.gridy = 0;
 		bottomPanel.add(exitButton, gbc_exitButton);
 		setButtonStatus();
-		setConnectionLabel(false);
+		updateConnectionStatus();
 	}
 	private void forwardButton() {
 		contentPane.remove(currentCenterPanel);
@@ -228,9 +232,20 @@ public class MainFrame extends JFrame {
 		if(!connected) {
 			connectionLabel.setText("No Connection");
 			connectionLabel.setForeground(Color.RED);
-		}else {
+		} else {
 			connectionLabel.setText("Connected");
 			connectionLabel.setForeground(Color.GREEN);
 		}
+	}
+	
+	public void updateConnectionStatus() {
+		boolean connected = false;
+		try {
+			DatabaseConnection.getInstance().getConnection();
+			connected = DatabaseConnection.getInstance().isConnected();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		setConnectionLabel(connected);
 	}
 }
