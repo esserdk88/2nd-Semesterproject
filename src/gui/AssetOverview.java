@@ -197,7 +197,7 @@ public class AssetOverview extends JPanel {
     private void popUpMenuAction(ActionEvent e) {
         String s = e.getActionCommand();
 
-        if (s.equals("Se maskine")) {
+        if (s.equals("Se asset")) {
         	JPanel center = new ReadAsset();
 	        mainFrame.setNewCenterPanel(center);
         }
@@ -205,7 +205,7 @@ public class AssetOverview extends JPanel {
 	
 	private void setPopUpMenu() {
         popUp = new JPopupMenu();
-        JMenuItem details = new JMenuItem("Se maskine");
+        JMenuItem details = new JMenuItem("Se asset");
 
         popUp.add(details);
 

@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
 
@@ -12,7 +13,7 @@ public class Asset {
 	private int assetID;
 	private String name;
 	private String description;
-	private Calendar aquisitionDate;
+	private Date aquisitionDate; //Maybe change back to Calendar
 	private String status;
 	private String manufacturer;
 	private Location location;
@@ -22,9 +23,19 @@ public class Asset {
 
 	}
 	
-	public Asset(int assetID, String name, String description, Calendar aquisitionDate, String status,
+	public Asset(int assetID, String name, String description, Date aquisitionDate, String status,
 			String manufacturer, Location location) {
 		this.assetID = assetID;
+		this.name = name;
+		this.description = description;
+		this.aquisitionDate = aquisitionDate;
+		this.status = status;
+		this.manufacturer = manufacturer;
+		this.location = location;
+	}
+	
+	public Asset(String name, String description, Date aquisitionDate, String status,
+			String manufacturer, Location location) {
 		this.name = name;
 		this.description = description;
 		this.aquisitionDate = aquisitionDate;
@@ -57,11 +68,11 @@ public class Asset {
 		this.description = description;
 	}
 
-	public Calendar getAquisitionDate() {
+	public Date getAquisitionDate() {
 		return aquisitionDate;
 	}
 
-	public void setAquisitionDate(Calendar aquisitionDate) {
+	public void setAquisitionDate(Date aquisitionDate) {
 		this.aquisitionDate = aquisitionDate;
 	}
 
