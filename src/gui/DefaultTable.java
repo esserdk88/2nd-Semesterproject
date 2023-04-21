@@ -59,7 +59,6 @@ public class DefaultTable extends JTable {
 		this.visibleColumns = visibleColumns;
 		initializeTable(data, columns, visibleColumns);
 	}
-	
 	/**
 	 * Initializes the class
 	 * @param data The Data to be displayed
@@ -68,6 +67,10 @@ public class DefaultTable extends JTable {
 	 */
 	private void initializeTable(String[][] data, String[] columns, boolean[] visibleColumns) {
 		tabelModel = new DefaultTableModel(data, columns);
+		this.setCellSelectionEnabled(false);
+		this.setRowSelectionAllowed(true);
+		this.getTableHeader().setOpaque(false);
+		this.getTableHeader().setBackground(new Color(68, 114, 196));
 		tcm = new CustomTableColumnManager(this);
 		setModel(tabelModel);
 		setDefaultEditor(Object.class, null);
@@ -92,8 +95,12 @@ public class DefaultTable extends JTable {
 	 */
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 		Component c = super.prepareRenderer(renderer, row, column);
-		if (!isRowSelected(row))
-			c.setBackground(row % 2 == 0 ? getBackground() : Color.LIGHT_GRAY);
+		if (!isRowSelected(row)) {
+			c.setBackground(row % 2 == 0 ? getBackground() : new Color(205,212,234));
+			c.setBackground(row % 2 == 1 ? getBackground() : new Color(233, 236, 245));
+		}else {
+			c.setBackground(new Color(235,177,129));
+		}
 		return c;
 	}
 	

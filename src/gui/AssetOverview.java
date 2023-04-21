@@ -71,6 +71,10 @@ public class AssetOverview extends JPanel {
 		assetTable = new DefaultTable(null, columns1);
 		assetSrollPanel.setViewportView(assetTable);
 		assetTable.addRow(null);
+		assetTable.addRow(null);
+		assetTable.addRow(null);
+		assetTable.addRow(null);
+		assetTable.addRow(null);
 		
 		JPanel fillerPanel = new JPanel();
 		fillerPanel.setLayout(new GridLayout(15, 1, 5, 5));
