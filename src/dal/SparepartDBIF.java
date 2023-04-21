@@ -1,5 +1,7 @@
 package dal;
 
+import java.util.List;
+
 import model.Sparepart;
 
 /*
@@ -9,5 +11,6 @@ import model.Sparepart;
 public interface SparepartDBIF {
 	
 	public Sparepart findSparePartbyID(int sparePartID);
+	public List<Sparepart> getAllSpareparts();
 	
 }

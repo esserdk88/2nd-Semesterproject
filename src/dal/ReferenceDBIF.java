@@ -1,5 +1,7 @@
 package dal;
 
+import java.util.List;
+
 import model.Reference;
 
 /*
@@ -9,5 +11,6 @@ import model.Reference;
 public interface ReferenceDBIF {
 
 	public Reference findReferenceByID(int referenceID);
+	public List<Reference> getAllReferences();
 	
 }

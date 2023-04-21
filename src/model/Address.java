@@ -8,16 +8,29 @@ package model;
 public class Address {
 	//TODO: does this need a field for the id from the DB
 	
+	private int addressID;
 	private String cityName;
 	private String zipCode;
 	private String streetName;
 	private String streetNumber;
+	
+	public Address() {
+		
+	}
 	
 	public Address(String cityName, String zipCode, String streetName, String streetNumber) {
 		this.cityName = cityName;
 		this.zipCode = zipCode;
 		this.streetName = streetName;
 		this.streetNumber = streetNumber;
+	}
+
+	public int getAddressID() {
+		return addressID;
+	}
+
+	public void setAddressID(int addressID) {
+		this.addressID = addressID;
 	}
 
 	public String getCityName() {
@@ -51,5 +64,12 @@ public class Address {
 	public void setStreetNumber(String streetNumber) {
 		this.streetNumber = streetNumber;
 	}
+
 	
+	@Override
+	public String toString() {
+		
+		return "(" + getAddressID() +") " + getStreetName() + " " + getStreetNumber() + " - " + getZipCode() + " " + getCityName();
+	}
+
 }

@@ -12,6 +12,6 @@ public interface AddressDBIF {
 	
 	public Address findAddressByID(int addressID);
 	
-	public List<Address> getAllAddress();
+	public List<Address> getAllAddresses();
 	
 }
