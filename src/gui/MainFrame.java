@@ -11,8 +11,9 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import javax.swing.JButton;
@@ -21,7 +22,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Controller.AssetController;
+import dal.AssetDB;
 import dal.DatabaseConnection;
+import model.Asset;
 
 public class MainFrame extends JFrame {
 
@@ -93,7 +97,13 @@ public class MainFrame extends JFrame {
 		JButton assetButton = new JButton("Asset");
 		assetButton.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {
-			        JPanel center = new AssetOverview(frame);
+			        JPanel center = null;
+					try {
+						center = new AssetOverview(frame);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 			        setNewCenterPanel(center);
 			    }
 		});
@@ -109,7 +119,8 @@ public class MainFrame extends JFrame {
 		JButton workOrderButton = new JButton("Arbejdsordre");
 		workOrderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JPanel center = new WorkOrderOverview(frame);
+				JPanel center = null;
+				center = new WorkOrderOverview(frame);
 				setNewCenterPanel(center);
 			}
 		});

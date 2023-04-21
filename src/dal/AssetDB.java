@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -21,8 +22,7 @@ public class AssetDB implements AssetDBIF {
 					"asset_manufacturer", "asset_location_id_FK"));
 	private String ASSET_COLUMNS = listToString(ASSET_COLUMNS_LIST, false);
 	private String ASSET_TABLE = "Asset";
-	private final String QUERY_ASSET_BY_ID = "Select " + ASSET_COLUMNS + " From " + ASSET_TABLE
-			+ " where asset_id_PK = ?";
+	private final String QUERY_ASSET_BY_ID = "SELECT * From " + ASSET_TABLE + " where asset_id_PK = ?";
 	private final String SELECT_ALL_ASSETS = "SELECT * FROM " + ASSET_TABLE;
 	private final String INSERT_ASSET = "INSERT INTO " + ASSET_TABLE + "(" + ASSET_COLUMNS + ")"
 			+ " VALUES (?, ?, ?, ?, ?, ?)";
@@ -47,23 +47,46 @@ public class AssetDB implements AssetDBIF {
 	}
 
 	@Override
-	public Asset findAssetByID(int assetID) {
-		// TODO Auto-generated method stub
-		return null;
+	public Asset findAssetByID(int assetID) throws SQLException {
+		// Get a database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
+		Asset tempAsset = null;
+		try (PreparedStatement prepS = con.prepareStatement(QUERY_ASSET_BY_ID)) {
+
+			// Set parameters for the prepared statement
+			prepS.setInt(1, assetID);
+
+			// Execute the prepared statement
+			ResultSet rs = prepS.executeQuery();
+			if (rs != null && rs.next()) {
+				// Set the identity to the generated ID
+				tempAsset = buildObject(rs);
+			}
+			rs.close();
+			prepS.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Cannot insert record " + e.getMessage());
+		}
+
+		return tempAsset;
 	}
 
 	@Override
-	public Asset createNewAsset(String name, String description, Date aquisitionDate, String status,
+	public Asset createNewAsset(String name, String description, Calendar aquisitionDate, String status,
 			String manufacturer, Location location) throws SQLException {
 		// Get a database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		int identity = -1;
 		Asset tempAsset = null;
+		aquisitionDate = aquisitionDate.getInstance();
+		java.util.Date utilDate = aquisitionDate.getTime();
+		Date sqlDate = new Date(utilDate.getTime());
 		try (PreparedStatement prepS = con.prepareStatement(INSERT_ASSET, Statement.RETURN_GENERATED_KEYS)) {
 
 			// Set parameters for the prepared statement
 			prepS.setString(1, name);
-			prepS.setDate(2, aquisitionDate);
+			prepS.setDate(2, sqlDate);
 			prepS.setString(3, description);
 			prepS.setString(4, status);
 			prepS.setString(5, manufacturer);
@@ -136,15 +159,18 @@ public class AssetDB implements AssetDBIF {
 		Asset asset = null;
 		int identity;
 		int loco;
+		Calendar date = Calendar.getInstance();
+		Date sqlDate;
 		try {
+			sqlDate = rs.getDate("asset_acquisitiondate");
+			date.setTime(sqlDate);
 			loco = rs.getInt("asset_location_id_FK");
 			Location location = new Location(loco, "Test1", "Test2", "Test3", null);
 			identity = rs.getInt("asset_id_PK");
-			asset = new Asset(identity, rs.getString("asset_name"),
-					rs.getString("asset_description"), rs.getDate("asset_acquisitiondate"),
+			asset = new Asset(identity, rs.getString("asset_name"), rs.getString("asset_description"), date,
 					rs.getString("asset_status"), rs.getString("asset_manufacturer"), location);
 		} catch (SQLException e) {
-			System.out.println("Cannot convert from ResultSet" + e.getMessage());
+			System.out.println("Cannot convert from ResultSet " + e.getMessage());
 		}
 		return asset;
 	}

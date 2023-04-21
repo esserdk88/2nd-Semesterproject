@@ -1,7 +1,7 @@
 package Controller;
 
-import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.List;
 
 import dal.AssetDBIF;
@@ -17,12 +17,15 @@ public class AssetController implements AssetControllerIF {
 	}
 
 	@Override
-	public Asset findAssetByID(int assetID) {
-		// TODO Auto-generated method stub
-		return null;
+	public Asset findAssetByID(int assetID) throws SQLException {
+		Asset tempAsset = null;
+		
+		tempAsset = assetDatabase.findAssetByID(assetID);
+		
+		return tempAsset;
 	}
 	
-	public Asset createNewAsset(String name, String description, Date aquisitionDate, String status,
+	public Asset createNewAsset(String name, String description, Calendar aquisitionDate, String status,
 			String manufacturer, Location location) throws SQLException {
 		Asset tempAsset = null;
 		tempAsset = assetDatabase.createNewAsset(name, description, aquisitionDate, status, manufacturer, location);
@@ -30,6 +33,7 @@ public class AssetController implements AssetControllerIF {
 		return tempAsset;
 	}
 	
+	@Override
 	public List<Asset> getAllAssets() throws SQLException {
 		List<Asset> assetList = null;
 		

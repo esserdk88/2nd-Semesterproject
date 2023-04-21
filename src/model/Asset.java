@@ -2,7 +2,6 @@ package model;
 
 import java.sql.Date;
 import java.util.Calendar;
-import java.util.List;
 
 /*
  * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
@@ -13,7 +12,7 @@ public class Asset {
 	private int assetID;
 	private String name;
 	private String description;
-	private Date aquisitionDate; //Maybe change back to Calendar
+	private Calendar aquisitionDate; //Maybe change back to Calendar
 	private String status;
 	private String manufacturer;
 	private Location location;
@@ -23,7 +22,7 @@ public class Asset {
 
 	}
 	
-	public Asset(int assetID, String name, String description, Date aquisitionDate, String status,
+	public Asset(int assetID, String name, String description, Calendar aquisitionDate, String status,
 			String manufacturer, Location location) {
 		this.assetID = assetID;
 		this.name = name;
@@ -34,7 +33,7 @@ public class Asset {
 		this.location = location;
 	}
 	
-	public Asset(String name, String description, Date aquisitionDate, String status,
+	public Asset(String name, String description, Calendar aquisitionDate, String status,
 			String manufacturer, Location location) {
 		this.name = name;
 		this.description = description;
@@ -68,11 +67,11 @@ public class Asset {
 		this.description = description;
 	}
 
-	public Date getAquisitionDate() {
+	public Calendar getAquisitionDate() {
 		return aquisitionDate;
 	}
 
-	public void setAquisitionDate(Date aquisitionDate) {
+	public void setAquisitionDate(Calendar aquisitionDate) {
 		this.aquisitionDate = aquisitionDate;
 	}
 

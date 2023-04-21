@@ -8,6 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -21,6 +25,10 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
+import Controller.AssetController;
+import dal.AssetDB;
+import model.Asset;
+
 public class AssetOverview extends JPanel {
 	private JTextField txtSg;
 	private JTextField idTextField;
@@ -33,10 +41,17 @@ public class AssetOverview extends JPanel {
 	private JPopupMenu popUp;
 	private DefaultTable assetTable;
 	private MainFrame mainFrame;
+	private JScrollPane assetSrollPanel;
+	
+	private AssetDB assetDatabase;
+	private AssetController assetCtrl;
+	private ArrayList<Asset> list;
+	
 	/**
 	 * Create the panel.
+	 * @throws SQLException 
 	 */
-	public AssetOverview(MainFrame mainFrame) {
+	public AssetOverview(MainFrame mainFrame) throws SQLException {
 		this.mainFrame = mainFrame;
 		setLayout(new BorderLayout(0, 0));
 		JPanel topPanel = new JPanel();
@@ -65,12 +80,8 @@ public class AssetOverview extends JPanel {
 		JPanel assetPanel = new JPanel();
 		centerPanel.add(assetPanel);
 		assetPanel.setLayout(new BorderLayout(0, 0));
-		JScrollPane assetSrollPanel = new JScrollPane();
+		assetSrollPanel = new JScrollPane();
 		assetPanel.add(assetSrollPanel, BorderLayout.CENTER);
-		String[] columns1 = new String[] { "Column", "Column1", "Column2", "Column3" };
-		assetTable = new DefaultTable(null, columns1);
-		assetSrollPanel.setViewportView(assetTable);
-		assetTable.addRow(null);
 		
 		JPanel fillerPanel = new JPanel();
 		fillerPanel.setLayout(new GridLayout(15, 1, 5, 5));
@@ -184,8 +195,9 @@ public class AssetOverview extends JPanel {
 		deleteButton.setPreferredSize(new Dimension(80, 23));
 		deleteButton.setMinimumSize(new Dimension(30, 5));
 		
+		list = fetchAllAssets();
+		setTable(list);
 		setPopUpMenu();
-		
 	}
 	
 	private void showPopUp(MouseEvent e) {
@@ -198,8 +210,7 @@ public class AssetOverview extends JPanel {
         String s = e.getActionCommand();
 
         if (s.equals("Se asset")) {
-        	JPanel center = new ReadAsset();
-	        mainFrame.setNewCenterPanel(center);
+        	showAsset(false);
         }
     }
 	
@@ -228,5 +239,66 @@ public class AssetOverview extends JPanel {
         };
         assetTable.addMouseListener(ma);
     }
+	
+	public ArrayList<Asset> fetchAllAssets() throws SQLException {
+		assetDatabase = new AssetDB();
+		assetCtrl = new AssetController(assetDatabase);
+		List<Asset> list = assetCtrl.getAllAssets();
+        ArrayList<Asset> arrayList = new ArrayList<Asset>(list);
+		
+		return arrayList;
+	}
+
+	private void setTable(ArrayList<Asset> list) {
+		boolean[] activeColumns = new boolean[] { true, true, true, false, true, true };
+		String[] columns = new String[] { "AssetID", "Navn", "Anskfaffelsesdato", "Beskrivelse", "Status",
+				"Producent" };
+ 
+		String[][] data = convertToStringArray(list);
+		
+		assetTable = new DefaultTable(data, columns, activeColumns);
+
+		assetSrollPanel.setViewportView(assetTable);
+	}
+	
+	private String[][] convertToStringArray(ArrayList<Asset> dataArrayList) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		int size = dataArrayList.size();
+		String[][] data = new String[size][12];
+		for (int i = 0; i < size; i++) {
+			Asset current = dataArrayList.get(i);
+			String dateString = dateFormat.format(current.getAquisitionDate().getTime());
+			data[i][0] = Integer.toString(current.getAssetID());
+			data[i][1] = current.getName();
+			data[i][2] = dateString;
+			data[i][3] = current.getDescription();
+			data[i][4] = current.getStatus();
+			data[i][5] = current.getManufacturer();
+		}
+		return data;
+	}
+	
+	private void showAsset(boolean editMode) {
+		int index = assetTable.findElement();
+
+		if (index == -1) {
+			GUIPopUpMessages.informationMessage("Intet produkt valgt", "Fejl");
+		} else {
+			Asset tempAsset = null;
+			assetDatabase = new AssetDB();
+			assetCtrl = new AssetController(assetDatabase);
+			Object value = assetTable.getModel().getValueAt(index, 0);
+			try {
+				tempAsset = assetCtrl.findAssetByID(Integer.parseInt(value.toString()));
+			} catch (NumberFormatException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (tempAsset != null) {
+				ReadAsset readAsset = new ReadAsset(tempAsset);
+				mainFrame.setNewCenterPanel(readAsset);
+			}
+		}
+	}
 
 }

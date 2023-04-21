@@ -1,5 +1,8 @@
 package Controller;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import model.Asset;
 
 /*
@@ -8,6 +11,7 @@ import model.Asset;
 
 public interface AssetControllerIF {
 	
-	public Asset findAssetByID(int assetID);
-
+	public Asset findAssetByID(int assetID) throws SQLException;
+	
+	public List<Asset> getAllAssets() throws SQLException;
 }

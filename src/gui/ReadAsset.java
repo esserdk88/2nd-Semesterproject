@@ -3,27 +3,25 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.SimpleDateFormat;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JSpinner;
-import javax.swing.JCheckBox;
-import javax.swing.SwingConstants;
 import javax.swing.SpinnerDateModel;
-import java.util.Date;
-import java.util.Calendar;
-import java.awt.Font;
+import javax.swing.SwingConstants;
+
+import model.Asset;
 
 public class ReadAsset extends JPanel {
 	private JTextField txtTitle;
@@ -35,11 +33,14 @@ public class ReadAsset extends JPanel {
 	private JTextField txtRegNo;
 	private JTextField txtPriority;
 	private JTextField txtEmployeeID;
+	private Asset currentAsset;
+	private JTextArea textAreaDescription;
 
 	/**
 	 * Create the panel.
 	 */
-	public ReadAsset() {
+	public ReadAsset(Asset currentAsset) {
+		this.currentAsset = currentAsset;
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel southPanel = new JPanel();
@@ -101,10 +102,10 @@ public class ReadAsset extends JPanel {
 		gbc_txtAssetID.gridy = 3;
 		centerPanel.add(txtAssetID, gbc_txtAssetID);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setWrapStyleWord(true);
-		textArea.setLineWrap(true);
-		JScrollPane descriptionScrollPane = new JScrollPane(textArea);
+		textAreaDescription = new JTextArea();
+		textAreaDescription.setWrapStyleWord(true);
+		textAreaDescription.setLineWrap(true);
+		JScrollPane descriptionScrollPane = new JScrollPane(textAreaDescription);
 		GridBagConstraints gbc_descriptionScrollPane = new GridBagConstraints();
 		gbc_descriptionScrollPane.gridheight = 3;
 		gbc_descriptionScrollPane.gridwidth = 5;
@@ -319,6 +320,21 @@ public class ReadAsset extends JPanel {
 		gbc_btnDelete.gridx = 9;
 		gbc_btnDelete.gridy = 10;
 		centerPanel.add(btnDelete, gbc_btnDelete);
+		
+		initializeTextFields();
+	}
+	
+	public void initializeTextFields() {
+		//txtTitle.setText();
+		//txtInterval;
+		txtAssetID.setText(Integer.toString(currentAsset.getAssetID()));
+		txtName.setText(currentAsset.getName());
+		textAreaDescription.setText(currentAsset.getDescription());
+		//txtSerialNumber;
+		//txtType;
+		//txtRegNo;
+		//txtPriority;
+		//txtEmployeeID;*/
 	}
 
 }
