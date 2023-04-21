@@ -19,13 +19,14 @@ public class Location {
 	}
 	
 	//Construtor for Location-class
-	public Location (String building, String floor, String room, Address address){
+	public Location (int locationID, String building, String floor, String room, Address address){
+		this.locationID = locationID;
 		this.building = building;
 		this.floor = floor;
 		this.room = room;
 		this.address = address;
 	}
-	
+
 	
 	public int getLocationID() {
 		return locationID;

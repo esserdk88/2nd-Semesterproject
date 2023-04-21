@@ -1,6 +1,8 @@
 package dal;
 
 
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -14,5 +16,11 @@ import model.Location;
 public interface AssetDBIF {
 
 	public Asset findAssetByID(int assetID);
+	
+	public Asset createNewAsset(String name, String description, Date aquisitionDate, String status,
+			String manufacturer, Location location) throws SQLException;
+	
+	public List<Asset> getAllAssets() throws SQLException;
+
 	
 }
