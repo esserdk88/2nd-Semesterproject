@@ -1,4 +1,16 @@
 
+DROP TABLE Measurement;
+DROP TABLE Workorder;
+DROP TABLE Sparepart_Used;
+DROP TABLE Sparepart;
+DROP TABLE Supplier;
+DROP TABLE Reference
+DROP TABLE Employee;
+DROP TABLE Asset;
+DROP TABLE Location;
+DROP TABLE Address;
+
+
 CREATE TABLE Address (
   address_id_PK INT IDENTITY(1,1) PRIMARY KEY,
   address_streetname VARCHAR(255),
@@ -36,10 +48,8 @@ CREATE TABLE Employee (
   employee_address_id_FK INT FOREIGN KEY REFERENCES Address(address_id_PK)
 );
 
-
-
 CREATE TABLE Reference (
-  reference_CVR_PK INT IDENTITY(1,1) PRIMARY KEY,
+  reference_CVR_PK INT PRIMARY KEY,
   reference_name VARCHAR(255),
   reference_phone VARCHAR(MAX),
   reference_email VARCHAR(MAX),
@@ -48,7 +58,7 @@ CREATE TABLE Reference (
 );
 
 CREATE TABLE Supplier (
-  supplier_CVR_PK INT IDENTITY(1,1) PRIMARY KEY,
+  supplier_CVR_PK INT PRIMARY KEY,
   supplier_name VARCHAR(255),
   supplier_phone VARCHAR(MAX),
   supplier_email VARCHAR(MAX),
@@ -72,8 +82,6 @@ CREATE TABLE Sparepart_Used (
 
   CONSTRAINT sparepart_used_id_PK PRIMARY KEY (sparepart_used_workorder_id_FK, sparepart_used_sparepart_id_FK)
 );
-
-
 
 CREATE TABLE Workorder (
   workorder_id_PK INT IDENTITY(1,1) PRIMARY KEY,
