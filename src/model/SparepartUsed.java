@@ -9,6 +9,9 @@ public class SparepartUsed {
 	private int amount;
 	private Sparepart sparepart;
 	
+	public SparepartUsed() {
+		//Left empty
+	}
 	
 	public SparepartUsed(int amount, Sparepart sparepart) {
 		this.amount = amount;
@@ -34,6 +37,16 @@ public class SparepartUsed {
 	public void setSparepart(Sparepart sparepart) {
 		this.sparepart = sparepart;
 	}
+
+
+	@Override
+	public String toString() {
+		return sparepart.getName() + " : " + amount;
+	}
+	
+	
+	
+	
 	
 
 }

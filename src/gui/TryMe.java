@@ -5,23 +5,24 @@ import java.sql.SQLException;
 
 import dal.*;
 import model.Employee;
+import model.Measurement;
 import model.Reference;
 import model.Sparepart;
+import model.SparepartUsed;
 import model.Supplier;
 
 public class TryMe {
 
 	public static void main(String[] args) {
 		
-		EmployeeDB employeeDB = new EmployeeDB();
-		ReferenceDB referenceDB = new ReferenceDB();
-		SupplierDB supplierDB = new SupplierDB();
-		SparepartDB sparepartDB = new SparepartDB();
+		SparepartUsedDBIF sparepartUsedDB = new SparepartUsedDB();
+		MeasurementDBIF measurementDB = new MeasurementDB();
+		WorkOrderDBIF workOrderDB = new WorkOrderDB();
 		
-//		System.out.println(sparepartDB.findSparePartbyID(1));
-		for(Sparepart e : sparepartDB.getAllSpareparts()) {
-			System.out.println(e);
-		}
+		System.out.println(workOrderDB.findMaintenanceWorkOrderByID(1));
+//		for(Measurement e : measurementDB.getAllMeasurements()) {
+//			System.out.println(e);
+//		}
 		
 	}
 
