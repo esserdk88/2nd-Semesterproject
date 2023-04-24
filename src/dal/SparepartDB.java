@@ -34,11 +34,11 @@ public class SparepartDB implements SparepartDBIF {
 			ResultSet rs = psFindSparepart.executeQuery();
 			
 			if (rs != null && rs.next()) {
-				//build Reference object from result set
+				//build Sparepart object from result set
 				sparepart = buildObject(rs);
 			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING REFERENCE:" + e.getMessage());
+		System.out.println("ERROR FROM RETRIEVING SPAREPART:" + e.getMessage());
 		}
 		
 		return sparepart;
@@ -74,7 +74,7 @@ public class SparepartDB implements SparepartDBIF {
 			ResultSet rs = psFindSparepart.executeQuery();
 			
 			if (rs != null) {
-				//build Reference object from result set
+				//build Sparepart object from result set
 				while(rs.next()) {
 					list.add(buildObject(rs));
 				}

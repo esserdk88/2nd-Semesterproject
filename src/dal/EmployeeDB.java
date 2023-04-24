@@ -23,7 +23,7 @@ public class EmployeeDB implements EmployeeDBIF {
 	private AddressDB addressDB = new AddressDB();
 	
 	@Override
-	public Employee findEmployeeByID(int EmployeeID) {
+	public Employee findEmployeeByID(int employeeID) {
 		
 		Employee employee = null;
 		
@@ -32,13 +32,13 @@ public class EmployeeDB implements EmployeeDBIF {
 				PreparedStatement psFindEmployee = con.prepareStatement(SELECT_EMPLOYEE_BY_ID)) {
 			
 			//prepare statement
-			psFindEmployee.setInt(1, EmployeeID);
+			psFindEmployee.setInt(1, employeeID);
 			
 			//execute statement
 			ResultSet rs = psFindEmployee.executeQuery();
 			
 			if (rs != null && rs.next()) {
-				//build Location object from result set
+				//build Employee object from result set
 				employee = buildObject(rs);
 			}
 		} catch (SQLException e) {
@@ -53,7 +53,7 @@ public class EmployeeDB implements EmployeeDBIF {
 		// Create a new Employee object
 		Employee result = new Employee();
 
-		// Set the properties of the employee object based on the values in the ResultSet
+		// Set the properties of the Employee object based on the values in the ResultSet
 		result.setEmployeeID(rs.getInt("employee_id_PK"));
 		result.setCprNumber(rs.getString("employee_cpr"));
 		result.setStartDate(convertSqlDateToCalendar(rs.getDate("employee_start_date"))); //Convert date to calendar
@@ -63,7 +63,7 @@ public class EmployeeDB implements EmployeeDBIF {
 		result.setEmail(rs.getString("employee_email"));
 		result.setAddress(addressDB.findAddressByID(rs.getInt("employee_address_id_FK")));
 		
-		// return the location object
+		// return the Employee object
 		return result;
 	}
 
@@ -83,7 +83,7 @@ public class EmployeeDB implements EmployeeDBIF {
 			ResultSet rs = psFindEmployee.executeQuery();
 			
 			if (rs != null) {
-				//build Address object from result set
+				//build Employee object from result set
 				while(rs.next()) {
 					list.add(buildObject(rs));
 				}
@@ -94,8 +94,9 @@ public class EmployeeDB implements EmployeeDBIF {
 		return list;
 	}
 	
-	public static Calendar convertSqlDateToCalendar(Date sqlDate) { 
-		Calendar calendar = Calendar.getInstance(); calendar.setTime(sqlDate); 
+	private Calendar convertSqlDateToCalendar(Date sqlDate) { 
+		Calendar calendar = Calendar.getInstance(); 
+		calendar.setTime(sqlDate); 
 		
 		return calendar; 
 	}

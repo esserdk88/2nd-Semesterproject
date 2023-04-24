@@ -34,11 +34,11 @@ public class SupplierDB implements SupplierDBIF {
 			ResultSet rs = psFindSupplier.executeQuery();
 			
 			if (rs != null && rs.next()) {
-				//build Reference object from result set
+				//build Supplier object from result set
 				supplier = buildObject(rs);
 			}
 		} catch (SQLException e) {
-			System.out.println("ERROR FROM RETRIEVING REFERENCE:" + e.getMessage());
+			System.out.println("ERROR FROM RETRIEVING SUPPLIER:" + e.getMessage());
 		}
 		
 		return supplier;
@@ -56,7 +56,7 @@ public class SupplierDB implements SupplierDBIF {
 		result.setEmail(rs.getString("supplier_email"));
 		result.setAddress(addressDB.findAddressByID(rs.getInt("supplier_address_id_FK")));
 		
-		// return the Reference object
+		// return the Supplier object
 		return result;
 	}
 
@@ -75,7 +75,7 @@ public class SupplierDB implements SupplierDBIF {
 			ResultSet rs = psFindSupplier.executeQuery();
 			
 			if (rs != null) {
-				//build Reference object from result set
+				//build Supplier object from result set
 				while(rs.next()) {
 					list.add(buildObject(rs));
 				}
