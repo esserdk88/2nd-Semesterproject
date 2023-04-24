@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,7 +42,7 @@ class AssetTest {
 		Address address = new Address("Aalborg", "9000", "Godsbanen", "19, 1, 6");
 		Location location = new Location(1, "Bygning 3", "1. sal", "CSD-3.2.11", address);
 		LocalDate today = LocalDate.now();
-		Date sqlDate = Date.valueOf(today);
+		Calendar sqlDate = Calendar.getInstance();
 		
 		//Act
 		asset = assetCtrl.createNewAsset("Vægt", "Vægt til vejning af pålægspakker", sqlDate, "Active", "Gerdmans", location);
