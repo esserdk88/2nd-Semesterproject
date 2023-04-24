@@ -69,7 +69,4 @@ public class Employee extends MasterData {
 	public String toString() {
 		return "(" + getEmployeeID() + ") " + getCprNumber() + " " + calendarToString(getStartDate()) + " " + getPosition() + " - " + super.toString();
 	}
-	
-	
-	
 }

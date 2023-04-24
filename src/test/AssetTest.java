@@ -31,24 +31,6 @@ class AssetTest {
 	@AfterAll
 	static void tearDownAfterClass() throws Exception {
 	}
-
-	
-	void createNewAssetTest() throws SQLException {
-		//Arrange
-		assetDatabase = new AssetDB();
-		Asset asset = null;
-		AssetController assetCtrl = new AssetController(assetDatabase);
-		Address address = new Address("Aalborg", "9000", "Godsbanen", "19, 1, 6");
-		Location location = new Location(1, "Bygning 3", "1. sal", "CSD-3.2.11", address);
-		LocalDate today = LocalDate.now();
-		Date sqlDate = Date.valueOf(today);
-		
-		//Act
-		asset = assetCtrl.createNewAsset("Vægt", "Vægt til vejning af pålægspakker", sqlDate, "Active", "Gerdmans", location);
-		
-		//Assert
-		assertNotNull(asset);
-	}
 	
 	@Test
 	void getAllAssetsTest() throws SQLException {

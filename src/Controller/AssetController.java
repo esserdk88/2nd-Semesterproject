@@ -22,14 +22,6 @@ public class AssetController implements AssetControllerIF {
 		return null;
 	}
 	
-	public Asset createNewAsset(String name, String description, Date aquisitionDate, String status,
-			String manufacturer, Location location) throws SQLException {
-		Asset tempAsset = null;
-		tempAsset = assetDatabase.createNewAsset(name, description, aquisitionDate, status, manufacturer, location);
-		
-		return tempAsset;
-	}
-	
 	public List<Asset> getAllAssets() throws SQLException {
 		List<Asset> assetList = null;
 		

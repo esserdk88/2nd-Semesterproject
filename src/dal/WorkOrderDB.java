@@ -1,5 +1,6 @@
 package dal;
 
+import java.security.Provider.Service;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -82,7 +83,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	}
 	
 	//Converters
-	
 	private Calendar convertSqlDateToCalendar(Date sqlDate) { 
 		Calendar calendar = Calendar.getInstance(); 
 		if(sqlDate != null) {
@@ -91,12 +91,10 @@ public class WorkOrderDB implements WorkOrderDBIF {
 			calendar = null;
 		}
 		
-		
 		return calendar; 
 	}
 	
 	//Builders
-	
 	private Maintenance buildMaintenanceObject(ResultSet rs) throws SQLException {
 		// create a new Maintenance object
 		Maintenance result = new Maintenance();
@@ -108,12 +106,15 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		result.setDescription(rs.getString("workorder_description"));
 		result.setPriority(rs.getShort("workorder_priority"));
 		result.setFinished(rs.getBoolean("workorder_finished"));
+		
 		//Maintenance-specific
 		result.setRepeated(rs.getBoolean("workorder_repeatable"));
 		result.setIntervalDayCount(rs.getInt("workorder_interval"));
+		
 		//Dates
 		result.setStartDate(convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
 		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
+		
 		//Objects
 		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
 		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
@@ -124,5 +125,39 @@ public class WorkOrderDB implements WorkOrderDBIF {
 				
 		return result;
 	}
-
+	
+	public Service findServiceByWorkOrderID(int workOrderID) {
+		Service service = null;
+		
+		
+		// establish database connection
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psFindService = con.prepareStatement(SELECT_SERVICE_BY_ID)) {
+			
+			//prepare statement
+			psFindService.setInt(1, workOrderID);
+			
+			//execute statement
+			ResultSet rs = psFindService.executeQuery();
+			
+			if (rs != null && rs.next()) {
+				//build Service object from result set
+				service = buildServiceObject(rs);
+			}
+		} catch (SQLException e) {
+		System.out.println("ERROR FROM RETRIEVING SERVICE:" + e.getMessage());
+		
+		}
+		
+		return service ;
+		
+	}
+	
+	//TODO
+	private Service buildServiceObject(ResultSet rs) {
+		
+		
+		
+		return null;
+	}
 }
