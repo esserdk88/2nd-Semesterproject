@@ -9,9 +9,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Stack;
 
@@ -25,11 +22,14 @@ import dal.DatabaseConnection;
 
 public class MainFrame extends JFrame {
 
+	//The Frame
 	private static MainFrame frame;
 
+	//Stacks
 	private Stack<JPanel> forward;
 	private Stack<JPanel> backwards;
 
+	//Buttons
 	private JButton assetButton;
 	private JButton workOrderButton;
 	private JButton employeeButton;
@@ -37,6 +37,7 @@ public class MainFrame extends JFrame {
 	private JButton nextButton;
 	private JButton returnButton;
 	
+	//Panels
 	private JPanel leftPanel;
 	private JPanel topPanel;
 	private JPanel centerPanel;
@@ -44,6 +45,7 @@ public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	private JPanel currentCenterPanel;
 	
+	//Labels
 	private JLabel menulabel;
 	private JLabel connectionLabel;
 	

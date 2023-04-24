@@ -12,7 +12,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -71,6 +70,7 @@ public class DefaultTable extends JTable {
 		this.setRowSelectionAllowed(true);
 		this.getTableHeader().setOpaque(false);
 		this.getTableHeader().setBackground(new Color(68, 114, 196));
+		this.getTableHeader().setForeground(Color.WHITE);
 		tcm = new CustomTableColumnManager(this);
 		setModel(tabelModel);
 		setDefaultEditor(Object.class, null);
