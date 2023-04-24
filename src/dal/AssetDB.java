@@ -17,34 +17,12 @@ import model.Location;
 
 public class AssetDB implements AssetDBIF {
 
-	private ArrayList<String> ASSET_COLUMNS_LIST = new ArrayList<String>(
-			Arrays.asList("asset_id_PK", "asset_name", "asset_acquisitiondate", "asset_description", "asset_status",
-					"asset_manufacturer", "asset_location_id_FK"));
-	private String ASSET_COLUMNS = listToString(ASSET_COLUMNS_LIST, false);
+	private String ASSET_COLUMNS = "asset_id_PK, asset_name, asset_acquisitiondate, asset_description, asset_status, asset_manufacturer, asset_location_id_FK";
 	private String ASSET_TABLE = "Asset";
 	private final String QUERY_ASSET_BY_ID = "SELECT * From " + ASSET_TABLE + " where asset_id_PK = ?";
 	private final String SELECT_ALL_ASSETS = "SELECT * FROM " + ASSET_TABLE;
 	private final String INSERT_ASSET = "INSERT INTO " + ASSET_TABLE + "(" + ASSET_COLUMNS + ")"
 			+ " VALUES (?, ?, ?, ?, ?, ?)";
-
-	private String listToString(ArrayList<String> list, boolean keepID) {
-		String outputString = "";
-
-		if (!keepID) {
-			// Remove the ID of the Asset
-			list.remove(0);
-		}
-		for (int i = 0; i < list.size(); i++) {
-			if (i == list.size() - 1) {
-				// Last one
-				outputString += list.get(i);
-			} else {
-				// Others
-				outputString += list.get(i) + ",";
-			}
-		}
-		return outputString;
-	}
 
 	@Override
 	public Asset findAssetByID(int assetID) throws SQLException {
@@ -113,7 +91,7 @@ public class AssetDB implements AssetDBIF {
 
 		return tempAsset;
 	}
-
+	
 	@Override
 	public List<Asset> getAllAssets() throws SQLException {
 		// Initialize the productList variable to null

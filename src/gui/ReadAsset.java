@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -35,6 +37,8 @@ public class ReadAsset extends JPanel {
 	private JTextField txtEmployeeID;
 	private Asset currentAsset;
 	private JTextArea textAreaDescription;
+	private JSpinner spinnerDate;
+	private JCheckBox chckDateBox;
 
 	/**
 	 * Create the panel.
@@ -209,26 +213,26 @@ public class ReadAsset extends JPanel {
 		centerPanel.add(txtRegNo, gbc_txtRegNo);
 		txtRegNo.setColumns(10);
 		
-		JCheckBox checkDate = new JCheckBox("Lukket dato");
-		checkDate.setHorizontalAlignment(SwingConstants.TRAILING);
-		checkDate.setSelected(true);
-		GridBagConstraints gbc_checkDate = new GridBagConstraints();
-		gbc_checkDate.anchor = GridBagConstraints.WEST;
-		gbc_checkDate.insets = new Insets(0, 0, 5, 5);
-		gbc_checkDate.gridx = 7;
-		gbc_checkDate.gridy = 6;
-		centerPanel.add(checkDate, gbc_checkDate);
+		chckDateBox = new JCheckBox("Lukket dato");
+		chckDateBox.setHorizontalAlignment(SwingConstants.TRAILING);
+		chckDateBox.setSelected(true);
+		GridBagConstraints gbc_chckDateBox = new GridBagConstraints();
+		gbc_chckDateBox.anchor = GridBagConstraints.WEST;
+		gbc_chckDateBox.insets = new Insets(0, 0, 5, 5);
+		gbc_chckDateBox.gridx = 7;
+		gbc_chckDateBox.gridy = 6;
+		centerPanel.add(chckDateBox, gbc_chckDateBox);
 		
 		SimpleDateFormat spinnerModel = new SimpleDateFormat("dd.MM.yyyy");
-		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerDateModel());
-		spinner.setEditor(new JSpinner.DateEditor(spinner, spinnerModel.toPattern()));
-		GridBagConstraints gbc_spinner = new GridBagConstraints();
-		gbc_spinner.fill = GridBagConstraints.HORIZONTAL;
-		gbc_spinner.insets = new Insets(0, 0, 5, 5);
-		gbc_spinner.gridx = 8;
-		gbc_spinner.gridy = 6;
-		centerPanel.add(spinner, gbc_spinner);
+		spinnerDate = new JSpinner();
+		spinnerDate.setModel(new SpinnerDateModel());
+		spinnerDate.setEditor(new JSpinner.DateEditor(spinnerDate, spinnerModel.toPattern()));
+		GridBagConstraints gbc_spinnerDate = new GridBagConstraints();
+		gbc_spinnerDate.fill = GridBagConstraints.HORIZONTAL;
+		gbc_spinnerDate.insets = new Insets(0, 0, 5, 5);
+		gbc_spinnerDate.gridx = 8;
+		gbc_spinnerDate.gridy = 6;
+		centerPanel.add(spinnerDate, gbc_spinnerDate);
 		
 		JScrollPane historyScollPane = new JScrollPane();
 		historyScollPane.setPreferredSize(new Dimension(10, 0)); //Changes size of table
@@ -325,16 +329,46 @@ public class ReadAsset extends JPanel {
 	}
 	
 	public void initializeTextFields() {
-		//txtTitle.setText();
-		//txtInterval;
 		txtAssetID.setText(Integer.toString(currentAsset.getAssetID()));
 		txtName.setText(currentAsset.getName());
 		textAreaDescription.setText(currentAsset.getDescription());
 		//txtSerialNumber;
+		
+		//txtTitle.setText();
+		//txtInterval;
 		//txtType;
-		//txtRegNo;
+		//txtRegNo; //workorders count on machine
 		//txtPriority;
-		//txtEmployeeID;*/
+		//txtEmployeeID;
+		//spinnerDate
+		
+		// Change text color to gray
+		txtAssetID.setDisabledTextColor(Color.gray);
+		txtName.setDisabledTextColor(Color.gray);
+		textAreaDescription.setDisabledTextColor(Color.gray);
+		txtSerialNumber.setDisabledTextColor(Color.gray);
+		txtTitle.setDisabledTextColor(Color.gray);
+		txtInterval.setDisabledTextColor(Color.gray);
+		txtType.setDisabledTextColor(Color.gray);
+		txtRegNo.setDisabledTextColor(Color.gray);
+		txtPriority.setDisabledTextColor(Color.gray);
+		txtEmployeeID.setDisabledTextColor(Color.gray);
+		spinnerDate.setForeground(Color.gray);
+		chckDateBox.setForeground(Color.gray);
+		
+		// Disable editing of text
+		txtAssetID.setEnabled(false);
+		txtName.setEnabled(false);
+		textAreaDescription.setEnabled(false);
+		txtSerialNumber.setEnabled(false);
+		txtTitle.setEnabled(false);
+		txtInterval.setEnabled(false);
+		txtType.setEnabled(false);
+		txtRegNo.setEnabled(false);
+		txtPriority.setEnabled(false);
+		txtEmployeeID.setEnabled(false);
+		spinnerDate.setEnabled(false);
+		chckDateBox.setEnabled(false);
 	}
 
 }
