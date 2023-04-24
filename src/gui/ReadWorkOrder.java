@@ -3,27 +3,22 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.SimpleDateFormat;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JSpinner;
-import javax.swing.JCheckBox;
-import javax.swing.SwingConstants;
 import javax.swing.SpinnerDateModel;
-import java.util.Date;
-import java.util.Calendar;
-import java.awt.Font;
+import javax.swing.SwingConstants;
 
 public class ReadWorkOrder extends JPanel {
 	
