@@ -71,6 +71,7 @@ public class DefaultTable extends JTable {
 		this.setRowSelectionAllowed(true);
 		this.getTableHeader().setOpaque(false);
 		this.getTableHeader().setBackground(new Color(68, 114, 196));
+		this.getTableHeader().setForeground(Color.WHITE);
 		tcm = new CustomTableColumnManager(this);
 		setModel(tabelModel);
 		setDefaultEditor(Object.class, null);
