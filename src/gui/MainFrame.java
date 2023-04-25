@@ -177,7 +177,7 @@ public class MainFrame extends JFrame {
 		bottomPanel.setLayout(gbl_bottomPanel);
 	}
 	private void setButtons() {
-		assetButton = new JButton("Asset");
+		assetButton = new JRoundedButton("Asset");
 		assetButton.setMargin(new Insets(4, 26, 4, 26));
 		GridBagConstraints gbc_assetButton = new GridBagConstraints();
 		gbc_assetButton.gridwidth = 2;

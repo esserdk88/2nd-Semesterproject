@@ -71,6 +71,7 @@ public class DefaultTable extends JTable {
 		this.getTableHeader().setOpaque(false);
 		this.getTableHeader().setBackground(new Color(68, 114, 196));
 		this.getTableHeader().setForeground(Color.WHITE);
+		this.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 14));
 		tcm = new CustomTableColumnManager(this);
 		setModel(tabelModel);
 		setDefaultEditor(Object.class, null);
