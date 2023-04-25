@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 				maintenance = buildMaintenanceObject(rs);
 			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING MAINTENANCE:" + e.getMessage());
+		System.out.println("ERROR FROM RETRIEVING MAINTENANCE WORKORDER:" + e.getMessage());
 		}
 		
 		return maintenance;
@@ -66,8 +67,28 @@ public class WorkOrderDB implements WorkOrderDBIF {
 
 	@Override
 	public List<Maintenance> getAllMaintenanceWorkOrders() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Maintenance> list = new ArrayList<>();
+		
+		// establish database connection
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_MAINTENANCE)) {
+			
+			//prepare statement
+			// Left empty. 
+			
+			//execute statement
+			ResultSet rs = psFindWorkorder.executeQuery();
+			
+			if (rs != null) {
+				//build Employee object from result set
+				while(rs.next()) {
+					list.add(buildMaintenanceObject(rs));
+				}
+			} 
+		} catch (SQLException e) {
+		System.out.println("ERROR FROM RETRIEVING MAINTENANCE WORKORDER:" + e.getMessage());
+		}
+		return list;
 	}
 	
 	@Override

@@ -49,6 +49,9 @@ public class MainFrame extends JFrame {
 	private JLabel menulabel;
 	private JLabel connectionLabel;
 	
+	//Connection
+	ConnectionWatch connectionWatch;
+	
 	
 	/**
 	 * Launch the application.
@@ -87,7 +90,10 @@ public class MainFrame extends JFrame {
 		setPanels();
 		setButtons();
 		setButtonStatus();
-		updateConnectionStatus();
+		
+		//This will start a new Thread that will run a connection test and change the parsed label
+		connectionWatch = new ConnectionWatch(connectionLabel);
+		connectionWatch.start();
 	}
 	private void forwardButton() {
 		contentPane.remove(currentCenterPanel);
@@ -131,29 +137,8 @@ public class MainFrame extends JFrame {
 		}
 	}
 	
-	private void setConnectionLabel(boolean connected) {
-		if(!connected) {
-			connectionLabel.setText("No Connection");
-			connectionLabel.setForeground(Color.RED);
-		} else {
-			connectionLabel.setText("Connected");
-			connectionLabel.setForeground(Color.GREEN);
-		}
-	}
-	
 	public void setPageTitle(String newTitle) {
 		menulabel.setText(newTitle);
-	}
-	
-	public void updateConnectionStatus() {
-		boolean connected = false;
-		try {
-			DatabaseConnection.getInstance().getConnection();
-			connected = DatabaseConnection.getInstance().isConnected();
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		setConnectionLabel(connected);
 	}
 	
 	private void setPanels() {

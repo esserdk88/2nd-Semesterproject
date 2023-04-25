@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import dal.*;
 import model.Employee;
+import model.Maintenance;
 import model.Measurement;
 import model.Reference;
 import model.Sparepart;
@@ -19,10 +20,10 @@ public class TryMe {
 		MeasurementDBIF measurementDB = new MeasurementDB();
 		WorkOrderDBIF workOrderDB = new WorkOrderDB();
 		
-		System.out.println(workOrderDB.findMaintenanceWorkOrderByID(1));
-//		for(Measurement e : measurementDB.getAllMeasurements()) {
-//			System.out.println(e);
-//		}
+//		System.out.println(workOrderDB.findMaintenanceWorkOrderByID(1));
+		for(Maintenance e : workOrderDB.getAllMaintenanceWorkOrders()) {
+			System.out.println(e);
+		}
 		
 	}
 
