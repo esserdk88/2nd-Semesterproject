@@ -29,6 +29,7 @@ public class DatabaseConnection {
 
     // Method for getting the database connection
     public Connection getConnection() throws SQLException {
+    		DriverManager.setLoginTimeout(5);
         	connection = DriverManager.getConnection(CONNECTION_STRING);
         return connection;
     }

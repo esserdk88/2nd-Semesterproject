@@ -93,7 +93,7 @@ public class MainFrame extends JFrame {
 		
 		//This will start a new Thread that will run a connection test and change the parsed label
 		connectionWatch = new ConnectionWatch(connectionLabel);
-		connectionWatch.start();
+		connectionWatch.execute();
 	}
 	private void forwardButton() {
 		contentPane.remove(currentCenterPanel);

@@ -13,7 +13,7 @@ import model.Workorder;
 public interface WorkOrderDBIF {
 	
 	//Added from communication diagram Create Work Order
-	public boolean addWorkOrder (Maintenance workOrder); 
+	public boolean addMaintenanceWorkOrder (Maintenance workOrder); 
 	
 	public Maintenance findMaintenanceWorkOrderByID(int workOrderID);
 	

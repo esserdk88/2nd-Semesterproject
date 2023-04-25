@@ -92,7 +92,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	}
 	
 	@Override
-	public boolean addWorkOrder(Maintenance workOrder) {
+	public boolean addMaintenanceWorkOrder(Maintenance workOrder) {
 		// TODO Auto-generated method stub
 		return false;
 	}
