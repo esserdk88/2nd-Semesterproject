@@ -5,14 +5,16 @@ package model;
  */
 
 public class Sparepart {
-	
-	//TODO: does this need a field for the id from the DB
-	
+
+	private int sparepartID;
 	private String name;
 	private int stockAmount;
 	private double price;
 	private Supplier supplier;
 	
+	public Sparepart() {
+		//Left Empty
+	}
 	
 	public Sparepart(String name, int stockAmount, double price, Supplier supplier) {
 		this.name = name;
@@ -20,6 +22,17 @@ public class Sparepart {
 		this.price = price;
 		this.supplier = supplier;
 	}
+
+	public int getSparepartID() {
+		return sparepartID;
+	}
+
+
+
+	public void setSparepartID(int sparepartID) {
+		this.sparepartID = sparepartID;
+	}
+
 
 
 	public String getName() {
@@ -60,6 +73,18 @@ public class Sparepart {
 	public void setSupplier(Supplier supplier) {
 		this.supplier = supplier;
 	}
+
+	@Override
+	public String toString() {
+		return "(" + getSparepartID() + ") " + getName() + " " + getStockAmount() + " " + getPrice() + " " + getSupplier().toString();
+	}
+	
+	
 	
 
+//	private int sparepartID;
+//	private String name;
+//	private int stockAmount;
+//	private double price;
+//	private Supplier supplier;
 }

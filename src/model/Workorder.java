@@ -1,9 +1,9 @@
 package model;
 
-import java.sql.Date;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.spi.LocaleServiceProvider;
 
 /*
  * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
@@ -141,7 +141,24 @@ public abstract class Workorder {
 	public void setMeasurements(List<Measurement> measurements) {
 		this.measurements = measurements;
 	}
+
+	@Override
+	public String toString() {
+		
+		return "(" + getWorkOrderID() + ") " + getType() + ", " + getTitle() + ", " + calendarToString(getStartDate()) + ", " + 
+				calendarToString(getEndDate()) + ", " + getPriority() + ", " + getDescription() + ", " + getAsset();
+	}
 	
-	
-	
+	private String calendarToString(Calendar calendar) {
+		
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
+        String dateString = "Date not set";
+        
+        if(calendar != null) {
+            dateString = dateFormat.format(calendar.getTime());
+        }
+        
+         return dateString;
+	}
 }

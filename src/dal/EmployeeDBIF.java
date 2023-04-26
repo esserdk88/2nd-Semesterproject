@@ -11,5 +11,8 @@ import model.Employee;
 public interface EmployeeDBIF {
 	
 	//find Specific employee
-	public Employee findEmployeeByID(int EmployeeID, boolean withRelations);
+	public Employee findEmployeeByID(int EmployeeID);
+	
+	public List<Employee> getAllEmployees();
+	
 }

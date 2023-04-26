@@ -35,6 +35,11 @@ public class Supplier extends MasterData {
 	public void setContact(String contact) {
 		this.contact = contact;
 	}
+	
+	@Override
+	public String toString() {
+		return "(" + getCvr() + ") " + getContact() + " " + super.toString();
+	}
 
 	
 }

@@ -1,5 +1,7 @@
 package dal;
 
+import java.util.List;
+
 import model.SparepartUsed;
 
 /*
@@ -8,6 +10,8 @@ import model.SparepartUsed;
 
 public interface SparepartUsedDBIF {
 	
-	public SparepartUsed findSparePartUsedID(int sparePartUsedID);
+	public SparepartUsed findSparePartUsedByWorkorderIDAndSparepartID(int workOrderID, int sparepartID);
+	public List<SparepartUsed> findSparepartListByWorkorderID(int workOrderID);
+	public List<SparepartUsed> getAllSparepartUsed();
 	
 }

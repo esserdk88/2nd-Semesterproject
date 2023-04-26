@@ -63,5 +63,12 @@ public abstract class MasterData {
 		this.address = address;
 	}
 
+	@Override
+	public String toString() {
+		return getName() + " " + getPhone() + " " + getEmail() + " - " + getAddress().toString();
+	}
+	
+	
+
 	
 }

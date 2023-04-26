@@ -9,8 +9,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +31,37 @@ import model.Asset;
 
 public class MainFrame extends JFrame {
 
+	//The Frame
 	private static MainFrame frame;
-	private JPanel contentPane;
-	private JPanel currentCenterPanel;
-	private JButton nextButton;
-	private JButton returnButton;
+
+	//Stacks
 	private Stack<JPanel> forward;
 	private Stack<JPanel> backwards;
-	private JLabel connectionLabel;
 
+	//Buttons
+	private JButton assetButton;
+	private JButton workOrderButton;
+	private JButton employeeButton;
+	private JButton exitButton;
+	private JButton nextButton;
+	private JButton returnButton;
+	
+	//Panels
+	private JPanel leftPanel;
+	private JPanel topPanel;
+	private JPanel centerPanel;
+	private JPanel bottomPanel;
+	private JPanel contentPane;
+	private JPanel currentCenterPanel;
+	
+	//Labels
+	private JLabel menulabel;
+	private JLabel connectionLabel;
+	
+	//Connection
+	ConnectionWatch connectionWatch;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -59,149 +83,26 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
-		forward = new Stack<>();
-		backwards = new Stack<>();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		int dpi = toolkit.getScreenResolution();
 		double scaleFactor = dpi / 96.0;
 		int minWidth = (int) (958 * scaleFactor);
 		int minHeight = (int) (500 * scaleFactor);
 		setMinimumSize(new Dimension(minWidth, minHeight));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(5, 5));
 		
-		JPanel topPanel = new JPanel();
-		contentPane.add(topPanel, BorderLayout.NORTH);
+		forward = new Stack<>();
+		backwards = new Stack<>();
 		
-		JPanel centerPanel = new JPanel();
-		contentPane.add(centerPanel, BorderLayout.CENTER);
-		currentCenterPanel = centerPanel;
-		JLabel menulabel = new JLabel("Mainmenu");
-		menulabel.setFont(new Font("Tahoma", Font.BOLD, 24));
-		topPanel.add(menulabel);
-		
-		JPanel leftPanel = new JPanel();
-		contentPane.add(leftPanel, BorderLayout.WEST);
-		GridBagLayout gbl_leftPanel = new GridBagLayout();
-		gbl_leftPanel.columnWidths = new int[]{0, 0};
-		gbl_leftPanel.rowHeights = new int[]{0, 0, 0, 0};
-		gbl_leftPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_leftPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		leftPanel.setLayout(gbl_leftPanel);
-		
-		JButton assetButton = new JButton("Asset");
-		assetButton.addActionListener(new ActionListener() {
-			 public void actionPerformed(ActionEvent e) {
-			        JPanel center = null;
-					try {
-						center = new AssetOverview(frame);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-			        setNewCenterPanel(center);
-			    }
-		});
-		assetButton.setMargin(new Insets(4, 26, 4, 26));
-		GridBagConstraints gbc_assetButton = new GridBagConstraints();
-		gbc_assetButton.gridwidth = 2;
-		gbc_assetButton.fill = GridBagConstraints.BOTH;
-		gbc_assetButton.insets = new Insets(0, 0, 5, 0);
-		gbc_assetButton.gridx = 0;
-		gbc_assetButton.gridy = 0;
-		leftPanel.add(assetButton, gbc_assetButton);
-		
-		JButton workOrderButton = new JButton("Arbejdsordre");
-		workOrderButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JPanel center = null;
-				center = new WorkOrderOverview(frame);
-				setNewCenterPanel(center);
-			}
-		});
-		workOrderButton.setMargin(new Insets(4, 26, 4, 26));
-		GridBagConstraints gbc_workOrderButton = new GridBagConstraints();
-		gbc_workOrderButton.fill = GridBagConstraints.BOTH;
-		gbc_workOrderButton.insets = new Insets(0, 0, 5, 0);
-		gbc_workOrderButton.gridx = 0;
-		gbc_workOrderButton.gridy = 1;
-		leftPanel.add(workOrderButton, gbc_workOrderButton);
-		
-		JButton employeeButton = new JButton("Ansatte");
-		employeeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JPanel center = new EmployeeOverview();
-		        setNewCenterPanel(center);
-			}
-		});
-		employeeButton.setMargin(new Insets(4, 26, 4, 26));
-		GridBagConstraints gbc_employeeButton = new GridBagConstraints();
-		gbc_employeeButton.fill = GridBagConstraints.BOTH;
-		gbc_employeeButton.gridx = 0;
-		gbc_employeeButton.gridy = 2;
-		leftPanel.add(employeeButton, gbc_employeeButton);
-		
-		JPanel bottomPanel = new JPanel();
-		contentPane.add(bottomPanel, BorderLayout.SOUTH);
-		GridBagLayout gbl_bottomPanel = new GridBagLayout();
-		gbl_bottomPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_bottomPanel.rowHeights = new int[]{0, 0};
-		gbl_bottomPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_bottomPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-		bottomPanel.setLayout(gbl_bottomPanel);
-		
-		returnButton = new JButton("Tilbage");
-		returnButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(backwards.peek() != null) {
-					backwardsButton();
-				}
-			}
-		});
-		GridBagConstraints gbc_returnButton = new GridBagConstraints();
-		gbc_returnButton.fill = GridBagConstraints.BOTH;
-		gbc_returnButton.insets = new Insets(0, 0, 0, 5);
-		gbc_returnButton.gridx = 4;
-		gbc_returnButton.gridy = 0;
-		bottomPanel.add(returnButton, gbc_returnButton);
-		
-		connectionLabel = new JLabel("No connection");
-		
-		GridBagConstraints gbc_connectionLabel = new GridBagConstraints();
-		gbc_connectionLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_connectionLabel.gridx = 1;
-		gbc_connectionLabel.gridy = 0;
-		bottomPanel.add(connectionLabel, gbc_connectionLabel);
-		
-		
-		nextButton = new JButton("Næste");
-		nextButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(forward.isEmpty() != true) {
-					forwardButton();
-				}
-			}
-		});
-		GridBagConstraints gbc_nextButton = new GridBagConstraints();
-		gbc_nextButton.insets = new Insets(0, 0, 0, 5);
-		gbc_nextButton.gridx = 5;
-		gbc_nextButton.gridy = 0;
-		bottomPanel.add(nextButton, gbc_nextButton);
-		
-		JButton exitButton = new JButton("Afslut");
-		GridBagConstraints gbc_exitButton = new GridBagConstraints();
-		gbc_exitButton.insets = new Insets(0, 0, 0, 5);
-		gbc_exitButton.fill = GridBagConstraints.BOTH;
-		gbc_exitButton.gridx = 6;
-		gbc_exitButton.gridy = 0;
-		bottomPanel.add(exitButton, gbc_exitButton);
+		setPanels();
+		setButtons();
 		setButtonStatus();
-		updateConnectionStatus();
+		
+		//This will start a new Thread that will run a connection test and change the parsed label
+		connectionWatch = new ConnectionWatch(connectionLabel);
+		connectionWatch.execute();
 	}
 	private void forwardButton() {
 		contentPane.remove(currentCenterPanel);
@@ -245,24 +146,136 @@ public class MainFrame extends JFrame {
 		}
 	}
 	
-	private void setConnectionLabel(boolean connected) {
-		if(!connected) {
-			connectionLabel.setText("No Connection");
-			connectionLabel.setForeground(Color.RED);
-		} else {
-			connectionLabel.setText("Connected");
-			connectionLabel.setForeground(Color.GREEN);
-		}
+	public void setPageTitle(String newTitle) {
+		menulabel.setText(newTitle);
 	}
 	
-	public void updateConnectionStatus() {
-		boolean connected = false;
-		try {
-			DatabaseConnection.getInstance().getConnection();
-			connected = DatabaseConnection.getInstance().isConnected();
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		setConnectionLabel(connected);
+	private void setPanels() {
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(5, 5));
+		
+		topPanel = new JPanel();
+		contentPane.add(topPanel, BorderLayout.NORTH);
+		
+		centerPanel = new JPanel();
+		contentPane.add(centerPanel, BorderLayout.CENTER);
+		currentCenterPanel = centerPanel;
+		menulabel = new JLabel("Mainmenu");
+		menulabel.setFont(new Font("Tahoma", Font.BOLD, 24));
+		topPanel.add(menulabel);
+		
+		leftPanel = new JPanel();
+		contentPane.add(leftPanel, BorderLayout.WEST);
+		GridBagLayout gbl_leftPanel = new GridBagLayout();
+		gbl_leftPanel.columnWidths = new int[]{0, 0};
+		gbl_leftPanel.rowHeights = new int[]{0, 0, 0, 0};
+		gbl_leftPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_leftPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		leftPanel.setLayout(gbl_leftPanel);
+		
+
+		JButton assetButton = new JButton("Asset");
+		assetButton.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+			        JPanel center = null;
+					try {
+						center = new AssetOverview(frame);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+			        setNewCenterPanel(center);
+			    }
+		});
+
+		bottomPanel = new JPanel();
+		contentPane.add(bottomPanel, BorderLayout.SOUTH);
+		GridBagLayout gbl_bottomPanel = new GridBagLayout();
+		gbl_bottomPanel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_bottomPanel.rowHeights = new int[]{0, 0};
+		gbl_bottomPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_bottomPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		bottomPanel.setLayout(gbl_bottomPanel);
+	}
+	private void setButtons() {
+		assetButton = new JRoundedButton("Asset");
+
+		assetButton.setMargin(new Insets(4, 26, 4, 26));
+		GridBagConstraints gbc_assetButton = new GridBagConstraints();
+		gbc_assetButton.gridwidth = 2;
+		gbc_assetButton.fill = GridBagConstraints.BOTH;
+		gbc_assetButton.insets = new Insets(0, 0, 5, 0);
+		gbc_assetButton.gridx = 0;
+		gbc_assetButton.gridy = 0;
+		leftPanel.add(assetButton, gbc_assetButton);
+
+		JButton workOrderButton = new JButton("Arbejdsordre");
+		workOrderButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JPanel center = null;
+				center = new WorkOrderOverview(frame);
+				setNewCenterPanel(center);
+			}
+		});
+
+		workOrderButton = new JButton("Arbejdsordre");
+
+		workOrderButton.setMargin(new Insets(4, 26, 4, 26));
+		GridBagConstraints gbc_workOrderButton = new GridBagConstraints();
+		gbc_workOrderButton.fill = GridBagConstraints.BOTH;
+		gbc_workOrderButton.insets = new Insets(0, 0, 5, 0);
+		gbc_workOrderButton.gridx = 0;
+		gbc_workOrderButton.gridy = 1;
+		leftPanel.add(workOrderButton, gbc_workOrderButton);
+		
+		employeeButton = new JButton("Ansatte");
+		employeeButton.setMargin(new Insets(4, 26, 4, 26));
+		GridBagConstraints gbc_employeeButton = new GridBagConstraints();
+		gbc_employeeButton.fill = GridBagConstraints.BOTH;
+		gbc_employeeButton.gridx = 0;
+		gbc_employeeButton.gridy = 2;
+		leftPanel.add(employeeButton, gbc_employeeButton);
+		
+		returnButton = new JButton("Tilbage");
+		GridBagConstraints gbc_returnButton = new GridBagConstraints();
+		gbc_returnButton.insets = new Insets(0, 0, 0, 5);
+		gbc_returnButton.gridx = 4;
+		gbc_returnButton.gridy = 0;
+		bottomPanel.add(returnButton, gbc_returnButton);
+		
+		connectionLabel = new JLabel("No connection");
+		GridBagConstraints gbc_connectionLabel = new GridBagConstraints();
+		gbc_connectionLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_connectionLabel.gridx = 1;
+		gbc_connectionLabel.gridy = 0;
+		bottomPanel.add(connectionLabel, gbc_connectionLabel);
+		
+		
+		nextButton = new JButton("Næste");
+		GridBagConstraints gbc_nextButton = new GridBagConstraints();
+		gbc_nextButton.insets = new Insets(0, 0, 0, 5);
+		gbc_nextButton.gridx = 5;
+		gbc_nextButton.gridy = 0;
+		bottomPanel.add(nextButton, gbc_nextButton);
+		
+		exitButton = new JButton("Afslut");
+		GridBagConstraints gbc_exitButton = new GridBagConstraints();
+		gbc_exitButton.insets = new Insets(0, 0, 0, 5);
+		gbc_exitButton.fill = GridBagConstraints.BOTH;
+		gbc_exitButton.gridx = 6;
+		gbc_exitButton.gridy = 0;
+		bottomPanel.add(exitButton, gbc_exitButton);
+		
+		assetButton.addActionListener(e -> setNewCenterPanel(new AssetOverview(frame)));
+		workOrderButton.addActionListener(e -> setNewCenterPanel(new WorkOrderOverview(frame)));
+		employeeButton.addActionListener(e -> setNewCenterPanel(new EmployeeOverview()));
+		returnButton.addActionListener(e -> {if(backwards.peek() != null) {backwardsButton();}});
+		nextButton.addActionListener(e -> {if(forward.isEmpty() != true) {forwardButton();}});
+		
+		
+		
 	}
 }

@@ -19,22 +19,12 @@ public class Asset {
 	
 	
 	public Asset() {
-
+		//Left empty.
 	}
 	
 	public Asset(int assetID, String name, String description, Calendar aquisitionDate, String status,
 			String manufacturer, Location location) {
 		this.assetID = assetID;
-		this.name = name;
-		this.description = description;
-		this.aquisitionDate = aquisitionDate;
-		this.status = status;
-		this.manufacturer = manufacturer;
-		this.location = location;
-	}
-	
-	public Asset(String name, String description, Calendar aquisitionDate, String status,
-			String manufacturer, Location location) {
 		this.name = name;
 		this.description = description;
 		this.aquisitionDate = aquisitionDate;
@@ -98,5 +88,10 @@ public class Asset {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
-	
+
+	@Override
+	public String toString() {
+		
+		return "" + getAssetID();
+	}
 }

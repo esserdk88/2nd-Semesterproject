@@ -218,7 +218,9 @@ public class AssetOverview extends JPanel {
 		txtSg.setText("Søg efter ID");
 		topPanel.add(txtSg);
 		txtSg.setColumns(10);
-		idLabel = new JLabel("ID");
+    
+    JLabel idLabel = new JLabel("ID");
+
 		idLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		informationTextFieldPanel.add(idLabel);
 		

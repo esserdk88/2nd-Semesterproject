@@ -1,5 +1,7 @@
 package dal;
 
+import java.util.List;
+
 import model.Measurement;
 
 /*
@@ -9,5 +11,7 @@ import model.Measurement;
 public interface MeasurementDBIF {
 	
 	public Measurement findMeasurementByID(int measurementID);
+	public List<Measurement> findMeasurementsByWorkOrderID(int workOrderID);
+	public List<Measurement> getAllMeasurements();
 	
 }

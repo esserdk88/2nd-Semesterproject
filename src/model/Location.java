@@ -13,6 +13,11 @@ public class Location {
 	private String room;
 	private Address address;
 	
+	
+	public Location() {
+		
+	}
+	
 	//Construtor for Location-class
 	public Location (int locationID, String building, String floor, String room, Address address){
 		this.locationID = locationID;
@@ -21,15 +26,16 @@ public class Location {
 		this.room = room;
 		this.address = address;
 	}
+
 	
 	public int getLocationID() {
 		return locationID;
 	}
-	
+
 	public void setLocationID(int locationID) {
 		this.locationID = locationID;
 	}
-	
+
 	public Address getAddress() {
 		return address;
 	}
@@ -62,4 +68,10 @@ public class Location {
 		this.room = room;
 	}
 
+	@Override
+	public String toString() {
+		
+		
+		return "(" + getLocationID() + ") " + getBuilding() + " " + getFloor() + " " + getRoom() + " - " + getAddress();
+	}
 }
