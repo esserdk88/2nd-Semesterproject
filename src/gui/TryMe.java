@@ -8,6 +8,8 @@ import model.Employee;
 import model.Maintenance;
 import model.Measurement;
 import model.Reference;
+import model.Repair;
+import model.Service;
 import model.Sparepart;
 import model.SparepartUsed;
 import model.Supplier;
