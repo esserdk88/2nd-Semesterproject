@@ -1,5 +1,7 @@
 package test;
 
+
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterAll;
@@ -17,10 +19,6 @@ class AddressTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		address = new Address(42, "Aalborg SV", "9200", "Sofiendalsvej", "60");
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
 	}
 
 	@Test
@@ -41,11 +39,11 @@ class AddressTest {
 		streetNumber = address.getStreetNumber();
 		
 		//Assert
-		assertEquals(42, address.getAddressID());
-		assertEquals("Aalborg SV", address.getCityName());
-		assertEquals("9200", address.getZipCode());
-		assertEquals("Sofiendalsvej", address.getStreetName());
-		assertEquals("60", address.getStreetNumber());
+		assertEquals(42, addressID);
+		assertEquals("Aalborg SV", cityName);
+		assertEquals("9200", zipCode);
+		assertEquals("Sofiendalsvej", streetName);
+		assertEquals("60", streetNumber);
 	}
 	
 	@Test
