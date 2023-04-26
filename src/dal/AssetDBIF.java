@@ -15,8 +15,8 @@ import model.Location;
 
 public interface AssetDBIF {
 
-	public Asset findAssetByID(int assetID);
+	public Asset findAssetByID(int assetID) throws SQLException;
 	
-	public List<Asset> getAllAssets();
 
+	public List<Asset> getAllAssets();
 }

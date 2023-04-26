@@ -9,7 +9,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import javax.swing.JButton;
@@ -18,7 +24,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Controller.AssetController;
+import dal.AssetDB;
 import dal.DatabaseConnection;
+import model.Asset;
 
 public class MainFrame extends JFrame {
 
@@ -167,6 +176,21 @@ public class MainFrame extends JFrame {
 		gbl_leftPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		leftPanel.setLayout(gbl_leftPanel);
 		
+
+		JButton assetButton = new JButton("Asset");
+		assetButton.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+			        JPanel center = null;
+					try {
+						center = new AssetOverview(frame);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+			        setNewCenterPanel(center);
+			    }
+		});
+
 		bottomPanel = new JPanel();
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
 		GridBagLayout gbl_bottomPanel = new GridBagLayout();
@@ -178,6 +202,7 @@ public class MainFrame extends JFrame {
 	}
 	private void setButtons() {
 		assetButton = new JRoundedButton("Asset");
+
 		assetButton.setMargin(new Insets(4, 26, 4, 26));
 		GridBagConstraints gbc_assetButton = new GridBagConstraints();
 		gbc_assetButton.gridwidth = 2;
@@ -186,8 +211,18 @@ public class MainFrame extends JFrame {
 		gbc_assetButton.gridx = 0;
 		gbc_assetButton.gridy = 0;
 		leftPanel.add(assetButton, gbc_assetButton);
-		
+
+		JButton workOrderButton = new JButton("Arbejdsordre");
+		workOrderButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JPanel center = null;
+				center = new WorkOrderOverview(frame);
+				setNewCenterPanel(center);
+			}
+		});
+
 		workOrderButton = new JButton("Arbejdsordre");
+
 		workOrderButton.setMargin(new Insets(4, 26, 4, 26));
 		GridBagConstraints gbc_workOrderButton = new GridBagConstraints();
 		gbc_workOrderButton.fill = GridBagConstraints.BOTH;

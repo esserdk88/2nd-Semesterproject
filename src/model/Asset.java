@@ -2,7 +2,6 @@ package model;
 
 import java.sql.Date;
 import java.util.Calendar;
-import java.util.List;
 
 /*
  * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
