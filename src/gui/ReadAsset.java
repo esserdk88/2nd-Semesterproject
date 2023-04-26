@@ -24,6 +24,7 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
 import gui.components.DefaultTable;
+import gui.components.JRoundedButton;
 import model.Asset;
 
 public class ReadAsset extends JPanel {
@@ -53,7 +54,7 @@ public class ReadAsset extends JPanel {
 		fl_southPanel.setAlignment(FlowLayout.RIGHT);
 		add(southPanel, BorderLayout.SOUTH);
 		
-		JButton btnSave = new JButton("Opret ny arbejdsordre");
+		JButton btnSave = new JRoundedButton("Opret ny arbejdsordre");
 		southPanel.add(btnSave);
 		
 		JPanel centerPanel = new JPanel();
@@ -310,7 +311,7 @@ public class ReadAsset extends JPanel {
 		DefaultTable completedActionsTable = new DefaultTable(null, columnsCompletedActions);
 		scrollPane.setViewportView(completedActionsTable);
 		
-		JButton btnAdd = new JButton("Tilføj ny");
+		JButton btnAdd = new JRoundedButton("Tilføj ny");
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
 		gbc_btnAdd.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnAdd.insets = new Insets(0, 0, 5, 0);
@@ -318,7 +319,7 @@ public class ReadAsset extends JPanel {
 		gbc_btnAdd.gridy = 9;
 		centerPanel.add(btnAdd, gbc_btnAdd);
 		
-		JButton btnDelete = new JButton("Slet");
+		JButton btnDelete = new JRoundedButton("Slet");
 		GridBagConstraints gbc_btnDelete = new GridBagConstraints();
 		gbc_btnDelete.insets = new Insets(0, 0, 5, 0);
 		gbc_btnDelete.fill = GridBagConstraints.HORIZONTAL;

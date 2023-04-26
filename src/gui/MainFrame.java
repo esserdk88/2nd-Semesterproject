@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -9,13 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 import javax.swing.JButton;
@@ -24,11 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Controller.AssetController;
-import dal.AssetDB;
-import dal.DatabaseConnection;
 import gui.components.JRoundedButton;
-import model.Asset;
 
 public class MainFrame extends JFrame {
 
@@ -90,7 +80,7 @@ public class MainFrame extends JFrame {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		int dpi = toolkit.getScreenResolution();
 		double scaleFactor = dpi / 96.0;
-		int minWidth = (int) (958 * scaleFactor);
+		int minWidth = (int) (975 * scaleFactor);
 		int minHeight = (int) (500 * scaleFactor);
 		setMinimumSize(new Dimension(minWidth, minHeight));
 		
@@ -178,7 +168,7 @@ public class MainFrame extends JFrame {
 		leftPanel.setLayout(gbl_leftPanel);
 		
 
-		JButton assetButton = new JButton("Asset");
+		JButton assetButton = new JRoundedButton("Asset");
 		assetButton.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {
 			        JPanel center = null;
@@ -196,6 +186,10 @@ public class MainFrame extends JFrame {
 		gbl_bottomPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		bottomPanel.setLayout(gbl_bottomPanel);
 	}
+	private void assetButtonMethod() {
+		AssetOverview panel = new AssetOverview(frame);
+		setNewCenterPanel(panel);
+	}
 	private void setButtons() {
 		assetButton = new JRoundedButton("Asset");
 
@@ -208,16 +202,8 @@ public class MainFrame extends JFrame {
 		gbc_assetButton.gridy = 0;
 		leftPanel.add(assetButton, gbc_assetButton);
 
-		workOrderButton = new JButton("Arbejdsordre");
-		workOrderButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JPanel center = null;
-				center = new WorkOrderOverview(frame);
-				setNewCenterPanel(center);
-			}
-		});
-
-		workOrderButton = new JButton("Arbejdsordre");
+		workOrderButton = new JRoundedButton("Arbejdsordre");
+		workOrderButton = new JRoundedButton("Arbejdsordre");
 
 		workOrderButton.setMargin(new Insets(4, 26, 4, 26));
 		GridBagConstraints gbc_workOrderButton = new GridBagConstraints();
@@ -227,7 +213,7 @@ public class MainFrame extends JFrame {
 		gbc_workOrderButton.gridy = 1;
 		leftPanel.add(workOrderButton, gbc_workOrderButton);
 		
-		employeeButton = new JButton("Ansatte");
+		employeeButton = new JRoundedButton("Ansatte");
 		employeeButton.setMargin(new Insets(4, 26, 4, 26));
 		GridBagConstraints gbc_employeeButton = new GridBagConstraints();
 		gbc_employeeButton.fill = GridBagConstraints.BOTH;
@@ -235,7 +221,7 @@ public class MainFrame extends JFrame {
 		gbc_employeeButton.gridy = 2;
 		leftPanel.add(employeeButton, gbc_employeeButton);
 		
-		returnButton = new JButton("Tilbage");
+		returnButton = new JRoundedButton("Tilbage");
 		GridBagConstraints gbc_returnButton = new GridBagConstraints();
 		gbc_returnButton.insets = new Insets(0, 0, 0, 5);
 		gbc_returnButton.gridx = 4;
@@ -250,14 +236,14 @@ public class MainFrame extends JFrame {
 		bottomPanel.add(connectionLabel, gbc_connectionLabel);
 		
 		
-		nextButton = new JButton("Næste");
+		nextButton = new JRoundedButton("Næste");
 		GridBagConstraints gbc_nextButton = new GridBagConstraints();
 		gbc_nextButton.insets = new Insets(0, 0, 0, 5);
 		gbc_nextButton.gridx = 5;
 		gbc_nextButton.gridy = 0;
 		bottomPanel.add(nextButton, gbc_nextButton);
 		
-		exitButton = new JButton("Afslut");
+		exitButton = new JRoundedButton("Afslut");
 		GridBagConstraints gbc_exitButton = new GridBagConstraints();
 		gbc_exitButton.insets = new Insets(0, 0, 0, 5);
 		gbc_exitButton.fill = GridBagConstraints.BOTH;
@@ -265,13 +251,11 @@ public class MainFrame extends JFrame {
 		gbc_exitButton.gridy = 0;
 		bottomPanel.add(exitButton, gbc_exitButton);
 		
-		assetButton.addActionListener(e -> setNewCenterPanel(new AssetOverview(frame)));
+		assetButton.addActionListener(e -> assetButtonMethod());
 		workOrderButton.addActionListener(e -> setNewCenterPanel(new WorkOrderOverview(frame)));
 		employeeButton.addActionListener(e -> setNewCenterPanel(new EmployeeOverview()));
 		returnButton.addActionListener(e -> {if(backwards.peek() != null) {backwardsButton();}});
 		nextButton.addActionListener(e -> {if(forward.isEmpty() != true) {forwardButton();}});
-		
-		
 		
 	}
 }

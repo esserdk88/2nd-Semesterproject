@@ -107,6 +107,10 @@ public class DefaultTable extends JTable {
 		return c;
 	}
 	
+	public DefaultTableModel getDefaultTableModel() {
+		return tabelModel;
+	}
+	
 	/**
 	 * Insert new data into the existing array using a Multidimensional array
 	 * @param data Data to be displayed

@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -24,12 +26,15 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import Controller.AssetController;
 import dal.AssetDB;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
+import gui.components.TableSwingWorker;
 import model.Asset;
+import java.awt.Component;
 
 public class AssetOverview extends JPanel {
 	
@@ -84,7 +89,6 @@ public class AssetOverview extends JPanel {
 	private MainFrame mainFrame;
 	private AssetDB assetDatabase;
 	private AssetController assetCtrl;
-	private List<Asset> list;	
 	/**
 	 * Create the panel.
 	 * @throws SQLException 
@@ -97,8 +101,9 @@ public class AssetOverview extends JPanel {
 		setButtons();
 		setTables();
 		setPopUpMenu();
+		TableSwingWorker dataFetcher = new TableSwingWorker(assetTable);
+        dataFetcher.execute();
 	}
-	
 
 	private void showPopUp(MouseEvent e) {
         if (e.isPopupTrigger()) {
@@ -155,17 +160,23 @@ public class AssetOverview extends JPanel {
 		return list;
 	}
 
-	private void setTable(List<Asset> list) {
+	public void setAssetOnStartUp() {
+		List<Asset> list = fetchAllAssets();
+		assetTable.setNewData(convertToStringArray(list));
+	}
+	private void setTables() {
+		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
+		workOrderScrollPanel = new JScrollPane();
+		workOrderPanel.add(workOrderScrollPanel, BorderLayout.CENTER);
+		workOrderTable = new DefaultTable(null, columns2);
+		workOrderScrollPanel.setViewportView(workOrderTable);
+		
 		assetScrollPanel = new JScrollPane();
 		assetPanel.add(assetScrollPanel, BorderLayout.CENTER);
 		boolean[] activeColumns = new boolean[] { true, true, true, false, true, true };
 		String[] columns = new String[] { "AssetID", "Navn", "Anskfaffelsesdato", "Beskrivelse", "Status",
 				"Producent" };
- 
-		String[][] data = convertToStringArray(list);
-		
-		assetTable = new DefaultTable(data, columns, activeColumns);
-
+		assetTable = new DefaultTable(null, columns, activeColumns);
 		assetScrollPanel.setViewportView(assetTable);
 	}
 	
@@ -207,15 +218,6 @@ public class AssetOverview extends JPanel {
 				mainFrame.setNewCenterPanel(readAsset);
 			}
 		}
-	}
-	private void setTables() {
-		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
-		workOrderScrollPanel = new JScrollPane();
-		workOrderPanel.add(workOrderScrollPanel, BorderLayout.CENTER);
-		workOrderTable = new DefaultTable(null, columns2);
-		workOrderScrollPanel.setViewportView(workOrderTable);
-		list = fetchAllAssets();
-		setTable(list);
 	}
 
 	private void setLabelsAndTextfields() {
@@ -299,20 +301,22 @@ public class AssetOverview extends JPanel {
 		
 		addNewButton = new JRoundedButton("Tilføj ny");
 		workOrderButtonPanel.add(addNewButton);
-		addNewButton.setMaximumSize(new Dimension(100, 23));
-		addNewButton.setPreferredSize(new Dimension(100, 23));
+		addNewButton.setMaximumSize(new Dimension(110, 23));
+		addNewButton.setPreferredSize(new Dimension(110, 23));
 		addNewButton.setMinimumSize(new Dimension(30, 5));
+		workOrderButtonPanel.add(Box.createVerticalStrut(4));
 		
 		editButton = new JRoundedButton("Rediger");
 		workOrderButtonPanel.add(editButton);
-		editButton.setMaximumSize(new Dimension(100, 23));
-		editButton.setPreferredSize(new Dimension(100, 23));
+		editButton.setMaximumSize(new Dimension(110, 23));
+		editButton.setPreferredSize(new Dimension(110, 23));
 		editButton.setMinimumSize(new Dimension(30, 5));
+		workOrderButtonPanel.add(Box.createVerticalStrut(4));
 		
 		deleteButton = new JRoundedButton("Slet");
 		workOrderButtonPanel.add(deleteButton);
-		deleteButton.setMaximumSize(new Dimension(100, 23));
-		deleteButton.setPreferredSize(new Dimension(100, 23));
+		deleteButton.setMaximumSize(new Dimension(110, 23));
+		deleteButton.setPreferredSize(new Dimension(110, 23));
 		deleteButton.setMinimumSize(new Dimension(30, 5));
 	}
 
