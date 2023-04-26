@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
+import gui.components.DefaultTable;
 import model.Asset;
 
 public class ReadAsset extends JPanel {

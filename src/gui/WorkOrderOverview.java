@@ -18,6 +18,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import gui.components.DefaultTable;
+
 public class WorkOrderOverview extends JPanel {
 	
 	//TextField
