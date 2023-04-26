@@ -20,6 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
+import gui.components.DefaultTable;
+
 public class ReadWorkOrder extends JPanel {
 	
 	//Textfields

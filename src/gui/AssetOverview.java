@@ -27,6 +27,8 @@ import javax.swing.SwingConstants;
 
 import Controller.AssetController;
 import dal.AssetDB;
+import gui.components.DefaultTable;
+import gui.components.JRoundedButton;
 import model.Asset;
 
 public class AssetOverview extends JPanel {
@@ -91,8 +93,8 @@ public class AssetOverview extends JPanel {
 		this.mainFrame = mainFrame;
 		setLayout(new BorderLayout(0, 0));
 		setPanels();
-		setButtons();
 		setLabelsAndTextfields();
+		setButtons();
 		setTables();
 		setPopUpMenu();
 	}
@@ -286,31 +288,31 @@ public class AssetOverview extends JPanel {
 	}
 
 	private void setButtons() {
-		searchButton = new JButton("Søg");
+		searchButton = new JRoundedButton("Søg");
 		topPanel.add(searchButton);
-		changeButton = new JButton("Ændre");
+		changeButton = new JRoundedButton("Ændre");
 		changeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		extraPanel.add(changeButton);
 		
-		addNewButton = new JButton("Tilføj ny");
+		addNewButton = new JRoundedButton("Tilføj ny");
 		workOrderButtonPanel.add(addNewButton);
-		addNewButton.setMaximumSize(new Dimension(80, 23));
-		addNewButton.setPreferredSize(new Dimension(80, 23));
+		addNewButton.setMaximumSize(new Dimension(100, 23));
+		addNewButton.setPreferredSize(new Dimension(100, 23));
 		addNewButton.setMinimumSize(new Dimension(30, 5));
 		
-		editButton = new JButton("Rediger");
+		editButton = new JRoundedButton("Rediger");
 		workOrderButtonPanel.add(editButton);
-		editButton.setMaximumSize(new Dimension(80, 23));
-		editButton.setPreferredSize(new Dimension(80, 23));
+		editButton.setMaximumSize(new Dimension(100, 23));
+		editButton.setPreferredSize(new Dimension(100, 23));
 		editButton.setMinimumSize(new Dimension(30, 5));
 		
-		deleteButton = new JButton("Slet");
+		deleteButton = new JRoundedButton("Slet");
 		workOrderButtonPanel.add(deleteButton);
-		deleteButton.setMaximumSize(new Dimension(80, 23));
-		deleteButton.setPreferredSize(new Dimension(80, 23));
+		deleteButton.setMaximumSize(new Dimension(100, 23));
+		deleteButton.setPreferredSize(new Dimension(100, 23));
 		deleteButton.setMinimumSize(new Dimension(30, 5));
 	}
 

@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import gui.components.DefaultTable;
+
 public class EmployeeOverview extends JPanel {
 
 	//Panels

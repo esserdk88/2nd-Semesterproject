@@ -27,6 +27,7 @@ import javax.swing.border.EmptyBorder;
 import Controller.AssetController;
 import dal.AssetDB;
 import dal.DatabaseConnection;
+import gui.components.JRoundedButton;
 import model.Asset;
 
 public class MainFrame extends JFrame {
