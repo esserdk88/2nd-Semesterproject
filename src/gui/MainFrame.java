@@ -181,12 +181,7 @@ public class MainFrame extends JFrame {
 		assetButton.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {
 			        JPanel center = null;
-					try {
-						center = new AssetOverview(frame);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					center = new AssetOverview(frame);
 			        setNewCenterPanel(center);
 			    }
 		});
@@ -212,7 +207,7 @@ public class MainFrame extends JFrame {
 		gbc_assetButton.gridy = 0;
 		leftPanel.add(assetButton, gbc_assetButton);
 
-		JButton workOrderButton = new JButton("Arbejdsordre");
+		workOrderButton = new JButton("Arbejdsordre");
 		workOrderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JPanel center = null;

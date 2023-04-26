@@ -82,12 +82,12 @@ public class AssetOverview extends JPanel {
 	private MainFrame mainFrame;
 	private AssetDB assetDatabase;
 	private AssetController assetCtrl;
-	private ArrayList<Asset> list;	
+	private List<Asset> list;	
 	/**
 	 * Create the panel.
 	 * @throws SQLException 
 	 */
-	public AssetOverview(MainFrame mainFrame) throws SQLException{
+	public AssetOverview(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		setLayout(new BorderLayout(0, 0));
 		setPanels();
@@ -138,16 +138,22 @@ public class AssetOverview extends JPanel {
         assetTable.addMouseListener(ma);
     }
 	
-	public ArrayList<Asset> fetchAllAssets() throws SQLException {
+	public List<Asset> fetchAllAssets() {
 		assetDatabase = new AssetDB();
 		assetCtrl = new AssetController(assetDatabase);
-		List<Asset> list = assetCtrl.getAllAssets();
-        ArrayList<Asset> arrayList = new ArrayList<Asset>(list);
+		List<Asset> list = new ArrayList<>();
+		try {
+			list = assetCtrl.getAllAssets();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //ArrayList<Asset> arrayList = new ArrayList<Asset>(list);
 		
-		return arrayList;
+		return list;
 	}
 
-	private void setTable(ArrayList<Asset> list) {
+	private void setTable(List<Asset> list) {
 		assetScrollPanel = new JScrollPane();
 		assetPanel.add(assetScrollPanel, BorderLayout.CENTER);
 		boolean[] activeColumns = new boolean[] { true, true, true, false, true, true };
@@ -161,7 +167,7 @@ public class AssetOverview extends JPanel {
 		assetScrollPanel.setViewportView(assetTable);
 	}
 	
-	private String[][] convertToStringArray(ArrayList<Asset> dataArrayList) {
+	private String[][] convertToStringArray(List<Asset> dataArrayList) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		int size = dataArrayList.size();
 		String[][] data = new String[size][12];
@@ -200,7 +206,7 @@ public class AssetOverview extends JPanel {
 			}
 		}
 	}
-	private void setTables() throws SQLException {
+	private void setTables() {
 		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
 		workOrderScrollPanel = new JScrollPane();
 		workOrderPanel.add(workOrderScrollPanel, BorderLayout.CENTER);
@@ -219,7 +225,7 @@ public class AssetOverview extends JPanel {
 		topPanel.add(txtSg);
 		txtSg.setColumns(10);
     
-    JLabel idLabel = new JLabel("ID");
+		idLabel = new JLabel("ID");
 
 		idLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		informationTextFieldPanel.add(idLabel);
