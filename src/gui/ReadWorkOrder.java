@@ -21,6 +21,7 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
 import gui.components.DefaultTable;
+import gui.components.JRoundedButton;
 
 public class ReadWorkOrder extends JPanel {
 	
@@ -112,13 +113,13 @@ public class ReadWorkOrder extends JPanel {
 
 	private void setButtons() {
 		
-		btnCancel = new JButton("Udskyd arbejdsordre");
+		btnCancel = new JRoundedButton("Udskyd arbejdsordre");
 		southPanel.add(btnCancel);
 		
-		btnSave = new JButton("Færddiggør arbejdsordre");
+		btnSave = new JRoundedButton("Færddiggør arbejdsordre");
 		southPanel.add(btnSave);
 		
-		btnAdd = new JButton("Tilføj ny");
+		btnAdd = new JRoundedButton("Tilføj ny");
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
 		gbc_btnAdd.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnAdd.insets = new Insets(0, 0, 5, 0);
@@ -126,7 +127,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_btnAdd.gridy = 9;
 		centerPanel.add(btnAdd, gbc_btnAdd);
 		
-		btnDelete = new JButton("Slet");
+		btnDelete = new JRoundedButton("Slet");
 		GridBagConstraints gbc_btnDelete = new GridBagConstraints();
 		gbc_btnDelete.insets = new Insets(0, 0, 5, 0);
 		gbc_btnDelete.fill = GridBagConstraints.HORIZONTAL;

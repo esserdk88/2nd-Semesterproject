@@ -3,12 +3,14 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import gui.components.DefaultTable;
+import gui.components.JRoundedButton;
 
 public class EmployeeOverview extends JPanel {
 
@@ -36,28 +38,31 @@ public class EmployeeOverview extends JPanel {
 	}
 
 	private void setButtons() {
-		createButton = new JButton("Opret");
-		createButton.setMaximumSize(new Dimension(80, 23));
-		createButton.setPreferredSize(new Dimension(80, 23));
+		createButton = new JRoundedButton("Opret");
+		createButton.setMaximumSize(new Dimension(110, 23));
+		createButton.setPreferredSize(new Dimension(110, 23));
 		createButton.setMinimumSize(new Dimension(30, 5));
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		rightPanel.add(createButton);
+		rightPanel.add(Box.createVerticalStrut(4));
 		
-		editButton = new JButton("Rediger");
-		editButton.setMaximumSize(new Dimension(80, 23));
-		editButton.setPreferredSize(new Dimension(80, 23));
+		editButton = new JRoundedButton("Rediger");
+		editButton.setMaximumSize(new Dimension(110, 23));
+		editButton.setPreferredSize(new Dimension(110, 23));
 		editButton.setMinimumSize(new Dimension(30, 5));
 		rightPanel.add(editButton);
+		rightPanel.add(Box.createVerticalStrut(4));
 		
-		showButton = new JButton("Se");
-		showButton.setMaximumSize(new Dimension(80, 23));
-		showButton.setPreferredSize(new Dimension(80, 23));
+		showButton = new JRoundedButton("Se");
+		showButton.setMaximumSize(new Dimension(110, 23));
+		showButton.setPreferredSize(new Dimension(110, 23));
 		showButton.setMinimumSize(new Dimension(30, 5));
 		rightPanel.add(showButton);
+		rightPanel.add(Box.createVerticalStrut(4));
 		
-		deleteButton = new JButton("Slet");
-		deleteButton.setMaximumSize(new Dimension(80, 23));
-		deleteButton.setPreferredSize(new Dimension(80, 23));
+		deleteButton = new JRoundedButton("Slet");
+		deleteButton.setMaximumSize(new Dimension(110, 23));
+		deleteButton.setPreferredSize(new Dimension(110, 23));
 		deleteButton.setMinimumSize(new Dimension(30, 5));
 		rightPanel.add(deleteButton);
 		

@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -30,6 +32,7 @@ import dal.AssetDB;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import model.Asset;
+import java.awt.Component;
 
 public class AssetOverview extends JPanel {
 	
@@ -85,6 +88,7 @@ public class AssetOverview extends JPanel {
 	private AssetDB assetDatabase;
 	private AssetController assetCtrl;
 	private List<Asset> list;	
+	private Component rigidArea;
 	/**
 	 * Create the panel.
 	 * @throws SQLException 
@@ -299,20 +303,22 @@ public class AssetOverview extends JPanel {
 		
 		addNewButton = new JRoundedButton("Tilføj ny");
 		workOrderButtonPanel.add(addNewButton);
-		addNewButton.setMaximumSize(new Dimension(100, 23));
-		addNewButton.setPreferredSize(new Dimension(100, 23));
+		addNewButton.setMaximumSize(new Dimension(110, 23));
+		addNewButton.setPreferredSize(new Dimension(110, 23));
 		addNewButton.setMinimumSize(new Dimension(30, 5));
+		workOrderButtonPanel.add(Box.createVerticalStrut(4));
 		
 		editButton = new JRoundedButton("Rediger");
 		workOrderButtonPanel.add(editButton);
-		editButton.setMaximumSize(new Dimension(100, 23));
-		editButton.setPreferredSize(new Dimension(100, 23));
+		editButton.setMaximumSize(new Dimension(110, 23));
+		editButton.setPreferredSize(new Dimension(110, 23));
 		editButton.setMinimumSize(new Dimension(30, 5));
+		workOrderButtonPanel.add(Box.createVerticalStrut(4));
 		
 		deleteButton = new JRoundedButton("Slet");
 		workOrderButtonPanel.add(deleteButton);
-		deleteButton.setMaximumSize(new Dimension(100, 23));
-		deleteButton.setPreferredSize(new Dimension(100, 23));
+		deleteButton.setMaximumSize(new Dimension(110, 23));
+		deleteButton.setPreferredSize(new Dimension(110, 23));
 		deleteButton.setMinimumSize(new Dimension(30, 5));
 	}
 

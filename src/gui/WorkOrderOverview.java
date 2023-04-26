@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import gui.components.DefaultTable;
+import gui.components.JRoundedButton;
 
 public class WorkOrderOverview extends JPanel {
 	
@@ -129,23 +130,23 @@ public class WorkOrderOverview extends JPanel {
 	}
 
 	private void setButtons() {
-		searchButton = new JButton("Søg");
+		searchButton = new JRoundedButton("Søg");
 		rightTopPanel.add(searchButton);
-		openOrderButton = new JButton("Åben opgave");
+		openOrderButton = new JRoundedButton("Åben opgave");
 		openOrderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setNewCenterPanel(new ReadWorkOrder()); //TODO add workorder to constructor
 			}
 		});
-		openOrderButton.setMinimumSize(new Dimension(110, 23));
-		openOrderButton.setMaximumSize(new Dimension(110, 23));
-		openOrderButton.setPreferredSize(new Dimension(110, 23));
+		openOrderButton.setMinimumSize(new Dimension(145, 23));
+		openOrderButton.setMaximumSize(new Dimension(145, 23));
+		openOrderButton.setPreferredSize(new Dimension(145, 23));
 		rightPanel.add(openOrderButton);
-		
-		createNewWorkOrder = new JButton("Ny Opgave");
-		createNewWorkOrder.setPreferredSize(new Dimension(110, 23));
-		createNewWorkOrder.setMinimumSize(new Dimension(110, 23));
-		createNewWorkOrder.setMaximumSize(new Dimension(110, 23));
+		rightPanel.add(Box.createVerticalStrut(4));
+		createNewWorkOrder = new JRoundedButton("Ny Opgave");
+		createNewWorkOrder.setPreferredSize(new Dimension(145, 23));
+		createNewWorkOrder.setMinimumSize(new Dimension(145, 23));
+		createNewWorkOrder.setMaximumSize(new Dimension(145, 23));
 		createNewWorkOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setNewCenterPanel(new WorkOrder());

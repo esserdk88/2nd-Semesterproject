@@ -14,6 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
+
+import gui.components.JRoundedButton;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -85,7 +88,7 @@ setLayout(new BorderLayout(0, 0));
 		gbc_comboBox_2.gridy = 1;
 		centerLeftPanel.add(comboBox_2, gbc_comboBox_2);
 		
-		JButton btnFindEmployee = new JButton("Find medarbejder");
+		JButton btnFindEmployee = new JRoundedButton("Find medarbejder");
 		GridBagConstraints gbc_btnFindEmployee = new GridBagConstraints();
 		gbc_btnFindEmployee.fill = GridBagConstraints.BOTH;
 		gbc_btnFindEmployee.weighty = 0;
@@ -328,7 +331,7 @@ setLayout(new BorderLayout(0, 0));
 		gbc_scrollPane.gridwidth = 4;
 		centerLeftPanel.add(scrollPane, gbc_scrollPane);
 		
-		JButton btnNewButton = new JButton("Opret arbejdsordre");
+		JButton btnNewButton = new JRoundedButton("Opret arbejdsordre");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.anchor = GridBagConstraints.SOUTH;
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
