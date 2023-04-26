@@ -20,7 +20,7 @@ import model.Address;
 import model.Asset;
 import model.Location;
 
-class AssetTest {
+class AssetDBTest {
 	
 	private static AssetDB assetDatabase;
 
