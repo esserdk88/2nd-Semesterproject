@@ -1,5 +1,8 @@
 package dal;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -22,20 +25,29 @@ import model.Workorder;
 
 public class WorkOrderDB implements WorkOrderDBIF {
 	
-	public static final String FIELDS_COMMON = "workorder_id_PK, workorder_title, workorder_type, workorder_startdate, workorder_enddate, "
+	public static final String FIELDS_COMMON_WITH_ID = "workorder_id_PK, workorder_title, workorder_type, workorder_startdate, workorder_enddate, "
 			+ "workorder_priority, workorder_description, workorder_finished, workorder_asset_id_FK, workorder_employee_id_FK";
-	public static final String FIELDS_MAINTENANCE = FIELDS_COMMON + ", workorder_interval, workorder_repeatable";
-	public static final String FIELDS_SERVICE = FIELDS_COMMON + ", workorder_reference_id_FK";
-	public static final String FIELDS_REPAIR = FIELDS_COMMON + ", workorder_reference_id_FK, workorder_price";
+	public static final String FIELDS_INSERT_COMMON = "workorder_title, workorder_type, workorder_startdate, workorder_enddate,"
+						+ "workorder_priority, workorder_description, workorder_finished, workorder_asset_id_FK";
+	public static final String FIELDS_MAINTENANCE_WITH_ID = FIELDS_COMMON_WITH_ID + ", workorder_interval, workorder_repeatable";
+	public static final String FIELDS_INSERT_MAINTENANCE = FIELDS_INSERT_COMMON + ", workorder_interval, workorder_repeatable";
+	public static final String FIELDS_SERVICE = FIELDS_COMMON_WITH_ID + ", workorder_reference_id_FK";
+	public static final String FIELDS_REPAIR = FIELDS_COMMON_WITH_ID + ", workorder_reference_id_FK, workorder_price";
 	
-	public static final String SELECT_MAINTENANCE_BY_ID = "SELECT " + FIELDS_MAINTENANCE + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Maintenance'";
+	public static final String SELECT_MAINTENANCE_BY_ID = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Maintenance'";
 	public static final String SELECT_SERVICE_BY_ID = "SELECT " + FIELDS_SERVICE + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Service'";
 	public static final String SELECT_REPAIR_BY_ID = "SELECT " + FIELDS_REPAIR + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Repair'";
 	
-	public static final String SELECT_ALL_MAINTENANCE = "SELECT " + FIELDS_MAINTENANCE + " FROM Workorder WHERE workorder_type = 'Maintenance'";
+	public static final String SELECT_UNFINISHED_WORKORDERS = "SELECT * from Workorder where workorder_finished = 0 and workorder_startdate <= GETDATE()";
+	
+	public static final String SELECT_ALL_MAINTENANCE = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Maintenance'";
 	public static final String SELECT_ALL_SERVICE = "SELECT " + FIELDS_SERVICE + " FROM Workorder WHERE workorder_type = 'Service'";
 	public static final String SELECT_ALL_REPAIR = "SELECT " + FIELDS_REPAIR + " FROM Workorder WHERE workorder_type = 'Repair'";
-
+	
+	public static final String INSERT_MAINTENANCE = "INSERT INTO Workorder (" + FIELDS_INSERT_MAINTENANCE + ") VALUES (?,?,?,?,?,?,?,?,?,?)" ;
+	
+	public static final String DELETE_WORK_ORDER_BY_ID = "DELETE FROM Workorder where workorder_id_PK = ?";
+	
 	private EmployeeDBIF employeeDB = new EmployeeDB();
 	private AssetDBIF assetDB = new AssetDB();
 	private SparepartUsedDBIF sparepartUsedDB = new SparepartUsedDB();
@@ -44,8 +56,34 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	@Override
 	public boolean addMaintenanceWorkOrder(Maintenance workOrder) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		boolean success = false;
+		
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psAddMaintenance = con.prepareStatement(INSERT_MAINTENANCE)) {
+			
+			//prepare statement
+			psAddMaintenance.setString(1, workOrder.getTitle());
+			psAddMaintenance.setString(2, "Maintenance");
+			psAddMaintenance.setDate(3, convertCalendarToSqlDate(workOrder.getStartDate()));
+			psAddMaintenance.setDate(4, convertCalendarToSqlDate(workOrder.getEndDate()));
+			psAddMaintenance.setShort(5, workOrder.getPriority());
+			psAddMaintenance.setString(6, workOrder.getDescription());
+			psAddMaintenance.setBoolean(7, workOrder.isFinished());
+			psAddMaintenance.setInt(8, workOrder.getAsset().getAssetID());
+			psAddMaintenance.setInt(9, workOrder.getIntervalDayCount());
+			psAddMaintenance.setBoolean(10, workOrder.isRepeated());
+					
+			//execute statement
+			psAddMaintenance.executeUpdate();
+			
+			success = true;
+			
+		} catch (SQLException e) {
+			System.out.println("ERROR FROM INSERTING MAINTENANCE WORKORDER:" + e.getMessage());
+		}
+		
+		return success;
 	}
 	
 	@Override
@@ -203,11 +241,68 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		}
 		return list;
 	}
-
+	
 	@Override
 	public List<Workorder> getAllUnfinishedWorkOrders() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Workorder> list = new ArrayList<>();
+		
+		// establish database connection
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_UNFINISHED_WORKORDERS)) {
+			
+			//prepare statement
+			// Left empty.
+			
+			//execute statement
+			ResultSet rs = psFindWorkorder.executeQuery();
+			
+			if (rs != null) {
+				//build WorkOrder object from result set
+				while(rs.next()) {
+					switch (rs.getString("workorder_type")) {
+					case "Maintenance":  
+						list.add(buildMaintenanceObject(rs));
+						break;
+					case "Service":  
+						list.add(buildServiceObject(rs));
+						break;	
+					case "Repair":  
+						list.add(buildRepairObject(rs));
+						break;	
+					default:
+						//Left empty.
+					}
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("ERROR FROM RETRIEVING UNFINISHED WORKORDER:" + e.getMessage());
+		}
+		return list;
+	}
+	
+	public boolean deleteWorkOrderByID(int workOrderID) {
+		
+		boolean success = false;
+		
+		// establish database connection
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psDeleteWorkOrder = con.prepareStatement(DELETE_WORK_ORDER_BY_ID)) {
+			
+			//prepare statement
+			psDeleteWorkOrder.setInt(1, workOrderID);
+			
+			//execute statement
+			psDeleteWorkOrder.executeUpdate();
+			psDeleteWorkOrder.getUpdateCount(); 
+			if(psDeleteWorkOrder.getUpdateCount() > 0) {
+				success = true;
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("ERROR FROM DELETING WORKORDER:" + e.getMessage());
+		}
+		
+		return success;
 	}
 	
 	@Override
@@ -227,6 +322,11 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		
 		return calendar; 
 	}
+	
+	private Date convertCalendarToSqlDate(Calendar cal) {
+        long timeInMillis = cal.getTimeInMillis();
+        return new Date(timeInMillis);
+    }
 		
 	//Builders
 	private Maintenance buildMaintenanceObject(ResultSet rs) throws SQLException {

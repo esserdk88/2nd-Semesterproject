@@ -27,6 +27,8 @@ public interface WorkOrderDBIF {
 	public List<Repair> getAllRepairWorkOrders();
 	public List<Workorder> getAllUnfinishedWorkOrders();
 	
+	public boolean deleteWorkOrderByID(int workOrderID);
+	
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder);
 	
 }
