@@ -48,11 +48,11 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	public static final String DELETE_WORK_ORDER_BY_ID = "DELETE FROM Workorder where workorder_id_PK = ?";
 	
-	private EmployeeDBIF employeeDB = new EmployeeDB();
-	private AssetDBIF assetDB = new AssetDB();
-	private SparepartUsedDBIF sparepartUsedDB = new SparepartUsedDB();
-	private MeasurementDBIF measurementDB = new MeasurementDB();
-	private ReferenceDBIF referenceDB = new ReferenceDB();
+	private EmployeeDBIF employeeDB = Database.getInstance().getEmployeeDataBase();
+	private AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
+	private SparepartUsedDBIF sparepartUsedDB = Database.getInstance().getSparepartUsedDataBase();
+	private MeasurementDBIF measurementDB = Database.getInstance().getMeasurementDataBase();
+	private ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 	
 	@Override
 	public boolean addMaintenanceWorkOrder(Maintenance workOrder) {

@@ -17,7 +17,7 @@ public class SparepartUsedDB implements SparepartUsedDBIF {
 	public static final String SELECT_SPAREPART_USED_BY_WORKORDER_ID = "SELECT " + FIELDS + " FROM Sparepart_Used WHERE sparepart_used_workorder_id_FK = ?";
 	public static final String SELECT_ALL_SPAREPART_USED = "SELECT " + FIELDS + " FROM Sparepart_Used";
 	
-	private SparepartDBIF sparepartDB = new SparepartDB();
+	private SparepartDBIF sparepartDB = Database.getInstance().getSparepartDataBase();
 
 	@Override
 	public SparepartUsed findSparePartUsedByWorkorderIDAndSparepartID(int workOrderID, int sparepartID) {

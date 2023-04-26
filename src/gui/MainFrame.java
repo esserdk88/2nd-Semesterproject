@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import dal.*;
 import gui.components.JRoundedButton;
 
 public class MainFrame extends JFrame {
@@ -86,7 +87,7 @@ public class MainFrame extends JFrame {
 		
 		forward = new Stack<>();
 		backwards = new Stack<>();
-		
+		Database.getInstance();
 		setPanels();
 		setButtons();
 		setButtonStatus();

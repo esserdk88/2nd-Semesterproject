@@ -1,13 +1,16 @@
 package model;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import gui.components.StringArrayConvertible;
 
 /*
  * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
  */
 
-public class Asset {
+public class Asset implements StringArrayConvertible{
 	
 	private int assetID;
 	private String name;
@@ -93,5 +96,10 @@ public class Asset {
 	public String toString() {
 		
 		return "" + getAssetID();
+	}
+	
+	public String[] getObjectAsStringArray() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		return new String[] {Integer.toString(getAssetID()), getName(), dateFormat.format(getAquisitionDate().getTime()), getDescription(), getStatus(), getManufacturer()};
 	}
 }

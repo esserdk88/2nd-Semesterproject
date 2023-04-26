@@ -17,7 +17,7 @@ public class SparepartDB implements SparepartDBIF {
 	public static final String SELECT_SPAREPART_BY_ID = "SELECT " + FIELDS + " FROM Sparepart Where sparepart_id_PK = ?";
 	public static final String SELECT_ALL_SPAREPARTS = "SELECT " + FIELDS + " FROM Sparepart";
 
-	private SupplierDBIF supplierDB = new SupplierDB();
+	private SupplierDBIF supplierDB = Database.getInstance().getSupplierDataBase();
 
 	@Override
 	public Sparepart findSparePartbyID(int sparePartID) {
