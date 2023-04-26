@@ -101,8 +101,7 @@ public class AssetOverview extends JPanel {
 		setButtons();
 		setTables();
 		setPopUpMenu();
-		TableSwingWorker dataFetcher = new TableSwingWorker(assetTable);
-        dataFetcher.execute();
+		setAssetOnStartUp();
 	}
 
 	private void showPopUp(MouseEvent e) {
@@ -144,25 +143,19 @@ public class AssetOverview extends JPanel {
         };
         assetTable.addMouseListener(ma);
     }
-	
-	public List<Asset> fetchAllAssets() {
-		assetDatabase = new AssetDB();
-		assetCtrl = new AssetController(assetDatabase);
-		List<Asset> list = new ArrayList<>();
-		try {
-			list = assetCtrl.getAllAssets();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        //ArrayList<Asset> arrayList = new ArrayList<Asset>(list);
-		
-		return list;
-	}
 
 	public void setAssetOnStartUp() {
-		List<Asset> list = fetchAllAssets();
-		assetTable.setNewData(convertToStringArray(list));
+		assetCtrl = new AssetController();
+		Thread workerThread = new Thread(() -> {
+		    TableSwingWorker dataFetcher = null;
+			try {
+				dataFetcher = new TableSwingWorker(assetTable, assetCtrl.getAllAssets());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		    dataFetcher.execute();
+		});
+		workerThread.start();
 	}
 	private void setTables() {
 		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
@@ -180,23 +173,6 @@ public class AssetOverview extends JPanel {
 		assetScrollPanel.setViewportView(assetTable);
 	}
 	
-	private String[][] convertToStringArray(List<Asset> dataArrayList) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		int size = dataArrayList.size();
-		String[][] data = new String[size][12];
-		for (int i = 0; i < size; i++) {
-			Asset current = dataArrayList.get(i);
-			String dateString = dateFormat.format(current.getAquisitionDate().getTime());
-			data[i][0] = Integer.toString(current.getAssetID());
-			data[i][1] = current.getName();
-			data[i][2] = dateString;
-			data[i][3] = current.getDescription();
-			data[i][4] = current.getStatus();
-			data[i][5] = current.getManufacturer();
-		}
-		return data;
-	}
-	
 	private void showAsset(boolean editMode) {
 		int index = assetTable.findElement();
 
@@ -204,8 +180,7 @@ public class AssetOverview extends JPanel {
 			GUIPopUpMessages.informationMessage("Intet produkt valgt", "Fejl");
 		} else {
 			Asset tempAsset = null;
-			assetDatabase = new AssetDB();
-			assetCtrl = new AssetController(assetDatabase);
+			assetCtrl = new AssetController();
 			Object value = assetTable.getModel().getValueAt(index, 0);
 			try {
 				tempAsset = assetCtrl.findAssetByID(Integer.parseInt(value.toString()));

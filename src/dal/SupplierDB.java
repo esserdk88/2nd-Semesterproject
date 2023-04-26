@@ -16,7 +16,7 @@ public class SupplierDB implements SupplierDBIF {
 	public static final String SELECT_SUPPLIER_BY_CVR = "SELECT " + FIELDS + " FROM Supplier Where supplier_CVR_PK = ?";
 	public static final String SELECT_ALL_SUPPLIERS = "SELECT " + FIELDS + " FROM Supplier";
 
-	private AddressDB addressDB = new AddressDB();
+	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
 	
 	@Override
 	public Supplier findSupplierByID(int supplierCVR) {

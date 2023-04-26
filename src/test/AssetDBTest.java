@@ -36,9 +36,9 @@ class AssetDBTest {
 	@Test
 	void getAllAssetsTest() throws SQLException {
 		//Arrange
-		assetDatabase = new AssetDB();
+		assetDatabase = new AssetDB(); //TODO Set correct testing databases?
 		List<Asset> assetList = new ArrayList<Asset>();
-		AssetController assetCtrl = new AssetController(assetDatabase);
+		AssetController assetCtrl = new AssetController(); 
 		
 		//Act
 		assetList = assetCtrl.getAllAssets();

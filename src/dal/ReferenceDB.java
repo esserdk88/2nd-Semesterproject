@@ -18,7 +18,7 @@ public class ReferenceDB implements ReferenceDBIF {
 	public static final String SELECT_REFERENCE_BY_CVR = "SELECT " + FIELDS + " FROM Reference Where reference_CVR_PK = ?";
 	public static final String SELECT_ALL_REFERENCES = "SELECT " + FIELDS + " FROM Reference";
 
-	private AddressDB addressDB = new AddressDB();
+	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
 
 	@Override
 	public Reference findReferenceByID(int referenceCVR) {

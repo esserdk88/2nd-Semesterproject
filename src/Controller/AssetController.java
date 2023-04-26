@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import dal.AssetDBIF;
+import dal.Database;
 import model.Asset;
 import model.Location;
 
@@ -12,8 +13,8 @@ public class AssetController implements AssetControllerIF {
 	
 	private AssetDBIF assetDatabase;
 
-	public AssetController(AssetDBIF assetDatabase) {
-			this.assetDatabase = assetDatabase;
+	public AssetController() {
+			this.assetDatabase = Database.getInstance().getAssetDataBase();
 	}
 
 	@Override

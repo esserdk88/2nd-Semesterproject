@@ -16,7 +16,7 @@ public class LocationDB implements LocationDBIF {
 	public static final String SELECT_LOCATION_BY_ID = "SELECT " + FIELDS + " FROM Location Where location_id_PK = ?";
 	public static final String SELECT_ALL_LOCATIONS = "SELECT " + FIELDS + " FROM Location";
 	
-	private AddressDB addressDB = new AddressDB();
+	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
 	
 	@Override
 	public Location findLocationByID(int locationID) {

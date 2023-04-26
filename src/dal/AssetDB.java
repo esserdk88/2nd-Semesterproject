@@ -24,7 +24,7 @@ public class AssetDB implements AssetDBIF {
 	public static final String SELECT_ASSET_BY_ID = "SELECT " + FIELDS + " FROM Asset Where asset_id_PK = ?";
 	public static final String SELECT_ALL_ASSETS = "SELECT " + FIELDS + " FROM Asset";
 
-	private LocationDBIF locationDB = new LocationDB();
+	private LocationDBIF locationDB = Database.getInstance().getLocationDataBase();
 	
 	@Override
 	public Asset findAssetByID(int assetID) {

@@ -20,7 +20,7 @@ public class EmployeeDB implements EmployeeDBIF {
 	public static final String SELECT_EMPLOYEE_BY_ID = "SELECT " + FIELDS + " FROM Employee Where employee_id_PK = ?";
 	public static final String SELECT_ALL_EMPLOYEES = "SELECT " + FIELDS + " FROM Employee";
 	
-	private AddressDB addressDB = new AddressDB();
+	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
 	
 	@Override
 	public Employee findEmployeeByID(int employeeID) {
