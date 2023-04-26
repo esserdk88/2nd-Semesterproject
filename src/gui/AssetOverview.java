@@ -26,11 +26,13 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import Controller.AssetController;
 import dal.AssetDB;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
+import gui.components.TableSwingWorker;
 import model.Asset;
 import java.awt.Component;
 
@@ -87,8 +89,6 @@ public class AssetOverview extends JPanel {
 	private MainFrame mainFrame;
 	private AssetDB assetDatabase;
 	private AssetController assetCtrl;
-	private List<Asset> list;	
-	private Component rigidArea;
 	/**
 	 * Create the panel.
 	 * @throws SQLException 
@@ -101,8 +101,9 @@ public class AssetOverview extends JPanel {
 		setButtons();
 		setTables();
 		setPopUpMenu();
+		TableSwingWorker dataFetcher = new TableSwingWorker(assetTable);
+        dataFetcher.execute();
 	}
-	
 
 	private void showPopUp(MouseEvent e) {
         if (e.isPopupTrigger()) {
@@ -159,17 +160,23 @@ public class AssetOverview extends JPanel {
 		return list;
 	}
 
-	private void setTable(List<Asset> list) {
+	public void setAssetOnStartUp() {
+		List<Asset> list = fetchAllAssets();
+		assetTable.setNewData(convertToStringArray(list));
+	}
+	private void setTables() {
+		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
+		workOrderScrollPanel = new JScrollPane();
+		workOrderPanel.add(workOrderScrollPanel, BorderLayout.CENTER);
+		workOrderTable = new DefaultTable(null, columns2);
+		workOrderScrollPanel.setViewportView(workOrderTable);
+		
 		assetScrollPanel = new JScrollPane();
 		assetPanel.add(assetScrollPanel, BorderLayout.CENTER);
 		boolean[] activeColumns = new boolean[] { true, true, true, false, true, true };
 		String[] columns = new String[] { "AssetID", "Navn", "Anskfaffelsesdato", "Beskrivelse", "Status",
 				"Producent" };
- 
-		String[][] data = convertToStringArray(list);
-		
-		assetTable = new DefaultTable(data, columns, activeColumns);
-
+		assetTable = new DefaultTable(null, columns, activeColumns);
 		assetScrollPanel.setViewportView(assetTable);
 	}
 	
@@ -211,15 +218,6 @@ public class AssetOverview extends JPanel {
 				mainFrame.setNewCenterPanel(readAsset);
 			}
 		}
-	}
-	private void setTables() {
-		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
-		workOrderScrollPanel = new JScrollPane();
-		workOrderPanel.add(workOrderScrollPanel, BorderLayout.CENTER);
-		workOrderTable = new DefaultTable(null, columns2);
-		workOrderScrollPanel.setViewportView(workOrderTable);
-		list = fetchAllAssets();
-		setTable(list);
 	}
 
 	private void setLabelsAndTextfields() {

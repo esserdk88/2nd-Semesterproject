@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -9,13 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 import javax.swing.JButton;
@@ -24,11 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Controller.AssetController;
-import dal.AssetDB;
-import dal.DatabaseConnection;
 import gui.components.JRoundedButton;
-import model.Asset;
 
 public class MainFrame extends JFrame {
 
@@ -196,6 +186,10 @@ public class MainFrame extends JFrame {
 		gbl_bottomPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		bottomPanel.setLayout(gbl_bottomPanel);
 	}
+	private void assetButtonMethod() {
+		AssetOverview panel = new AssetOverview(frame);
+		setNewCenterPanel(panel);
+	}
 	private void setButtons() {
 		assetButton = new JRoundedButton("Asset");
 
@@ -209,14 +203,6 @@ public class MainFrame extends JFrame {
 		leftPanel.add(assetButton, gbc_assetButton);
 
 		workOrderButton = new JRoundedButton("Arbejdsordre");
-		workOrderButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JPanel center = null;
-				center = new WorkOrderOverview(frame);
-				setNewCenterPanel(center);
-			}
-		});
-
 		workOrderButton = new JRoundedButton("Arbejdsordre");
 
 		workOrderButton.setMargin(new Insets(4, 26, 4, 26));
@@ -265,13 +251,11 @@ public class MainFrame extends JFrame {
 		gbc_exitButton.gridy = 0;
 		bottomPanel.add(exitButton, gbc_exitButton);
 		
-		assetButton.addActionListener(e -> setNewCenterPanel(new AssetOverview(frame)));
+		assetButton.addActionListener(e -> assetButtonMethod());
 		workOrderButton.addActionListener(e -> setNewCenterPanel(new WorkOrderOverview(frame)));
 		employeeButton.addActionListener(e -> setNewCenterPanel(new EmployeeOverview()));
 		returnButton.addActionListener(e -> {if(backwards.peek() != null) {backwardsButton();}});
 		nextButton.addActionListener(e -> {if(forward.isEmpty() != true) {forwardButton();}});
-		
-		
 		
 	}
 }
