@@ -15,6 +15,7 @@ import model.Asset;
 import model.Employee;
 import model.Maintenance;
 import model.Measurement;
+import model.Repair;
 import model.SparepartUsed;
 import model.Workorder;
 
@@ -38,7 +39,13 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	private AssetDBIF assetDB = new AssetDB();
 	private SparepartUsedDBIF sparepartUsedDB = new SparepartUsedDB();
 	private MeasurementDBIF measurementDB = new MeasurementDB();
-
+	
+	@Override
+	public boolean addMaintenanceWorkOrder(Maintenance workOrder) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 	@Override
 	public Maintenance findMaintenanceWorkOrderByID(int workOrderID) {
 		
@@ -64,6 +71,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		
 		return maintenance;
 	}
+	
 
 	@Override
 	public List<Maintenance> getAllMaintenanceWorkOrders() {
@@ -91,11 +99,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return list;
 	}
 	
-	@Override
-	public boolean addMaintenanceWorkOrder(Maintenance workOrder) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 	
 	@Override
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder) {
@@ -103,53 +107,10 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return false;
 	}
 	
-	//Converters
-	private Calendar convertSqlDateToCalendar(Date sqlDate) { 
-		Calendar calendar = Calendar.getInstance(); 
-		if(sqlDate != null) {
-			calendar.setTime(sqlDate); 
-		} else {
-			calendar = null;
-		}
-		
-		return calendar; 
-	}
-	
-	//Builders
-	private Maintenance buildMaintenanceObject(ResultSet rs) throws SQLException {
-		// create a new Maintenance object
-		Maintenance result = new Maintenance();
 
-		// set the properties of the Maintenance object based on the values in the ResultSet
-		result.setWorkOrderID(rs.getInt("workorder_id_PK"));
-		result.setTitle(rs.getString("workorder_title"));
-		result.setType(rs.getString("workorder_type"));
-		result.setDescription(rs.getString("workorder_description"));
-		result.setPriority(rs.getShort("workorder_priority"));
-		result.setFinished(rs.getBoolean("workorder_finished"));
-		
-		//Maintenance-specific
-		result.setRepeated(rs.getBoolean("workorder_repeatable"));
-		result.setIntervalDayCount(rs.getInt("workorder_interval"));
-		
-		//Dates
-		result.setStartDate(convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
-		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
-		
-		//Objects
-		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
-		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
-		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
-		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
-
-		// return the Maintenance object
-				
-		return result;
-	}
-	
-	public Service findServiceByWorkOrderID(int workOrderID) {
+	@Override
+	public Service findServiceWorkOrderByID(int workOrderID) {
 		Service service = null;
-		
 		
 		// establish database connection
 		try (Connection con = DatabaseConnection.getInstance().getConnection();
@@ -171,14 +132,81 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		}
 		
 		return service ;
-		
 	}
-	
-	//TODO
-	private Service buildServiceObject(ResultSet rs) {
-		
-		
-		
+
+	@Override
+	public Repair findRepairWorkOrderByID(int workOrderID) {
+		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<Service> getAllServiceWorkOrders() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Repair> getAllRepairWorkOrders() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Workorder> getAllUnfinishedWorkOrders() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	//Converters
+		private Calendar convertSqlDateToCalendar(Date sqlDate) { 
+			Calendar calendar = Calendar.getInstance(); 
+			if(sqlDate != null) {
+				calendar.setTime(sqlDate); 
+			} else {
+				calendar = null;
+			}
+			
+			return calendar; 
+		}
+		
+		//Builders
+		private Maintenance buildMaintenanceObject(ResultSet rs) throws SQLException {
+			// create a new Maintenance object
+			Maintenance result = new Maintenance();
+
+			// set the properties of the Maintenance object based on the values in the ResultSet
+			result.setWorkOrderID(rs.getInt("workorder_id_PK"));
+			result.setTitle(rs.getString("workorder_title"));
+			result.setType(rs.getString("workorder_type"));
+			result.setDescription(rs.getString("workorder_description"));
+			result.setPriority(rs.getShort("workorder_priority"));
+			result.setFinished(rs.getBoolean("workorder_finished"));
+			
+			//Maintenance-specific
+			result.setRepeated(rs.getBoolean("workorder_repeatable"));
+			result.setIntervalDayCount(rs.getInt("workorder_interval"));
+			
+			//Dates
+			result.setStartDate(convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
+			result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
+			
+			//Objects
+			result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
+			result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
+			result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
+			result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
+
+			// return the Maintenance object
+					
+			return result;
+		}
+		
+		//TODO
+		private Service buildServiceObject(ResultSet rs) {
+				
+				
+			return null;
+		}
+		
 }

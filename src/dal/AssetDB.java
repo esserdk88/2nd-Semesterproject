@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import model.Address;
 import model.Asset;
 import model.Employee;
 import model.Location;
@@ -68,12 +69,32 @@ public class AssetDB implements AssetDBIF {
 		return result;
 	}
 
-
-
 	@Override
 	public List<Asset> getAllAssets() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Asset> list = new ArrayList<>();
+		
+		// establish database connection
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psFindAsset = con.prepareStatement(SELECT_ALL_ASSETS)) {
+			
+			//prepare statement
+			// Left empty.
+			
+			//execute statement
+			ResultSet rs = psFindAsset.executeQuery();
+			
+			if (rs != null) {
+				//build Asset object from result set
+				while(rs.next()) {
+					list.add(buildObject(rs));
+				}
+			}
+		} catch (SQLException e) {
+		System.out.println("ERROR FROM RETRIEVING ASSET:" + e.getMessage());
+		}
+		
+		return list;
 	}
 	
 	//Converter
