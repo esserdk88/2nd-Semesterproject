@@ -28,8 +28,49 @@ class EmployeeTest {
 	}
 
 	@Test
-	void test() {
-		fail("Not yet implemented");
+	void testGetters() {
+		//Arrange
+		//MasterData will be tested in its own unitTest
+		int employeeID;
+		String cprNumber; 
+		Calendar startDate;
+		String position;
+		
+		
+		//Act
+		employeeID = employee.getEmployeeID();
+		cprNumber = employee.getCprNumber();
+		startDate = employee.getStartDate();
+		position = employee.getPosition();
+		
+		//Assert
+		assertEquals(69, employeeID);
+		assertEquals("1108881859", cprNumber);
+		assertEquals(this.startDate, startDate);
+		assertEquals("Elektriker", position);
+	}
+	
+	@Test
+	public void testSetters() {
+		
+		//Arrange
+		//MasterData will be tested in its own unitTest
+		int newEmployeeID = 13;
+		String newCprNumber = "1412601145";
+		Calendar newStartDate = Calendar.getInstance();
+		String newPosition = "Bogholder";
+		
+		//Act
+		employee.setEmployeeID(newEmployeeID);
+		employee.setCprNumber(newCprNumber);
+		employee.setStartDate(newStartDate);
+		employee.setPosition(newPosition);
+		
+		//Assert
+		assertEquals(newEmployeeID, employee.getEmployeeID());
+		assertEquals(newCprNumber, employee.getCprNumber());
+		assertEquals(newStartDate, employee.getStartDate());
+		assertEquals(newPosition, employee.getPosition());
 	}
 
 }
