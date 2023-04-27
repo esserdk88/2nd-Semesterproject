@@ -23,12 +23,8 @@ class EmployeeTest {
 	void setUp() throws Exception {
 		startDate.set(1988, 8, 11);
 		address = new Address(42, "Aalborg SV", "9200", "Sofiendalsvej", "60");
-		employee = new Employee(69, "1108881859", startDate, "Elektriker", "Rasmus", "28697610", "rasmus.lyngberg@gmail.com", address)
+		employee = new Employee(69, "1108881859", startDate, "Elektriker", "Rasmus", "28697610", "rasmus.lyngberg@gmail.com", address);
 		
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
 	}
 
 	@Test
