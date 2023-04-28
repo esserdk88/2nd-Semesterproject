@@ -15,13 +15,17 @@ public class Sparepart {
 	public Sparepart() {
 		//Left Empty
 	}
-	
-	public Sparepart(String name, int stockAmount, double price, Supplier supplier) {
+
+	public Sparepart(int sparepartID, String name, int stockAmount, double price, Supplier supplier) {
+		super();
+		this.sparepartID = sparepartID;
 		this.name = name;
 		this.stockAmount = stockAmount;
 		this.price = price;
 		this.supplier = supplier;
 	}
+
+
 
 	public int getSparepartID() {
 		return sparepartID;
