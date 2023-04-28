@@ -38,7 +38,7 @@ class AssetTest {
 		int assetID;
 		String name;
 		String description;
-		Calendar aquisitionDate; //Maybe change back to Calendar
+		Calendar aquisitionDate;
 		String status;
 		String manufacturer;
 		Location location;
@@ -65,14 +65,33 @@ class AssetTest {
 	
 	@Test
 	public void testSetters() {
-		//TODO: Test needs to be done
 		
 		//Arrange
+		int newAssetID = 666;
+		String newName = "Kontorstol";
+		String newDescription = "En stol man sidder på";
+		Calendar newAquisitionDate = Calendar.getInstance();
+		String newStatus = "Mangler 2 hjul";
+		String newManufacturer = "Carl A/S";
+		Location newLocation = new Location();
 		
 		//Act
+		asset.setAssetID(newAssetID);
+		asset.setName(newName);
+		asset.setDescription(newDescription);
+		asset.setAquisitionDate(newAquisitionDate);
+		asset.setStatus(newStatus);
+		asset.setManufacturer(newManufacturer);
+		asset.setLocation(newLocation);
 		
 		//Assert
-		assertFalse(true);
+		assertEquals(newAssetID, asset.getAssetID());
+		assertEquals(newName, asset.getName());
+		assertEquals(newDescription, asset.getDescription());
+		assertEquals(newAquisitionDate, asset.getAquisitionDate());
+		assertEquals(newStatus, asset.getStatus());
+		assertEquals(newManufacturer, asset.getManufacturer());
+		assertEquals(newLocation, asset.getLocation());
 	}
 
 }
