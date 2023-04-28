@@ -14,13 +14,15 @@ public class Measurement {
 	public Measurement() {
 		//Left empty
 	}
-	
-	public Measurement(String title, double value) {
+
+	public Measurement(int measurementID, String title, double value, Workorder workorder) {
+		this.measurementID = measurementID;
 		this.title = title;
 		this.value = value;
+		this.workorder = workorder;
 	}
-	
-	
+
+
 
 	public int getMeasurementID() {
 		return measurementID;
