@@ -359,8 +359,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 				
 		return result;
 	}
-	
-	
 	private Service buildServiceObject(ResultSet rs) throws SQLException {
 		// create a new Service object
 		Service result = new Service();

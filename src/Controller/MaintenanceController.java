@@ -1,19 +1,26 @@
 package Controller;
 
+import dal.WorkOrderDB;
+import dal.WorkOrderDBIF;
 import model.Maintenance;
 
 public class MaintenanceController extends WorkOrderController implements MaintenanceControllerIF {
+	
+	private WorkOrderDBIF workOrderDB = new WorkOrderDB();
 
 	@Override
 	public boolean createWorkOrder(Maintenance maintenance) {
-		// TODO Auto-generated method stub
-		return false;
+		// we have to check if the asset is null.
+		if(maintenance.getAsset() == null) {
+			throw new IllegalArgumentException("Asset cant be empty");
+		}
+		
+		return workOrderDB.addMaintenanceWorkOrder(maintenance);
 	}
 
 	@Override
 	public Maintenance findWorkOrderByID(int workOrderID) {
-		// TODO Auto-generated method stub
-		return null;
+		return workOrderDB.findMaintenanceWorkOrderByID(workOrderID);
 	}
 
 }
