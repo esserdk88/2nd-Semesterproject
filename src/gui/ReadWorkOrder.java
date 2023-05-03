@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
+import model.Asset;
 
 public class ReadWorkOrder extends JPanel {
 	

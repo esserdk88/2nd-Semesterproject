@@ -192,7 +192,7 @@ public class AssetOverview extends JPanel {
 				e.printStackTrace();
 			}
 			if (tempAsset != null) {
-				ReadAsset readAsset = new ReadAsset(tempAsset);
+				ReadAsset readAsset = new ReadAsset(mainFrame, tempAsset);
 				mainFrame.setNewCenterPanel(readAsset);
 			}
 		}
