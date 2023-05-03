@@ -183,7 +183,7 @@ class WorkOrderDBTest {
 	}
 	
 	@Test
-	void testFindServiceWorkOrderByID() {
+	void findServiceWorkOrderByIDTest() {
 		//arrange
 		service.setType("Service");
 		Random random = new Random();

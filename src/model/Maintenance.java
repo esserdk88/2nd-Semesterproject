@@ -98,9 +98,9 @@ public class Maintenance extends Workorder implements StringArrayConvertible {
         if (!this.getAsset().equals(m.getAsset())){
         	return false;
         }
-    	if(!(this.getEmployee() != null && m.getEmployee() != null)) {
-    		return false;
-    	}
+        if ((this.getEmployee() != null && m.getEmployee() == null) || (this.getEmployee() == null && m.getEmployee() != null)) {
+            return false;
+        }
         if ((this.getEmployee() != null && m.getEmployee() != null) && !this.getEmployee().equals(m.getEmployee())){
         	return false;
         }

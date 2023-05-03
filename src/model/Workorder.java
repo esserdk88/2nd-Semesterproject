@@ -228,11 +228,9 @@ public abstract class Workorder {
         if (!this.getAsset().equals(w.getAsset())){
         	return false;
         }
-    	if(this.getEmployee() == null && w.getEmployee() == null) {
-    		
-    	} else {
-    		return false;
-    	}
+        if ((this.getEmployee() != null && w.getEmployee() == null) || (this.getEmployee() == null && w.getEmployee() != null)) {
+            return false;
+        }
         if ((this.getEmployee() != null && w.getEmployee() != null) && !this.getEmployee().equals(w.getEmployee())){
         	return false;
         }

@@ -78,11 +78,9 @@ public class Service extends Workorder implements StringArrayConvertible {
         if (!this.getAsset().equals(s.getAsset())){
         	return false;
         }
-    	if(this.getEmployee() == null && s.getEmployee() == null) {
-    		
-    	} else {
-    		return false;
-    	}
+        if ((this.getEmployee() != null && s.getEmployee() == null) || (this.getEmployee() == null && s.getEmployee() != null)) {
+            return false;
+        }
         if ((this.getEmployee() != null && s.getEmployee() != null) && !this.getEmployee().equals(s.getEmployee())){
         	return false;
         }
