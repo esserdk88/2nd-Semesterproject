@@ -1,7 +1,9 @@
 package dal;
 
-import java.util.Calendar;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+
 import model.Employee;
 
 /*
@@ -15,4 +17,5 @@ public interface EmployeeDBIF {
 	
 	public List<Employee> getAllEmployees();
 	
+	public Employee buildObjectFromResultset(ResultSet rs) throws SQLException;
 }

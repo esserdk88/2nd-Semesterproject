@@ -45,7 +45,12 @@ public class AddressDB implements AddressDBIF {
 		return address;
 	
 	}
-
+	public Address buildObjectFromResultset(ResultSet rs) throws SQLException {
+		if(rs.getInt("address_id_PK") == 0) {
+			return null;
+		}else return buildObject(rs);
+	}
+	
 	private Address buildObject(ResultSet rs) throws SQLException {
 		
 		// create a new Address object
@@ -57,7 +62,7 @@ public class AddressDB implements AddressDBIF {
 		result.setStreetNumber(rs.getString("address_streetnumber"));
 		result.setZipCode(rs.getString("address_zipcode"));
 		result.setCityName(rs.getString("address_cityname"));
-
+		
 		// return the address object
 				
 		return result;

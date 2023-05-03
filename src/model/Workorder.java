@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.spi.LocaleServiceProvider;
 
 /*
  * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.

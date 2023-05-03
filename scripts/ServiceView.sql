@@ -1,4 +1,4 @@
-CREATE VIEW ServiceView AS
+CREATE VIEW MaintenanceView AS
 SELECT
   wo.workorder_id_PK,
   wo.workorder_title,
@@ -8,6 +8,8 @@ SELECT
   wo.workorder_priority,
   wo.workorder_description,
   wo.workorder_finished,
+  wo.workorder_interval,
+  wo.workorder_repeatable,
   emp.employee_id_PK,
   emp.employee_start_date,
   emp.employee_cpr,
@@ -29,17 +31,11 @@ SELECT
   loc.location_id_PK,
   loc.location_building,
   loc.location_floor,
-  loc.location_room,
-  ref.reference_CVR_PK,
-  ref.reference_name,
-  ref.reference_email,
-  ref.reference_phone,
-  ref.reference_contact
+  loc.location_room
 FROM
   Workorder AS wo
 LEFT JOIN Employee AS emp ON wo.workorder_employee_id_FK = emp.employee_id_PK
 LEFT JOIN Asset AS a ON wo.workorder_asset_id_FK = a.asset_id_PK
 LEFT JOIN Location AS loc ON a.asset_location_id_FK = loc.location_id_PK
 LEFT JOIN Address AS addr ON loc.location_address_id_FK = addr.address_id_PK
-LEFT JOIN Reference as ref on wo.workorder_reference_id_FK = ref.reference_CVR_PK
-WHERE wo.workorder_type = 'Service';
+WHERE wo.workorder_type = 'Maintenance';

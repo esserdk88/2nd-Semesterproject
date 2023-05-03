@@ -1,6 +1,5 @@
 package dal;
 
-import java.lang.module.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,7 +27,7 @@ public class DatabaseConnection {
     }
 
     // Method for getting the database connection
-    public Connection getConnection() throws SQLException {
+    public synchronized Connection getConnection() throws SQLException {
     		DriverManager.setLoginTimeout(5);
         	connection = DriverManager.getConnection(CONNECTION_STRING);
         return connection;

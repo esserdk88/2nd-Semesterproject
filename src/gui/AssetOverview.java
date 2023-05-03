@@ -24,7 +24,6 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import Controller.AssetController;
-import dal.AssetDB;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
