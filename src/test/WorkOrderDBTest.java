@@ -52,13 +52,7 @@ class WorkOrderDBTest {
 	private int intervalDayCount = 7;
 	
 	//Service fields
-	private int cvr = 12345678;
-	private String contact = "Mikkel Hansen";
-	private String name = "Rasmus"; 
-	private String phone = "28697610";
-	private String email = "rasmus.lyngberg@gmail.com";
-	private Address address = new Address(42, "Aalborg SV", "9200", "Sofiendalsvej", "60");
-	private Reference reference = new Reference(cvr, contact, name, phone, email, address);
+	private Reference reference;
 	
 	//Repair fields
 	private double price = 100.43;
