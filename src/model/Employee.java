@@ -16,7 +16,9 @@ public class Employee extends MasterData {
 	
 	public Employee() {
 		super();
-		
+		this.cprNumber = "";
+		this.startDate = Calendar.getInstance();
+		this.position = "";
 	}
 
 	public Employee(int employeeID, String cprNumber, Calendar startDate, String position,
@@ -68,5 +70,58 @@ public class Employee extends MasterData {
 	@Override
 	public String toString() {
 		return "(" + getEmployeeID() + ") " + getCprNumber() + " " + calendarToString(getStartDate()) + " " + getPosition() + " - " + super.toString();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		//object variables
+
+        // If the object is compared with itself then return true 
+        if (o == this) {
+            return true;
+        }
+ 
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Employee)) {
+            return false;
+        }
+         
+        // typecast o to Complex so that we can compare data members
+        Employee m = (Employee) o;
+        
+        // god whyyyyy...??
+//        private int employeeID;
+//    	private String cprNumber; 
+//    	private Calendar startDate;
+//    	private String position; 
+//    	private String name; 
+//    	private String phone;
+//    	private String email;
+//    	private Address address;
+         
+        if (!this.getCprNumber().equals(m.getCprNumber())) {
+        	return false;
+        }
+      //TODO: CALENDAR DATES!
+//        if (!this.getStartDate().equals(m.getStartDate()) ) {
+//        	return false;
+//        }
+        if (!this.getPosition().equals(m.getPosition())){
+        	return false;
+        }
+        if (!this.getName().equals(m.getName()) ) {
+        	return false;
+        }
+        if (!this.getPhone().equals(m.getPhone()) ) {
+        	return false;
+        }
+        if (!this.getEmail().equals(m.getEmail()) ) {
+        	return false;
+        }
+        if (!this.getAddress().equals(m.getAddress()) ) {
+        	return false;
+        }
+        return true;
 	}
 }

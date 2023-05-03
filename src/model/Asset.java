@@ -22,7 +22,13 @@ public class Asset implements StringArrayConvertible{
 	
 	
 	public Asset() {
-		//Left empty.
+		this.assetID = 0;
+		this.name = "";
+		this.description = "";
+		this.aquisitionDate = Calendar.getInstance();
+		this.status = "";
+		this.manufacturer = "";
+		this.location = new Location();
 	}
 	
 	public Asset(int assetID, String name, String description, Calendar aquisitionDate, String status,
@@ -101,5 +107,47 @@ public class Asset implements StringArrayConvertible{
 	public String[] getObjectAsStringArray() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		return new String[] {Integer.toString(getAssetID()), getName(), dateFormat.format(getAquisitionDate().getTime()), getDescription(), getStatus(), getManufacturer()};
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		//object variables
+
+        // If the object is compared with itself then return true 
+        if (o == this) {
+            return true;
+        }
+ 
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Asset)) {
+            return false;
+        }
+         
+        // typecast o to Complex so that we can compare data members
+        Asset m = (Asset) o;
+        
+        // god whyyyyy...??
+         
+        if (!this.getName().equals(m.getName())) {
+        	return false;
+        }
+        if (!this.getDescription().equals(m.getDescription()) ) {
+        	return false;
+        }
+        //TODO: This can fail due to nano seconds
+//        if (!this.getAquisitionDate().equals(m.getAquisitionDate())){
+//        	return false;
+//        }
+        if (!this.getStatus().equals(m.getStatus())) {
+        	return false;
+        }
+        if (!this.getManufacturer().equals(m.getManufacturer())) {
+        	return false;
+        }
+        if (!this.getLocation().equals(m.getLocation())){
+        	return false;
+        }
+        return true;
 	}
 }

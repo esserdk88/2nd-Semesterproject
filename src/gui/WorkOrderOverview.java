@@ -149,7 +149,9 @@ public class WorkOrderOverview extends JPanel {
 		createNewWorkOrder.setMaximumSize(new Dimension(145, 23));
 		createNewWorkOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setNewCenterPanel(new WorkOrder());
+				
+				//TODO: other than null,null maybe
+				frame.setNewCenterPanel(new WorkOrder(null,null));
 			}
 		});
 		rightPanel.add(createNewWorkOrder);

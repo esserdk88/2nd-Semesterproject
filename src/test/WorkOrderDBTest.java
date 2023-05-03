@@ -10,6 +10,10 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import dal.AssetDB;
+import dal.AssetDBIF;
+import dal.EmployeeDB;
+import dal.EmployeeDBIF;
 import dal.WorkOrderDB;
 import dal.WorkOrderDBIF;
 import model.Address;
@@ -41,13 +45,13 @@ class WorkOrderDBTest {
 //		public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder);
 	
 	//Asset fields
-	private Address assetAddress = new Address(42, "Aalborg SV", "9200", "Sofiendalsvej", "60");
-	private Location location = new Location(69, "Hoved bygningen", "2.sal", "HB242", assetAddress);
-	Calendar aquisitionDate = Calendar.getInstance();
-	private String assetName = "";
-	private String assetDescription ="";
-	private String assetStatus = "";
-	private String assetManufacturer = "";
+//	private Address assetAddress = new Address(42, "Aalborg SV", "9200", "Sofiendalsvej", "60");
+//	private Location location = new Location(69, "Hoved bygningen", "2.sal", "HB242", assetAddress);
+//	Calendar aquisitionDate = Calendar.getInstance();
+//	private String assetName = "";
+//	private String assetDescription ="";
+//	private String assetStatus = "";
+//	private String assetManufacturer = "";
 	
 	//Common fields for use 
 	private int workOrderID = 42;
@@ -61,8 +65,8 @@ class WorkOrderDBTest {
 	
 	
 	private List<SparepartUsed> sparepartsUsed = new ArrayList<>();
-	private Asset asset = new Asset(1, assetName, assetDescription, aquisitionDate, assetStatus, assetManufacturer, location);
-	private Employee employee = new Employee();
+	private Asset asset;
+	private Employee employee;
 	private List<Measurement> measurements = new ArrayList<>();
 	
 	//Maintenance fields
@@ -87,12 +91,14 @@ class WorkOrderDBTest {
 	
 	//Instances
 	private WorkOrderDBIF workOrderDB = new WorkOrderDB();
+	private AssetDBIF assetDB = new AssetDB();
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		maintenance = new Maintenance(repeated, intervalDayCount, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, employee, measurements);
-		service = new Service(reference, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, employee, measurements);
-		repair = new Repair(price, reference, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, employee, measurements);
+		asset = assetDB.findAssetByID(1);
+		maintenance = new Maintenance(repeated, intervalDayCount, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
+		service = new Service(reference, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
+		repair = new Repair(price, reference, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
 	}
 			
 	@Test

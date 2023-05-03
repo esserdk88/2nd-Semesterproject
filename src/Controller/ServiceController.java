@@ -1,7 +1,10 @@
 package Controller;
 
+import java.util.List;
+
 import dal.WorkOrderDB;
 import dal.WorkOrderDBIF;
+import gui.WorkOrder;
 import model.Service;
 
 public class ServiceController extends WorkOrderController implements ServiceControllerIF {
@@ -18,5 +21,11 @@ public class ServiceController extends WorkOrderController implements ServiceCon
 	@Override
 	public Service findWorkOrderByID(int workOrderID) {
 		return workOrderDB.findServiceWorkOrderByID(workOrderID);
+	}
+
+	@Override
+	public List<WorkOrder> getAllWorkOrdersByAssetID() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

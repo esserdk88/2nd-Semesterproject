@@ -1,7 +1,10 @@
 package Controller;
 
+import java.util.List;
+
 import dal.WorkOrderDB;
 import dal.WorkOrderDBIF;
+import gui.WorkOrder;
 import model.Repair;
 
 public class RepairController extends WorkOrderController implements RepairControllerIF {
@@ -19,6 +22,12 @@ public class RepairController extends WorkOrderController implements RepairContr
 	@Override
 	public Repair findWorkOrderByID(int workOrderID) {
 		return workOrderDB.findRepairWorkOrderByID(workOrderID);
+	}
+
+	@Override
+	public List<WorkOrder> getAllWorkOrdersByAssetID() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

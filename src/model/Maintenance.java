@@ -14,6 +14,8 @@ public class Maintenance extends Workorder {
 	
 	public Maintenance() {
 		super();
+		boolean repeated = false;
+		int intervalDayCount = 0;
 	}
 
 	public Maintenance(boolean repeated, int intervalDayCount, int workOrderID, String title, String type, 
@@ -69,19 +71,14 @@ public class Maintenance extends Workorder {
         	System.out.println(this.getType() + " " + m.getType());
         	return false;
         }
-        if (!this.getStartDate().equals(m.getStartDate())){
-        	return false;
-        }
-        if (!this.getEndDate().equals(m.getEndDate())) {
-        	return false;
-        }
+        //TODO: CALENDAR DATES!
         if (this.getPriority() != m.getPriority()) {
         	return false;
         }
         if (!this.getDescription().equals(m.getDescription())){
         	return false;
         }
-        if (!this.isFinished() != m.isFinished()) {
+        if (this.isFinished() != m.isFinished()) {
         	return false;
         }
         if (!this.getSparepartsUsed().equals(m.getSparepartsUsed())) {
@@ -90,7 +87,12 @@ public class Maintenance extends Workorder {
         if (!this.getAsset().equals(m.getAsset())){
         	return false;
         }
-        if (!this.getEmployee().equals(m.getEmployee())){
+    	if(this.getEmployee() == null && m.getEmployee() == null) {
+    		
+    	} else {
+    		return false;
+    	}
+        if ((this.getEmployee() != null && m.getEmployee() != null) && !this.getEmployee().equals(m.getEmployee())){
         	return false;
         }
         if (!this.getMeasurements().equals(m.getMeasurements())){
