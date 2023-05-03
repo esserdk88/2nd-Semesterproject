@@ -1,10 +1,14 @@
 package Controller;
 
+import dal.WorkOrderDB;
+import dal.WorkOrderDBIF;
 import model.Asset;
 import model.Employee;
 import model.Workorder;
 
 public abstract class WorkOrderController implements WorkOrderControllerIF {
+	
+	protected WorkOrderDBIF workOrderDB = new WorkOrderDB();
 	
 	@Override
 	public Asset findAssetByID(int id) {
@@ -23,5 +27,4 @@ public abstract class WorkOrderController implements WorkOrderControllerIF {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

@@ -17,6 +17,8 @@ public interface WorkOrderDBIF {
 	
 	//Added from communication diagram Create Work Order
 	public boolean addMaintenanceWorkOrder (Maintenance workOrder);
+	public boolean addServiceWorkOrder (Service workOrder);
+	public boolean addRepairWorkOrder (Repair workOrder);
 	
 	public Maintenance findMaintenanceWorkOrderByID(int workOrderID);
 	public Service findServiceWorkOrderByID(int workOrderID);
@@ -28,7 +30,10 @@ public interface WorkOrderDBIF {
 	public List<Workorder> getAllUnfinishedWorkOrders();
 	
 	public boolean deleteWorkOrderByID(int workOrderID);
+	public boolean deleteWorkOrderTestData(short ID);
 	
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder);
+	
+	public int getLatestKey();
 	
 }

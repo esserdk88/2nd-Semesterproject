@@ -6,7 +6,6 @@ import model.Maintenance;
 
 public class MaintenanceController extends WorkOrderController implements MaintenanceControllerIF {
 	
-	private WorkOrderDBIF workOrderDB = new WorkOrderDB();
 
 	@Override
 	public boolean createWorkOrder(Maintenance maintenance) {
@@ -22,5 +21,4 @@ public class MaintenanceController extends WorkOrderController implements Mainte
 	public Maintenance findWorkOrderByID(int workOrderID) {
 		return workOrderDB.findMaintenanceWorkOrderByID(workOrderID);
 	}
-
 }

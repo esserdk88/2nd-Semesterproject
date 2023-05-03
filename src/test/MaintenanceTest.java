@@ -50,5 +50,20 @@ class MaintenanceTest {
 		assertEquals(newRepeated, maintenance.isRepeated());
 		assertEquals(newIntervalDayCount, maintenance.getIntervalDayCount());
 	}
+	
+	@Test
+	public void testEquals() {
+		//Arrange
+		boolean equals = false;
+		Maintenance testMaintenance = new Maintenance();
+		testMaintenance.setRepeated(true);
+		testMaintenance.setIntervalDayCount(7);
+		
+		//Act 
+		equals = maintenance.equals(testMaintenance);
+		
+		//Assert
+		assertEquals(true, equals);
+	}
 
 }

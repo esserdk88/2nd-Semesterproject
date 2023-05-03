@@ -6,24 +6,24 @@ package model;
 
 public class Reference extends MasterData {
 	
-	private String cvr;
+	private int cvr;
 	private String contact;
 	
 	public Reference() {
 		super();
 	}
 	
-	public Reference(String cvr, String contact, String name, String phone, String email, Address address) {
+	public Reference(int cvr, String contact, String name, String phone, String email, Address address) {
 		super(name, phone, email, address);
 		this.cvr = cvr;
 		this.contact = contact;
 	}
 
-	public String getCvr() {
+	public int getCvr() {
 		return cvr;
 	}
 
-	public void setCvr(String cvr) {
+	public void setCvr(int cvr) {
 		this.cvr = cvr;
 	}
 
