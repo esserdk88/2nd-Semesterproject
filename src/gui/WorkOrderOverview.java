@@ -22,41 +22,41 @@ import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 
 public class WorkOrderOverview extends JPanel {
-	
-	//TextField
+
+	// TextField
 	private JTextField searchTextField;
 	private JTextField departmentTextField;
 	private JTextField titleTextField;
-	
-	//Table
+
+	// Table
 	private JScrollPane centerScrollPane;
 	private DefaultTable workOrderTable;
-	
-	//Button
+
+	// Button
 	private JButton createNewWorkOrder;
 	private JButton openOrderButton;
 	private JButton searchButton;
-	
-	//Panels
+
+	// Panels
 	private JPanel rightPanel;
 	private JPanel rightTopPanel;
 	private JPanel leftTopPriorityPanel;
 	private JPanel leftTopPanel;
 	private JPanel topPanel;
-	
-	//Label
+
+	// Label
 	private JLabel searchLabel;
 	private JLabel searchTitleLabel;
 	private JLabel searchDepartmentLabel;
 	private JLabel searchCriteriaLabel;
 	private JLabel priorityLabel;
-	
-	//RadioButtons
+
+	// RadioButtons
 	private JRadioButton lowJRadioButton;
 	private JRadioButton mediumJRadioButton;
 	private JRadioButton highJRadioButton;
-	
-	//Extra components
+
+	// Extra components
 	private ButtonGroup priorityButtons;
 	private Component rigidArea_1;
 	private Component rigidArea;
@@ -69,7 +69,7 @@ public class WorkOrderOverview extends JPanel {
 	public WorkOrderOverview(MainFrame frame) {
 		this.frame = frame;
 		setLayout(new BorderLayout(0, 0));
-		
+
 		setPanels();
 		setLabelsAndTextFieldsAndRadioButtons();
 		setTables();
@@ -81,52 +81,51 @@ public class WorkOrderOverview extends JPanel {
 
 		priorityLabel = new JLabel("Prioritet:");
 		leftTopPriorityPanel.add(priorityLabel);
-		
+
 		searchCriteriaLabel = new JLabel("Søgekriterier:");
 		leftTopPriorityPanel.add(searchCriteriaLabel);
-		
+
 		rigidArea_2 = Box.createRigidArea(new Dimension(20, 20));
 		leftTopPriorityPanel.add(rigidArea_2);
-		
+
 		highJRadioButton = new JRadioButton("Høj");
 		leftTopPriorityPanel.add(highJRadioButton);
 		priorityButtons.add(highJRadioButton);
-				
+
 		searchDepartmentLabel = new JLabel("Afdeling");
 		leftTopPriorityPanel.add(searchDepartmentLabel);
-		
+
 		departmentTextField = new JTextField();
 		leftTopPriorityPanel.add(departmentTextField);
 		departmentTextField.setColumns(10);
-		
+
 		mediumJRadioButton = new JRadioButton("Mellem");
 		leftTopPriorityPanel.add(mediumJRadioButton);
 		priorityButtons.add(mediumJRadioButton);
-		
-		
+
 		searchTitleLabel = new JLabel("Titel");
 		leftTopPriorityPanel.add(searchTitleLabel);
-		
+
 		titleTextField = new JTextField();
 		leftTopPriorityPanel.add(titleTextField);
 		titleTextField.setColumns(10);
-		
+
 		lowJRadioButton = new JRadioButton("Lav");
 		leftTopPriorityPanel.add(lowJRadioButton);
 		priorityButtons.add(lowJRadioButton);
 		rigidArea = Box.createRigidArea(new Dimension(20, 20));
 		leftTopPriorityPanel.add(rigidArea);
-		
+
 		rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		leftTopPriorityPanel.add(rigidArea_1);
-		
+
 		searchLabel = new JLabel("Søg på ID");
 		rightTopPanel.add(searchLabel);
-		
+
 		searchTextField = new JTextField();
 		rightTopPanel.add(searchTextField);
 		searchTextField.setColumns(10);
-		
+
 	}
 
 	private void setButtons() {
@@ -135,7 +134,7 @@ public class WorkOrderOverview extends JPanel {
 		openOrderButton = new JRoundedButton("Åben opgave");
 		openOrderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setNewCenterPanel(new ReadWorkOrder()); //TODO add workorder to constructor
+				frame.setNewCenterPanel(new ReadWorkOrder()); // TODO add workorder to constructor
 			}
 		});
 		openOrderButton.setMinimumSize(new Dimension(145, 23));
@@ -149,13 +148,11 @@ public class WorkOrderOverview extends JPanel {
 		createNewWorkOrder.setMaximumSize(new Dimension(145, 23));
 		createNewWorkOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				//TODO: other than null,null maybe
-				frame.setNewCenterPanel(new WorkOrder(null,null));
+				frame.setNewCenterPanel(new CreateWorkOrder());
 			}
 		});
 		rightPanel.add(createNewWorkOrder);
-		
+
 	}
 
 	private void setTables() {
@@ -170,7 +167,7 @@ public class WorkOrderOverview extends JPanel {
 		topPanel = new JPanel();
 		add(topPanel, BorderLayout.NORTH);
 		topPanel.setLayout(new BorderLayout(0, 0));
-		
+
 		leftTopPanel = new JPanel();
 		topPanel.add(leftTopPanel);
 		leftTopPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
@@ -182,7 +179,7 @@ public class WorkOrderOverview extends JPanel {
 		rightPanel = new JPanel();
 		add(rightPanel, BorderLayout.EAST);
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-		
+
 	}
 
 }
