@@ -145,6 +145,8 @@ public class AssetOverview extends JPanel {
     }
 
 	public void setAssetOnStartUp() {
+		String[][] loadingStatus = { {"Henter assets..."} };
+		assetTable.setNewData(loadingStatus);
 		assetCtrl = new AssetController();
 		Thread workerThread = new Thread(() -> {
 		    TableSwingWorker dataFetcher = null;
@@ -157,6 +159,7 @@ public class AssetOverview extends JPanel {
 		});
 		workerThread.start();
 	}
+	
 	private void setTables() {
 		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
 		workOrderScrollPanel = new JScrollPane();
