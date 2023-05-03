@@ -1,5 +1,8 @@
 package Controller;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import model.Employee;
 
 /*
@@ -9,5 +12,5 @@ import model.Employee;
 public interface EmployeeControllerIF {
 	
 	public Employee findEmployeeByID(int employeeID);
-
+	public List<Employee> getAllEmployees() throws SQLException;
 }

@@ -1,5 +1,7 @@
 package dal;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import model.Reference;
@@ -12,5 +14,5 @@ public interface ReferenceDBIF {
 
 	public Reference findReferenceByID(int referenceID);
 	public List<Reference> getAllReferences();
-	
+	public Reference buildObjectFromResultset(ResultSet rs) throws SQLException;
 }

@@ -10,8 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import Controller.AssetController;
-import dal.EmployeeDB;
+import Controller.EmployeeController;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
@@ -31,7 +30,7 @@ public class EmployeeOverview extends JPanel {
 	private JScrollPane centerPanel;
 	private DefaultTable employeeTable;
 
-	private AssetController employeeCtr;
+	private EmployeeController employeeCtr;
 
 	/**
 	 * Create the panel.
@@ -41,18 +40,23 @@ public class EmployeeOverview extends JPanel {
 		setPanels();
 		setTables();
 		setButtons();
-		//setEmployeeOnStartUp();
+		setEmployeeOnStartUp();
 	}
 
-	/*private void setEmployeeOnStartUp() {
+	private void setEmployeeOnStartUp() {
 		employeeCtr = new EmployeeController();
 		Thread workerThread = new Thread(() -> {
 		    TableSwingWorker dataFetcher = null;
-			dataFetcher = new TableSwingWorker(employeeTable, employeeCtr.getAllEmployees());
+			try {
+				dataFetcher = new TableSwingWorker(employeeTable, employeeCtr.getAllEmployees());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		    dataFetcher.execute();
 		});
 		workerThread.start();
-	}*/
+	}
 	private void setButtons() {
 		createButton = new JRoundedButton("Opret");
 		createButton.setMaximumSize(new Dimension(110, 23));

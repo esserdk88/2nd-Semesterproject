@@ -38,4 +38,10 @@ public class WorkOrderController implements WorkOrderControllerIF {
 		return tempList;
 	}
 
+	@Override
+	public List<Workorder> getAllWorkOrdersByAssetID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

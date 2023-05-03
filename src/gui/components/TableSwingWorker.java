@@ -1,6 +1,7 @@
 package gui.components;
 
 import java.util.List;
+
 import javax.swing.SwingWorker;
 
 public class TableSwingWorker<T extends StringArrayConvertible> extends SwingWorker<String[][], Void> {

@@ -1,7 +1,5 @@
 package dal;
 
-import dal.Database;
-
 public class Database {
 	
     private static volatile Database INSTANCE;

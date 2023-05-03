@@ -1,13 +1,11 @@
 package Controller;
 
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.List;
 
 import dal.AssetDBIF;
 import dal.Database;
 import model.Asset;
-import model.Location;
 
 public class AssetController implements AssetControllerIF {
 	

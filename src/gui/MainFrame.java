@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import dal.*;
+import dal.Database;
 import gui.components.JRoundedButton;
 
 public class MainFrame extends JFrame {
