@@ -1,10 +1,14 @@
 package Controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dal.Database;
 import model.Asset;
 import model.Employee;
 import model.Workorder;
 
-public abstract class WorkOrderController implements WorkOrderControllerIF {
+public class WorkOrderController implements WorkOrderControllerIF {
 	
 	@Override
 	public Asset findAssetByID(int id) {
@@ -22,6 +26,13 @@ public abstract class WorkOrderController implements WorkOrderControllerIF {
 	public boolean assignEmployeeToWorkOrder(Employee employee, Workorder workOrder) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	
+	public List<Workorder> getAllUnfinishedWorkOrders() {
+		List<Workorder> tempList = new ArrayList<>();
+		tempList = Database.getInstance().getWorkOrderDataBase().getAllUnfinishedWorkOrders();
+		return tempList;
 	}
 
 }

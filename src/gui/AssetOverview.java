@@ -87,7 +87,6 @@ public class AssetOverview extends JPanel {
 	//Extra Components
 	private JSpinner spinner;
 	private MainFrame mainFrame;
-	private AssetDB assetDatabase;
 	private AssetController assetCtrl;
 	/**
 	 * Create the panel.
@@ -161,7 +160,7 @@ public class AssetOverview extends JPanel {
 	}
 	
 	private void setTables() {
-		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
+		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3", "Column3"};
 		workOrderScrollPanel = new JScrollPane();
 		workOrderPanel.add(workOrderScrollPanel, BorderLayout.CENTER);
 		workOrderTable = new DefaultTable(null, columns2);
@@ -169,7 +168,7 @@ public class AssetOverview extends JPanel {
 		
 		assetScrollPanel = new JScrollPane();
 		assetPanel.add(assetScrollPanel, BorderLayout.CENTER);
-		boolean[] activeColumns = new boolean[] { true, true, true, false, true, true };
+		boolean[] activeColumns = new boolean[] { true, true, true, false, true };
 		String[] columns = new String[] { "AssetID", "Navn", "Anskfaffelsesdato", "Beskrivelse", "Status",
 				"Producent" };
 		assetTable = new DefaultTable(null, columns, activeColumns);

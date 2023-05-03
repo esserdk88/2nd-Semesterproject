@@ -149,11 +149,11 @@ public abstract class Workorder {
 				calendarToString(getEndDate()) + ", " + getPriority() + ", " + getDescription() + ", " + getAsset();
 	}
 	
-	private String calendarToString(Calendar calendar) {
+	public String calendarToString(Calendar calendar) {
 		
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         
-        String dateString = "Date not set";
+        String dateString = "Dato ikke sat";
         
         if(calendar != null) {
             dateString = dateFormat.format(calendar.getTime());

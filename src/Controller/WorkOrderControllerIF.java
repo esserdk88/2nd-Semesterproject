@@ -19,6 +19,4 @@ public interface WorkOrderControllerIF {
 	
 	public boolean assignEmployeeToWorkOrder(Employee employee, Workorder workOrder);
 	
-	public List<WorkOrder> getAllWorkOrdersByAssetID();
-	
 }
