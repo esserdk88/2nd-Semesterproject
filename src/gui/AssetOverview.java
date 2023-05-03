@@ -144,7 +144,7 @@ public class AssetOverview extends JPanel {
         assetTable.addMouseListener(ma);
     }
 
-	public void setAssetOnStartUp() {
+	private void setAssetOnStartUp() {
 		assetCtrl = new AssetController();
 		Thread workerThread = new Thread(() -> {
 		    TableSwingWorker dataFetcher = null;

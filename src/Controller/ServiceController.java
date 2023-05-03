@@ -1,6 +1,6 @@
 package Controller;
 
-import java.security.Provider.Service;
+import model.Service;
 
 public class ServiceController extends WorkOrderController implements ServiceControllerIF {
 

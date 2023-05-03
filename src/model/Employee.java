@@ -3,11 +3,13 @@ package model;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import gui.components.StringArrayConvertible;
+
 /*
  * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
  */
 
-public class Employee extends MasterData {	
+public class Employee extends MasterData implements StringArrayConvertible{	
 	
 	private int employeeID;
 	private String cprNumber; 
@@ -68,5 +70,11 @@ public class Employee extends MasterData {
 	@Override
 	public String toString() {
 		return "(" + getEmployeeID() + ") " + getCprNumber() + " " + calendarToString(getStartDate()) + " " + getPosition() + " - " + super.toString();
+	}
+
+	@Override
+	public String[] getObjectAsStringArray() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		return new String[] {Integer.toString(getEmployeeID()), getCprNumber(), dateFormat.format(getStartDate().getTime()), getPosition(), getName(), getPhone(), getEmail()};
 	}
 }
