@@ -86,7 +86,7 @@ public class CreateWorkOrder extends JPanel {
 	private Asset asset;
 	private Employee employee;
 	private String assetID;
-	
+	private Asset currentAsset;
 	
 
 	/**
@@ -105,6 +105,18 @@ public class CreateWorkOrder extends JPanel {
 		setMaintenanceFields();		
 	}
 	
+	public CreateWorkOrder(Asset currentAsset) {
+		this();
+		this.currentAsset = currentAsset;
+		setupTextFields();
+	}
+	
+	private void setupTextFields() {
+		txtAssetID.setEnabled(false);
+		txtName.setEnabled(false);
+		txtAssetID.setText(Integer.toString((currentAsset.getAssetID())));
+		txtName.setText(currentAsset.getName());
+	}
 	//TODO fiks Denne absolut bunke af fucking lort :)
 	private boolean createWorkOrder() {
 		if(asset == null) {GUIPopUpMessages.warningMessage("No Asset selected!", "Error!"); return false;}
@@ -134,7 +146,7 @@ public class CreateWorkOrder extends JPanel {
 		}
 		
 		//Set common data
-		workOrder.setTitle(txtName.getText());
+		workOrder.setTitle(topicTextField.getText());
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime((Date) spinnerStartDate.getValue());
 		workOrder.setStartDate(calendar);
@@ -211,8 +223,10 @@ public class CreateWorkOrder extends JPanel {
 
 				if(assetCheck == null) {
 					txtAssetID.setBackground(Color.red);
+					txtName.setText("");
 				}else {
 					txtAssetID.setBackground(Color.green);
+					txtName.setText(assetCheck.getName());
 					asset = assetCheck;
 					}
 				});
@@ -304,6 +318,7 @@ public class CreateWorkOrder extends JPanel {
 		topicTextField.setColumns(10);
 		
 		txtName = new JTextField();
+		txtName.setEnabled(false);
 		txtName.setColumns(10);
 		GridBagConstraints gbc_txtName = new GridBagConstraints();
 		gbc_txtName.weighty = 0;
@@ -455,7 +470,7 @@ public class CreateWorkOrder extends JPanel {
 		typeComboBox.addActionListener(e -> setMaintenanceFields());
 		templatesComboBox.addActionListener(e -> setIntervalFromTemplate());
 	}
-private void setLabels() {
+	private void setLabels() {
 		
 		lblTitle = new JLabel("Emne");
 		GridBagConstraints gbc_lblTitle = new GridBagConstraints();
@@ -497,7 +512,7 @@ private void setLabels() {
 		gbc_lblStatus.gridy = 2;
 		centerLeftPanel.add(lblStatus, gbc_lblStatus);
 		
-		lblName = new JLabel("Navn");
+		lblName = new JLabel("Asset Navn");
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.fill = GridBagConstraints.BOTH;
 		gbc_lblName.weighty = 0;
