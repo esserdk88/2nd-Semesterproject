@@ -40,6 +40,59 @@ public class Reference extends MasterData {
 		return "(" + getCvr() + ") " + getContact() + " " + super.toString();
 	}
 	
-	
+	@Override
+	public boolean equals(Object o) {
+		// object variables
+
+		// If the object is compared with itself then return true
+		if (o == this) {
+			return true;
+		}
+
+		/*
+		 * Check if o is an instance of Complex or not
+		 * "null instanceof [type]" also returns false
+		 */
+		if (!(o instanceof Reference)) {
+			return false;
+		}
+
+		// typecast o to Complex so that we can compare data members
+		Reference r = (Reference) o;
+
+		// god whyyyyy...??
+		// private int employeeID;
+		// private String cprNumber;
+		// private Calendar startDate;
+		// private String position;
+		// private String name;
+		// private String phone;
+		// private String email;
+		// private Address address;
+
+		if (this.getCvr() != r.getCvr()) {
+			return false;
+		}
+		// TODO: CALENDAR DATES!
+		// if (!this.getStartDate().equals(m.getStartDate()) ) {
+		// return false;
+		// }
+		if (!this.getAddress().equals(r.getAddress())) {
+			return false;
+		}
+		if (!this.getContact().equals(r.getContact())) {
+			return false;
+		}
+		if (!this.getEmail().equals(r.getEmail())){
+			return false;
+		}
+		if (!this.getName().equals(r.getName())) {
+			return false;
+		}
+		if (!this.getPhone().equals(r.getPhone())) {
+			return false;
+		}
+		return true;
+	}
 	
 }

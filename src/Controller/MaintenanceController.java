@@ -2,10 +2,8 @@ package Controller;
 
 import java.util.List;
 
-import dal.WorkOrderDB;
-import dal.WorkOrderDBIF;
-import gui.WorkOrder;
 import model.Maintenance;
+import model.Workorder;
 
 public class MaintenanceController extends WorkOrderController implements MaintenanceControllerIF {
 	
@@ -26,7 +24,7 @@ public class MaintenanceController extends WorkOrderController implements Mainte
 	}
 
 	@Override
-	public List<WorkOrder> getAllWorkOrdersByAssetID() {
+	public List<Workorder> getAllWorkOrdersByAssetID() {
 		// TODO Auto-generated method stub
 		return null;
 	}

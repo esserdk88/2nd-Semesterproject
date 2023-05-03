@@ -14,6 +14,7 @@ import dal.AssetDB;
 import dal.AssetDBIF;
 import dal.EmployeeDB;
 import dal.EmployeeDBIF;
+import dal.ReferenceDB;
 import dal.WorkOrderDB;
 import dal.WorkOrderDBIF;
 import model.Address;
@@ -31,7 +32,6 @@ import model.Workorder;
 class WorkOrderDBTest {
 	
 	
-//		public Maintenance findMaintenanceWorkOrderByID(int workOrderID);
 //		public Service findServiceWorkOrderByID(int workOrderID);
 //		public Repair findRepairWorkOrderByID(int workOrderID);
 //		
@@ -92,10 +92,12 @@ class WorkOrderDBTest {
 	//Instances
 	private WorkOrderDBIF workOrderDB = new WorkOrderDB();
 	private AssetDBIF assetDB = new AssetDB();
+	private ReferenceDB referenceDB = new ReferenceDB();
 	
 	@BeforeEach
 	void setUp() throws Exception {
 		asset = assetDB.findAssetByID(1);
+		reference = referenceDB.findReferenceByID(11111111);
 		maintenance = new Maintenance(repeated, intervalDayCount, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
 		service = new Service(reference, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
 		repair = new Repair(price, reference, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
@@ -178,6 +180,24 @@ class WorkOrderDBTest {
 		//Clean up
 		workOrderDB.deleteWorkOrderTestData(testID);
 		
+	}
+	
+	@Test
+	void testFindServiceWorkOrderByID() {
+		//arrange
+		service.setType("Service");
+		Random random = new Random();
+		short testID = (short) random.nextInt(50,100);
+		service.setPriority(testID);
+		workOrderDB.addServiceWorkOrder(service);
+		Service foundService = null;
+		int latestKey = workOrderDB.getLatestKey();
+		
+		//Act
+		foundService = workOrderDB.findServiceWorkOrderByID(latestKey);
+		
+		//Assert
+		assertEquals(true, foundService.equals(service));
 	}
 	
 }

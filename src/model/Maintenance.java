@@ -98,6 +98,12 @@ public class Maintenance extends Workorder {
         if (!this.getMeasurements().equals(m.getMeasurements())){
         	return false;
         }
+        if (this.isRepeated() != m.isRepeated()) {
+        	return false;
+        }
+        if (this.getIntervalDayCount() != m.getIntervalDayCount()) {
+        	return false;
+        }
         return true;
 	}
 
