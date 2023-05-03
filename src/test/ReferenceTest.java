@@ -11,7 +11,7 @@ import model.Workorder;
 
 class ReferenceTest {
 	
-	private String cvr = "12345678";
+	private int cvr = 12345678;
 	private String contact = "Mikkel Hansen";
 	
 	private Reference reference;
@@ -28,7 +28,7 @@ class ReferenceTest {
 	public void testGetters() {
 		
 		//Arrange
-		String cvr;
+		int cvr;
 		String contact;
 		
 		//Act
@@ -45,7 +45,7 @@ class ReferenceTest {
 	public void testSetters() {
 		
 		//Arrange
-		String newCvr = "98765432";
+		int newCvr = 98765432;
 		String newContact = "Jacob Kyed";
 		
 		//Act

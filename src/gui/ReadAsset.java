@@ -380,8 +380,6 @@ public class ReadAsset extends JPanel {
 	}
 	
 	public void createNewWorkOrder() {
-		JPanel center = null;
-		center = new WorkOrder(mainFrame, this.currentAsset);
-		mainFrame.setNewCenterPanel(center);
+		mainFrame.setNewCenterPanel(new CreateWorkOrder(this.currentAsset));
 	}
 }

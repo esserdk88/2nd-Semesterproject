@@ -9,11 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -26,7 +22,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 
 import Controller.AssetController;
 import dal.AssetDB;
@@ -34,7 +29,6 @@ import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
 import model.Asset;
-import java.awt.Component;
 
 public class AssetOverview extends JPanel {
 	
@@ -143,7 +137,7 @@ public class AssetOverview extends JPanel {
         assetTable.addMouseListener(ma);
     }
 
-	public void setAssetOnStartUp() {
+	private void setAssetOnStartUp() {
 		String[][] loadingStatus = { {"Henter assets..."} };
 		assetTable.setNewData(loadingStatus);
 		assetCtrl = new AssetController();

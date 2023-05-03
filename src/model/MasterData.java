@@ -13,7 +13,10 @@ public abstract class MasterData {
 	
 
 	public MasterData() {
-		//Left empty.
+		this.name = "";
+		this.phone = "";
+		this.email = "";
+		this.address = new Address();
 	}
 	
 	public MasterData(String name, String phone, String email, Address address) {

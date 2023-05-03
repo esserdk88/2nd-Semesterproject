@@ -15,7 +15,10 @@ public class Address {
 	private String streetNumber;
 	
 	public Address() {
-		
+		this.cityName = "";
+		this.zipCode = "";
+		this.streetName = "";
+		this.streetNumber = "";
 	}
 	
 	public Address(int addressID, String cityName, String zipCode, String streetName, String streetNumber) {
@@ -71,6 +74,46 @@ public class Address {
 	public String toString() {
 		
 		return "(" + getAddressID() +") " + getStreetName() + " " + getStreetNumber() + " - " + getZipCode() + " " + getCityName();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		//object variables
+
+        // If the object is compared with itself then return true 
+        if (o == this) {
+            return true;
+        }
+ 
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Address)) {
+            return false;
+        }
+         
+        // typecast o to Complex so that we can compare data members
+        Address m = (Address) o;
+        
+        // god whyyyyy...??
+//        private int addressID;
+//    	private String cityName;
+//    	private String zipCode;
+//    	private String streetName;
+//    	private String streetNumber;
+         
+        if (!this.getCityName().equals(m.getCityName())) {
+        	return false;
+        }
+        if (!this.getZipCode().equals(m.getZipCode()) ) {
+        	return false;
+        }
+        if (!this.getStreetName().equals(m.getStreetName())){
+        	return false;
+        }
+        if (!this.getStreetNumber().equals(m.getStreetNumber())) {
+        	return false;
+        }
+        return true;
 	}
 
 }

@@ -1,6 +1,7 @@
 package model;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.spi.LocaleServiceProvider;
@@ -26,6 +27,19 @@ public abstract class Workorder {
 	private List<Measurement> measurements;
 	
 	public Workorder() {
+		
+		this.title = "";
+		this.type = "";
+		this.startDate = Calendar.getInstance();
+		this.endDate = Calendar.getInstance();
+		this.priority = 0;
+		this.description = "";
+		this.finished = false;
+		
+		this.sparepartsUsed = new ArrayList<>();
+		this.asset = new Asset();
+		this.employee = new Employee();
+		this.measurements = new ArrayList<>();
 		
 	}
 

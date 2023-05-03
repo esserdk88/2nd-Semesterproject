@@ -1,12 +1,14 @@
 package Controller;
 
+import java.util.List;
+
 import dal.WorkOrderDB;
 import dal.WorkOrderDBIF;
+import gui.WorkOrder;
 import model.Maintenance;
 
 public class MaintenanceController extends WorkOrderController implements MaintenanceControllerIF {
 	
-	private WorkOrderDBIF workOrderDB = new WorkOrderDB();
 
 	@Override
 	public boolean createWorkOrder(Maintenance maintenance) {
@@ -23,4 +25,9 @@ public class MaintenanceController extends WorkOrderController implements Mainte
 		return workOrderDB.findMaintenanceWorkOrderByID(workOrderID);
 	}
 
+	@Override
+	public List<WorkOrder> getAllWorkOrdersByAssetID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

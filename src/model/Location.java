@@ -15,7 +15,10 @@ public class Location {
 	
 	
 	public Location() {
-		
+		this.building = "";
+		this.floor = "";
+		this.room = "";
+		this.address = new Address();
 	}
 	
 	//Construtor for Location-class
@@ -73,5 +76,45 @@ public class Location {
 		
 		
 		return "(" + getLocationID() + ") " + getBuilding() + " " + getFloor() + " " + getRoom() + " - " + getAddress();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		//object variables
+
+        // If the object is compared with itself then return true 
+        if (o == this) {
+            return true;
+        }
+ 
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Location)) {
+            return false;
+        }
+         
+        // typecast o to Complex so that we can compare data members
+        Location m = (Location) o;
+        
+        // god whyyyyy...??
+//        private int locationID;
+//    	private String building;
+//    	private String floor;
+//    	private String room;
+//    	private Address address;
+         
+        if (!this.getBuilding().equals(m.getBuilding())) {
+        	return false;
+        }
+        if (!this.getFloor().equals(m.getFloor()) ) {
+        	return false;
+        }
+        if (!this.getRoom().equals(m.getRoom())){
+        	return false;
+        }
+        if (!this.getAddress().equals(m.getAddress())) {
+        	return false;
+        }
+        return true;
 	}
 }

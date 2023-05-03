@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.sql.SQLException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -9,8 +10,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import Controller.AssetController;
+import dal.EmployeeDB;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
+import gui.components.TableSwingWorker;
 
 public class EmployeeOverview extends JPanel {
 
@@ -25,7 +29,9 @@ public class EmployeeOverview extends JPanel {
 	
 	//Tables
 	private JScrollPane centerPanel;
-	private DefaultTable workOrderTable;
+	private DefaultTable employeeTable;
+
+	private AssetController employeeCtr;
 
 	/**
 	 * Create the panel.
@@ -35,8 +41,18 @@ public class EmployeeOverview extends JPanel {
 		setPanels();
 		setTables();
 		setButtons();
+		//setEmployeeOnStartUp();
 	}
 
+	/*private void setEmployeeOnStartUp() {
+		employeeCtr = new EmployeeController();
+		Thread workerThread = new Thread(() -> {
+		    TableSwingWorker dataFetcher = null;
+			dataFetcher = new TableSwingWorker(employeeTable, employeeCtr.getAllEmployees());
+		    dataFetcher.execute();
+		});
+		workerThread.start();
+	}*/
 	private void setButtons() {
 		createButton = new JRoundedButton("Opret");
 		createButton.setMaximumSize(new Dimension(110, 23));
@@ -76,9 +92,10 @@ public class EmployeeOverview extends JPanel {
 	private void setTables() {
 		centerPanel = new JScrollPane();
 		add(centerPanel, BorderLayout.CENTER);
-		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
-		workOrderTable = new DefaultTable(null, columns2);
-		centerPanel.setViewportView(workOrderTable);
+		String[] columns2 = new String[] { "EmployeeID", "CPR", "Start Date", "Position", "Name", "Phone Number", "Email" };
+		boolean[] visibleColumns = new boolean[] {true, false, false, true, true, true, false};
+		employeeTable = new DefaultTable(null, columns2, visibleColumns);
+		centerPanel.setViewportView(employeeTable);
 		
 	}
 

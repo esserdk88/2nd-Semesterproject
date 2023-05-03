@@ -1,6 +1,5 @@
 package Controller;
 
-
 import model.Maintenance;
 
 public interface MaintenanceControllerIF {

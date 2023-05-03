@@ -51,7 +51,7 @@ public class ReferenceDB implements ReferenceDBIF {
 		Reference result = new Reference();
 
 		// Set the properties of the Reference object based on the values in the ResultSet
-		result.setCvr(rs.getString("reference_CVR_PK"));
+		result.setCvr(rs.getInt("reference_CVR_PK"));
 		result.setContact(rs.getString("reference_contact"));
 		result.setName(rs.getString("reference_name"));
 		result.setPhone(rs.getString("reference_phone"));
