@@ -31,28 +31,6 @@ import model.Workorder;
 
 class WorkOrderDBTest {
 	
-	
-//		public Service findServiceWorkOrderByID(int workOrderID);
-//		public Repair findRepairWorkOrderByID(int workOrderID);
-//		
-//		public List<Maintenance> getAllMaintenanceWorkOrders();
-//		public List<Service> getAllServiceWorkOrders();
-//		public List<Repair> getAllRepairWorkOrders();
-//		public List<Workorder> getAllUnfinishedWorkOrders();
-//		
-//		public boolean deleteWorkOrderByID(int workOrderID);
-//		
-//		public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder);
-	
-	//Asset fields
-//	private Address assetAddress = new Address(42, "Aalborg SV", "9200", "Sofiendalsvej", "60");
-//	private Location location = new Location(69, "Hoved bygningen", "2.sal", "HB242", assetAddress);
-//	Calendar aquisitionDate = Calendar.getInstance();
-//	private String assetName = "";
-//	private String assetDescription ="";
-//	private String assetStatus = "";
-//	private String assetManufacturer = "";
-	
 	//Common fields for use 
 	private int workOrderID = 42;
 	private String title = "Test opgave";
@@ -94,13 +72,18 @@ class WorkOrderDBTest {
 	private AssetDBIF assetDB = new AssetDB();
 	private ReferenceDB referenceDB = new ReferenceDB();
 	
+	//Other
+	Random random = new Random();
+	short testID;
+	
 	@BeforeEach
 	void setUp() throws Exception {
+		testID = (short) random.nextInt(50,100);
 		asset = assetDB.findAssetByID(1);
 		reference = referenceDB.findReferenceByID(11111111);
-		maintenance = new Maintenance(repeated, intervalDayCount, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
-		service = new Service(reference, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
-		repair = new Repair(price, reference, workOrderID, title, type, startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
+		maintenance = new Maintenance(repeated, intervalDayCount, workOrderID, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
+		service = new Service(reference, workOrderID, title, "Service", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
+		repair = new Repair(price, reference, workOrderID, title, "Repair", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
 	}
 			
 	@Test
@@ -164,8 +147,6 @@ class WorkOrderDBTest {
 	void findMaintenanceWorkOrderByIDTest() {
 		//TODO Finish this test
 		//Arrange
-		Random random = new Random();
-		short testID = (short) random.nextInt(50,100);
 		maintenance.setPriority(testID);
 		workOrderDB.addMaintenanceWorkOrder(maintenance);
 		Maintenance foundMaintenance = null;
@@ -184,10 +165,7 @@ class WorkOrderDBTest {
 	
 	@Test
 	void findServiceWorkOrderByIDTest() {
-		//arrange
-		service.setType("Service");
-		Random random = new Random();
-		short testID = (short) random.nextInt(50,100);
+		//Arrange
 		service.setPriority(testID);
 		workOrderDB.addServiceWorkOrder(service);
 		Service foundService = null;
@@ -198,6 +176,88 @@ class WorkOrderDBTest {
 		
 		//Assert
 		assertEquals(true, foundService.equals(service));
+		
+		//Clean up
+		workOrderDB.deleteWorkOrderTestData(testID);
+	}
+	
+	@Test
+	void findRepairWorkOrderByIDTest() {
+		//TODO: this test will fail as long as the database workorder_price holde decimal number with 0 decimal points
+//		//Arrange
+//		repair.setPriority(testID);
+//		workOrderDB.addRepairWorkOrder(repair);
+//		Repair foundRepair = null;
+//		int latestKey = workOrderDB.getLatestKey();
+//		
+//		//Act
+//		foundRepair = workOrderDB.findRepairWorkOrderByID(latestKey);
+//		
+//		//Assert
+//		assertEquals(true, foundRepair.equals(repair));
+//		
+//		//Clean up
+//		workOrderDB.deleteWorkOrderTestData(testID);
+	}
+	
+	@Test
+	void getAllMaintenanceWorkOrdersTest() {
+		//TODO: Write test case
+		//Arrange
+				
+		//Act
+		
+		//Assert
+		
+		//Clean up
+	}
+	
+	@Test
+	void getAllServiceWorkOrdersTest() {
+		//TODO: Write test case
+		//Arrange
+		
+		//Act
+		
+		//Assert
+		
+		//Clean up
+	}
+	
+	@Test
+	void getAllRepairWorkOrdersTest() {
+		//TODO: Write test case
+		//Arrange
+		
+		//Act
+		
+		//Assert
+		
+		//Clean up
+	}
+	
+	@Test
+	void getAllUnfinishedWorkOrdersTest() {
+		//TODO: Write test case
+		//Arrange
+		
+		//Act
+		
+		//Assert
+		
+		//Clean up
+	}
+	
+	@Test
+	void deleteWorkOrderByIDTest() {
+		//TODO: Write test case
+		//Arrange
+		
+		//Act
+		
+		//Assert
+		
+		//Clean up
 	}
 	
 }
