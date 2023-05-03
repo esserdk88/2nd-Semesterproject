@@ -28,6 +28,7 @@ public interface WorkOrderDBIF {
 	public List<Service> getAllServiceWorkOrders();
 	public List<Repair> getAllRepairWorkOrders();
 	public List<Workorder> getAllUnfinishedWorkOrders();
+	public List<Workorder> getAllWorkOrdersByAssetID(int assetID);
 	
 	public boolean deleteWorkOrderByID(int workOrderID);
 	public boolean deleteWorkOrderTestData(short ID);

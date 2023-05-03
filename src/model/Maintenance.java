@@ -47,7 +47,6 @@ public class Maintenance extends Workorder implements StringArrayConvertible {
 
 	@Override
 	public String[] getObjectAsStringArray() {
-		// TODO Auto-generated method stub
 		return new String[] { Integer.toString(getWorkOrderID()), getTitle(), getType(), calendarToString(getStartDate()), "",
 				Short.toString(getPriority()), getDescription(), Boolean.toString(isFinished()),
 				Integer.toString(getAsset().getAssetID()),
@@ -70,8 +69,6 @@ public class Maintenance extends Workorder implements StringArrayConvertible {
          
         // typecast o to Complex so that we can compare data members
         Maintenance m = (Maintenance) o;
-        
-        // god whyyyyy...??
          
         if (!this.getTitle().equals(m.getTitle())) {
         	return false;
@@ -80,7 +77,12 @@ public class Maintenance extends Workorder implements StringArrayConvertible {
         	System.out.println(this.getType() + " " + m.getType());
         	return false;
         }
-        //TODO: CALENDAR DATES!
+        if (!this.getStartDateString().equals(m.getStartDateString()) ) {
+			return false;
+		}
+        if (!this.getEndDateString().equals(m.getEndDateString()) ) {
+			return false;
+		}
         if (this.getPriority() != m.getPriority()) {
         	return false;
         }
@@ -96,9 +98,7 @@ public class Maintenance extends Workorder implements StringArrayConvertible {
         if (!this.getAsset().equals(m.getAsset())){
         	return false;
         }
-    	if(this.getEmployee() == null && m.getEmployee() == null) {
-    		
-    	} else {
+    	if(!(this.getEmployee() != null && m.getEmployee() != null)) {
     		return false;
     	}
         if ((this.getEmployee() != null && m.getEmployee() != null) && !this.getEmployee().equals(m.getEmployee())){

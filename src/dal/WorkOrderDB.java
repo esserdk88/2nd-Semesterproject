@@ -46,6 +46,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public static final String SELECT_REPAIR_BY_ID = "SELECT " + FIELDS_REPAIR_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Repair'";
 	
 	public static final String SELECT_UNFINISHED_WORKORDERS = "SELECT * from Workorder where workorder_finished = 0 and workorder_startdate <= GETDATE()";
+	public static final String SELECT_ALL_WORKORDERS_BY_ASSET_ID = "SELECT * from Workorder where workorder_asset_id_FK = ?";
 	
 	public static final String SELECT_ALL_MAINTENANCE = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Maintenance'";
 	public static final String SELECT_ALL_SERVICE = "SELECT " + FIELDS_SERVICE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Service'";
@@ -326,6 +327,43 @@ public class WorkOrderDB implements WorkOrderDBIF {
 			
 			//prepare statement
 			// Left empty.
+			
+			//execute statement
+			ResultSet rs = psFindWorkorder.executeQuery();
+			
+			if (rs != null) {
+				//build WorkOrder object from result set
+				while(rs.next()) {
+					switch (rs.getString("workorder_type")) {
+					case "Maintenance":  
+						list.add(buildMaintenanceObject(rs));
+						break;
+					case "Service":  
+						list.add(buildServiceObject(rs));
+						break;	
+					case "Repair":  
+						list.add(buildRepairObject(rs));
+						break;	
+					default:
+						//Left empty.
+					}
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("ERROR FROM RETRIEVING UNFINISHED WORKORDER:" + e.getMessage());
+		}
+		return list;
+	}
+	@Override
+	public List<Workorder> getAllWorkOrdersByAssetID(int assetID){
+		List<Workorder> list = new ArrayList<>();
+		
+		// establish database connection
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_WORKORDERS_BY_ASSET_ID)) {
+			
+			//prepare statement
+			psFindWorkorder.setInt(1, assetID);
 			
 			//execute statement
 			ResultSet rs = psFindWorkorder.executeQuery();

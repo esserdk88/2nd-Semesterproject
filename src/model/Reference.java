@@ -2,6 +2,7 @@ package model;
 
 /*
  * 19-04-2023: Review done by Rasmus and Mikkel - Align DCD vs. code
+ * 03-05-2023: Added equals method
  */
 
 public class Reference extends MasterData {
@@ -50,40 +51,20 @@ public class Reference extends MasterData {
 		}
 
 		/*
-		 * Check if o is an instance of Complex or not
+		 * Check if o is an instance of Reference or not
 		 * "null instanceof [type]" also returns false
 		 */
 		if (!(o instanceof Reference)) {
 			return false;
 		}
 
-		// typecast o to Complex so that we can compare data members
+		// typecast o to Reference so that we can compare data members
 		Reference r = (Reference) o;
-
-		// god whyyyyy...??
-		// private int employeeID;
-		// private String cprNumber;
-		// private Calendar startDate;
-		// private String position;
-		// private String name;
-		// private String phone;
-		// private String email;
-		// private Address address;
 
 		if (this.getCvr() != r.getCvr()) {
 			return false;
 		}
-		// TODO: CALENDAR DATES!
-		// if (!this.getStartDate().equals(m.getStartDate()) ) {
-		// return false;
-		// }
-		if (!this.getAddress().equals(r.getAddress())) {
-			return false;
-		}
 		if (!this.getContact().equals(r.getContact())) {
-			return false;
-		}
-		if (!this.getEmail().equals(r.getEmail())){
 			return false;
 		}
 		if (!this.getName().equals(r.getName())) {
@@ -92,7 +73,15 @@ public class Reference extends MasterData {
 		if (!this.getPhone().equals(r.getPhone())) {
 			return false;
 		}
+		if (!this.getEmail().equals(r.getEmail())){
+			return false;
+		}
+		if (!this.getAddress().equals(r.getAddress())) {
+			return false;
+		}
 		return true;
 	}
+
+	
 	
 }

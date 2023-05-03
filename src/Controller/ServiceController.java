@@ -22,8 +22,7 @@ public class ServiceController extends WorkOrderController implements ServiceCon
 	}
 
 	@Override
-	public List<Workorder> getAllWorkOrdersByAssetID() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Workorder> getAllWorkOrdersByAssetID(int assetID) {
+		return super.getAllWorkOrdersByAssetID(assetID);
 	}
 }

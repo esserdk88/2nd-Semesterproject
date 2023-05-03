@@ -45,7 +45,6 @@ public class Repair extends Workorder implements StringArrayConvertible {
 
 	@Override
 	public String[] getObjectAsStringArray() {
-		// TODO Auto-generated method stub
 		return new String[] { Integer.toString(getWorkOrderID()), getTitle(), getType(), calendarToString(getStartDate()), "",
 				Short.toString(getPriority()), getDescription(), Boolean.toString(isFinished()),
 				Integer.toString(getAsset().getAssetID()),

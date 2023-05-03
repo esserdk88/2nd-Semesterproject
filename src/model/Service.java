@@ -50,17 +50,19 @@ public class Service extends Workorder implements StringArrayConvertible {
          
         // typecast o to Complex so that we can compare data members
         Service s = (Service) o;
-        
-        // god whyyyyy...??
          
         if (!this.getTitle().equals(s.getTitle())) {
         	return false;
         }
         if (!this.getType().equals(s.getType()) ) {
-        	System.out.println(this.getType() + " " + s.getType());
         	return false;
         }
-        //TODO: CALENDAR DATES!
+        if (!this.getStartDateString().equals(s.getStartDateString()) ) {
+			return false;
+		}
+        if (!this.getEndDateString().equals(s.getEndDateString()) ) {
+			return false;
+		}
         if (this.getPriority() != s.getPriority()) {
         	return false;
         }
@@ -95,8 +97,6 @@ public class Service extends Workorder implements StringArrayConvertible {
 
 	@Override
 	public String[] getObjectAsStringArray() {
-		// TODO Auto-generated method stub
-
 		return new String[] { Integer.toString(getWorkOrderID()), getTitle(), getType(), calendarToString(getStartDate()), "",
 				Short.toString(getPriority()), getDescription(), Boolean.toString(isFinished()),
 				Integer.toString(getAsset().getAssetID()),

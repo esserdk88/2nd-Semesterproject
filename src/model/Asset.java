@@ -69,6 +69,10 @@ public class Asset implements StringArrayConvertible{
 	public Calendar getAquisitionDate() {
 		return aquisitionDate;
 	}
+	
+	public String getAquisitionDateString() {
+		return calendarToString(aquisitionDate);
+	}
 
 	public void setAquisitionDate(Calendar aquisitionDate) {
 		this.aquisitionDate = aquisitionDate;
@@ -104,6 +108,19 @@ public class Asset implements StringArrayConvertible{
 		return "" + getAssetID();
 	}
 	
+	public String calendarToString(Calendar calendar) {
+		
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        
+        String dateString = "Dato ikke sat";
+        
+        if(calendar != null) {
+            dateString = dateFormat.format(calendar.getTime());
+        }
+        
+         return dateString;
+	}
+	
 	public String[] getObjectAsStringArray() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		return new String[] {Integer.toString(getAssetID()), getName(), dateFormat.format(getAquisitionDate().getTime()), getDescription(), getStatus(), getManufacturer()};
@@ -126,8 +143,6 @@ public class Asset implements StringArrayConvertible{
          
         // typecast o to Complex so that we can compare data members
         Asset m = (Asset) o;
-        
-        // god whyyyyy...??
          
         if (!this.getName().equals(m.getName())) {
         	return false;
@@ -135,10 +150,9 @@ public class Asset implements StringArrayConvertible{
         if (!this.getDescription().equals(m.getDescription()) ) {
         	return false;
         }
-        //TODO: This can fail due to nano seconds
-//        if (!this.getAquisitionDate().equals(m.getAquisitionDate())){
-//        	return false;
-//        }
+        if (!this.getAquisitionDateString().equals(m.getAquisitionDateString())){
+        	return false;
+        }
         if (!this.getStatus().equals(m.getStatus())) {
         	return false;
         }
@@ -150,4 +164,6 @@ public class Asset implements StringArrayConvertible{
         }
         return true;
 	}
+
+	
 }
