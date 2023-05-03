@@ -27,26 +27,38 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	public static final String FIELDS_COMMON_WITH_ID = "workorder_id_PK, workorder_title, workorder_type, workorder_startdate, workorder_enddate, "
 			+ "workorder_priority, workorder_description, workorder_finished, workorder_asset_id_FK, workorder_employee_id_FK";
+	
+	//Without ID and employee.
 	public static final String FIELDS_INSERT_COMMON = "workorder_title, workorder_type, workorder_startdate, workorder_enddate,"
 						+ "workorder_priority, workorder_description, workorder_finished, workorder_asset_id_FK";
+	
+	
 	public static final String FIELDS_MAINTENANCE_WITH_ID = FIELDS_COMMON_WITH_ID + ", workorder_interval, workorder_repeatable";
+	public static final String FIELDS_SERVICE_WITH_ID = FIELDS_COMMON_WITH_ID + ", workorder_reference_id_FK";
+	public static final String FIELDS_REPAIR_WITH_ID = FIELDS_COMMON_WITH_ID + ", workorder_reference_id_FK, workorder_price";
+	
 	public static final String FIELDS_INSERT_MAINTENANCE = FIELDS_INSERT_COMMON + ", workorder_interval, workorder_repeatable";
-	public static final String FIELDS_SERVICE = FIELDS_COMMON_WITH_ID + ", workorder_reference_id_FK";
-	public static final String FIELDS_REPAIR = FIELDS_COMMON_WITH_ID + ", workorder_reference_id_FK, workorder_price";
+	public static final String FIELDS_INSERT_SERVICE = FIELDS_INSERT_COMMON + ", workorder_reference_id_FK";
+	public static final String FIELDS_INSERT_REPAIR = FIELDS_INSERT_COMMON + ", workorder_reference_id_FK, workorder_price";
 	
 	public static final String SELECT_MAINTENANCE_BY_ID = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Maintenance'";
-	public static final String SELECT_SERVICE_BY_ID = "SELECT " + FIELDS_SERVICE + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Service'";
-	public static final String SELECT_REPAIR_BY_ID = "SELECT " + FIELDS_REPAIR + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Repair'";
+	public static final String SELECT_SERVICE_BY_ID = "SELECT " + FIELDS_SERVICE_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Service'";
+	public static final String SELECT_REPAIR_BY_ID = "SELECT " + FIELDS_REPAIR_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Repair'";
 	
 	public static final String SELECT_UNFINISHED_WORKORDERS = "SELECT * from Workorder where workorder_finished = 0 and workorder_startdate <= GETDATE()";
 	
 	public static final String SELECT_ALL_MAINTENANCE = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Maintenance'";
-	public static final String SELECT_ALL_SERVICE = "SELECT " + FIELDS_SERVICE + " FROM Workorder WHERE workorder_type = 'Service'";
-	public static final String SELECT_ALL_REPAIR = "SELECT " + FIELDS_REPAIR + " FROM Workorder WHERE workorder_type = 'Repair'";
+	public static final String SELECT_ALL_SERVICE = "SELECT " + FIELDS_SERVICE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Service'";
+	public static final String SELECT_ALL_REPAIR = "SELECT " + FIELDS_REPAIR_WITH_ID + " FROM Workorder WHERE workorder_type = 'Repair'";
 	
 	public static final String INSERT_MAINTENANCE = "INSERT INTO Workorder (" + FIELDS_INSERT_MAINTENANCE + ") VALUES (?,?,?,?,?,?,?,?,?,?)" ;
+	public static final String INSERT_SERVICE = "INSERT INTO Workorder (" + FIELDS_INSERT_SERVICE + ") VALUES (?,?,?,?,?,?,?,?,?)" ;
+	public static final String INSERT_REPAIR = "INSERT INTO Workorder (" + FIELDS_INSERT_REPAIR + ") VALUES (?,?,?,?,?,?,?,?,?,?)" ;
 	
 	public static final String DELETE_WORK_ORDER_BY_ID = "DELETE FROM Workorder where workorder_id_PK = ?";
+	public static final String DELETE_WORK_ORDER_TEST_DATA = "DELETE FROM Workorder where workorder_priority = ?";
+	
+	public static final String SELECT_LATEST_KEY = "SELECT MAX (workorder_id_PK) from Workorder";
 	
 	private EmployeeDBIF employeeDB = Database.getInstance().getEmployeeDataBase();
 	private AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
@@ -81,6 +93,68 @@ public class WorkOrderDB implements WorkOrderDBIF {
 			
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM INSERTING MAINTENANCE WORKORDER:" + e.getMessage());
+		}
+		
+		return success;
+	}
+	
+	@Override
+	public boolean addServiceWorkOrder (Service workOrder) {
+		
+		boolean success = false;
+		
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psAddService = con.prepareStatement(INSERT_SERVICE)) {
+			
+			//prepare statement
+			psAddService.setString(1, workOrder.getTitle());
+			psAddService.setString(2, "Service");
+			psAddService.setDate(3, convertCalendarToSqlDate(workOrder.getStartDate()));
+			psAddService.setDate(4, convertCalendarToSqlDate(workOrder.getEndDate()));
+			psAddService.setShort(5, workOrder.getPriority());
+			psAddService.setString(6, workOrder.getDescription());
+			psAddService.setBoolean(7, workOrder.isFinished());
+			psAddService.setInt(8, workOrder.getAsset().getAssetID());
+			psAddService.setInt(9, workOrder.getReference().getCvr());
+					
+			//execute statement
+			psAddService.executeUpdate();
+			
+			success = true;
+			
+		} catch (SQLException e) {
+			System.out.println("ERROR FROM INSERTING SERVICE WORKORDER:" + e.getMessage());
+		}
+		
+		return success;
+	}
+	
+	@Override
+	public boolean addRepairWorkOrder (Repair workOrder) {
+		boolean success = false;
+		
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psAddRepair = con.prepareStatement(INSERT_REPAIR)) {
+			
+			//prepare statement
+			psAddRepair.setString(1, workOrder.getTitle());
+			psAddRepair.setString(2, "Repair");
+			psAddRepair.setDate(3, convertCalendarToSqlDate(workOrder.getStartDate()));
+			psAddRepair.setDate(4, convertCalendarToSqlDate(workOrder.getEndDate()));
+			psAddRepair.setShort(5, workOrder.getPriority());
+			psAddRepair.setString(6, workOrder.getDescription());
+			psAddRepair.setBoolean(7, workOrder.isFinished());
+			psAddRepair.setInt(8, workOrder.getAsset().getAssetID());
+			psAddRepair.setInt(9, workOrder.getReference().getCvr());
+			psAddRepair.setDouble(10, workOrder.getPrice());
+					
+			//execute statement
+			psAddRepair.executeUpdate();
+			
+			success = true;
+			
+		} catch (SQLException e) {
+			System.out.println("ERROR FROM INSERTING REPAIR WORKORDER:" + e.getMessage());
 		}
 		
 		return success;
@@ -306,6 +380,31 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	}
 	
 	@Override
+	public boolean deleteWorkOrderTestData(short ID) {
+		boolean success = false;
+		
+		// establish database connection
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psDeleteWorkOrder = con.prepareStatement(DELETE_WORK_ORDER_TEST_DATA)) {
+			
+			//prepare statement
+			psDeleteWorkOrder.setInt(1, ID);
+			
+			//execute statement
+			psDeleteWorkOrder.executeUpdate();
+			psDeleteWorkOrder.getUpdateCount(); 
+			if(psDeleteWorkOrder.getUpdateCount() > 0) {
+				success = true;
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("ERROR FROM DELETING TEST DATA:" + e.getMessage());
+		}
+		
+		return success;
+	}
+	
+	@Override
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder) {
 		// TODO Auto-generated method stub
 		return false;
@@ -416,6 +515,31 @@ public class WorkOrderDB implements WorkOrderDBIF {
 
 		// return the Repair object
 		return result;
+	}
+
+	@Override
+	public int getLatestKey() {
+		
+		int outputKey = -1;
+		
+		// establish database connection
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psFindLatestKey = con.prepareStatement(SELECT_LATEST_KEY)) {
+			
+			//prepare statement left empty
+			
+			//execute statement
+			ResultSet rs = psFindLatestKey.executeQuery();
+			
+			if (rs != null && rs.next()) {
+				//build Maintenance object from result set
+				outputKey = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+		System.out.println("ERROR FROM RETRIEVING LATEST KEY:" + e.getMessage());
+		}
+		
+		return outputKey;
 	}
 	
 }

@@ -24,7 +24,6 @@ class AssetDBTest {
 	
 	private static AssetDB assetDatabase;
 
-
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 	}

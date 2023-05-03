@@ -145,6 +145,8 @@ public class AssetOverview extends JPanel {
     }
 
 	private void setAssetOnStartUp() {
+		String[][] loadingStatus = { {"Henter assets..."} };
+		assetTable.setNewData(loadingStatus);
 		assetCtrl = new AssetController();
 		Thread workerThread = new Thread(() -> {
 		    TableSwingWorker dataFetcher = null;
@@ -157,6 +159,7 @@ public class AssetOverview extends JPanel {
 		});
 		workerThread.start();
 	}
+	
 	private void setTables() {
 		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
 		workOrderScrollPanel = new JScrollPane();
@@ -189,7 +192,7 @@ public class AssetOverview extends JPanel {
 				e.printStackTrace();
 			}
 			if (tempAsset != null) {
-				ReadAsset readAsset = new ReadAsset(tempAsset);
+				ReadAsset readAsset = new ReadAsset(mainFrame, tempAsset);
 				mainFrame.setNewCenterPanel(readAsset);
 			}
 		}
