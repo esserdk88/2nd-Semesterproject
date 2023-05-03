@@ -40,8 +40,7 @@ public class WorkOrderController implements WorkOrderControllerIF {
 
 	@Override
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID) {
-		// TODO Auto-generated method stub
-		return null;
+		return workOrderDB.getAllWorkOrdersByAssetID(assetID);
 	}
 
 }
