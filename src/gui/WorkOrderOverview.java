@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -18,8 +19,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import Controller.WorkOrderController;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
+import gui.components.TableSwingWorker;
 
 public class WorkOrderOverview extends JPanel {
 
@@ -62,6 +65,7 @@ public class WorkOrderOverview extends JPanel {
 	private Component rigidArea;
 	private Component rigidArea_2;
 	private MainFrame frame;
+	private WorkOrderController workOrderCtrl;
 
 	/**
 	 * Create the panel.
@@ -74,6 +78,7 @@ public class WorkOrderOverview extends JPanel {
 		setLabelsAndTextFieldsAndRadioButtons();
 		setTables();
 		setButtons();
+		setWorkOrderOnStartUp();
 	}
 
 	private void setLabelsAndTextFieldsAndRadioButtons() {
@@ -158,8 +163,9 @@ public class WorkOrderOverview extends JPanel {
 	private void setTables() {
 		centerScrollPane = new JScrollPane();
 		add(centerScrollPane, BorderLayout.CENTER);
-		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3" };
-		workOrderTable = new DefaultTable(null, columns2);
+		boolean[] activeColumns = new boolean[] { true, true, true, true, false, true, false, false, false, true };
+		String[] columns2 = new String[] { "WorkOrderID", "Emne", "Type", "Start Dato", "Slut Dato", "Prioritet", "Beskrivelse", "Færdig", "AssetID", "Medarbejder"};
+		workOrderTable = new DefaultTable(null, columns2, activeColumns);
 		centerScrollPane.setViewportView(workOrderTable);
 	}
 
@@ -182,4 +188,15 @@ public class WorkOrderOverview extends JPanel {
 
 	}
 
+	public void setWorkOrderOnStartUp() {
+		String[][] loadingStatus = { { "Henter arbejdsordrer..." } };
+		workOrderTable.setNewData(loadingStatus);
+		workOrderCtrl = new WorkOrderController();
+		Thread workerThread = new Thread(() -> {
+			TableSwingWorker dataFetcher = null;
+			dataFetcher = new TableSwingWorker(workOrderTable, workOrderCtrl.getAllUnfinishedWorkOrders());
+			dataFetcher.execute();
+		});
+		workerThread.start();
+	}
 }
