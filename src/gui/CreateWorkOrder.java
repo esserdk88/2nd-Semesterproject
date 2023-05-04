@@ -238,22 +238,14 @@ public class CreateWorkOrder extends JPanel {
 	
 	private void setMaintenanceFields() {
 		if(typeComboBox.getSelectedItem().toString().equals("Vedligeholdelse")) {
-			spinnerStartDate.setEnabled(true);
-			spinnerEndDate.setEnabled(true);
 			intervalSpinner.setEnabled(true);
 			templatesComboBox.setEnabled(true);
 			lblInterval.setEnabled(true);
-			lblStartDate.setEnabled(true);
-			lblEndDate.setEnabled(true);
 			lblTemplates.setEnabled(true);
 		}else {
-			spinnerStartDate.setEnabled(false);
-			spinnerEndDate.setEnabled(false);
 			intervalSpinner.setEnabled(false);
 			templatesComboBox.setEnabled(false);
 			lblInterval.setEnabled(false);
-			lblStartDate.setEnabled(false);
-			lblEndDate.setEnabled(false);
 			lblTemplates.setEnabled(false);
 		}
 	}
@@ -292,6 +284,73 @@ public class CreateWorkOrder extends JPanel {
 		gbc_btnFindEmployee.gridx = 6;
 		gbc_btnFindEmployee.gridy = 1;
 		centerLeftPanel.add(btnFindEmployee, gbc_btnFindEmployee);
+		
+		lblStartDate = new JLabel("Startdato");
+		GridBagConstraints gbc_lblStartDate = new GridBagConstraints();
+		gbc_lblStartDate.fill = GridBagConstraints.BOTH;
+		gbc_lblStartDate.weighty = 0;
+		gbc_lblStartDate.weightx = 0;
+		gbc_lblStartDate.insets = new Insets(0, 0, 5, 5);
+		gbc_lblStartDate.gridx = 1;
+		gbc_lblStartDate.gridy = 4;
+		centerLeftPanel.add(lblStartDate, gbc_lblStartDate);
+		
+		
+		lblSerieNr = new JLabel("Serienr.");
+		GridBagConstraints gbc_lblSerieNr = new GridBagConstraints();
+		gbc_lblSerieNr.fill = GridBagConstraints.BOTH;
+		gbc_lblSerieNr.weighty = 0;
+		gbc_lblSerieNr.weightx = 0;
+		gbc_lblSerieNr.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSerieNr.gridx = 4;
+		gbc_lblSerieNr.gridy = 4;
+		centerLeftPanel.add(lblSerieNr, gbc_lblSerieNr);
+		
+		serieNrTextField = new JTextField();
+		GridBagConstraints gbc_serieNrTextField = new GridBagConstraints();
+		gbc_serieNrTextField.weighty = 0;
+		gbc_serieNrTextField.weightx = 0;
+		gbc_serieNrTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_serieNrTextField.fill = GridBagConstraints.BOTH;
+		gbc_serieNrTextField.gridx = 5;
+		gbc_serieNrTextField.gridy = 4;
+		centerLeftPanel.add(serieNrTextField, gbc_serieNrTextField);
+		serieNrTextField.setColumns(10);
+		
+		lblEndDate = new JLabel("Slutdato");
+		GridBagConstraints gbc_lblEndDate = new GridBagConstraints();
+		gbc_lblEndDate.fill = GridBagConstraints.BOTH;
+		gbc_lblEndDate.weighty = 0;
+		gbc_lblEndDate.weightx = 0;
+		gbc_lblEndDate.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEndDate.gridx = 1;
+		gbc_lblEndDate.gridy = 5;
+		centerLeftPanel.add(lblEndDate, gbc_lblEndDate);
+		
+		
+		lblType = new JLabel("Type");
+		GridBagConstraints gbc_lblType = new GridBagConstraints();
+		gbc_lblType.fill = GridBagConstraints.BOTH;
+		gbc_lblType.weighty = 0;
+		gbc_lblType.weightx = 0;
+		gbc_lblType.insets = new Insets(0, 0, 5, 5);
+		gbc_lblType.gridx = 1;
+		gbc_lblType.gridy = 7;
+		centerLeftPanel.add(lblType, gbc_lblType);
+		
+		typeComboBox = new JComboBox();		
+		typeComboBox.setModel(new DefaultComboBoxModel(new String[] {"", "Reparation", "Serviceaftale", "Vedligeholdelse"}));
+		GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
+		gbc_comboBox_1.weighty = 0;
+		gbc_comboBox_1.weightx = 0;
+		gbc_comboBox_1.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBox_1.fill = GridBagConstraints.BOTH;
+		gbc_comboBox_1.gridx = 2;
+		gbc_comboBox_1.gridy = 7;
+		centerLeftPanel.add(typeComboBox, gbc_comboBox_1);
+		
+		
+		typeComboBox.addActionListener(e -> setMaintenanceFields());
 		
 		createWorkOrderButton = new JRoundedButton("Opret arbejdsordre");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
@@ -358,17 +417,6 @@ public class CreateWorkOrder extends JPanel {
 		gbc_txtAssetID.gridy = 2;
 		centerLeftPanel.add(txtAssetID, gbc_txtAssetID);
 		
-		serieNrTextField = new JTextField();
-		GridBagConstraints gbc_serieNrTextField = new GridBagConstraints();
-		gbc_serieNrTextField.weighty = 0;
-		gbc_serieNrTextField.weightx = 0;
-		gbc_serieNrTextField.insets = new Insets(0, 0, 5, 5);
-		gbc_serieNrTextField.fill = GridBagConstraints.BOTH;
-		gbc_serieNrTextField.gridx = 2;
-		gbc_serieNrTextField.gridy = 4;
-		centerLeftPanel.add(serieNrTextField, gbc_serieNrTextField);
-		serieNrTextField.setColumns(10);
-		
 		textArea = new JTextArea();
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
@@ -394,7 +442,7 @@ public class CreateWorkOrder extends JPanel {
 		gbc_spinner.fill = GridBagConstraints.BOTH;
 		gbc_spinner.insets = new Insets(0, 0, 5, 5);
 		gbc_spinner.gridx = 2;
-		gbc_spinner.gridy = 7;
+		gbc_spinner.gridy = 4;
 		centerLeftPanel.add(spinnerStartDate, gbc_spinner);
 		
 		spinnerEndDate = new JSpinner();
@@ -405,7 +453,7 @@ public class CreateWorkOrder extends JPanel {
 		gbc_spinner_1.fill = GridBagConstraints.BOTH;
 		gbc_spinner_1.insets = new Insets(0, 0, 5, 5);
 		gbc_spinner_1.gridx = 2;
-		gbc_spinner_1.gridy = 8;
+		gbc_spinner_1.gridy = 5;
 		centerLeftPanel.add(spinnerEndDate, gbc_spinner_1);
 		spinnerEndDate.setEditor(new JSpinner.DateEditor(spinnerStartDate, spinnerModel.toPattern()));
 		
@@ -444,17 +492,6 @@ public class CreateWorkOrder extends JPanel {
 		gbc_priorityComboBox.gridy = 2;
 		centerLeftPanel.add(priorityComboBox, gbc_priorityComboBox);
 		
-		typeComboBox = new JComboBox();		
-		typeComboBox.setModel(new DefaultComboBoxModel(new String[] {"", "Reparation", "Serviceaftale", "Vedligeholdelse"}));
-		GridBagConstraints gbc_comboBox_1 = new GridBagConstraints();
-		gbc_comboBox_1.weighty = 0;
-		gbc_comboBox_1.weightx = 0;
-		gbc_comboBox_1.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox_1.fill = GridBagConstraints.BOTH;
-		gbc_comboBox_1.gridx = 2;
-		gbc_comboBox_1.gridy = 6;
-		centerLeftPanel.add(typeComboBox, gbc_comboBox_1);
-		
 		templatesComboBox = new JComboBox();
 		templatesComboBox.setModel(new DefaultComboBoxModel(new String[] {"2 uger", "1 måned", "3 måneder", "6 måneder", "12 måneder"}));
 		GridBagConstraints gbc_templatesComboBox = new GridBagConstraints();
@@ -465,9 +502,6 @@ public class CreateWorkOrder extends JPanel {
 		gbc_templatesComboBox.gridx = 5;
 		gbc_templatesComboBox.gridy = 7;
 		centerLeftPanel.add(templatesComboBox, gbc_templatesComboBox);
-		
-		
-		typeComboBox.addActionListener(e -> setMaintenanceFields());
 		templatesComboBox.addActionListener(e -> setIntervalFromTemplate());
 	}
 	private void setLabels() {
@@ -532,38 +566,6 @@ public class CreateWorkOrder extends JPanel {
 		gbc_lblRegNr.gridy = 3;
 		centerLeftPanel.add(lblRegNr, gbc_lblRegNr);
 		
-		
-		lblSerieNr = new JLabel("Serienr.");
-		GridBagConstraints gbc_lblSerieNr = new GridBagConstraints();
-		gbc_lblSerieNr.fill = GridBagConstraints.BOTH;
-		gbc_lblSerieNr.weighty = 0;
-		gbc_lblSerieNr.weightx = 0;
-		gbc_lblSerieNr.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSerieNr.gridx = 1;
-		gbc_lblSerieNr.gridy = 4;
-		centerLeftPanel.add(lblSerieNr, gbc_lblSerieNr);
-		
-		
-		lblType = new JLabel("Type");
-		GridBagConstraints gbc_lblType = new GridBagConstraints();
-		gbc_lblType.fill = GridBagConstraints.BOTH;
-		gbc_lblType.weighty = 0;
-		gbc_lblType.weightx = 0;
-		gbc_lblType.insets = new Insets(0, 0, 5, 5);
-		gbc_lblType.gridx = 1;
-		gbc_lblType.gridy = 6;
-		centerLeftPanel.add(lblType, gbc_lblType);
-		
-		lblStartDate = new JLabel("Startdato");
-		GridBagConstraints gbc_lblStartDate = new GridBagConstraints();
-		gbc_lblStartDate.fill = GridBagConstraints.BOTH;
-		gbc_lblStartDate.weighty = 0;
-		gbc_lblStartDate.weightx = 0;
-		gbc_lblStartDate.insets = new Insets(0, 0, 5, 5);
-		gbc_lblStartDate.gridx = 1;
-		gbc_lblStartDate.gridy = 7;
-		centerLeftPanel.add(lblStartDate, gbc_lblStartDate);
-		
 		lblTemplates = new JLabel("Skabeloner");
 		GridBagConstraints gbc_lblTemplates = new GridBagConstraints();
 		gbc_lblTemplates.fill = GridBagConstraints.BOTH;
@@ -573,16 +575,6 @@ public class CreateWorkOrder extends JPanel {
 		gbc_lblTemplates.gridx = 4;
 		gbc_lblTemplates.gridy = 7;
 		centerLeftPanel.add(lblTemplates, gbc_lblTemplates);
-		
-		lblEndDate = new JLabel("Slutdato");
-		GridBagConstraints gbc_lblEndDate = new GridBagConstraints();
-		gbc_lblEndDate.fill = GridBagConstraints.BOTH;
-		gbc_lblEndDate.weighty = 0;
-		gbc_lblEndDate.weightx = 0;
-		gbc_lblEndDate.insets = new Insets(0, 0, 5, 5);
-		gbc_lblEndDate.gridx = 1;
-		gbc_lblEndDate.gridy = 8;
-		centerLeftPanel.add(lblEndDate, gbc_lblEndDate);
 		
 		lblInterval = new JLabel("Interval");
 		GridBagConstraints gbc_lblInterval = new GridBagConstraints();
