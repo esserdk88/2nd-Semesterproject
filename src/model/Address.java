@@ -6,7 +6,6 @@ package model;
  */
 
 public class Address {
-	//TODO: does this need a field for the id from the DB
 	
 	private int addressID;
 	private String cityName;

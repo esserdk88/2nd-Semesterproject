@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Reference;
 import model.Sparepart;
-import model.Supplier;
 
 public class SparepartDB implements SparepartDBIF {
 	
@@ -43,6 +41,11 @@ public class SparepartDB implements SparepartDBIF {
 		
 		return sparepart;
 	}
+	public Sparepart buildObjectFromResultset(ResultSet rs) throws SQLException {
+		if(rs.getInt("sparepart_id_PK") == 0) {
+			return null;
+		}else return buildObject(rs);
+	}
 
 	private Sparepart buildObject(ResultSet rs) throws SQLException {
 		// Create a new Sparepart object
@@ -53,7 +56,8 @@ public class SparepartDB implements SparepartDBIF {
 		result.setName(rs.getString("sparepart_name"));
 		result.setStockAmount(rs.getInt("sparepart_stock_amount"));
 		result.setPrice(rs.getDouble("sparepart_price"));
-		result.setSupplier(supplierDB.findSupplierByID(rs.getInt("sparepart_supplier_CVR_FK")));
+		result.setSupplier(supplierDB.buildObjectFromResultset(rs));
+		//result.setSupplier(supplierDB.findSupplierByID(rs.getInt("sparepart_supplier_CVR_FK")));
 		
 		// return the Sparepart object
 		return result;

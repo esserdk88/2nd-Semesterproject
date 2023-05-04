@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.SparepartUsed;
-import model.Supplier;
 
 public class SparepartUsedDB implements SparepartUsedDBIF {
 	

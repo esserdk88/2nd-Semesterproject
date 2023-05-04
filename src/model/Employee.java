@@ -7,6 +7,7 @@ import gui.components.StringArrayConvertible;
 
 /*
  * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
+ * 03-05-2023: Added equals method
  */
 
 public class Employee extends MasterData implements StringArrayConvertible {
@@ -51,6 +52,10 @@ public class Employee extends MasterData implements StringArrayConvertible {
 	public Calendar getStartDate() {
 		return startDate;
 	}
+	
+	public String getStartDateString() {
+		return calendarToString(startDate);
+	}
 
 	public void setStartDate(Calendar startDate) {
 		this.startDate = startDate;
@@ -85,46 +90,35 @@ public class Employee extends MasterData implements StringArrayConvertible {
 		}
 
 		/*
-		 * Check if o is an instance of Complex or not
+		 * Check if o is an instance of Employee or not
 		 * "null instanceof [type]" also returns false
 		 */
 		if (!(o instanceof Employee)) {
 			return false;
 		}
 
-		// typecast o to Complex so that we can compare data members
-		Employee m = (Employee) o;
+		// typecast o to Employee so that we can compare data members
+		Employee e = (Employee) o;
 
-		// god whyyyyy...??
-		// private int employeeID;
-		// private String cprNumber;
-		// private Calendar startDate;
-		// private String position;
-		// private String name;
-		// private String phone;
-		// private String email;
-		// private Address address;
-
-		if (!this.getCprNumber().equals(m.getCprNumber())) {
+		if (!this.getCprNumber().equals(e.getCprNumber())) {
 			return false;
 		}
-		// TODO: CALENDAR DATES!
-		// if (!this.getStartDate().equals(m.getStartDate()) ) {
-		// return false;
-		// }
-		if (!this.getPosition().equals(m.getPosition())) {
+		if (!this.getStartDateString().equals(e.getStartDateString()) ) {
 			return false;
 		}
-		if (!this.getName().equals(m.getName())) {
+		if (!this.getPosition().equals(e.getPosition())) {
 			return false;
 		}
-		if (!this.getPhone().equals(m.getPhone())) {
+		if (!this.getName().equals(e.getName())) {
 			return false;
 		}
-		if (!this.getEmail().equals(m.getEmail())) {
+		if (!this.getPhone().equals(e.getPhone())) {
 			return false;
 		}
-		if (!this.getAddress().equals(m.getAddress())) {
+		if (!this.getEmail().equals(e.getEmail())) {
+			return false;
+		}
+		if (!this.getAddress().equals(e.getAddress())) {
 			return false;
 		}
 		return true;

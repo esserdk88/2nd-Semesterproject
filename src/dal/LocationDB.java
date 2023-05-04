@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Address;
 import model.Location;
 
 public class LocationDB implements LocationDBIF {
@@ -43,7 +42,11 @@ public class LocationDB implements LocationDBIF {
 		
 		return location;
 	}
-
+	public Location buildObjectFromResultset(ResultSet rs) throws SQLException {
+		if(rs.getInt("location_id_PK") == 0) {
+			return null;
+		}else return buildObject(rs);
+	}
 	private Location buildObject(ResultSet rs) throws SQLException {
 		
 		// create a new Location object
@@ -54,7 +57,8 @@ public class LocationDB implements LocationDBIF {
 		result.setBuilding(rs.getString("location_building"));
 		result.setFloor(rs.getString("location_floor"));
 		result.setRoom(rs.getString("location_room"));
-		result.setAddress(addressDB.findAddressByID(rs.getInt("location_address_id_FK")));
+		result.setAddress(addressDB.buildObjectFromResultset(rs));
+		//result.setAddress(addressDB.findAddressByID(rs.getInt("location_address_id_FK")));
 
 		// return the location object
 		return result;

@@ -1,5 +1,7 @@
 package dal;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import model.Sparepart;
@@ -12,5 +14,5 @@ public interface SparepartDBIF {
 	
 	public Sparepart findSparePartbyID(int sparePartID);
 	public List<Sparepart> getAllSpareparts();
-	
+	public Sparepart buildObjectFromResultset(ResultSet rs) throws SQLException;
 }

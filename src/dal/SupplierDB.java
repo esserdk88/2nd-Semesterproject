@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Reference;
 import model.Supplier;
 
 public class SupplierDB implements SupplierDBIF {
@@ -44,6 +43,11 @@ public class SupplierDB implements SupplierDBIF {
 		return supplier;
 	}
 
+	public Supplier buildObjectFromResultset(ResultSet rs) throws SQLException {
+		if(rs.getInt("supplier_CVR_PK") == 0) {
+			return null;
+		}else return buildObject(rs);
+	}
 	private Supplier buildObject(ResultSet rs) throws SQLException {
 		// Create a new Supplier object
 		Supplier result = new Supplier();
@@ -54,7 +58,8 @@ public class SupplierDB implements SupplierDBIF {
 		result.setName(rs.getString("supplier_name"));
 		result.setPhone(rs.getString("supplier_phone"));
 		result.setEmail(rs.getString("supplier_email"));
-		result.setAddress(addressDB.findAddressByID(rs.getInt("supplier_address_id_FK")));
+		result.setAddress(addressDB.buildObjectFromResultset(rs));
+		//result.setAddress(addressDB.findAddressByID(rs.getInt("supplier_address_id_FK")));
 		
 		// return the Supplier object
 		return result;

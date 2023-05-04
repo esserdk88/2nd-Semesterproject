@@ -32,11 +32,69 @@ public class Service extends Workorder implements StringArrayConvertible {
 	public void setReference(Reference reference) {
 		this.reference = reference;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		//object variables
+
+        // If the object is compared with itself then return true 
+        if (o == this) {
+            return true;
+        }
+ 
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Service)) {
+            return false;
+        }
+         
+        // typecast o to Complex so that we can compare data members
+        Service s = (Service) o;
+         
+        if (!this.getTitle().equals(s.getTitle())) {
+        	return false;
+        }
+        if (!this.getType().equals(s.getType()) ) {
+        	return false;
+        }
+        if (!this.getStartDateString().equals(s.getStartDateString()) ) {
+			return false;
+		}
+        if (!this.getEndDateString().equals(s.getEndDateString()) ) {
+			return false;
+		}
+        if (this.getPriority() != s.getPriority()) {
+        	return false;
+        }
+        if (!this.getDescription().equals(s.getDescription())){
+        	return false;
+        }
+        if (this.isFinished() != s.isFinished()) {
+        	return false;
+        }
+        if (!this.getSparepartsUsed().equals(s.getSparepartsUsed())) {
+        	return false;
+        }
+        if (!this.getAsset().equals(s.getAsset())){
+        	return false;
+        }
+        if ((this.getEmployee() != null && s.getEmployee() == null) || (this.getEmployee() == null && s.getEmployee() != null)) {
+            return false;
+        }
+        if ((this.getEmployee() != null && s.getEmployee() != null) && !this.getEmployee().equals(s.getEmployee())){
+        	return false;
+        }
+        if (!this.getMeasurements().equals(s.getMeasurements())){
+        	return false;
+        }
+        if(!this.getReference().equals(s.getReference())) {
+        	return false;
+        }
+        return true;
+	}
 
 	@Override
 	public String[] getObjectAsStringArray() {
-		// TODO Auto-generated method stub
-
 		return new String[] { Integer.toString(getWorkOrderID()), getTitle(), getType(), calendarToString(getStartDate()), "",
 				Short.toString(getPriority()), getDescription(), Boolean.toString(isFinished()),
 				Integer.toString(getAsset().getAssetID()),

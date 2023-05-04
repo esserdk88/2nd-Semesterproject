@@ -1,8 +1,5 @@
 package dal;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -12,15 +9,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import model.Address;
-import model.Asset;
 import model.Employee;
 import model.Maintenance;
-import model.Measurement;
-import model.Reference;
 import model.Repair;
 import model.Service;
-import model.SparepartUsed;
 import model.Workorder;
 
 public class WorkOrderDB implements WorkOrderDBIF {
@@ -41,15 +33,24 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public static final String FIELDS_INSERT_SERVICE = FIELDS_INSERT_COMMON + ", workorder_reference_id_FK";
 	public static final String FIELDS_INSERT_REPAIR = FIELDS_INSERT_COMMON + ", workorder_reference_id_FK, workorder_price";
 	
-	public static final String SELECT_MAINTENANCE_BY_ID = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Maintenance'";
-	public static final String SELECT_SERVICE_BY_ID = "SELECT " + FIELDS_SERVICE_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Service'";
-	public static final String SELECT_REPAIR_BY_ID = "SELECT " + FIELDS_REPAIR_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Repair'";
+//	public static final String SELECT_MAINTENANCE_BY_ID = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Maintenance'";
+//	public static final String SELECT_SERVICE_BY_ID = "SELECT " + FIELDS_SERVICE_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Service'";
+//	public static final String SELECT_REPAIR_BY_ID = "SELECT " + FIELDS_REPAIR_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Repair'";
+	public static final String SELECT_MAINTENANCE_BY_ID = "SELECT * FROM MaintenanceView WHERE workorder_id_PK = ?";
+	public static final String SELECT_SERVICE_BY_ID = "SELECT * FROM ServiceView WHERE workorder_id_PK = ?";
+	public static final String SELECT_REPAIR_BY_ID = "SELECT * FROM RepairView WHERE workorder_id_PK = ?";
 	
-	public static final String SELECT_UNFINISHED_WORKORDERS = "SELECT * from Workorder where workorder_finished = 0 and workorder_startdate <= GETDATE()";
 	
-	public static final String SELECT_ALL_MAINTENANCE = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Maintenance'";
-	public static final String SELECT_ALL_SERVICE = "SELECT " + FIELDS_SERVICE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Service'";
-	public static final String SELECT_ALL_REPAIR = "SELECT " + FIELDS_REPAIR_WITH_ID + " FROM Workorder WHERE workorder_type = 'Repair'";
+//	public static final String SELECT_UNFINISHED_WORKORDERS = "SELECT * from Workorder where workorder_finished = 0 and workorder_startdate <= GETDATE()";
+	public static final String SELECT_UNFINISHED_WORKORDERS = "SELECT * from WorkOrdersView where workorder_finished = 0 and workorder_startdate <= GETDATE()";
+	public static final String SELECT_ALL_WORKORDERS_BY_ASSET_ID = "SELECT * from WorkOrdersView where workorder_asset_id_FK = ?";
+//	public static final String SELECT_ALL_MAINTENANCE = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Maintenance'";
+//	public static final String SELECT_ALL_SERVICE = "SELECT " + FIELDS_SERVICE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Service'";
+//	public static final String SELECT_ALL_REPAIR = "SELECT " + FIELDS_REPAIR_WITH_ID + " FROM Workorder WHERE workorder_type = 'Repair'";
+	
+	public static final String SELECT_ALL_MAINTENANCE = "SELECT * FROM MaintenanceView";
+	public static final String SELECT_ALL_SERVICE = "SELECT * FROM ServiceView";
+	public static final String SELECT_ALL_REPAIR = "SELECT * FROM RepairView";
 	
 	public static final String INSERT_MAINTENANCE = "INSERT INTO Workorder (" + FIELDS_INSERT_MAINTENANCE + ") VALUES (?,?,?,?,?,?,?,?,?,?)" ;
 	public static final String INSERT_SERVICE = "INSERT INTO Workorder (" + FIELDS_INSERT_SERVICE + ") VALUES (?,?,?,?,?,?,?,?,?)" ;
@@ -60,6 +61,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	public static final String SELECT_LATEST_KEY = "SELECT MAX (workorder_id_PK) from Workorder";
 	
+
 	private EmployeeDBIF employeeDB = Database.getInstance().getEmployeeDataBase();
 	private AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
 	private SparepartUsedDBIF sparepartUsedDB = Database.getInstance().getSparepartUsedDataBase();
@@ -353,6 +355,43 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		}
 		return list;
 	}
+	@Override
+	public List<Workorder> getAllWorkOrdersByAssetID(int assetID){
+		List<Workorder> list = new ArrayList<>();
+		
+		// establish database connection
+		try (Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_WORKORDERS_BY_ASSET_ID)) {
+			
+			//prepare statement
+			psFindWorkorder.setInt(1, assetID);
+			
+			//execute statement
+			ResultSet rs = psFindWorkorder.executeQuery();
+			
+			if (rs != null) {
+				//build WorkOrder object from result set
+				while(rs.next()) {
+					switch (rs.getString("workorder_type")) {
+					case "Maintenance":  
+						list.add(buildMaintenanceObject(rs));
+						break;
+					case "Service":  
+						list.add(buildServiceObject(rs));
+						break;	
+					case "Repair":  
+						list.add(buildRepairObject(rs));
+						break;	
+					default:
+						//Left empty.
+					}
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("ERROR FROM RETRIEVING UNFINISHED WORKORDER:" + e.getMessage());
+		}
+		return list;
+	}
 	
 	public boolean deleteWorkOrderByID(int workOrderID) {
 		
@@ -426,6 +465,11 @@ public class WorkOrderDB implements WorkOrderDBIF {
         long timeInMillis = cal.getTimeInMillis();
         return new Date(timeInMillis);
     }
+	public Maintenance buildMaintenanceObjectFromResultset(ResultSet rs) throws SQLException {
+		if(rs.getInt("workorder_id_PK") == 0) {
+			return null;
+		}else return buildMaintenanceObject(rs);
+	}
 		
 	//Builders
 	private Maintenance buildMaintenanceObject(ResultSet rs) throws SQLException {
@@ -449,14 +493,23 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
 		
 		//Objects
-		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
-		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
-		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
-		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
+//		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
+//		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
+//		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
+//		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
+		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
+		result.setAsset(assetDB.buildObjectFromResultset(rs));
+		
 
 		// return the Maintenance object
 				
 		return result;
+	}
+	
+	public Service buildServiceObjectFromResultset(ResultSet rs) throws SQLException {
+		if(rs.getInt("workorder_id_PK") == 0) {
+			return null;
+		}else return buildServiceObject(rs);
 	}
 	private Service buildServiceObject(ResultSet rs) throws SQLException {
 		// create a new Service object
@@ -471,22 +524,29 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		result.setFinished(rs.getBoolean("workorder_finished"));
 		
 		//Service-specific
-		result.setReference(referenceDB.findReferenceByID(rs.getInt("workorder_reference_id_FK")));
+//		result.setReference(referenceDB.findReferenceByID(rs.getInt("workorder_reference_id_FK")));
+		result.setReference(referenceDB.buildObjectFromResultset(rs));
 		
 		//Dates
 		result.setStartDate(convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
 		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
 		
 		//Objects
-		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
-		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
-		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
-		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
-
+//		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
+//		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
+//		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
+//		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
+		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
+		result.setAsset(assetDB.buildObjectFromResultset(rs));
 		// return the Service object
 		return result;
 	}
 	
+	public Repair buildRepairObjectFromResultset(ResultSet rs) throws SQLException {
+		if(rs.getInt("workorder_id_PK") == 0) {
+			return null;
+		}else return buildRepairObject(rs);
+	}
 	private Repair buildRepairObject(ResultSet rs) throws SQLException {
 		// create a new Repair object
 		Repair result = new Repair();
@@ -501,18 +561,20 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		
 		//Repair-specific
 		result.setPrice(rs.getDouble("workorder_price"));
-		result.setReference(referenceDB.findReferenceByID(rs.getInt("workorder_reference_id_FK")));
+//		result.setReference(referenceDB.findReferenceByID(rs.getInt("workorder_reference_id_FK")));
+		result.setReference(referenceDB.buildObjectFromResultset(rs));
 		
 		//Dates
 		result.setStartDate(convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
 		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
 		
 		//Objects
-		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
-		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
-		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
-		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
-
+//		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
+//		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
+//		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
+//		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
+		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
+		result.setAsset(assetDB.buildObjectFromResultset(rs));
 		// return the Repair object
 		return result;
 	}

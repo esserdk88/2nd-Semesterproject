@@ -2,7 +2,6 @@ package Controller;
 
 import java.util.List;
 
-import gui.WorkOrder;
 import model.Asset;
 import model.Employee;
 import model.Workorder;
@@ -18,5 +17,8 @@ public interface WorkOrderControllerIF {
 	public Employee findEmployeeByID(int employeeID);
 	
 	public boolean assignEmployeeToWorkOrder(Employee employee, Workorder workOrder);
+	
+
+	public List<Workorder> getAllWorkOrdersByAssetID(int assetID);
 	
 }

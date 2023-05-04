@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.spi.LocaleServiceProvider;
 
 /*
  * 19-04-2023: Rasmus and Mikkel - Reconstructed class to match DCD.
@@ -87,6 +86,10 @@ public abstract class Workorder {
 	public Calendar getStartDate() {
 		return startDate;
 	}
+	
+	public String getStartDateString() {
+		return calendarToString(startDate);
+	}
 
 	public void setStartDate(Calendar startDate) {
 		this.startDate = startDate;
@@ -94,6 +97,10 @@ public abstract class Workorder {
 
 	public Calendar getEndDate() {
 		return endDate;
+	}
+	
+	public String getEndDateString() {
+		return calendarToString(endDate);
 	}
 
 	public void setEndDate(Calendar endDate) {
@@ -174,5 +181,61 @@ public abstract class Workorder {
         }
         
          return dateString;
+	}
+	
+	public boolean equals(Object o) {
+		//object variables
+
+        // If the object is compared with itself then return true 
+        if (o == this) {
+            return true;
+        }
+ 
+        /* Check if o is an instance of Workorder or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Workorder)) {
+            return false;
+        }
+         
+        // typecast o to Workorder so that we can compare data members
+        Workorder w = (Workorder) o;
+         
+        if (!this.getTitle().equals(w.getTitle())) {
+        	return false;
+        }
+        if (!this.getType().equals(w.getType()) ) {
+        	return false;
+        }
+        if (!this.getStartDateString().equals(w.getStartDateString()) ) {
+			return false;
+		}
+        if (!this.getEndDateString().equals(w.getEndDateString()) ) {
+			return false;
+		}
+        if (this.getPriority() != w.getPriority()) {
+        	return false;
+        }
+        if (!this.getDescription().equals(w.getDescription())){
+        	return false;
+        }
+        if (this.isFinished() != w.isFinished()) {
+        	return false;
+        }
+        if (!this.getSparepartsUsed().equals(w.getSparepartsUsed())) {
+        	return false;
+        }
+        if (!this.getAsset().equals(w.getAsset())){
+        	return false;
+        }
+        if ((this.getEmployee() != null && w.getEmployee() == null) || (this.getEmployee() == null && w.getEmployee() != null)) {
+            return false;
+        }
+        if ((this.getEmployee() != null && w.getEmployee() != null) && !this.getEmployee().equals(w.getEmployee())){
+        	return false;
+        }
+        if (!this.getMeasurements().equals(w.getMeasurements())){
+        	return false;
+        }
+        return true;
 	}
 }

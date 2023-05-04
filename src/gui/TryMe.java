@@ -1,22 +1,17 @@
 package gui;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.List;
 
-import dal.*;
-import model.Asset;
-import model.Employee;
+import dal.AssetDB;
+import dal.AssetDBIF;
+import dal.MeasurementDB;
+import dal.MeasurementDBIF;
+import dal.SparepartUsedDB;
+import dal.SparepartUsedDBIF;
+import dal.WorkOrderDB;
+import dal.WorkOrderDBIF;
 import model.Maintenance;
-import model.Measurement;
-import model.Reference;
-import model.Repair;
-import model.Service;
-import model.Sparepart;
-import model.SparepartUsed;
-import model.Supplier;
-import model.Workorder;
 
 public class TryMe {
 

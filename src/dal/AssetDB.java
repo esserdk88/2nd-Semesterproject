@@ -5,24 +5,21 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import model.Address;
 import model.Asset;
-import model.Employee;
-import model.Location;
 
 public class AssetDB implements AssetDBIF {
 	
-	public static final String FIELDS = "asset_id_PK, asset_name, asset_acquisitiondate, asset_description, asset_status,"
+	/*public static final String FIELDS = "asset_id_PK, asset_name, asset_acquisitiondate, asset_description, asset_status,"
 			+ "asset_manufacturer, asset_location_id_FK";
 	public static final String SELECT_ASSET_BY_ID = "SELECT " + FIELDS + " FROM Asset Where asset_id_PK = ?";
-	public static final String SELECT_ALL_ASSETS = "SELECT " + FIELDS + " FROM Asset";
+	public static final String SELECT_ALL_ASSETS = "SELECT " + FIELDS + " FROM Asset";*/
+	
+	public static final String SELECT_ASSET_BY_ID = "SELECT * FROM Asset_Location_Address Where asset_id_PK = ?";
+	public static final String SELECT_ALL_ASSETS = "SELECT * FROM Asset_Location_Address";
 
 	private LocationDBIF locationDB = Database.getInstance().getLocationDataBase();
 	
@@ -51,6 +48,11 @@ public class AssetDB implements AssetDBIF {
 		return asset;
 	}
 
+	public Asset buildObjectFromResultset(ResultSet rs) throws SQLException {
+		if(rs.getInt("asset_id_PK") == 0) {
+			return null;
+		}else return buildObject(rs);
+	}
 	private Asset buildObject(ResultSet rs) throws SQLException {
 		
 		// Create a new Asset object
@@ -63,7 +65,8 @@ public class AssetDB implements AssetDBIF {
 		result.setDescription(rs.getString("asset_description"));
 		result.setStatus(rs.getString("asset_status"));
 		result.setManufacturer(rs.getString("asset_manufacturer"));
-		result.setLocation(locationDB.findLocationByID(rs.getInt("asset_location_id_FK")));
+		result.setLocation(locationDB.buildObjectFromResultset(rs));
+		//result.setLocation(locationDB.findLocationByID(rs.getInt("asset_location_id_FK")));
 		
 		// return the Asset object
 		return result;
