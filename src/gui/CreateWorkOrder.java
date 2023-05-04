@@ -116,33 +116,13 @@ public class CreateWorkOrder extends JPanel {
 		txtAssetID.setText(Integer.toString((currentAsset.getAssetID())));
 		txtName.setText(currentAsset.getName());
 	}
-	//TODO fiks Denne absolut bunke af fucking lort :)
+	
 	private boolean createWorkOrder() {
 		if(asset == null) {GUIPopUpMessages.warningMessage("No Asset selected!", "Error!"); return false;}
-		boolean success = false;
 		
-		
-		//Set the WorkOrder type
-		Workorder workOrder;
 		String type = typeComboBox.getSelectedItem().toString();
-		switch(type){
-		case"Reperation":
-			workOrder = new Repair();
-			//TODO Add specific values for repair
-			break;
-		case"Serviceaftale":
-			workOrder = new Service();
-			//TODO add specific values for service
-			break;
-		case"Vedligeholdelse":
-			workOrder = new Maintenance();
-			
-			((Maintenance) workOrder).setRepeated(true);
-			((Maintenance) workOrder).setIntervalDayCount((int)intervalSpinner.getValue());
-			break;
-		default:
-			GUIPopUpMessages.warningMessage("No type was selected", "Error!"); return false;
-		}
+		//Set the WorkOrder type
+		Workorder workOrder = createWorkOrderOfType(type);
 		
 		//Set common data
 		workOrder.setTitle(topicTextField.getText());
@@ -151,38 +131,63 @@ public class CreateWorkOrder extends JPanel {
 		workOrder.setStartDate(calendar);
 		calendar.setTime((Date) spinnerEndDate.getValue());
 		workOrder.setEndDate(calendar);
-		switch(priorityComboBox.getSelectedItem().toString()) {
-		case"Høj":
-			workOrder.setPriority((short) 3);
-			break;
-		case"Mellem":
-			workOrder.setPriority((short) 2);
-			break;
-		default://Default is set to low, so low goes under default
-			workOrder.setPriority((short) 1);
-			break;
-		}
+		workOrder.setPriority(getPriorityFromComboBox());
 		workOrder.setDescription(textArea.getText());
 		workOrder.setAsset(asset);
 		
 		
-		//Call controller from type
-		switch(type){
-		case"Reperation":
-			RepairController repairController = new RepairController();
-			success = repairController.createWorkOrder((Repair)workOrder);
-			break;
-		case"Serviceaftale":
-			ServiceController serviceController = new ServiceController();
-			success = serviceController.createWorkOrder((Service)workOrder);
-			break;
-		case"Vedligeholdelse":
-			MaintenanceController maintenanceController = new MaintenanceController();
-			success = maintenanceController.createWorkOrder((Maintenance)workOrder);
-			break;
-		}
-		return success;
+		boolean success = callControllerOfType(type, workOrder);
+	    return success;
 	}
+	
+	private boolean callControllerOfType(String type, Workorder workOrder) {
+	    switch(type) {
+	        case "Reparation":
+	            RepairController repairController = new RepairController();
+	            return repairController.createWorkOrder((Repair) workOrder);
+	        case "Serviceaftale":
+	            ServiceController serviceController = new ServiceController();
+	            return serviceController.createWorkOrder((Service) workOrder);
+	        case "Vedligeholdelse":
+	            MaintenanceController maintenanceController = new MaintenanceController();
+	            return maintenanceController.createWorkOrder((Maintenance) workOrder);
+	        default:
+	            return false;
+	    }
+	}
+	private Workorder createWorkOrderOfType(String type) {
+	    switch(type) {
+	        case "Reparation":
+	            Repair repair = new Repair();
+	            // TODO: add specific values for repair
+	            return repair;
+	        case "Serviceaftale":
+	            Service service = new Service();
+	            // TODO: add specific values for service
+	            return service;
+	        case "Vedligeholdelse":
+	            Maintenance maintenance = new Maintenance();
+	            maintenance.setRepeated(true);
+	            maintenance.setIntervalDayCount((int) intervalSpinner.getValue());
+	            return maintenance;
+	        default:
+	            return null;
+	    }
+	}
+	
+	private short getPriorityFromComboBox() {
+	    String priority = priorityComboBox.getSelectedItem().toString();
+	    switch(priority) {
+	        case "Høj":
+	            return 3;
+	        case "Mellem":
+	            return 2;
+	        default:
+	            return 1;
+	    }
+	}
+
+	
 	private void setIntervalFromTemplate() {
 		switch(templatesComboBox.getSelectedItem().toString()) {
 		case"2 uger":
