@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -8,8 +9,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.Stack;
 
 import javax.swing.JButton;
@@ -91,11 +96,44 @@ public class MainFrame extends JFrame {
 		setPanels();
 		setButtons();
 		setButtonStatus();
-		
+		setBackAndForwardsListeners();
 		//This will start a new Thread that will run a connection test and change the parsed label
 		connectionWatch = new ConnectionWatch(connectionLabel);
 		connectionWatch.execute();
 	}
+	private void setBackAndForwardsListeners() {
+		AWTEventListener keyEventListener = event -> {
+            KeyEvent keyEvent = (KeyEvent) event;
+            if (keyEvent.getID() == KeyEvent.KEY_PRESSED) {
+                if (backwards.size() > 0 && keyEvent.isControlDown() && keyEvent.isAltDown() && keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
+                    backwardsButton();
+                }
+                else if (forward.size() > 0 && keyEvent.isControlDown() && keyEvent.isAltDown() && keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    forwardButton();
+                }
+            }
+            
+        };
+
+        AWTEventListener mouseEventListener = event -> {
+            InputEvent inputEvent = (InputEvent) event;
+            if (inputEvent instanceof MouseEvent) {
+                MouseEvent mouseEvent = (MouseEvent) inputEvent;
+                if (mouseEvent.getID() == MouseEvent.MOUSE_PRESSED) {
+                	if(backwards.size() > 0 && mouseEvent.getButton() == 4) {
+                		backwardsButton();
+                	}else if(forward.size() > 0 && mouseEvent.getButton() == 5) {
+                		forwardButton();
+                	}
+                }
+            }
+        };
+
+        Toolkit.getDefaultToolkit().addAWTEventListener(keyEventListener, AWTEvent.KEY_EVENT_MASK);
+        Toolkit.getDefaultToolkit().addAWTEventListener(mouseEventListener, AWTEvent.MOUSE_EVENT_MASK);
+		
+	}
+
 	private void forwardButton() {
 		contentPane.remove(currentCenterPanel);
 		backwards.add(currentCenterPanel);
