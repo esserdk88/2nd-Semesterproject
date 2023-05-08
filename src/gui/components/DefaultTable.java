@@ -138,6 +138,10 @@ public class DefaultTable extends JTable {
 		}
 	}
 	
+	public String getCellData(String columnName) {
+		return tabelModel.getValueAt(this.getSelectedRows()[0],tcm.getColumn(columnName).getModelIndex()).toString();
+	}
+	
 	/**
 	 * Add just one row to the table
 	 * @param data Data for the row to be added in 

@@ -22,6 +22,8 @@ import javax.swing.SwingConstants;
 
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
+import model.Maintenance;
+import model.Workorder;
 
 public class ReadWorkOrder extends JPanel {
 	
@@ -47,18 +49,18 @@ public class ReadWorkOrder extends JPanel {
 	private JButton btnDelete;
 	
 	//Labels
-	private JLabel lblNewLabel;
+	private JLabel lblDescription;
 	private JLabel lblTitle;
 	private JLabel lblAssetID;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
+	private JLabel lblName;
+	private JLabel lblSerialNumber;
 	private JLabel lblInterval;
-	private JLabel lblNewLabel_6;
-	private JLabel lblNewLabel_4;
-	private JLabel lblNewLabel_7;
-	private JLabel lblNewLabel_8;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_5;
+	private JLabel lblType;
+	private JLabel lblHistory;
+	private JLabel lblRegNumber;
+	private JLabel lblPrioritize;
+	private JLabel lblClosedBy;
+	private JLabel lblActionsPerformed;
 	
 	//Tabel
 	private JScrollPane historyScollPane;
@@ -71,19 +73,39 @@ public class ReadWorkOrder extends JPanel {
 	private JTextArea textArea;
 	private JCheckBox checkDate;
 	private JSpinner spinner;
+	private Workorder current;
 	
 	/**
 	 * Create the panel.
 	 */
 	public ReadWorkOrder() {
 		setLayout(new BorderLayout(0, 0));
-		
+
 		setPanels();
 		setLabelsAndTextFields();
 		setTables();
 		setButtons();
 		setSpinners();
 		setCheckBoxes();
+	}
+	
+	public void setCurrentWorkorderInfo(Workorder current) {
+		this.current = current;
+		txtTitle.setText(current.getTitle());
+		txtAssetID.setText(Integer.toString(current.getAsset().getAssetID()));
+		txtName.setText(current.getAsset().getName());
+		txtType.setText(current.getType());
+		textArea.setText(current.getDescription());
+		if(current.getType().equals("Maintenance")) {
+			//Set Interval??
+//			private JTextField txtInterval;
+		}
+		txtPriority.setText(Short.toString(current.getPriority()));
+		txtEmployeeID.setText(Integer.toString(current.getEmployee().getEmployeeID()));
+
+//		private JTextField txtSerialNumber;
+//		private JTextField txtRegNo;
+		
 	}
 
 	private void setCheckBoxes() {
@@ -189,13 +211,13 @@ public class ReadWorkOrder extends JPanel {
 		gbc_descriptionScrollPane.gridy = 2;
 		centerPanel.add(descriptionScrollPane, gbc_descriptionScrollPane);
 		
-		lblNewLabel = new JLabel("Beskrivelse");
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.gridx = 4;
-		gbc_lblNewLabel.gridy = 1;
-		centerPanel.add(lblNewLabel, gbc_lblNewLabel);
+		lblDescription = new JLabel("Beskrivelse");
+		GridBagConstraints gbc_lblDescription = new GridBagConstraints();
+		gbc_lblDescription.anchor = GridBagConstraints.WEST;
+		gbc_lblDescription.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDescription.gridx = 4;
+		gbc_lblDescription.gridy = 1;
+		centerPanel.add(lblDescription, gbc_lblDescription);
 		
 		lblTitle = new JLabel("Emne");
 		GridBagConstraints gbc_lblTitle = new GridBagConstraints();
@@ -224,6 +246,7 @@ public class ReadWorkOrder extends JPanel {
 		
 		txtAssetID = new JTextField();
 		txtAssetID.setColumns(10);
+		txtAssetID.setEnabled(false);
 		GridBagConstraints gbc_txtAssetID = new GridBagConstraints();
 		gbc_txtAssetID.insets = new Insets(0, 0, 5, 5);
 		gbc_txtAssetID.fill = GridBagConstraints.HORIZONTAL;
@@ -231,15 +254,16 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtAssetID.gridy = 3;
 		centerPanel.add(txtAssetID, gbc_txtAssetID);
 		
-		lblNewLabel_2 = new JLabel("Navn");
-		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_2.gridx = 1;
-		gbc_lblNewLabel_2.gridy = 4;
-		centerPanel.add(lblNewLabel_2, gbc_lblNewLabel_2);
+		lblName = new JLabel("Navn");
+		GridBagConstraints gbc_lblName = new GridBagConstraints();
+		gbc_lblName.anchor = GridBagConstraints.WEST;
+		gbc_lblName.insets = new Insets(0, 0, 5, 5);
+		gbc_lblName.gridx = 1;
+		gbc_lblName.gridy = 4;
+		centerPanel.add(lblName, gbc_lblName);
 		
 		txtName = new JTextField();
+		txtName.setEnabled(false);
 		txtName.setColumns(10);
 		GridBagConstraints gbc_txtName = new GridBagConstraints();
 		gbc_txtName.insets = new Insets(0, 0, 5, 5);
@@ -248,13 +272,13 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtName.gridy = 4;
 		centerPanel.add(txtName, gbc_txtName);
 		
-		lblNewLabel_3 = new JLabel("Serienr.");
-		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
-		gbc_lblNewLabel_3.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_3.gridx = 1;
-		gbc_lblNewLabel_3.gridy = 5;
-		centerPanel.add(lblNewLabel_3, gbc_lblNewLabel_3);
+		lblSerialNumber = new JLabel("Serienr.");
+		GridBagConstraints gbc_lblSerialNumber = new GridBagConstraints();
+		gbc_lblSerialNumber.anchor = GridBagConstraints.WEST;
+		gbc_lblSerialNumber.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSerialNumber.gridx = 1;
+		gbc_lblSerialNumber.gridy = 5;
+		centerPanel.add(lblSerialNumber, gbc_lblSerialNumber);
 		
 		txtSerialNumber = new JTextField();
 		GridBagConstraints gbc_txtSerialNumber = new GridBagConstraints();
@@ -265,13 +289,13 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(txtSerialNumber, gbc_txtSerialNumber);
 		txtSerialNumber.setColumns(10);
 		
-		lblNewLabel_8 = new JLabel("Prioritering");
-		GridBagConstraints gbc_lblNewLabel_8 = new GridBagConstraints();
-		gbc_lblNewLabel_8.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel_8.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_8.gridx = 1;
-		gbc_lblNewLabel_8.gridy = 6;
-		centerPanel.add(lblNewLabel_8, gbc_lblNewLabel_8);
+		lblPrioritize = new JLabel("Prioritering");
+		GridBagConstraints gbc_lblPrioritize = new GridBagConstraints();
+		gbc_lblPrioritize.anchor = GridBagConstraints.WEST;
+		gbc_lblPrioritize.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPrioritize.gridx = 1;
+		gbc_lblPrioritize.gridy = 6;
+		centerPanel.add(lblPrioritize, gbc_lblPrioritize);
 		
 		txtPriority = new JTextField();
 		GridBagConstraints gbc_txtPriority = new GridBagConstraints();
@@ -282,13 +306,13 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(txtPriority, gbc_txtPriority);
 		txtPriority.setColumns(10);
 		
-		lblNewLabel_6 = new JLabel("Type");
-		GridBagConstraints gbc_lblNewLabel_6 = new GridBagConstraints();
-		gbc_lblNewLabel_6.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel_6.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_6.gridx = 4;
-		gbc_lblNewLabel_6.gridy = 6;
-		centerPanel.add(lblNewLabel_6, gbc_lblNewLabel_6);
+		lblType = new JLabel("Type");
+		GridBagConstraints gbc_lblType = new GridBagConstraints();
+		gbc_lblType.anchor = GridBagConstraints.WEST;
+		gbc_lblType.insets = new Insets(0, 0, 5, 5);
+		gbc_lblType.gridx = 4;
+		gbc_lblType.gridy = 6;
+		centerPanel.add(lblType, gbc_lblType);
 		
 		txtType = new JTextField();
 		GridBagConstraints gbc_txtType = new GridBagConstraints();
@@ -299,13 +323,13 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(txtType, gbc_txtType);
 		txtType.setColumns(10);
 		
-		lblNewLabel_7 = new JLabel("Reg nr.");
-		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
-		gbc_lblNewLabel_7.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel_7.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_7.gridx = 1;
-		gbc_lblNewLabel_7.gridy = 7;
-		centerPanel.add(lblNewLabel_7, gbc_lblNewLabel_7);
+		lblRegNumber = new JLabel("Reg nr.");
+		GridBagConstraints gbc_lblRegNumber = new GridBagConstraints();
+		gbc_lblRegNumber.anchor = GridBagConstraints.WEST;
+		gbc_lblRegNumber.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRegNumber.gridx = 1;
+		gbc_lblRegNumber.gridy = 7;
+		centerPanel.add(lblRegNumber, gbc_lblRegNumber);
 		
 		txtRegNo = new JTextField();
 		GridBagConstraints gbc_txtRegNo = new GridBagConstraints();
@@ -333,13 +357,13 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(txtInterval, gbc_txtInterval);
 		txtInterval.setColumns(10);
 		
-		lblNewLabel_1 = new JLabel("Lukkes af");
-		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-		gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_1.gridx = 7;
-		gbc_lblNewLabel_1.gridy = 7;
-		centerPanel.add(lblNewLabel_1, gbc_lblNewLabel_1);
+		lblClosedBy = new JLabel("Lukkes af");
+		GridBagConstraints gbc_lblClosedBy = new GridBagConstraints();
+		gbc_lblClosedBy.anchor = GridBagConstraints.WEST;
+		gbc_lblClosedBy.insets = new Insets(0, 0, 5, 5);
+		gbc_lblClosedBy.gridx = 7;
+		gbc_lblClosedBy.gridy = 7;
+		centerPanel.add(lblClosedBy, gbc_lblClosedBy);
 		
 		txtEmployeeID = new JTextField();
 		GridBagConstraints gbc_txtEmployeeID = new GridBagConstraints();
@@ -350,23 +374,23 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(txtEmployeeID, gbc_txtEmployeeID);
 		txtEmployeeID.setColumns(10);
 		
-		lblNewLabel_4 = new JLabel("Historik");
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 12));
-		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
-		gbc_lblNewLabel_4.gridwidth = 2;
-		gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_4.gridx = 1;
-		gbc_lblNewLabel_4.gridy = 8;
-		centerPanel.add(lblNewLabel_4, gbc_lblNewLabel_4);
+		lblHistory = new JLabel("Historik");
+		lblHistory.setFont(new Font("Tahoma", Font.BOLD, 12));
+		GridBagConstraints gbc_lblHistory = new GridBagConstraints();
+		gbc_lblHistory.gridwidth = 2;
+		gbc_lblHistory.insets = new Insets(0, 0, 5, 5);
+		gbc_lblHistory.gridx = 1;
+		gbc_lblHistory.gridy = 8;
+		centerPanel.add(lblHistory, gbc_lblHistory);
 		
-		lblNewLabel_5 = new JLabel("Aktioner udført");
-		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 12));
-		GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
-		gbc_lblNewLabel_5.gridwidth = 5;
-		gbc_lblNewLabel_5.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_5.gridx = 4;
-		gbc_lblNewLabel_5.gridy = 8;
-		centerPanel.add(lblNewLabel_5, gbc_lblNewLabel_5);
+		lblActionsPerformed = new JLabel("Aktioner udført");
+		lblActionsPerformed.setFont(new Font("Tahoma", Font.BOLD, 12));
+		GridBagConstraints gbc_lblActionsPerformed = new GridBagConstraints();
+		gbc_lblActionsPerformed.gridwidth = 5;
+		gbc_lblActionsPerformed.insets = new Insets(0, 0, 5, 5);
+		gbc_lblActionsPerformed.gridx = 4;
+		gbc_lblActionsPerformed.gridy = 8;
+		centerPanel.add(lblActionsPerformed, gbc_lblActionsPerformed);
 	}
 
 	private void setPanels() {

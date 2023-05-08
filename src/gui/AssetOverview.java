@@ -24,6 +24,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
 import Controller.AssetController;
+import Controller.WorkOrderController;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
@@ -168,25 +169,35 @@ public class AssetOverview extends JPanel {
 		assetScrollPanel.setViewportView(assetTable);
 	}
 	
+	@SuppressWarnings("unused")
 	private void showAsset(boolean editMode) {
 		int index = assetTable.findElement();
 
 		if (index == -1) {
 			GUIPopUpMessages.informationMessage("Intet produkt valgt", "Fejl");
 		} else {
-			Asset tempAsset = null;
 			assetCtrl = new AssetController();
+			WorkOrderController controller = new WorkOrderController();
 			Object value = assetTable.getModel().getValueAt(index, 0);
-			try {
-				tempAsset = assetCtrl.findAssetByID(Integer.parseInt(value.toString()));
-			} catch (NumberFormatException | SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (tempAsset != null) {
-				ReadAsset readAsset = new ReadAsset(mainFrame, tempAsset);
+				ReadAsset readAsset = new ReadAsset(mainFrame);
+				int assetID = Integer.parseInt(value.toString());
 				mainFrame.setNewCenterPanel(readAsset);
-			}
+				Thread workerThread = new Thread(() -> {
+					try {
+						readAsset.initialize(assetCtrl.findAssetByID(assetID));
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					TableSwingWorker dataFetcher = null;
+					dataFetcher = new TableSwingWorker(readAsset.getHistoryTable(), controller.getAllWorkOrdersByAssetID(assetID));
+				    dataFetcher.execute();
+				});
+				workerThread.start();
+				
 		}
 	}
 

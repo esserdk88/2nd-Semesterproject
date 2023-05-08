@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -17,11 +18,18 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import Controller.AssetController;
+import Controller.MaintenanceController;
+import Controller.RepairController;
+import Controller.ServiceController;
 import Controller.WorkOrderController;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
+import model.Workorder;
 
 public class WorkOrderOverview extends JPanel {
 
@@ -33,6 +41,7 @@ public class WorkOrderOverview extends JPanel {
 	// Table
 	private JScrollPane centerScrollPane;
 	private DefaultTable workOrderTable;
+	private final String[] columns = { "WorkOrderID", "Emne", "Type", "Start Dato", "Slut Dato", "Prioritet", "Beskrivelse", "Færdig", "AssetID", "Medarbejder"};
 
 	// Button
 	private JButton createNewWorkOrder;
@@ -131,16 +140,21 @@ public class WorkOrderOverview extends JPanel {
 		searchTextField.setColumns(10);
 
 	}
-
+	private void readWorkOrderButton() {
+		ReadWorkOrder panel = new ReadWorkOrder();
+		frame.setNewCenterPanel(panel);
+		Thread workerThread = new Thread(() -> {
+			panel.setCurrentWorkorderInfo(getController(workOrderTable.getCellData(columns[2])));
+		});
+		workerThread.start();
+	}
 	private void setButtons() {
 		searchButton = new JRoundedButton("Søg");
 		rightTopPanel.add(searchButton);
 		openOrderButton = new JRoundedButton("Åben opgave");
-		openOrderButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.setNewCenterPanel(new ReadWorkOrder()); // TODO add workorder to constructor
-			}
-		});
+		openOrderButton.setEnabled(false);
+		openOrderButton.addActionListener((e) -> readWorkOrderButton());
+		
 		openOrderButton.setMinimumSize(new Dimension(145, 23));
 		openOrderButton.setMaximumSize(new Dimension(145, 23));
 		openOrderButton.setPreferredSize(new Dimension(145, 23));
@@ -158,14 +172,38 @@ public class WorkOrderOverview extends JPanel {
 		rightPanel.add(createNewWorkOrder);
 
 	}
+	
+	private Workorder getController(String type) {
+		int workOrderID = Integer.valueOf(workOrderTable.getCellData(columns[0]));
+		switch(type) {
+		case"Maintenance":
+			return new MaintenanceController().findWorkOrderByID(workOrderID);
+		case"Repair":
+			return new RepairController().findWorkOrderByID(workOrderID);
+		case"Service":
+			return new ServiceController().findWorkOrderByID(workOrderID);
+		}
+		return null;
+	}
 
 	private void setTables() {
 		centerScrollPane = new JScrollPane();
 		add(centerScrollPane, BorderLayout.CENTER);
 		boolean[] activeColumns = new boolean[] { true, true, true, true, false, true, false, false, false, true };
-		String[] columns2 = new String[] { "WorkOrderID", "Emne", "Type", "Start Dato", "Slut Dato", "Prioritet", "Beskrivelse", "Færdig", "AssetID", "Medarbejder"};
-		workOrderTable = new DefaultTable(null, columns2, activeColumns);
+		workOrderTable = new DefaultTable(null, columns, activeColumns);
 		centerScrollPane.setViewportView(workOrderTable);
+		workOrderTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int[] rows = workOrderTable.getSelectedRows();
+				if(rows.length != 0) {
+					openOrderButton.setEnabled(true);
+				} else {
+					openOrderButton.setEnabled(false);
+				}
+			}
+		});
 	}
 
 	private void setPanels() {
