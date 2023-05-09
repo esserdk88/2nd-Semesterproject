@@ -94,8 +94,7 @@ CREATE TABLE Workorder (
   workorder_finished bit,
   workorder_interval int,
   workorder_repeatable bit,
-  workorder_price decimal,
-
+  workorder_price decimal(18,2),
   workorder_asset_id_FK INT FOREIGN KEY REFERENCES Asset(asset_id_PK),
   workorder_employee_id_FK INT FOREIGN KEY REFERENCES Employee(employee_id_PK),
   workorder_reference_id_FK INT FOREIGN KEY REFERENCES Reference(reference_CVR_PK)
