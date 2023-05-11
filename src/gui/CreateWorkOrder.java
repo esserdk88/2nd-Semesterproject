@@ -126,11 +126,14 @@ public class CreateWorkOrder extends JPanel {
 		
 		//Set common data
 		workOrder.setTitle(topicTextField.getText());
+		
+		//Setting WorkOrder Dates
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime((Date) spinnerStartDate.getValue());
 		workOrder.setStartDate(calendar);
 		calendar.setTime((Date) spinnerEndDate.getValue());
 		workOrder.setEndDate(calendar);
+		
 		workOrder.setPriority(getPriorityFromComboBox());
 		workOrder.setDescription(textArea.getText());
 		workOrder.setAsset(asset);

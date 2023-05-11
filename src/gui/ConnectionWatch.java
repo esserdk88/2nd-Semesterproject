@@ -14,7 +14,7 @@ public class ConnectionWatch extends SwingWorker<Void, Boolean> {
 	private ConnectionControllerIF connectionController = new ConnectionController();
 	
 	private JLabel connectionLabel;
-	private int keepAlive = 3000;
+	private int keepAlive = 300;
 	private int tryAgain = 3000;
 	
 	public ConnectionWatch(JLabel connectionLabel) {
@@ -45,6 +45,7 @@ public class ConnectionWatch extends SwingWorker<Void, Boolean> {
 					Thread.sleep(keepAlive);
 				}
 				else {
+					GUIPopUpMessages.informationMessage("Lost Connection to database!", "Lost connection");
 					Thread.sleep(tryAgain);
 				}
 			} catch (Exception e) {
