@@ -44,13 +44,14 @@ VALUES
 ('Palle stabler', GETDATE(), 'Pallestabler nummer 2', 'I brug', 'BT Saxio', 2),
 ('Computer', GETDATE(), 'Computer 6 i terminalen', 'I brug', 'BT Saxio', 2)
 
-INSERT INTO Workorder (workorder_title, workorder_type, workorder_startdate, workorder_enddate, workorder_priority, workorder_description, workorder_finished, workorder_interval, workorder_repeatable, workorder_price, workorder_asset_id_FK, workorder_employee_id_FK, workorder_reference_id_FK)
+INSERT INTO Workorder (workorder_title, workorder_type, workorder_startdate, workorder_enddate, workorder_priority, workorder_description, workorder_finished,
+workorder_interval, workorder_repeatable, workorder_price, workorder_asset_id_FK, workorder_employee_id_FK, workorder_reference_id_FK)
 VALUES
-('Stabler løfter ikke', 'Maintenace', GETDATE(), NULL, 1, 'Description', 0, null, 0, 10.0, 2, 1, 12345678),
+('Stabler løfter ikke', 'Maintenance', GETDATE(), NULL, 1, 'Description', 0, 5, 1, 10.0, 2, 1, 12345678),
 ('Stabler virker ikke', 'Repair', GETDATE(), NULL, 2, 'Description', 0, null, 0, 15.1, 3, 2, 12345678),
-('Stabler service tjek', 'Service', GETDATE(), NULL, 3, 'Description', 1, 10, 1, 200.0, 4, 3, 11111111),
-('Computer starter ikke', 'Maintenace', GETDATE(), GETDATE(), 2, 'Description', 1, null, 0, 50000.0, 5, null, 22222222),
-('El Motor tjek', 'Service', GETDATE(), GETDATE(), 2, 'Description', 1, 5, 1, 500000.0, 1, null, 33333333)
+('Stabler service tjek', 'Service', GETDATE(), NULL, 3, 'Description', 1, null, 0, 200.0, 4, 3, 11111111),
+('Computer starter ikke', 'Maintenance', GETDATE(), GETDATE(), 2, 'Description', 1, 5, 1, 50000.0, 5, null, 22222222),
+('El Motor tjek', 'Service', GETDATE(), GETDATE(), 2, 'Description', 1, null, 0, 500000.0, 1, null, 33333333)
 
 INSERT INTO Sparepart (sparepart_name, sparepart_stock_amount, sparepart_price, sparepart_supplier_CVR_FK)
 VALUES
