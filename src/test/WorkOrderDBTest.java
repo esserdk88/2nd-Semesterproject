@@ -12,9 +12,11 @@ import org.junit.jupiter.api.Test;
 
 import dal.AssetDB;
 import dal.AssetDBIF;
+import dal.Database;
 import dal.EmployeeDB;
 import dal.EmployeeDBIF;
 import dal.ReferenceDB;
+import dal.ReferenceDBIF;
 import dal.WorkOrderDB;
 import dal.WorkOrderDBIF;
 import model.Address;
@@ -62,9 +64,9 @@ class WorkOrderDBTest {
 	private Repair repair;
 	
 	//Instances
-	private WorkOrderDBIF workOrderDB = new WorkOrderDB();
-	private AssetDBIF assetDB = new AssetDB();
-	private ReferenceDB referenceDB = new ReferenceDB();
+	private WorkOrderDBIF workOrderDB = Database.getInstance().getWorkOrderDataBase();
+	private AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
+	private ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 	
 	//Other
 	Random random = new Random();

@@ -12,7 +12,7 @@ import model.Workorder;
 
 public class WorkOrderController implements WorkOrderControllerIF {
 	
-	protected WorkOrderDBIF workOrderDB = new WorkOrderDB();
+	protected WorkOrderDBIF workOrderDB = Database.getInstance().getWorkOrderDataBase();
 	
 	@Override
 	public Asset findAssetByID(int id) {
