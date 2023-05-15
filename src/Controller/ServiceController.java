@@ -1,7 +1,11 @@
 package Controller;
 
+import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.List;
 
+import model.Asset;
+import model.Reference;
 import model.Service;
 import model.Workorder;
 
@@ -13,6 +17,26 @@ public class ServiceController extends WorkOrderController implements ServiceCon
 		if(service.getAsset() == null) {
 			throw new IllegalArgumentException("Asset cant be empty");
 		}			
+		return workOrderDB.addServiceWorkOrder(service);
+	}
+	public boolean createWorkOrder(int assetID, String title, Calendar startDate, short priority, String description, int referenceCVR) throws SQLException {
+		AssetController assetCtr = new AssetController();
+		Asset asset = assetCtr.findAssetByID(assetID);
+		if(asset == null) {
+			throw new IllegalArgumentException("Asset cant be empty");
+		}
+		Service service = new Service();
+		service.setAsset(asset);
+		service.setTitle(title);
+		service.setStartDate(startDate);
+		service.setPriority(priority);
+		service.setDescription(description);
+		
+		//TODO fix this when Reference Controller is made
+		Reference reference = new Reference();
+		reference.setCvr(referenceCVR);
+		service.setReference(reference);
+		
 		return workOrderDB.addServiceWorkOrder(service);
 	}
 

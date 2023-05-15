@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 
+import Controller.AssetController;
 import Controller.MaintenanceController;
 import Controller.RepairController;
 import Controller.ServiceController;
@@ -38,6 +39,7 @@ import model.Reference;
 import model.Repair;
 import model.Service;
 import model.Workorder;
+import javax.swing.JCheckBox;
 
 public class CreateWorkOrder extends JPanel {
 	
@@ -94,6 +96,8 @@ public class CreateWorkOrder extends JPanel {
 	private JLabel referenceLabel;
 	private JTextField employeeTextField;
 	private JTextField referenceTextField;
+	private JLabel repeatedLabel;
+	private JCheckBox repeatedCheckBox;
 	
 
 	/**
@@ -130,62 +134,51 @@ public class CreateWorkOrder extends JPanel {
 		if(asset == null) {GUIPopUpMessages.warningMessage("No Asset selected!", "Error!"); return false;}
 		String type = typeComboBox.getSelectedItem().toString();
 		if(!type.equals("Vedligeholdelse") && reference.getCvr() == 0) {GUIPopUpMessages.warningMessage("No Reference selected!", "Error!"); return false;}
-		//Set the WorkOrder type
-		Workorder workOrder = createWorkOrderOfType(type);
-		
-		//Set common data
-		workOrder.setTitle(topicTextField.getText());
-		
-		//Setting WorkOrder Dates
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime((Date) spinnerStartDate.getValue());
-		workOrder.setStartDate(calendar);
-		calendar.setTime((Date) spinnerEndDate.getValue());
-		workOrder.setEndDate(calendar);
-		
-		workOrder.setPriority(getPriorityFromComboBox());
-		workOrder.setDescription(textArea.getText());
-		workOrder.setAsset(asset);
-		
-		
-		boolean success = callControllerOfType(type, workOrder);
+		boolean success = callControllerOfType(type);
 	    return success;
 	}
 	
-	private boolean callControllerOfType(String type, Workorder workOrder) {
+	private boolean callControllerOfType(String type) {
+		int intAssetID = Integer.valueOf(assetID);
+		String topic = topicTextField.getText();
+		Calendar startDate = Calendar.getInstance();
+		startDate.setTime((Date) spinnerStartDate.getValue());
+		short priority = getPriorityFromComboBox();
+		String description = textArea.getText();
+		
 	    switch(type) {
+	    
+	    	//Creating WorkOrder of type Repair/Reperation
 	        case "Reparation":
 	            RepairController repairController = new RepairController();
-	            return repairController.createWorkOrder((Repair) workOrder);
+			try {
+				return repairController.createWorkOrder(intAssetID, topic, startDate, priority, description,
+														Integer.valueOf(referenceCVR));
+				
+			} catch (NumberFormatException e2) {} catch (SQLException e2) {}
+			
+			//Creating WorkOrder of type Service/Serviceaftale
 	        case "Serviceaftale":
 	            ServiceController serviceController = new ServiceController();
-	            return serviceController.createWorkOrder((Service) workOrder);
+			try {
+				return serviceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
+	            										Integer.valueOf(referenceCVR));
+				
+			} catch (NumberFormatException e1) {} catch (SQLException e1) {}
+			
+			//Creating WorkOrder of type Maintenance/Vedligeholdelse
 	        case "Vedligeholdelse":
 	            MaintenanceController maintenanceController = new MaintenanceController();
-	            return maintenanceController.createWorkOrder((Maintenance) workOrder);
+			try {
+				return maintenanceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
+	            											(int) intervalSpinner.getValue(),
+	            											repeatedCheckBox.isSelected());
+				
+			} catch (SQLException e) {}
+			
+			//If no type has been picked fail(return false)
 	        default:
 	            return false;
-	    }
-	}
-	private Workorder createWorkOrderOfType(String type) {
-	    switch(type) {
-	        case "Reparation":
-	            Repair repair = new Repair();
-	            repair.setReference(reference);
-	            //TODO Implement
-	            return repair;
-	        case "Serviceaftale":
-	            Service service = new Service();
-	            //TODO Implement
-	            service.setReference(reference);
-	            return service;
-	        case "Vedligeholdelse":
-	            Maintenance maintenance = new Maintenance();
-	            maintenance.setRepeated(true);
-	            maintenance.setIntervalDayCount((int) intervalSpinner.getValue());
-	            return maintenance;
-	        default:
-	            return null;
 	    }
 	}
 	
@@ -223,15 +216,14 @@ public class CreateWorkOrder extends JPanel {
 	}
 
 	private void checkAsset() {
-
 		if(txtAssetID.getText().length()>0) {
 			if(!txtAssetID.getText().equals(assetID)) {
 				Thread workerThread = new Thread(() -> {
 				assetID = txtAssetID.getText();
 				Asset assetCheck = null;
-				AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
+				AssetController assetCtr = new AssetController();
 					try {
-						assetCheck = assetDB.findAssetByID(Integer.parseInt(assetID));
+						assetCheck = assetCtr.findAssetByID(Integer.parseInt(assetID));
 					} catch (NumberFormatException e1) {
 						GUIPopUpMessages.warningMessage("Only Number in AssetID Field", "Error!");
 						System.out.println("Letter in Asset Text Field");
@@ -241,6 +233,7 @@ public class CreateWorkOrder extends JPanel {
 
 				if(assetCheck == null) {
 					txtAssetID.setBackground(Color.red);
+					assetID = "";
 					txtName.setText("");
 				}else {
 					txtAssetID.setBackground(Color.green);
@@ -315,11 +308,15 @@ public class CreateWorkOrder extends JPanel {
 			templatesComboBox.setEnabled(true);
 			lblInterval.setEnabled(true);
 			lblTemplates.setEnabled(true);
+			repeatedLabel.setEnabled(true);
+			repeatedCheckBox.setEnabled(true);
 		}else {
 			intervalSpinner.setEnabled(false);
 			templatesComboBox.setEnabled(false);
 			lblInterval.setEnabled(false);
 			lblTemplates.setEnabled(false);
+			repeatedLabel.setEnabled(false);
+			repeatedCheckBox.setEnabled(false);
 		}
 	}
 	
@@ -328,8 +325,6 @@ public class CreateWorkOrder extends JPanel {
 		    boolean success = createWorkOrder();
 		    if(success) {
 		    	GUIPopUpMessages.informationMessage("Creation was successfull", "Success!");
-		    }else {
-		    	GUIPopUpMessages.warningMessage("Creation error, reason unknown", "Error");
 		    }
 		});
 		workerThread.start();
@@ -375,7 +370,7 @@ public class CreateWorkOrder extends JPanel {
 		
 		referenceLabel = new JLabel("Reference");
 		GridBagConstraints gbc_referenceLabel = new GridBagConstraints();
-		gbc_referenceLabel.anchor = GridBagConstraints.EAST;
+		gbc_referenceLabel.anchor = GridBagConstraints.WEST;
 		gbc_referenceLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_referenceLabel.gridx = 4;
 		gbc_referenceLabel.gridy = 2;
@@ -512,6 +507,22 @@ public class CreateWorkOrder extends JPanel {
 		
 		
 		typeComboBox.addActionListener(e -> setMaintenanceFields());
+		
+		repeatedLabel = new JLabel("Repeated");
+		GridBagConstraints gbc_repeatedLabel = new GridBagConstraints();
+		gbc_repeatedLabel.anchor = GridBagConstraints.WEST;
+		gbc_repeatedLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_repeatedLabel.gridx = 1;
+		gbc_repeatedLabel.gridy = 8;
+		centerLeftPanel.add(repeatedLabel, gbc_repeatedLabel);
+		
+		repeatedCheckBox = new JCheckBox("");
+		GridBagConstraints gbc_repeatedCheckBox = new GridBagConstraints();
+		gbc_repeatedCheckBox.anchor = GridBagConstraints.WEST;
+		gbc_repeatedCheckBox.insets = new Insets(0, 0, 5, 5);
+		gbc_repeatedCheckBox.gridx = 2;
+		gbc_repeatedCheckBox.gridy = 8;
+		centerLeftPanel.add(repeatedCheckBox, gbc_repeatedCheckBox);
 		
 		createWorkOrderButton = new JRoundedButton("Opret arbejdsordre");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
