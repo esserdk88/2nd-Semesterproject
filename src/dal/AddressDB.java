@@ -46,8 +46,15 @@ public class AddressDB implements AddressDBIF {
 	
 	}
 	public Address buildObjectFromResultset(ResultSet rs) throws SQLException {
-		if(rs.getInt("address_id_PK") == 0) {
-			return null;
+		boolean check = false;
+		int count = rs.getMetaData().getColumnCount();
+		for (int i = 1; i <=count; i++) {
+			   if(rs.getMetaData().getColumnName(i).equals("address_id_PK")) {
+			      check = true;
+			   }
+			}
+		if(!check || rs.getInt("address_id_PK") == 0) {
+			return new Address();
 		}else return buildObject(rs);
 	}
 	

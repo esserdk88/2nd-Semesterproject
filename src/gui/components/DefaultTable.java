@@ -50,7 +50,7 @@ public class DefaultTable extends JTable {
 	}
 	
 	/**
-	 * Basic Table constructor with specefications for visibleColumns on initialization
+	 * Basic Table constructor with specifications for visibleColumns on initialization
 	 * @param data The Data to be displayed
 	 * @param columns The column headers
 	 * @param visibleColumns The column you want visible set to true and false to be hidden

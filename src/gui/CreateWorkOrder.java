@@ -28,10 +28,13 @@ import Controller.RepairController;
 import Controller.ServiceController;
 import dal.AssetDBIF;
 import dal.Database;
+import dal.EmployeeDBIF;
+import dal.ReferenceDBIF;
 import gui.components.JRoundedButton;
 import model.Asset;
 import model.Employee;
 import model.Maintenance;
+import model.Reference;
 import model.Repair;
 import model.Service;
 import model.Workorder;
@@ -51,7 +54,6 @@ public class CreateWorkOrder extends JPanel {
 	private JComboBox<?> typeComboBox;
 	private JComboBox<?> templatesComboBox;
 	private JComboBox<?> priorityComboBox;
-	private JComboBox<?> comboBox_2;
 	
 	//Labels
 	private JLabel lblDescription;
@@ -83,9 +85,15 @@ public class CreateWorkOrder extends JPanel {
 	
 	//Extra
 	private Asset asset;
-	private Employee employee;
 	private String assetID;
-	private Asset currentAsset;
+	private String referenceCVR;
+	private Reference reference;
+	private String employeeID;
+	private Employee employee;
+	private JRoundedButton btnFindEmployee_1;
+	private JLabel referenceLabel;
+	private JTextField employeeTextField;
+	private JTextField referenceTextField;
 	
 
 	/**
@@ -101,26 +109,27 @@ public class CreateWorkOrder extends JPanel {
 		setLabels();
 		setSpinners();
 		setComboBoxes();
-		setMaintenanceFields();		
+		setMaintenanceFields();	
+		reference = new Reference();
 	}
 	
 	public CreateWorkOrder(Asset currentAsset) {
 		this();
-		this.currentAsset = currentAsset;
+		asset = currentAsset;
 		setupTextFields();
 	}
 	
 	private void setupTextFields() {
 		txtAssetID.setEnabled(false);
 		txtName.setEnabled(false);
-		txtAssetID.setText(Integer.toString((currentAsset.getAssetID())));
-		txtName.setText(currentAsset.getName());
+		txtAssetID.setText(Integer.toString((asset.getAssetID())));
+		txtName.setText(asset.getName());
 	}
 	
 	private boolean createWorkOrder() {
 		if(asset == null) {GUIPopUpMessages.warningMessage("No Asset selected!", "Error!"); return false;}
-		
 		String type = typeComboBox.getSelectedItem().toString();
+		if(!type.equals("Vedligeholdelse") && reference.getCvr() == 0) {GUIPopUpMessages.warningMessage("No Reference selected!", "Error!"); return false;}
 		//Set the WorkOrder type
 		Workorder workOrder = createWorkOrderOfType(type);
 		
@@ -162,11 +171,13 @@ public class CreateWorkOrder extends JPanel {
 	    switch(type) {
 	        case "Reparation":
 	            Repair repair = new Repair();
-	            // TODO: add specific values for repair
+	            repair.setReference(reference);
+	            //TODO Implement
 	            return repair;
 	        case "Serviceaftale":
 	            Service service = new Service();
-	            // TODO: add specific values for service
+	            //TODO Implement
+	            service.setReference(reference);
 	            return service;
 	        case "Vedligeholdelse":
 	            Maintenance maintenance = new Maintenance();
@@ -222,7 +233,7 @@ public class CreateWorkOrder extends JPanel {
 					try {
 						assetCheck = assetDB.findAssetByID(Integer.parseInt(assetID));
 					} catch (NumberFormatException e1) {
-						GUIPopUpMessages.warningMessage("Only letters in AssetID Field", "Error!");
+						GUIPopUpMessages.warningMessage("Only Number in AssetID Field", "Error!");
 						System.out.println("Letter in Asset Text Field");
 					} catch (SQLException e1) {
 						GUIPopUpMessages.warningMessage("Error retrieving data from database", "Error!");
@@ -235,6 +246,61 @@ public class CreateWorkOrder extends JPanel {
 					txtAssetID.setBackground(Color.green);
 					txtName.setText(assetCheck.getName());
 					asset = assetCheck;
+					}
+				});
+				workerThread.start();
+				
+			}
+		}
+	}
+	private void checkReference() {
+		if(referenceTextField.getText().length()>0) {
+			if(!referenceTextField.getText().equals(referenceCVR)) {
+				Thread workerThread = new Thread(() -> {
+				referenceCVR = referenceTextField.getText();
+				Reference referenceCheck = null;
+				ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
+					try {
+						referenceCheck = referenceDB.findReferenceByID(Integer.parseInt(referenceCVR));
+					} catch (NumberFormatException e1) {
+						GUIPopUpMessages.warningMessage("Only Number in reference Field", "Error!");
+						System.out.println("Letter in Reference Text Field");
+					}
+
+				if(referenceCheck == null) {
+					referenceTextField.setBackground(Color.red);
+					reference.setCvr(0);
+				}else {
+					referenceTextField.setBackground(Color.green);
+					reference = referenceCheck;
+					reference.setCvr(Integer.parseInt(referenceCVR));
+					}
+				});
+				workerThread.start();
+				
+			}
+		}
+	}
+	private void checkEmployee() {
+		if(employeeTextField.getText().length()>0) {
+			if(!employeeTextField.getText().equals(employeeID)) {
+				Thread workerThread = new Thread(() -> {
+				employeeID = employeeTextField.getText();
+				Employee employeeCheck = null;
+				EmployeeDBIF employeeDB = Database.getInstance().getEmployeeDataBase();
+					try {
+						employeeCheck = employeeDB.findEmployeeByID(Integer.parseInt(employeeID));
+					} catch (NumberFormatException e1) {
+						GUIPopUpMessages.warningMessage("Only Number in employee Field", "Error!");
+						System.out.println("Letter in Reference Text Field");
+					}
+
+				if(employeeCheck == null) {
+					employeeTextField.setBackground(Color.red);
+				}else {
+					employeeTextField.setBackground(Color.green);
+					employee = employeeCheck;
+					employee.setCprNumber(employeeID);
 					}
 				});
 				workerThread.start();
@@ -275,12 +341,27 @@ public class CreateWorkOrder extends JPanel {
 		GridBagLayout gbl_centerLeftPanel = new GridBagLayout();
 		gbl_centerLeftPanel.columnWidths = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_centerLeftPanel.rowHeights = new int[] {30, 0, 0, 0, 0, 30, 0, 0, 0, 101, 0, 0};
-		gbl_centerLeftPanel.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_centerLeftPanel.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_centerLeftPanel.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		centerLeftPanel.setLayout(gbl_centerLeftPanel);
 		
 	}
 	private void setButtons() {
+		
+		employeeTextField = new JTextField();
+		employeeTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				checkEmployee();
+			}
+		});
+		GridBagConstraints gbc_employeeTextField = new GridBagConstraints();
+		gbc_employeeTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_employeeTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_employeeTextField.gridx = 5;
+		gbc_employeeTextField.gridy = 1;
+		centerLeftPanel.add(employeeTextField, gbc_employeeTextField);
+		employeeTextField.setColumns(10);
 		
 		btnFindEmployee = new JRoundedButton("Find medarbejder");
 		GridBagConstraints gbc_btnFindEmployee = new GridBagConstraints();
@@ -292,6 +373,58 @@ public class CreateWorkOrder extends JPanel {
 		gbc_btnFindEmployee.gridy = 1;
 		centerLeftPanel.add(btnFindEmployee, gbc_btnFindEmployee);
 		
+		referenceLabel = new JLabel("Reference");
+		GridBagConstraints gbc_referenceLabel = new GridBagConstraints();
+		gbc_referenceLabel.anchor = GridBagConstraints.EAST;
+		gbc_referenceLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_referenceLabel.gridx = 4;
+		gbc_referenceLabel.gridy = 2;
+		centerLeftPanel.add(referenceLabel, gbc_referenceLabel);
+		
+		referenceTextField = new JTextField();
+		referenceTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				checkReference();
+			}
+		});
+		GridBagConstraints gbc_referenceTextField = new GridBagConstraints();
+		gbc_referenceTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_referenceTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_referenceTextField.gridx = 5;
+		gbc_referenceTextField.gridy = 2;
+		centerLeftPanel.add(referenceTextField, gbc_referenceTextField);
+		referenceTextField.setColumns(10);
+		
+		btnFindEmployee_1 = new JRoundedButton("Find Reference");
+		GridBagConstraints gbc_btnFindEmployee_1 = new GridBagConstraints();
+		gbc_btnFindEmployee_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnFindEmployee_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnFindEmployee_1.gridx = 6;
+		gbc_btnFindEmployee_1.gridy = 2;
+		centerLeftPanel.add(btnFindEmployee_1, gbc_btnFindEmployee_1);
+		
+				lblStatus = new JLabel("Prioritet");
+				GridBagConstraints gbc_lblStatus = new GridBagConstraints();
+				gbc_lblStatus.fill = GridBagConstraints.BOTH;
+				gbc_lblStatus.weighty = 0;
+				gbc_lblStatus.weightx = 0;
+				gbc_lblStatus.insets = new Insets(0, 0, 5, 5);
+				gbc_lblStatus.gridx = 4;
+				gbc_lblStatus.gridy = 3;
+				centerLeftPanel.add(lblStatus, gbc_lblStatus);
+		
+		priorityComboBox = new JComboBox();
+		priorityComboBox.setModel(new DefaultComboBoxModel(new String[] {"", "Høj", "Mellem", "Lav"}));
+		GridBagConstraints gbc_priorityComboBox = new GridBagConstraints();
+		gbc_priorityComboBox.weighty = 0;
+		gbc_priorityComboBox.weightx = 0;
+		gbc_priorityComboBox.insets = new Insets(0, 0, 5, 5);
+		gbc_priorityComboBox.fill = GridBagConstraints.BOTH;
+		gbc_priorityComboBox.gridx = 5;
+		gbc_priorityComboBox.gridy = 3;
+		centerLeftPanel.add(priorityComboBox, gbc_priorityComboBox);
+		
 		lblStartDate = new JLabel("Startdato");
 		GridBagConstraints gbc_lblStartDate = new GridBagConstraints();
 		gbc_lblStartDate.fill = GridBagConstraints.BOTH;
@@ -302,27 +435,26 @@ public class CreateWorkOrder extends JPanel {
 		gbc_lblStartDate.gridy = 4;
 		centerLeftPanel.add(lblStartDate, gbc_lblStartDate);
 		
+		lblRegNr = new JLabel("Reg nr.");
+		GridBagConstraints gbc_lblRegNr = new GridBagConstraints();
+		gbc_lblRegNr.fill = GridBagConstraints.BOTH;
+		gbc_lblRegNr.weighty = 0;
+		gbc_lblRegNr.weightx = 0;
+		gbc_lblRegNr.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRegNr.gridx = 4;
+		gbc_lblRegNr.gridy = 4;
+		centerLeftPanel.add(lblRegNr, gbc_lblRegNr);
 		
-		lblSerieNr = new JLabel("Serienr.");
-		GridBagConstraints gbc_lblSerieNr = new GridBagConstraints();
-		gbc_lblSerieNr.fill = GridBagConstraints.BOTH;
-		gbc_lblSerieNr.weighty = 0;
-		gbc_lblSerieNr.weightx = 0;
-		gbc_lblSerieNr.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSerieNr.gridx = 4;
-		gbc_lblSerieNr.gridy = 4;
-		centerLeftPanel.add(lblSerieNr, gbc_lblSerieNr);
-		
-		serieNrTextField = new JTextField();
-		GridBagConstraints gbc_serieNrTextField = new GridBagConstraints();
-		gbc_serieNrTextField.weighty = 0;
-		gbc_serieNrTextField.weightx = 0;
-		gbc_serieNrTextField.insets = new Insets(0, 0, 5, 5);
-		gbc_serieNrTextField.fill = GridBagConstraints.BOTH;
-		gbc_serieNrTextField.gridx = 5;
-		gbc_serieNrTextField.gridy = 4;
-		centerLeftPanel.add(serieNrTextField, gbc_serieNrTextField);
-		serieNrTextField.setColumns(10);
+		txtWorkOrderID = new JTextField();
+		GridBagConstraints gbc_txtWorkOrderID = new GridBagConstraints();
+		gbc_txtWorkOrderID.weighty = 0;
+		gbc_txtWorkOrderID.weightx = 0;
+		gbc_txtWorkOrderID.insets = new Insets(0, 0, 5, 5);
+		gbc_txtWorkOrderID.fill = GridBagConstraints.BOTH;
+		gbc_txtWorkOrderID.gridx = 5;
+		gbc_txtWorkOrderID.gridy = 4;
+		centerLeftPanel.add(txtWorkOrderID, gbc_txtWorkOrderID);
+		txtWorkOrderID.setColumns(10);
 		
 		lblEndDate = new JLabel("Slutdato");
 		GridBagConstraints gbc_lblEndDate = new GridBagConstraints();
@@ -333,6 +465,28 @@ public class CreateWorkOrder extends JPanel {
 		gbc_lblEndDate.gridx = 1;
 		gbc_lblEndDate.gridy = 5;
 		centerLeftPanel.add(lblEndDate, gbc_lblEndDate);
+		
+		
+		lblSerieNr = new JLabel("Serienr.");
+		GridBagConstraints gbc_lblSerieNr = new GridBagConstraints();
+		gbc_lblSerieNr.fill = GridBagConstraints.BOTH;
+		gbc_lblSerieNr.weighty = 0;
+		gbc_lblSerieNr.weightx = 0;
+		gbc_lblSerieNr.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSerieNr.gridx = 4;
+		gbc_lblSerieNr.gridy = 5;
+		centerLeftPanel.add(lblSerieNr, gbc_lblSerieNr);
+		
+		serieNrTextField = new JTextField();
+		GridBagConstraints gbc_serieNrTextField = new GridBagConstraints();
+		gbc_serieNrTextField.weighty = 0;
+		gbc_serieNrTextField.weightx = 0;
+		gbc_serieNrTextField.insets = new Insets(0, 0, 5, 5);
+		gbc_serieNrTextField.fill = GridBagConstraints.BOTH;
+		gbc_serieNrTextField.gridx = 5;
+		gbc_serieNrTextField.gridy = 5;
+		centerLeftPanel.add(serieNrTextField, gbc_serieNrTextField);
+		serieNrTextField.setColumns(10);
 		
 		
 		lblType = new JLabel("Type");
@@ -377,7 +531,7 @@ public class CreateWorkOrder extends JPanel {
 		gbc_topicTextField.weighty = 0;
 		gbc_topicTextField.weightx = 0;
 		gbc_topicTextField.insets = new Insets(0, 0, 5, 5);
-		gbc_topicTextField.fill = GridBagConstraints.BOTH;
+		gbc_topicTextField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_topicTextField.gridx = 2;
 		gbc_topicTextField.gridy = 1;
 		centerLeftPanel.add(topicTextField, gbc_topicTextField);
@@ -395,17 +549,6 @@ public class CreateWorkOrder extends JPanel {
 		gbc_txtName.gridy = 3;
 		centerLeftPanel.add(txtName, gbc_txtName);
 		
-		txtWorkOrderID = new JTextField();
-		GridBagConstraints gbc_txtWorkOrderID = new GridBagConstraints();
-		gbc_txtWorkOrderID.weighty = 0;
-		gbc_txtWorkOrderID.weightx = 0;
-		gbc_txtWorkOrderID.insets = new Insets(0, 0, 5, 5);
-		gbc_txtWorkOrderID.fill = GridBagConstraints.BOTH;
-		gbc_txtWorkOrderID.gridx = 5;
-		gbc_txtWorkOrderID.gridy = 3;
-		centerLeftPanel.add(txtWorkOrderID, gbc_txtWorkOrderID);
-		txtWorkOrderID.setColumns(10);
-		
 		txtAssetID = new JTextField();
 		txtAssetID.addFocusListener(new FocusAdapter() {
 			@Override
@@ -419,7 +562,7 @@ public class CreateWorkOrder extends JPanel {
 		gbc_txtAssetID.weighty = 0;
 		gbc_txtAssetID.weightx = 0;
 		gbc_txtAssetID.insets = new Insets(0, 0, 5, 5);
-		gbc_txtAssetID.fill = GridBagConstraints.BOTH;
+		gbc_txtAssetID.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtAssetID.gridx = 2;
 		gbc_txtAssetID.gridy = 2;
 		centerLeftPanel.add(txtAssetID, gbc_txtAssetID);
@@ -478,27 +621,6 @@ public class CreateWorkOrder extends JPanel {
 	}
 	private void setComboBoxes() {
 		
-		comboBox_2 = new JComboBox();
-		GridBagConstraints gbc_comboBox_2 = new GridBagConstraints();
-		gbc_comboBox_2.weighty = 0;
-		gbc_comboBox_2.weightx = 0;
-		gbc_comboBox_2.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox_2.fill = GridBagConstraints.BOTH;
-		gbc_comboBox_2.gridx = 5;
-		gbc_comboBox_2.gridy = 1;
-		centerLeftPanel.add(comboBox_2, gbc_comboBox_2);
-		
-		priorityComboBox = new JComboBox();
-		priorityComboBox.setModel(new DefaultComboBoxModel(new String[] {"", "Høj", "Mellem", "Lav"}));
-		GridBagConstraints gbc_priorityComboBox = new GridBagConstraints();
-		gbc_priorityComboBox.weighty = 0;
-		gbc_priorityComboBox.weightx = 0;
-		gbc_priorityComboBox.insets = new Insets(0, 0, 5, 5);
-		gbc_priorityComboBox.fill = GridBagConstraints.BOTH;
-		gbc_priorityComboBox.gridx = 5;
-		gbc_priorityComboBox.gridy = 2;
-		centerLeftPanel.add(priorityComboBox, gbc_priorityComboBox);
-		
 		templatesComboBox = new JComboBox();
 		templatesComboBox.setModel(new DefaultComboBoxModel(new String[] {"2 uger", "1 måned", "3 måneder", "6 måneder", "12 måneder"}));
 		GridBagConstraints gbc_templatesComboBox = new GridBagConstraints();
@@ -525,7 +647,8 @@ public class CreateWorkOrder extends JPanel {
 		
 		lblNewLabel_1 = new JLabel("Tildel");
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-		gbc_lblNewLabel_1.fill = GridBagConstraints.BOTH;
+		gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
+		gbc_lblNewLabel_1.fill = GridBagConstraints.VERTICAL;
 		gbc_lblNewLabel_1.weighty = 0;
 		gbc_lblNewLabel_1.weightx = 0;
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
@@ -542,16 +665,6 @@ public class CreateWorkOrder extends JPanel {
 		gbc_lblAssetID.gridx = 1;
 		gbc_lblAssetID.gridy = 2;
 		centerLeftPanel.add(lblAssetID, gbc_lblAssetID);
-
-		lblStatus = new JLabel("Prioritet");
-		GridBagConstraints gbc_lblStatus = new GridBagConstraints();
-		gbc_lblStatus.fill = GridBagConstraints.BOTH;
-		gbc_lblStatus.weighty = 0;
-		gbc_lblStatus.weightx = 0;
-		gbc_lblStatus.insets = new Insets(0, 0, 5, 5);
-		gbc_lblStatus.gridx = 4;
-		gbc_lblStatus.gridy = 2;
-		centerLeftPanel.add(lblStatus, gbc_lblStatus);
 		
 		lblName = new JLabel("Asset Navn");
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
@@ -562,16 +675,6 @@ public class CreateWorkOrder extends JPanel {
 		gbc_lblName.gridx = 1;
 		gbc_lblName.gridy = 3;
 		centerLeftPanel.add(lblName, gbc_lblName);
-		
-		lblRegNr = new JLabel("Reg nr.");
-		GridBagConstraints gbc_lblRegNr = new GridBagConstraints();
-		gbc_lblRegNr.fill = GridBagConstraints.BOTH;
-		gbc_lblRegNr.weighty = 0;
-		gbc_lblRegNr.weightx = 0;
-		gbc_lblRegNr.insets = new Insets(0, 0, 5, 5);
-		gbc_lblRegNr.gridx = 4;
-		gbc_lblRegNr.gridy = 3;
-		centerLeftPanel.add(lblRegNr, gbc_lblRegNr);
 		
 		lblTemplates = new JLabel("Skabeloner");
 		GridBagConstraints gbc_lblTemplates = new GridBagConstraints();
