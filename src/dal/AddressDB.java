@@ -36,7 +36,7 @@ public class AddressDB implements AddressDBIF {
 			
 			if (rs != null && rs.next()) {
 				//build Address object from result set
-				address = buildObject(rs);
+				address = buildObject(rs,null);
 			}
 		} catch (SQLException e) {
 		System.out.println("ERROR FROM RETRIEVING ADDRESS:" + e.getMessage());
@@ -45,23 +45,37 @@ public class AddressDB implements AddressDBIF {
 		return address;
 	
 	}
-	public Address buildObjectFromResultset(ResultSet rs) throws SQLException {
-		if(rs.getInt("address_id_PK") == 0) {
-			return null;
-		}else return buildObject(rs);
-	}
+	public Address buildObjectFromResultset(ResultSet rs, String prefix) throws SQLException {
+		if(prefix == null) {
+			prefix = "";
+		}
+		
+		boolean check = false;
+        int count = rs.getMetaData().getColumnCount();
+        for (int i = 1; i <=count; i++) {
+               if(rs.getMetaData().getColumnName(i).equals(prefix+"address_id_PK")) {
+                  check = true;
+               }
+            }
+        if(!check || rs.getInt(prefix+"address_id_PK") == 0) {
+            return new Address();
+        }else return buildObject(rs,prefix);
+    }
 	
-	private Address buildObject(ResultSet rs) throws SQLException {
+	private Address buildObject(ResultSet rs, String prefix) throws SQLException {
+		if(prefix == null) {
+			prefix = "";
+		}
 		
 		// create a new Address object
 		Address result = new Address();
 
 		// set the properties of the address object based on the values in the ResultSet
-		result.setAddressID(rs.getInt("address_id_PK"));
-		result.setStreetName(rs.getString("address_streetname"));
-		result.setStreetNumber(rs.getString("address_streetnumber"));
-		result.setZipCode(rs.getString("address_zipcode"));
-		result.setCityName(rs.getString("address_cityname"));
+		result.setAddressID(rs.getInt(prefix+"address_id_PK"));
+		result.setStreetName(rs.getString(prefix+"address_streetname"));
+		result.setStreetNumber(rs.getString(prefix+"address_streetnumber"));
+		result.setZipCode(rs.getString(prefix+"address_zipcode"));
+		result.setCityName(rs.getString(prefix+"address_cityname"));
 		
 		// return the address object
 				
@@ -86,7 +100,7 @@ public class AddressDB implements AddressDBIF {
 			if (rs != null) {
 				//build Address object from result set
 				while(rs.next()) {
-					list.add(buildObject(rs));
+					list.add(buildObject(rs,null));
 				}
 			}
 		} catch (SQLException e) {

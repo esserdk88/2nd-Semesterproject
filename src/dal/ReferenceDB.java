@@ -39,7 +39,7 @@ public class ReferenceDB implements ReferenceDBIF {
 			
 			if (rs != null && rs.next()) {
 				//build Reference object from result set
-				reference = buildObject(rs);
+				reference = buildObject(rs,null);
 			}
 		} catch (SQLException e) {
 		System.out.println("ERROR FROM RETRIEVING REFERENCE:" + e.getMessage());
@@ -51,9 +51,9 @@ public class ReferenceDB implements ReferenceDBIF {
 	public Reference buildObjectFromResultset(ResultSet rs) throws SQLException {
 		if(rs.getInt("reference_CVR_PK") == 0) {
 			return null;
-		}else return buildObject(rs);
+		}else return buildObject(rs, "reference_");
 	}
-	private Reference buildObject(ResultSet rs) throws SQLException {
+	private Reference buildObject(ResultSet rs, String prefix) throws SQLException {
 		// Create a new Reference object
 		Reference result = new Reference();
 
@@ -63,7 +63,7 @@ public class ReferenceDB implements ReferenceDBIF {
 		result.setName(rs.getString("reference_name"));
 		result.setPhone(rs.getString("reference_phone"));
 		result.setEmail(rs.getString("reference_email"));
-		result.setAddress(addressDB.buildObjectFromResultset(rs));
+		result.setAddress(addressDB.buildObjectFromResultset(rs,prefix));
 		//result.setAddress(addressDB.findAddressByID(rs.getInt("reference_address_id_FK")));
 		
 		// return the Reference object
@@ -87,7 +87,7 @@ public class ReferenceDB implements ReferenceDBIF {
 			if (rs != null) {
 				//build Reference object from result set
 				while(rs.next()) {
-					list.add(buildObject(rs));
+					list.add(buildObject(rs,null));
 				}
 			} 
 		} catch (SQLException e) {

@@ -16,5 +16,5 @@ public interface AddressDBIF {
 	
 	public List<Address> getAllAddresses();
 	
-	public Address buildObjectFromResultset(ResultSet rs) throws SQLException;
+	public Address buildObjectFromResultset(ResultSet rs, String prefix) throws SQLException;
 }

@@ -57,7 +57,7 @@ public class LocationDB implements LocationDBIF {
 		result.setBuilding(rs.getString("location_building"));
 		result.setFloor(rs.getString("location_floor"));
 		result.setRoom(rs.getString("location_room"));
-		result.setAddress(addressDB.buildObjectFromResultset(rs));
+		result.setAddress(addressDB.buildObjectFromResultset(rs,"location_"));
 		//result.setAddress(addressDB.findAddressByID(rs.getInt("location_address_id_FK")));
 
 		// return the location object

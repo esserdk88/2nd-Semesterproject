@@ -58,7 +58,7 @@ public class SupplierDB implements SupplierDBIF {
 		result.setName(rs.getString("supplier_name"));
 		result.setPhone(rs.getString("supplier_phone"));
 		result.setEmail(rs.getString("supplier_email"));
-		result.setAddress(addressDB.buildObjectFromResultset(rs));
+		result.setAddress(addressDB.buildObjectFromResultset(rs,null));
 		//result.setAddress(addressDB.findAddressByID(rs.getInt("supplier_address_id_FK")));
 		
 		// return the Supplier object

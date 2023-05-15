@@ -66,7 +66,7 @@ public class EmployeeDB implements EmployeeDBIF {
 		result.setName(rs.getString("employee_name"));
 		result.setPhone(rs.getString("employee_phone"));
 		result.setEmail(rs.getString("employee_email"));
-		result.setAddress(addressDB.buildObjectFromResultset(rs));
+		result.setAddress(addressDB.buildObjectFromResultset(rs, "employee_"));
 		//result.setAddress(addressDB.findAddressByID(rs.getInt("employee_address_id_FK")));
 		
 		// return the Employee object
