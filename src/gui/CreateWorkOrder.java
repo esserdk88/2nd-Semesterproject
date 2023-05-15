@@ -341,7 +341,7 @@ public class CreateWorkOrder extends JPanel {
 		GridBagLayout gbl_centerLeftPanel = new GridBagLayout();
 		gbl_centerLeftPanel.columnWidths = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_centerLeftPanel.rowHeights = new int[] {30, 0, 0, 0, 0, 30, 0, 0, 0, 101, 0, 0};
-		gbl_centerLeftPanel.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_centerLeftPanel.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_centerLeftPanel.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		centerLeftPanel.setLayout(gbl_centerLeftPanel);
 		
@@ -356,8 +356,8 @@ public class CreateWorkOrder extends JPanel {
 			}
 		});
 		GridBagConstraints gbc_employeeTextField = new GridBagConstraints();
-		gbc_employeeTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_employeeTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_employeeTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_employeeTextField.gridx = 5;
 		gbc_employeeTextField.gridy = 1;
 		centerLeftPanel.add(employeeTextField, gbc_employeeTextField);
@@ -389,8 +389,8 @@ public class CreateWorkOrder extends JPanel {
 			}
 		});
 		GridBagConstraints gbc_referenceTextField = new GridBagConstraints();
-		gbc_referenceTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_referenceTextField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_referenceTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_referenceTextField.gridx = 5;
 		gbc_referenceTextField.gridy = 2;
 		centerLeftPanel.add(referenceTextField, gbc_referenceTextField);
