@@ -180,20 +180,20 @@ class WorkOrderDBTest {
 	@Test
 	void findRepairWorkOrderByIDTest() {
 		//TODO: this test will fail as long as the database workorder_price holde decimal number with 0 decimal points
-//		//Arrange
-//		repair.setPriority(testID);
-//		workOrderDB.addRepairWorkOrder(repair);
-//		Repair foundRepair = null;
-//		int latestKey = workOrderDB.getLatestKey();
-//		
-//		//Act
-//		foundRepair = workOrderDB.findRepairWorkOrderByID(latestKey);
-//		
-//		//Assert
-//		assertEquals(true, foundRepair.equals(repair));
-//		
-//		//Clean up
-//		workOrderDB.deleteWorkOrderTestData(testID);
+		//Arrange
+		repair.setPriority(testID);
+		workOrderDB.addRepairWorkOrder(repair);
+		Repair foundRepair = null;
+		int latestKey = workOrderDB.getLatestKey();
+		
+		//Act
+		foundRepair = workOrderDB.findRepairWorkOrderByID(latestKey);
+		
+		//Assert
+		assertEquals(true, foundRepair.equals(repair));
+		
+		//Clean up
+		workOrderDB.deleteWorkOrderTestData(testID);
 	}
 	
 	@Test
