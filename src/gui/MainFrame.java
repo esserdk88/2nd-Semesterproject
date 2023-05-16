@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -15,18 +16,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
+import java.util.List;
 import java.util.Stack;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import dal.Database;
 import gui.components.JRoundedButton;
+import gui.components.PageTracker;
 
 public class MainFrame extends JFrame {
 
@@ -60,6 +65,15 @@ public class MainFrame extends JFrame {
 	//Connection
 	ConnectionWatch connectionWatch;
 	
+	//Page Tracker
+	private PageTracker pageTracker;
+	private JLabel frequentLabel;
+	private JSeparator separator;
+
+	private JLabel primaryMenu;
+
+	private JSeparator separator2;
+	
 	
 	/**
 	 * Launch the application.
@@ -85,6 +99,7 @@ public class MainFrame extends JFrame {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setName("Hovedmenu");
+		pageTracker = new PageTracker();
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		int dpi = toolkit.getScreenResolution();
 		double scaleFactor = dpi / 96.0;
@@ -99,6 +114,7 @@ public class MainFrame extends JFrame {
 		setButtons();
 		setButtonStatus();
 		setBackAndForwardsListeners();
+		frequentlyVisitedPagesButtons();
 		//This will start a new Thread that will run a connection test and change the parsed label
 		connectionWatch = new ConnectionWatch(connectionLabel);
 		connectionWatch.execute();
@@ -144,6 +160,7 @@ public class MainFrame extends JFrame {
         contentPane.revalidate();
         contentPane.repaint();
         menulabel.setText(currentCenterPanel.getName());
+        addPageVisit(currentCenterPanel);
         setButtonStatus();
 	}
 	private void backwardsButton() {
@@ -154,6 +171,7 @@ public class MainFrame extends JFrame {
         contentPane.revalidate();
         contentPane.repaint();
         menulabel.setText(currentCenterPanel.getName());
+        addPageVisit(currentCenterPanel);
         setButtonStatus();
 	}
 	
@@ -166,6 +184,7 @@ public class MainFrame extends JFrame {
         contentPane.repaint();
         menulabel.setText(newPanel.getName());
         currentCenterPanel = newPanel;
+        addPageVisit(currentCenterPanel);
         setButtonStatus();
 	}
 	private void setButtonStatus() {
@@ -207,21 +226,11 @@ public class MainFrame extends JFrame {
 		contentPane.add(leftPanel, BorderLayout.WEST);
 		GridBagLayout gbl_leftPanel = new GridBagLayout();
 		gbl_leftPanel.columnWidths = new int[]{0, 0};
-		gbl_leftPanel.rowHeights = new int[]{0, 0, 0, 0};
+		gbl_leftPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_leftPanel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_leftPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_leftPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		leftPanel.setLayout(gbl_leftPanel);
 		
-
-		JButton assetButton = new JRoundedButton("Asset");
-		assetButton.addActionListener(new ActionListener() {
-			 public void actionPerformed(ActionEvent e) {
-			        JPanel center = null;
-					center = new AssetOverview(frame);
-			        setNewCenterPanel(center);
-			    }
-		});
-
 		bottomPanel = new JPanel();
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
 		GridBagLayout gbl_bottomPanel = new GridBagLayout();
@@ -237,17 +246,14 @@ public class MainFrame extends JFrame {
 	}
 	private void setButtons() {
 		assetButton = new JRoundedButton("Asset");
-
 		assetButton.setMargin(new Insets(4, 26, 4, 26));
 		GridBagConstraints gbc_assetButton = new GridBagConstraints();
-		gbc_assetButton.gridwidth = 2;
 		gbc_assetButton.fill = GridBagConstraints.BOTH;
 		gbc_assetButton.insets = new Insets(0, 0, 5, 0);
 		gbc_assetButton.gridx = 0;
-		gbc_assetButton.gridy = 0;
+		gbc_assetButton.gridy = 2;
 		leftPanel.add(assetButton, gbc_assetButton);
 
-		workOrderButton = new JRoundedButton("Arbejdsordre");
 		workOrderButton = new JRoundedButton("Arbejdsordre");
 
 		workOrderButton.setMargin(new Insets(4, 26, 4, 26));
@@ -255,15 +261,16 @@ public class MainFrame extends JFrame {
 		gbc_workOrderButton.fill = GridBagConstraints.BOTH;
 		gbc_workOrderButton.insets = new Insets(0, 0, 5, 0);
 		gbc_workOrderButton.gridx = 0;
-		gbc_workOrderButton.gridy = 1;
+		gbc_workOrderButton.gridy = 3;
 		leftPanel.add(workOrderButton, gbc_workOrderButton);
 		
 		employeeButton = new JRoundedButton("Ansatte");
 		employeeButton.setMargin(new Insets(4, 26, 4, 26));
 		GridBagConstraints gbc_employeeButton = new GridBagConstraints();
+		gbc_employeeButton.insets = new Insets(0, 0, 5, 0);
 		gbc_employeeButton.fill = GridBagConstraints.BOTH;
 		gbc_employeeButton.gridx = 0;
-		gbc_employeeButton.gridy = 2;
+		gbc_employeeButton.gridy = 4;
 		leftPanel.add(employeeButton, gbc_employeeButton);
 		
 		returnButton = new JRoundedButton("Tilbage");
@@ -280,6 +287,44 @@ public class MainFrame extends JFrame {
 		gbc_connectionLabel.gridy = 0;
 		bottomPanel.add(connectionLabel, gbc_connectionLabel);
 		
+		separator = new JSeparator();
+		Border paddingBorder = BorderFactory.createEmptyBorder(10, 10, 10, 10); // 10 pixels of padding on all sides
+		Border lineBorder = BorderFactory.createLineBorder(Color.BLACK);
+		separator.setBorder(BorderFactory.createCompoundBorder(lineBorder, paddingBorder));
+		GridBagConstraints gbc_separator = new GridBagConstraints();
+		gbc_separator.fill = GridBagConstraints.HORIZONTAL;
+		gbc_separator.insets = new Insets(0, 0, 5, 0);
+		gbc_separator.gridx = 0;
+		gbc_separator.gridy = 7;
+		leftPanel.add(separator, gbc_separator);
+		
+		separator2 = new JSeparator();
+		Border paddingBorder2 = BorderFactory.createEmptyBorder(10, 10, 10, 10); // 10 pixels of padding on all sides
+		Border lineBorder2 = BorderFactory.createLineBorder(Color.BLACK);
+		separator2.setBorder(BorderFactory.createCompoundBorder(lineBorder2, paddingBorder2));
+		GridBagConstraints gbc_separator2 = new GridBagConstraints();
+		gbc_separator2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_separator2.insets = new Insets(0, 0, 5, 0);
+		gbc_separator2.gridx = 0;
+		gbc_separator2.gridy = 1;
+		leftPanel.add(separator2, gbc_separator2);
+		
+		primaryMenu = new JLabel("Menu");
+		primaryMenu.setFont(new Font("Tahoma", Font.BOLD, 16));
+		GridBagConstraints gbc_primaryMenu = new GridBagConstraints();
+		gbc_primaryMenu.insets = new Insets(4, 26, 5, 26);
+		gbc_primaryMenu.gridx = 0;
+		gbc_primaryMenu.gridy = 0;
+		leftPanel.add(primaryMenu, gbc_primaryMenu);
+		
+		frequentLabel = new JLabel("Mest Besøgte");
+		frequentLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+		GridBagConstraints gbc_frequentLabel = new GridBagConstraints();
+		gbc_frequentLabel.insets = new Insets(4, 26, 5, 26);
+		gbc_frequentLabel.gridx = 0;
+		gbc_frequentLabel.gridy = 6;
+		leftPanel.add(frequentLabel, gbc_frequentLabel);
+		
 		
 		nextButton = new JRoundedButton("Næste");
 		GridBagConstraints gbc_nextButton = new GridBagConstraints();
@@ -295,7 +340,7 @@ public class MainFrame extends JFrame {
 		gbc_exitButton.gridx = 6;
 		gbc_exitButton.gridy = 0;
 		bottomPanel.add(exitButton, gbc_exitButton);
-		
+				
 		assetButton.addActionListener(e -> assetButtonMethod());
 		workOrderButton.addActionListener(e -> setNewCenterPanel(new WorkOrderOverview(frame)));
 		employeeButton.addActionListener(e -> setNewCenterPanel(new EmployeeOverview()));
@@ -303,7 +348,60 @@ public class MainFrame extends JFrame {
 		nextButton.addActionListener(e -> {if(forward.isEmpty() != true) {forwardButton();}});
 		exitButton.addActionListener(e -> closeWindow());
 	}
+	private void addPageVisit(JPanel panel) {
+		if(!panel.getName().equals("HovedMenu")) {
+			pageTracker.pageVisited(currentCenterPanel);
+		}
+	}
+	private void frequentlyVisitedPagesButtons() {
+		List<String> panels = pageTracker.getTop5VisitedPages();
+		for(int i = 0;i<panels.size();i++) {
+			createNewFrequentButton(panels.get(i), i);
+		}
+	}
 	
+	private void createNewFrequentButton(String name, int position) {
+		JButton button = new JRoundedButton(name);
+		button.setMargin(new Insets(4, 26, 4, 26));
+		GridBagConstraints gbc_button1 = new GridBagConstraints();
+		gbc_button1.fill = GridBagConstraints.BOTH;
+		gbc_button1.insets = new Insets(0, 0, 5, 5);
+		gbc_button1.gridx = 0;
+		gbc_button1.gridy = 8 + position;
+		leftPanel.add(button, gbc_button1);
+		
+		button.addActionListener((e) -> setNewCenterPanel(findPanelFromName(name)));
+	}
+	private JPanel findPanelFromName(String name) {
+		JPanel panel = null;
+		switch(name) {
+		case"Aktiv Oversigt":
+			panel = new AssetOverview(this);
+			break;
+		case"Opret Arbejdsodre":
+			panel = new CreateWorkOrder();
+			break;
+		case"Medarbejder Oversigt":
+			panel = new EmployeeOverview();
+			break;
+		case"Se Aktiv":
+			panel = new ReadAsset(this);
+			break;
+		case"Se Arbejdsopgave":
+			panel = new ReadWorkOrder();
+			break;
+		case"Arbejdsordre Oversigt":
+			panel = new WorkOrderOverview(this);
+			break;
+		default:
+			
+			//No panel found set to main menu
+			//TODO add error? Check before adding button?
+			panel = centerPanel;
+			break;
+		}
+		return panel;
+	}
 	private void closeWindow(){
 		int input = JOptionPane.showOptionDialog(this, "Er du sikkert på at du vil lukke programmet?", "Afslut program",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
