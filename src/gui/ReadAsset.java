@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import javax.swing.event.ListSelectionListener;
 import Controller.WorkOrderController;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
+import gui.components.TableSwingWorker;
 import model.Asset;
 import model.Measurement;
 import model.Sparepart;
@@ -196,6 +198,40 @@ public class ReadAsset extends JPanel {
 		centerPanel.add(spinnerDate, gbc_spinnerDate);
 		
 	}
+	
+	private void updateMeasurementTable(int id) {
+		List<Measurement> measurementList = new ArrayList<>();
+		WorkOrderController workOrderController = new WorkOrderController();
+    	measurementList = workOrderController.getAllMeasurementsUsedInWorkOrder(id);
+    	
+    	Object[][] data = new Object[measurementList.size()][4]; // create a 2D array with 4 columns
+
+    	for (int i = 0; i < measurementList.size(); i++) {
+    	    Measurement measurement = measurementList.get(i);
+    	    data[i][0] = measurement.getMeasurementID();
+    	    data[i][1] = measurement.getTitle();
+    	    data[i][2] = measurement.getValue();
+    	    data[i][3] = measurement.getWorkorder();
+    	}
+    	
+    	measurementTable.setNewData(data);
+	}
+	
+	private void updateSparepartTable(int id) {
+    	List<SparepartUsed> sparepartList = new ArrayList<>();
+		WorkOrderController workOrderController = new WorkOrderController();
+    	sparepartList = workOrderController.getAllSparepartsUsedInWorkOrder(id);
+    	
+    	Object[][] data = new Object[sparepartList.size()][2]; // create a 2D array with 2 columns
+
+    	for (int i = 0; i < sparepartList.size(); i++) {
+    	    SparepartUsed sparepart = sparepartList.get(i);
+    	    data[i][0] = sparepart.getSparepart();
+    	    data[i][1] = sparepart.getAmount();
+
+    	}
+    	sparepartTable.setNewData(data);
+	}
 
 	private void setTables() {
 		historyScollPane = new JScrollPane();
@@ -227,33 +263,22 @@ public class ReadAsset extends JPanel {
 
 		        Object isMarked = historyTable.getValueAt(selectedRow, 0);
 		        if (isMarked != null) {
-		        	List<Measurement> measurementList = new ArrayList<>();
-		        	List<SparepartUsed> sparepartList = new ArrayList<>();
+		        	
+		        	String[][] loadingStatus = { { "Henter data..." } };
+		        	sparepartTable.setNewData(loadingStatus);
+		        	measurementTable.setNewData(loadingStatus);
 		        	int id = Integer.parseInt(isMarked.toString());
-		        	WorkOrderController workOrderController = new WorkOrderController();
-		        	measurementList = workOrderController.getAllMeasurementsUsedInWorkOrder(id);
-		        	sparepartList = workOrderController.getAllSparepartsUsedInWorkOrder(id);
-		        	Object[][] data1 = new Object[measurementList.size()][4]; // create a 2D array with 4 columns
-
-		        	for (int i = 0; i < measurementList.size(); i++) {
-		        	    Measurement measurement = measurementList.get(i);
-		        	    data1[i][0] = measurement.getMeasurementID();
-		        	    data1[i][1] = measurement.getTitle();
-		        	    data1[i][2] = measurement.getValue();
-		        	    data1[i][3] = measurement.getWorkorder();
-		        	}
-		        	
-		        	measurementTable.setNewData(data1);
-		        	
-		        	Object[][] data2 = new Object[sparepartList.size()][2]; // create a 2D array with 2 columns
-
-		        	for (int i = 0; i < sparepartList.size(); i++) {
-		        	    SparepartUsed sparepart = sparepartList.get(i);
-		        	    data2[i][0] = sparepart.getSparepart();
-		        	    data2[i][1] = sparepart.getAmount();
-
-		        	}
-		        	sparepartTable.setNewData(data2);
+		        	Thread workerThread = new Thread(() -> {
+		    			TableSwingWorker dataFetcherSparePart = null;
+		    			TableSwingWorker dataFetcherMeasurement = null;
+		    			WorkOrderController workOrderController = new WorkOrderController();
+						dataFetcherSparePart = new TableSwingWorker(sparepartTable, workOrderController.getAllSparepartsUsedInWorkOrder(id));
+						//dataFetcherMeasurement = new TableSwingWorker(measurementTable, workor);
+		    			dataFetcherSparePart.execute();
+		    		});
+		    		workerThread.start();
+		        	//updateSparepartTable(id);
+		        	//updateMeasurementTable(id);
 		        }
 		    }
 		});
