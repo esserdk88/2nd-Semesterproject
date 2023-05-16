@@ -52,40 +52,35 @@ public class WorkOrderController implements WorkOrderControllerIF {
 	}
 
 	@Override
-	public boolean switchEmployeeWorkorders(Workorder firstWorkorder, Workorder secoundWorkorder) throws Exception {
-		boolean success = false;
-		Workorder workorderOne = null;
-		Workorder workorderTwo = null;
-		if(firstWorkorder != null && secoundWorkorder != null) {
-			workorderOne = firstWorkorder;
-			workorderTwo = secoundWorkorder;
-		}
-		else {
+	public boolean switchEmployeeWorkorders(Workorder firstWorkorder, Workorder secondWorkorder) throws Exception {
+		//Make sure that both workorders aren't null
+		if(firstWorkorder == null || secondWorkorder == null) {
 			throw new Exception("One or both workorders are null"); 
 		}
-		
 		//Make sure that both workorders have an employee
-		if(workorderOne.getEmployee() != null && workorderTwo.getEmployee() != null) {
-			System.out.println("Inside switch with employees");
-			Employee employeeOne = workorderOne.getEmployee();
-			Employee employeeTwo = workorderTwo.getEmployee();
-			
-			workorderOne.setEmployee(employeeTwo);
-			workorderTwo.setEmployee(employeeOne);
-			
-			Connection con = DatabaseConnection.getInstance().getConnection();
-			con.setAutoCommit(false);
-			workOrderDB.updateWorkorder(workorderOne);
-			workOrderDB.updateWorkorder(workorderTwo);
-			con.commit();
-			con.setAutoCommit(true);
-			success = true;
-		}
-		else {
+		if(firstWorkorder.getEmployee() == null || secondWorkorder.getEmployee() == null) {
 			throw new Exception("One or both workorders are missing an employee");
 		}
-		
-		return success;
+			//Creating temp Employee
+			Employee tempEmployee = firstWorkorder.getEmployee();
+			
+			//Setting first Workorder Employee to Second Workorder Employee
+		    firstWorkorder.setEmployee(secondWorkorder.getEmployee());
+		    
+		    //Setting Second Workorder to Temporay Employee From Workorder one
+		    secondWorkorder.setEmployee(tempEmployee);
+			
+		    
+		    //Starting Transaction
+			DatabaseConnection.getInstance().startTransaction();
+			
+			//Updating both workorders
+			boolean first = workOrderDB.updateWorkorder(firstWorkorder);
+			boolean second = workOrderDB.updateWorkorder(secondWorkorder);
+			
+			//If nothing failed commitTransaction;
+			DatabaseConnection.getInstance().commitTransaction();
+		return first && second;
 	}
 	
 	public boolean workorderHasEmployee(int workorderId) {
