@@ -106,7 +106,7 @@ public class CreateWorkOrder extends JPanel {
 	public CreateWorkOrder() {
 		setLayout(new BorderLayout(0, 0));
 		this.setFocusable(true);
-		
+		this.setName("Opret Arbejdsodre");
 		setPanels();
 		setButtons();
 		setTextFields();

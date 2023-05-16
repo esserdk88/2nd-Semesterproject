@@ -81,7 +81,7 @@ public class WorkOrderOverview extends JPanel {
 	public WorkOrderOverview(MainFrame frame) {
 		this.frame = frame;
 		setLayout(new BorderLayout(0, 0));
-
+		this.setName("Arbejdsordre Oversigt");
 		setPanels();
 		setLabelsAndTextFieldsAndRadioButtons();
 		setTables();

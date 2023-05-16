@@ -36,6 +36,7 @@ public class EmployeeOverview extends JPanel {
 	 * Create the panel.
 	 */
 	public EmployeeOverview() {
+		this.setName("Medarbejder Oversigt");
 		setLayout(new BorderLayout(0, 0));
 		setPanels();
 		setTables();

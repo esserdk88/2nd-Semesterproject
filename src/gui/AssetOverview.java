@@ -88,6 +88,7 @@ public class AssetOverview extends JPanel {
 	 */
 	public AssetOverview(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
+		this.setName("Aktiv Oversigt");
 		setLayout(new BorderLayout(0, 0));
 		setPanels();
 		setLabelsAndTextfields();

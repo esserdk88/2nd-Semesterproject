@@ -81,7 +81,7 @@ public class ReadAsset extends JPanel {
 	 */
 	public ReadAsset(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
-		
+		this.setName("Se Aktiv");
 		setLayout(new BorderLayout(0, 0));
 
 		setPanels();

@@ -82,7 +82,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		this.setName("Hovedmenu");
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		int dpi = toolkit.getScreenResolution();
 		double scaleFactor = dpi / 96.0;
@@ -141,6 +141,7 @@ public class MainFrame extends JFrame {
 		contentPane.add(forward.pop(), BorderLayout.CENTER);
         contentPane.revalidate();
         contentPane.repaint();
+        menulabel.setText(currentCenterPanel.getName());
         setButtonStatus();
 	}
 	private void backwardsButton() {
@@ -150,6 +151,7 @@ public class MainFrame extends JFrame {
 		contentPane.add(backwards.pop(), BorderLayout.CENTER);
         contentPane.revalidate();
         contentPane.repaint();
+        menulabel.setText(currentCenterPanel.getName());
         setButtonStatus();
 	}
 	
@@ -160,6 +162,7 @@ public class MainFrame extends JFrame {
         contentPane.add(newPanel, BorderLayout.CENTER);
         contentPane.revalidate();
         contentPane.repaint();
+        menulabel.setText(newPanel.getName());
         currentCenterPanel = newPanel;
         setButtonStatus();
 	}
@@ -183,7 +186,7 @@ public class MainFrame extends JFrame {
 	private void setPanels() {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(5, 5));
 		
@@ -191,9 +194,10 @@ public class MainFrame extends JFrame {
 		contentPane.add(topPanel, BorderLayout.NORTH);
 		
 		centerPanel = new JPanel();
+		centerPanel.setName("HovedMenu");
 		contentPane.add(centerPanel, BorderLayout.CENTER);
 		currentCenterPanel = centerPanel;
-		menulabel = new JLabel("Mainmenu");
+		menulabel = new JLabel("Hovedmenu");
 		menulabel.setFont(new Font("Tahoma", Font.BOLD, 24));
 		topPanel.add(menulabel);
 		

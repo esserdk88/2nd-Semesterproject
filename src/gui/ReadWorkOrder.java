@@ -80,7 +80,7 @@ public class ReadWorkOrder extends JPanel {
 	 */
 	public ReadWorkOrder() {
 		setLayout(new BorderLayout(0, 0));
-
+		this.setName("Se Arbejdsopgave");
 		setPanels();
 		setLabelsAndTextFields();
 		setTables();
