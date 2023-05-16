@@ -176,7 +176,7 @@ public class AssetOverview extends JPanel {
 		int index = assetTable.findElement();
 
 		if (index == -1) {
-			GUIPopUpMessages.informationMessage("Intet produkt valgt", "Fejl");
+			GUIPopUpMessages.informationMessage("Intet asset valgt", "Fejl");
 		} else {
 			assetCtrl = new AssetController();
 			WorkOrderController controller = new WorkOrderController();

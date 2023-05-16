@@ -56,7 +56,6 @@ public class SparepartUsedDB implements SparepartUsedDBIF {
 		result.setSparepart(sparepartDB.buildObjectFromResultset(rs));
 		
 		// return the SparepartUsed object
-		System.out.println(result);
 		return result;
 	}
 

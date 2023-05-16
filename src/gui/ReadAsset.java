@@ -8,10 +8,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -30,9 +30,6 @@ import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
 import model.Asset;
-import model.Measurement;
-import model.Sparepart;
-import model.SparepartUsed;
 
 public class ReadAsset extends JPanel {
 	
@@ -198,39 +195,6 @@ public class ReadAsset extends JPanel {
 		centerPanel.add(spinnerDate, gbc_spinnerDate);
 		
 	}
-	
-	private void updateMeasurementTable(int id) {
-		List<Measurement> measurementList = new ArrayList<>();
-		WorkOrderController workOrderController = new WorkOrderController();
-    	measurementList = workOrderController.getAllMeasurementsUsedInWorkOrder(id);
-    	
-    	Object[][] data = new Object[measurementList.size()][4]; // create a 2D array with 4 columns
-
-    	for (int i = 0; i < measurementList.size(); i++) {
-    	    Measurement measurement = measurementList.get(i);
-    	    data[i][0] = measurement.getMeasurementID();
-    	    data[i][1] = measurement.getTitle();
-    	    data[i][2] = measurement.getValue();
-    	    data[i][3] = measurement.getWorkorder();
-    	}
-    	
-    	measurementTable.setNewData(data);
-	}
-	
-	private void updateSparepartTable(int id) {
-    	List<SparepartUsed> sparepartList = new ArrayList<>();
-		WorkOrderController workOrderController = new WorkOrderController();
-    	sparepartList = workOrderController.getAllSparepartsUsedInWorkOrder(id);
-    	Object[][] data = new Object[sparepartList.size()][2]; // create a 2D array with 2 columns
-
-    	for (int i = 0; i < sparepartList.size(); i++) {
-    	    SparepartUsed sparepart = sparepartList.get(i);
-    	    data[i][0] = sparepart.getSparepart();
-    	    data[i][1] = sparepart.getAmount();
-
-    	}
-    	sparepartTable.setNewData(data);
-	}
 
 	private void setTables() {
 		historyScollPane = new JScrollPane();
@@ -261,8 +225,41 @@ public class ReadAsset extends JPanel {
 		        }
 
 		        Object isMarked = historyTable.getValueAt(selectedRow, 0);
+		        int priority = Integer.parseInt(historyTable.getModel().getValueAt(selectedRow, 5).toString());
+		        String priorityType = "";
 		        if (isMarked != null) {
+		        	txtTitle.setText(historyTable.getModel().getValueAt(selectedRow, 1).toString());
+		        	txtEmployeeID.setText(historyTable.getModel().getValueAt(selectedRow, 9).toString());
+		        	txtType.setText(historyTable.getModel().getValueAt(selectedRow, 2).toString());
+		        	txtRegNo.setText(historyTable.getModel().getValueAt(selectedRow, 0).toString());
 		        	
+		        	switch (priority) {
+					case 1:
+						priorityType = "Lav";
+						break;
+					case 2:
+						priorityType = "Mellem";
+						break;
+					case 3:
+						priorityType = "Høj";
+						break;
+					default:
+						priorityType = "Ikke angivet";
+					}
+		        	txtPriority.setText(priorityType);
+		        	
+		        	/*SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		        	Object dateObj = historyTable.getModel().getValueAt(selectedRow, 4);
+		        	System.out.println(dateObj.toString());
+		        	Date date = null;
+		        	try {
+			        	date = sdf.parse(dateObj.toString());
+					} catch (ParseException  e) {
+						 e.printStackTrace();
+					}
+		        	Calendar calendar = Calendar.getInstance();
+		        	calendar.setTime(date);
+		        	spinnerDate.getModel().setValue(calendar.getTime());*/
 		        	String[][] loadingStatus = { { "Henter data..." } };
 		        	sparepartTable.setNewData(loadingStatus);
 		        	measurementTable.setNewData(loadingStatus);
@@ -272,12 +269,11 @@ public class ReadAsset extends JPanel {
 		    			TableSwingWorker dataFetcherMeasurement = null;
 		    			WorkOrderController workOrderController = new WorkOrderController();
 						dataFetcherSparePart = new TableSwingWorker(sparepartTable, workOrderController.getAllSparepartsUsedInWorkOrder(id));
-						//dataFetcherMeasurement = new TableSwingWorker(measurementTable, workor);
+						dataFetcherMeasurement = new TableSwingWorker(measurementTable, workOrderController.getAllMeasurementsUsedInWorkOrder(id));
 		    			dataFetcherSparePart.execute();
+		    			dataFetcherMeasurement.execute();
 		    		});
 		    		workerThread.start();
-		        	//updateSparepartTable(id);
-		        	//updateMeasurementTable(id);
 		        }
 		    }
 		});
@@ -292,7 +288,6 @@ public class ReadAsset extends JPanel {
 		gbc_sparePartsScrollPane.gridy = 9;
 		centerPanel.add(sparePartsScrollPane, gbc_sparePartsScrollPane);
 
-		// TODO update sparepartsTable
 		String[] sparepartsColumns = new String[] { "Reservedel", "Mængde" };
 		sparepartTable = new DefaultTable(null, sparepartsColumns);
 		sparePartsScrollPane.setViewportView(sparepartTable);
@@ -307,7 +302,6 @@ public class ReadAsset extends JPanel {
 		gbc_measurementsScrollPane.gridy = 9;
 		centerPanel.add(measurementsScrollPane, gbc_measurementsScrollPane);
 		
-		// TODO update measurementTable
 		String[] columnsMeasurements = new String[] { "ID", "Titel", "Måling" };
 		measurementTable = new DefaultTable(null, columnsMeasurements);
 		measurementsScrollPane.setViewportView(measurementTable);
