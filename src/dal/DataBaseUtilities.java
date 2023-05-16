@@ -6,8 +6,9 @@ import java.sql.SQLException;
 
 public class DataBaseUtilities {
 
+	//Should return false if no problems
 	public static boolean check(ResultSet rs, String prefix, String columnName) throws SQLException {
-		boolean success = true;
+		boolean success = false;
 		if(prefix == null) {
 			prefix = "";
 		}
@@ -20,7 +21,7 @@ public class DataBaseUtilities {
                }
             }
         if(!check || rs.getInt(prefix+columnName) == 0) {
-            success = false;
+            success = true;
         }
 		return success;
 	}
