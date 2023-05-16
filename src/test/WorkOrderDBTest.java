@@ -33,57 +33,49 @@ import model.Workorder;
 class WorkOrderDBTest {
 	
 	//Common fields for use 
-	private int workOrderID = 42;
-	private String title = "Test opgave";
-	private String type = "Maintenance";
-	private Calendar startDate = Calendar.getInstance();
-	private Calendar endDate = Calendar.getInstance();
-	private short priority = 6;
-	private String description = "Test beskrivelse";
-	private boolean finished = false;
+	private static String title = "Test opgave";
+	private static Calendar startDate = Calendar.getInstance();
+	private static Calendar endDate = Calendar.getInstance();
+	private static short priority = 3;
+	private static String description = "Test beskrivelse";
+	private static boolean finished = false;
 	
 	
-	private List<SparepartUsed> sparepartsUsed = new ArrayList<>();
-	private Asset asset;
-	private Employee employee;
-	private List<Measurement> measurements = new ArrayList<>();
+	private static List<SparepartUsed> sparepartsUsed = new ArrayList<>();
+	private static Asset asset;
+	private static List<Measurement> measurements = new ArrayList<>();
 	
 	//Maintenance fields
-	private boolean repeated = true;
-	private int intervalDayCount = 7;
+	private static boolean repeated = true;
+	private static int intervalDayCount = 7;
 	
 	//Service fields
-	private Reference reference;
+	private static Reference reference;
 	
 	//Repair fields
-	private double price = 100.43;
+	private static double price = 100.43;
 	
-	private Maintenance maintenance;
-	private Service service;
-	private Repair repair;
+	private static Maintenance maintenance;
+	private static Service service;
+	private static Repair repair;
 	
 	//Instances
 	private WorkOrderDBIF workOrderDB = Database.getInstance().getWorkOrderDataBase();
-	private AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
-	private ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
+	private static AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
+	private static ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 	
 	//Other
 	Random random = new Random();
 	short testID;
 	
-	@BeforeEach
-	void setUp() throws Exception {
-		testID = (short) random.nextInt(50,100);
-		asset = assetDB.findAssetByID(1);
-		reference = referenceDB.findReferenceByID(11111111);
-		maintenance = new Maintenance(repeated, intervalDayCount, workOrderID, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
-		service = new Service(reference, workOrderID, title, "Service", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
-		repair = new Repair(price, reference, workOrderID, title, "Repair", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
-	}
-	
 	@BeforeAll
 	static void startUp() throws SQLException {
 		DatabaseConnection.getInstance().startTransaction();
+		asset = assetDB.findAssetByID(1);
+		reference = referenceDB.findReferenceByID(11111111);
+		maintenance = new Maintenance(repeated, intervalDayCount, 0, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
+		service = new Service(reference, 0, title, "Service", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
+		repair = new Repair(price, reference, 0, title, "Repair", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
 	}
 	@AfterAll
 	static void tearDown() throws SQLException {
@@ -95,9 +87,6 @@ class WorkOrderDBTest {
 		
 		//Arrange
 		boolean success = false;
-		Random random = new Random();
-		short testID = (short) random.nextInt(50,100);
-		maintenance.setPriority(testID);
 		
 		//Act
 		success = workOrderDB.addMaintenanceWorkOrder(maintenance);
@@ -111,9 +100,6 @@ class WorkOrderDBTest {
 		
 		//Arrange
 		boolean success = false;
-		Random random = new Random();
-		short testID = (short) random.nextInt(50,100);
-		service.setPriority(testID);
 		
 		//Act
 		success = workOrderDB.addServiceWorkOrder(service);
@@ -127,9 +113,6 @@ class WorkOrderDBTest {
 		
 		//Arrange
 		boolean success = false;
-		Random random = new Random();
-		short testID = (short) random.nextInt(50,100);
-		repair.setPriority(testID);
 		
 		//Act
 		success = workOrderDB.addRepairWorkOrder(repair);
@@ -142,7 +125,6 @@ class WorkOrderDBTest {
 	void findMaintenanceWorkOrderByIDTest() {
 		//TODO Finish this test
 		//Arrange
-		maintenance.setPriority(testID);
 		workOrderDB.addMaintenanceWorkOrder(maintenance);
 		Maintenance foundMaintenance = null;
 		int latestKey = workOrderDB.getLatestKey();
@@ -157,7 +139,6 @@ class WorkOrderDBTest {
 	@Test
 	void findServiceWorkOrderByIDTest() {
 		//Arrange
-		service.setPriority(testID);
 		workOrderDB.addServiceWorkOrder(service);
 		Service foundService = null;
 		int latestKey = workOrderDB.getLatestKey();
@@ -173,7 +154,6 @@ class WorkOrderDBTest {
 	void findRepairWorkOrderByIDTest() {
 		//TODO: this test will fail as long as the database workorder_price holde decimal number with 0 decimal points
 		//Arrange
-		repair.setPriority(testID);
 		workOrderDB.addRepairWorkOrder(repair);
 		Repair foundRepair = null;
 		int latestKey = workOrderDB.getLatestKey();

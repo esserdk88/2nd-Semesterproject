@@ -35,7 +35,6 @@ public interface WorkOrderDBIF {
 	public boolean updateWorkorder(Workorder workorder);
 	
 	public boolean deleteWorkOrderByID(int workOrderID);
-	public boolean deleteWorkOrderTestData(short ID);
 	
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder);
 	

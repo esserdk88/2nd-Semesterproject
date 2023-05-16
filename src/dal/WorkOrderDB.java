@@ -55,7 +55,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public static final String INSERT_REPAIR = "INSERT INTO Workorder (" + FIELDS_INSERT_REPAIR + ") VALUES (?,?,?,?,?,?,?,?,?,?)" ;
 	
 	public static final String DELETE_WORK_ORDER_BY_ID = "DELETE FROM Workorder where workorder_id_PK = ?";
-	public static final String DELETE_WORK_ORDER_TEST_DATA = "DELETE FROM Workorder where workorder_priority = ?";
 	
 	public static final String UPDATE_WORK_ORDER_BY_ID = "UPDATE Workorder SET " + FIELDS_INSERT_COMMON + " WHERE workoerd_id_PK = ?";
 	
@@ -409,30 +408,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 			
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM DELETING WORKORDER:" + e.getMessage());
-		}
-		
-		return success;
-	}
-	
-	@Override
-	public boolean deleteWorkOrderTestData(short ID) {
-		boolean success = false;
-		
-		// establish database connection
-		try (PreparedStatement psDeleteWorkOrder = con.prepareStatement(DELETE_WORK_ORDER_TEST_DATA)) {
-			
-			//prepare statement
-			psDeleteWorkOrder.setInt(1, ID);
-			
-			//execute statement
-			psDeleteWorkOrder.executeUpdate();
-			psDeleteWorkOrder.getUpdateCount(); 
-			if(psDeleteWorkOrder.getUpdateCount() > 0) {
-				success = true;
-			}
-			
-		} catch (SQLException e) {
-			System.out.println("ERROR FROM DELETING TEST DATA:" + e.getMessage());
 		}
 		
 		return success;
