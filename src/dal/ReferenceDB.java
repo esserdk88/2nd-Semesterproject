@@ -17,7 +17,6 @@ public class ReferenceDB implements ReferenceDBIF {
 	public static final String SELECT_ALL_REFERENCES = "SELECT * FROM ReferenceView";
 
 	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
-	private Connection con = DatabaseConnection.getInstance().getConnection();
 
 	@Override
 	public Reference findReferenceByID(int referenceCVR) {
@@ -25,6 +24,7 @@ public class ReferenceDB implements ReferenceDBIF {
 		Reference reference = null;
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindReference = con.prepareStatement(SELECT_REFERENCE_BY_CVR)) {
 			
 			//prepare statement
@@ -70,6 +70,7 @@ public class ReferenceDB implements ReferenceDBIF {
 		List<Reference> list = new ArrayList<>();
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindReference = con.prepareStatement(SELECT_ALL_REFERENCES)) {
 			
 			//prepare statement

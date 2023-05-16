@@ -15,13 +15,14 @@ public class EmployeeDB implements EmployeeDBIF {
 	public static final String SELECT_ALL_EMPLOYEES = "SELECT * FROM EmployeeView";
 	
 	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
-	private Connection con = DatabaseConnection.getInstance().getConnection();
 	
 	@Override
 	public Employee findEmployeeByID(int employeeID) {
 		
 		Employee employee = null;
 		
+		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindEmployee = con.prepareStatement(SELECT_EMPLOYEE_BY_ID)) {
 			
 			//prepare statement
@@ -70,6 +71,8 @@ public class EmployeeDB implements EmployeeDBIF {
 		
 		List<Employee> list = new ArrayList<>();
 		
+		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindEmployee = con.prepareStatement(SELECT_ALL_EMPLOYEES)) {
 			
 			//prepare statement

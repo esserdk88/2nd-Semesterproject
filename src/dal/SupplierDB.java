@@ -16,13 +16,13 @@ public class SupplierDB implements SupplierDBIF {
 	public static final String SELECT_ALL_SUPPLIERS = "SELECT " + FIELDS + " FROM Supplier";
 
 	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
-	private Connection con = DatabaseConnection.getInstance().getConnection();
 	@Override
 	public Supplier findSupplierByID(int supplierCVR) {
 
 		Supplier supplier = null;
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindSupplier = con.prepareStatement(SELECT_SUPPLIER_BY_CVR)) {
 			
 			//prepare statement
@@ -68,6 +68,7 @@ public class SupplierDB implements SupplierDBIF {
 		List<Supplier> list = new ArrayList<>();
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindSupplier = con.prepareStatement(SELECT_ALL_SUPPLIERS)) {
 			
 			//prepare statement

@@ -19,13 +19,7 @@ public class DatabaseConnection {
     
     // Private constructor to prevent instantiation outside the class
     private DatabaseConnection() {
-		DriverManager.setLoginTimeout(5);
-    	try {
-			connection = DriverManager.getConnection(CONNECTION_STRING);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+		resetConnection();
     }
      
     // Method for getting the singleton instance of the class
@@ -38,6 +32,12 @@ public class DatabaseConnection {
 
     // Method for getting the database connection
     public synchronized Connection getConnection(){
+    	try {
+			if(connection.isClosed()) {
+				System.out.println("resetting connection");
+				resetConnection();
+			}
+		} catch (SQLException e) {}
         return connection;
     }
     
@@ -67,10 +67,29 @@ public class DatabaseConnection {
 			e.printStackTrace();
 		}
 	}
+	
+	public void resetConnection() {
+	    try {
+	        // Close the old connection if it's not already closed
+	        if (connection != null && !connection.isClosed()) {
+	            connection.close();
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    DriverManager.setLoginTimeout(5);
+	    try {
+	        connection = DriverManager.getConnection(CONNECTION_STRING);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
     public boolean isConnected() {
 		boolean isOpen = false;
 		try {
-			isOpen = (!connection.isClosed());
+			isOpen = (connection.isValid(2));
 		} catch (Exception sclExc) {
 			isOpen = false;
 		}

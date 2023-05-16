@@ -16,13 +16,13 @@ public class SparepartDB implements SparepartDBIF {
 	public static final String SELECT_ALL_SPAREPARTS = "SELECT " + FIELDS + " FROM Sparepart";
 
 	private SupplierDBIF supplierDB = Database.getInstance().getSupplierDataBase();
-	private Connection con = DatabaseConnection.getInstance().getConnection();
 
 	@Override
 	public Sparepart findSparePartbyID(int sparePartID) {
 		Sparepart sparepart = null;
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindSparepart = con.prepareStatement(SELECT_SPAREPART_BY_ID)) {
 			
 			//prepare statement
@@ -67,6 +67,7 @@ public class SparepartDB implements SparepartDBIF {
 		List<Sparepart> list = new ArrayList<>();
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindSparepart = con.prepareStatement(SELECT_ALL_SPAREPARTS)) {
 			
 			//prepare statement

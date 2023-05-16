@@ -14,7 +14,7 @@ public class ConnectionWatch extends SwingWorker<Void, Boolean> {
 	private ConnectionControllerIF connectionController = new ConnectionController();
 	
 	private JLabel connectionLabel;
-	private int keepAlive = 300;
+	private int keepAlive = 1500;
 	private int tryAgain = 3000;
 	
 	public ConnectionWatch(JLabel connectionLabel) {

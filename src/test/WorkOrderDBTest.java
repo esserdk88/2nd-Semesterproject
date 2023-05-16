@@ -2,26 +2,21 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dal.AssetDBIF;
 import dal.Database;
 import dal.DatabaseConnection;
 import dal.ReferenceDBIF;
-import dal.WorkOrderDB;
 import dal.WorkOrderDBIF;
 import model.Asset;
-import model.Employee;
 import model.Maintenance;
 import model.Measurement;
 import model.Reference;

@@ -16,13 +16,13 @@ public class AssetDB implements AssetDBIF {
 	public static final String SELECT_ALL_ASSETS = "SELECT * FROM Asset_Location_Address";
 
 	private LocationDBIF locationDB = Database.getInstance().getLocationDataBase();
-	private Connection con = DatabaseConnection.getInstance().getConnection();
 	
 	@Override
 	public Asset findAssetByID(int assetID) {
 		Asset asset = null;
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindAsset = con.prepareStatement(SELECT_ASSET_BY_ID)) {
 			
 			//prepare statement
@@ -71,6 +71,7 @@ public class AssetDB implements AssetDBIF {
 		List<Asset> list = new ArrayList<>();
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindAsset = con.prepareStatement(SELECT_ALL_ASSETS)) {
 			
 			//prepare statement

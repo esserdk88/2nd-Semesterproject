@@ -16,7 +16,6 @@ public class LocationDB implements LocationDBIF {
 	public static final String SELECT_ALL_LOCATIONS = "SELECT " + FIELDS + " FROM Location";
 	
 	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
-	private Connection con = DatabaseConnection.getInstance().getConnection();
 	
 	@Override
 	public Location findLocationByID(int locationID) {
@@ -24,6 +23,7 @@ public class LocationDB implements LocationDBIF {
 		Location location = null;
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindLocation = con.prepareStatement(SELECT_LOCATION_BY_ID)) {
 			
 			//prepare statement
@@ -69,6 +69,7 @@ public class LocationDB implements LocationDBIF {
 		List<Location> list = new ArrayList<>();
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindLocation = con.prepareStatement(SELECT_ALL_LOCATIONS)) {
 			
 			//prepare statement

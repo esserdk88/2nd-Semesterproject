@@ -18,8 +18,6 @@ public class AddressDB implements AddressDBIF {
 	public static final String FIELDS = "address_id_PK, address_streetname, address_streetnumber, address_zipcode, address_cityname";
 	public static final String SELECT_ADDRESS_BY_ID = "SELECT " + FIELDS + " FROM Address Where address_id_PK = ?";
 	public static final String SELECT_ALL_ADDRESS = "SELECT " + FIELDS + " FROM Address";
-	
-	private Connection con = DatabaseConnection.getInstance().getConnection();
 
 	@Override
 	public Address findAddressByID(int addressID) {
@@ -27,6 +25,7 @@ public class AddressDB implements AddressDBIF {
 		Address address = null;
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindAddress = con.prepareStatement(SELECT_ADDRESS_BY_ID)) {
 			
 			//prepare statement
@@ -78,6 +77,8 @@ public class AddressDB implements AddressDBIF {
 		
 		List<Address> list = new ArrayList<>();
 		
+		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindAddress = con.prepareStatement(SELECT_ALL_ADDRESS)) {
 			
 			//prepare statement

@@ -17,7 +17,6 @@ public class SparepartUsedDB implements SparepartUsedDBIF {
 	public static final String SELECT_ALL_SPAREPART_USED = "SELECT " + FIELDS + " FROM Sparepart_Used";
 	
 	private SparepartDBIF sparepartDB = Database.getInstance().getSparepartDataBase();
-	private Connection con = DatabaseConnection.getInstance().getConnection();
 
 	@Override
 	public SparepartUsed findSparePartUsedByWorkorderIDAndSparepartID(int workOrderID, int sparepartID) {
@@ -25,6 +24,7 @@ public class SparepartUsedDB implements SparepartUsedDBIF {
 		SparepartUsed sparepartUsed = null;
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindSparepartUsed = con.prepareStatement(SELECT_SPAREPART_USED_BY_PK)) {
 			
 			//prepare statement
@@ -62,6 +62,7 @@ public class SparepartUsedDB implements SparepartUsedDBIF {
 		List<SparepartUsed> list = new ArrayList<>();
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindSparepartUsed = con.prepareStatement(SELECT_ALL_SPAREPART_USED)) {
 			
 			//prepare statement
@@ -87,6 +88,7 @@ public class SparepartUsedDB implements SparepartUsedDBIF {
 		List<SparepartUsed> list = new ArrayList<>();
 		
 		// establish database connection
+		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindSparepartUsed = con.prepareStatement(SELECT_SPAREPART_USED_BY_WORKORDER_ID)) {
 			
 			//prepare statement
