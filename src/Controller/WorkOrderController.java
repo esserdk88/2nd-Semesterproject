@@ -1,6 +1,7 @@
 package Controller;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,9 +46,8 @@ public class WorkOrderController implements WorkOrderControllerIF {
 		return workOrderDB.getAllWorkOrdersByAssetID(assetID);
 	}
 	
-	//TODO we need a method to return a single generic workorder
-	public Workorder getWorkorderByID(int workorderId) {
-		Workorder workorder = workOrderDB.getWorkordersById(new int[] {workorderId}).get(0);
+	public Workorder getWorkorderByID(int workorderId) throws SQLException {
+		Workorder workorder = workOrderDB.getWorkorderById(workorderId);
 		return workorder;
 	}
 
@@ -83,9 +83,9 @@ public class WorkOrderController implements WorkOrderControllerIF {
 		return first && second;
 	}
 	
-	public boolean workorderHasEmployee(int workorderId) {
+	public boolean workorderHasEmployee(int workorderId) throws SQLException {
 		boolean hasEmployee = false;
-		if(workOrderDB.getWorkordersById(new int[] {workorderId}).get(0).getEmployee() != null) {
+		if(workOrderDB.getWorkorderById(workorderId) != null) {
 			hasEmployee = true;
 		}
 		return hasEmployee;
