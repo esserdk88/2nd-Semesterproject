@@ -1,6 +1,5 @@
 package dal;
 
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -15,31 +14,41 @@ import model.Workorder;
  */
 
 public interface WorkOrderDBIF {
-	
-	//Added from communication diagram Create Work Order
-	public boolean addMaintenanceWorkOrder (Maintenance workOrder);
-	public boolean addServiceWorkOrder (Service workOrder);
-	public boolean addRepairWorkOrder (Repair workOrder);
-	
+
+	// Added from communication diagram Create Work Order
+	public boolean addMaintenanceWorkOrder(Maintenance workOrder);
+
+	public boolean addServiceWorkOrder(Service workOrder);
+
+	public boolean addRepairWorkOrder(Repair workOrder);
+
 	public Maintenance findMaintenanceWorkOrderByID(int workOrderID);
+
 	public Service findServiceWorkOrderByID(int workOrderID);
+
 	public Repair findRepairWorkOrderByID(int workOrderID);
-	
+
 	public List<Maintenance> getAllMaintenanceWorkOrders();
+
 	public List<Service> getAllServiceWorkOrders();
+
 	public List<Repair> getAllRepairWorkOrders();
+
 	public List<Workorder> getAllUnfinishedWorkOrders();
+
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID);
-	//Swtich employee Workorders
+
+	// Swtich employee Workorders
 	public List<Workorder> getWorkordersById(int[] workorderIds);
+
 	public Workorder getWorkorderById(int workorderId) throws SQLException;
-	
+
 	public boolean updateWorkorder(Workorder workorder);
-	
+
 	public boolean deleteWorkOrderByID(int workOrderID);
-	
+
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder);
-	
+
 	public int getLatestKey();
-	
+
 }

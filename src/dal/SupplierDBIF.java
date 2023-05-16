@@ -11,8 +11,10 @@ import model.Supplier;
  */
 
 public interface SupplierDBIF {
-	
+
 	public Supplier findSupplierByID(int supplierID);
+
 	public List<Supplier> getAllSuppliers();
+
 	public Supplier buildObjectFromResultset(ResultSet rs) throws SQLException;
 }

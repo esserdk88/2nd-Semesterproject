@@ -13,7 +13,7 @@ import model.Address;
 public interface AddressDBIF {
 	
 	public Address findAddressByID(int addressID);
-	
+
 	public List<Address> getAllAddresses();
 	
 	public Address buildObjectFromResultset(ResultSet rs, String prefix) throws SQLException;

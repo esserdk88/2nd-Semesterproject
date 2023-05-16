@@ -11,9 +11,9 @@ import model.Location;
  */
 
 public interface LocationDBIF {
-	
+
 	public Location findLocationByID(int locationID);
-	
+
 	public List<Location> getAllLocations();
 
 	public Location buildObjectFromResultset(ResultSet rs) throws SQLException;

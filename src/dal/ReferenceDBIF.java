@@ -13,6 +13,8 @@ import model.Reference;
 public interface ReferenceDBIF {
 
 	public Reference findReferenceByID(int referenceID);
+
 	public List<Reference> getAllReferences();
+
 	public Reference buildObjectFromResultset(ResultSet rs) throws SQLException;
 }
