@@ -42,7 +42,7 @@ public class SparepartDB implements SparepartDBIF {
 		return sparepart;
 	}
 	public Sparepart buildObjectFromResultset(ResultSet rs) throws SQLException {
-		if(rs.getInt("sparepart_id_PK") == 0) {
+		if(DataBaseUtilities.check(rs, null, "sparepart_id_PK")){
 			return null;
 		}else return buildObject(rs);
 	}
