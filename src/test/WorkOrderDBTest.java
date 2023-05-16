@@ -197,6 +197,47 @@ class WorkOrderDBTest {
 	}
 	
 	@Test
+	void getWorkordersByIdTest() {
+		//Arrange
+		int[] ids = new int[3];
+		List<Workorder> workorders = new ArrayList<>();
+		List<Short> priorities = new ArrayList<>();
+		WorkOrderDB wdb = new WorkOrderDB();
+		
+		//Very ugly
+		maintenance.setPriority((short)60);
+		wdb.addMaintenanceWorkOrder(maintenance);
+		priorities.add((short)60);
+		ids[0] = wdb.getLatestKey();
+		System.out.println(wdb.getLatestKey());
+		
+		repair.setPriority((short)61);
+		priorities.add((short)61);
+		wdb.addRepairWorkOrder(repair);
+		ids[1] = wdb.getLatestKey();
+		System.out.println(wdb.getLatestKey());
+		
+		service.setPriority((short) 62);
+		priorities.add((short)62);
+		wdb.addServiceWorkOrder(service);
+		ids[2] = wdb.getLatestKey();
+		System.out.println(wdb.getLatestKey());
+		
+		//Act
+		workorders = wdb.getWorkordersById(ids);
+		
+		//Assert
+		assertEquals(maintenance.equals(workorders.get(0)), true);
+		assertEquals(repair.equals(workorders.get(1)), true);
+		assertEquals(service.equals(workorders.get(2)), true);
+		
+		for(Short s: priorities) {
+			workOrderDB.deleteWorkOrderTestData(s);
+		}
+		
+	}
+	
+	@Test
 	void getAllMaintenanceWorkOrdersTest() {
 		//TODO: Write test case
 		//Arrange

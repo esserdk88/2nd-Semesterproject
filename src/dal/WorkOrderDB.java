@@ -44,9 +44,12 @@ public class WorkOrderDB implements WorkOrderDBIF {
 //	public static final String SELECT_UNFINISHED_WORKORDERS = "SELECT * from Workorder where workorder_finished = 0 and workorder_startdate <= GETDATE()";
 	public static final String SELECT_UNFINISHED_WORKORDERS = "SELECT * from WorkOrdersView where workorder_finished = 0 and workorder_startdate <= GETDATE()";
 	public static final String SELECT_ALL_WORKORDERS_BY_ASSET_ID = "SELECT * from WorkOrdersView where asset_id_PK = ?";
+	public static final String SELECT_ALL_WORKORDERS_BY_IDS = "SELECT * from WorkOrdersView where workorder_id_PK IN (";
 //	public static final String SELECT_ALL_MAINTENANCE = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Maintenance'";
 //	public static final String SELECT_ALL_SERVICE = "SELECT " + FIELDS_SERVICE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Service'";
 //	public static final String SELECT_ALL_REPAIR = "SELECT " + FIELDS_REPAIR_WITH_ID + " FROM Workorder WHERE workorder_type = 'Repair'";
+	//Used when selecting specific workorders. This script is not complete before being processed in select workordersById method.
+	public static final String SELECT_WORKORDERS_BY_ID = "SELECT " + FIELDS_COMMON_WITH_ID + " FROM Workorder WHERE workorder_id_PK IN (";
 	
 	public static final String SELECT_ALL_MAINTENANCE = "SELECT * FROM MaintenanceView";
 	public static final String SELECT_ALL_SERVICE = "SELECT * FROM ServiceView";
@@ -58,6 +61,8 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	public static final String DELETE_WORK_ORDER_BY_ID = "DELETE FROM Workorder where workorder_id_PK = ?";
 	public static final String DELETE_WORK_ORDER_TEST_DATA = "DELETE FROM Workorder where workorder_priority = ?";
+	
+	public static final String UPDATE_WORK_ORDER_BY_ID = "UPDATE Workorder SET " + FIELDS_INSERT_COMMON + " WHERE workoerd_id_PK = ?";
 	
 	public static final String SELECT_LATEST_KEY = "SELECT MAX (workorder_id_PK) from Workorder";
 	
@@ -443,6 +448,24 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return success;
 	}
 	
+	public boolean updateWorkorder(Workorder workorder) {
+		boolean success = false;
+		
+		try(Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psUpdateWorkorder = con.prepareStatement(UPDATE_WORK_ORDER_BY_ID)) {
+			
+			psUpdateWorkorder.setInt(1, workorder.getWorkOrderID());
+			psUpdateWorkorder.executeUpdate();
+			
+			success = true;
+		} catch (SQLException e) {
+			System.out.println("ERROR FROM UPDATING WORKORDER");
+			e.printStackTrace();
+		}
+				
+		return success;
+	}
+	
 	@Override
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder) {
 		// TODO Auto-generated method stub
@@ -602,6 +625,53 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		}
 		
 		return outputKey;
+	}
+
+	@Override
+	public List<Workorder> getWorkordersById(int[] workorderIds) {
+		
+		List<Workorder> workorders = new ArrayList<>();
+		String finishedStatement = SELECT_ALL_WORKORDERS_BY_IDS;
+		
+		for (int i = 0; i < workorderIds.length; i++) {
+		    if (i != 0) {
+		        finishedStatement += ",";
+		    }
+		    finishedStatement += "?";
+		}
+		finishedStatement += ")";
+		
+		try(Connection con = DatabaseConnection.getInstance().getConnection();
+				PreparedStatement psSelectWorkordersByIds = con.prepareStatement(finishedStatement)) {
+			for(int i = 0; i < workorderIds.length; i++) {
+				psSelectWorkordersByIds.setInt(i + 1, workorderIds[i]);
+			}
+			ResultSet rs = psSelectWorkordersByIds.executeQuery();
+			
+			if(rs != null) {
+				while(rs.next()) {
+					switch (rs.getString("workorder_type")) {
+					case "Maintenance":  
+						workorders.add(buildMaintenanceObject(rs));
+						break;
+					case "Service":  
+						workorders.add(buildServiceObject(rs));
+						break;	
+					case "Repair":  
+						workorders.add(buildRepairObject(rs));
+						break;	
+					default:
+						//Left empty.
+					}
+				}
+			}
+			
+		}
+		catch (Exception e) {
+			System.out.println("ERROR FROM RETRIEVING WORKORDERS BE MULTIBLE IDS: CHECK FOR VALID IDS");
+			e.printStackTrace();
+		}
+		return workorders;
 	}
 	
 }
