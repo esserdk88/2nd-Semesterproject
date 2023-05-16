@@ -29,6 +29,9 @@ public class DataBaseUtilities {
 	}
 	
 	public static Date convertCalendarToSqlDate(Calendar cal) {
+		if(cal == null) {
+			return null;
+		}
         long timeInMillis = cal.getTimeInMillis();
         return new Date(timeInMillis);
     }
