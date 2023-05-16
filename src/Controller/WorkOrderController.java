@@ -6,6 +6,7 @@ import java.util.List;
 
 import dal.Database;
 import dal.DatabaseConnection;
+import dal.WorkOrderDB;
 import dal.WorkOrderDBIF;
 import model.Asset;
 import model.Employee;
@@ -43,44 +44,56 @@ public class WorkOrderController implements WorkOrderControllerIF {
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID) {
 		return workOrderDB.getAllWorkOrdersByAssetID(assetID);
 	}
+	
+	//TODO we need a method to return a single generic workorder
+	public Workorder getWorkorderByID(int workorderId) {
+		return workOrderDB.getWorkordersById(new int[] {workorderId}).get(0);
+	}
 
+	//TODO use throws instead. handle in gui
 	@Override
-	public boolean switchEmployeeWorkorders(int[] workOrderIds) {
+	public boolean switchEmployeeWorkorders(Workorder firstWorkorder, Workorder secoundWorkorder) throws Exception {
 		boolean success = false;
+		Workorder workorderOne = null;
+		Workorder workorderTwo = null;
+		if(firstWorkorder != null && secoundWorkorder != null) {
+			workorderOne = firstWorkorder;
+			workorderTwo = secoundWorkorder;
+		}
+		else {
+			throw new Exception("One or both workorders are null"); 
+		}
 		
-		try {
+		//Make sure that both workorders have an employee
+		if(workorderOne.getEmployee() != null && workorderTwo.getEmployee() != null) {
+			System.out.println("Inside switch with employees");
+			Employee employeeOne = workorderOne.getEmployee();
+			Employee employeeTwo = workorderTwo.getEmployee();
+			
+			workorderOne.setEmployee(employeeTwo);
+			workorderTwo.setEmployee(employeeOne);
+			
 			Connection con = DatabaseConnection.getInstance().getConnection();
 			con.setAutoCommit(false);
-			try {
-				List<Workorder> workorders = workOrderDB.getWorkordersById(workOrderIds);
-				//if more or less than two workOrders are retrieved something is wrong and success will be false
-				if(workorders.size() == 2) {
-					Employee empOne = workorders.get(0).getEmployee();
-					Employee empTwo = workorders.get(1).getEmployee();
-					Workorder wkoOne = workorders.get(0);
-					Workorder wkoTwo = workorders.get(1);
-					
-					//switch places
-					wkoOne.setEmployee(empTwo);
-					wkoTwo.setEmployee(empOne);
-					
-					workOrderDB.updateWorkorder(wkoOne);
-					workOrderDB.updateWorkorder(wkoTwo);
-					
-					success = true;
-				}
-			}	
-			catch (Exception e) {
-				con.rollback();
-				System.out.println("switchEmployeeWorkorders - ROLLBACK");
-				e.printStackTrace();
-			}
+			workOrderDB.updateWorkorder(workorderOne);
+			workOrderDB.updateWorkorder(workorderTwo);	
+			success = true;
 		}
-		//Can remove double try-catch with throws.
-		catch (Exception e) {
-			e.printStackTrace();
+		else {
+			throw new Exception("One or both workorders are missing an employee");
 		}
+		
 		return success;
 	}
+	
+	public boolean workorderHasEmployee(int workorderId) {
+		boolean hasEmployee = false;
+		if(workOrderDB.getWorkordersById(new int[] {workorderId}).get(0).getEmployee() != null) {
+			hasEmployee = true;
+		}
+		return hasEmployee;
+	}
+	
+	
 
 }

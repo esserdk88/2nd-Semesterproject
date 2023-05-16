@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,19 +28,14 @@ import Controller.AssetController;
 import Controller.MaintenanceController;
 import Controller.RepairController;
 import Controller.ServiceController;
-import dal.AssetDBIF;
 import dal.Database;
 import dal.EmployeeDBIF;
 import dal.ReferenceDBIF;
 import gui.components.JRoundedButton;
 import model.Asset;
 import model.Employee;
-import model.Maintenance;
 import model.Reference;
-import model.Repair;
-import model.Service;
-import model.Workorder;
-import javax.swing.JCheckBox;
+
 
 public class CreateWorkOrder extends JPanel {
 	
@@ -525,6 +521,7 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(repeatedCheckBox, gbc_repeatedCheckBox);
 		
 		createWorkOrderButton = new JRoundedButton("Opret arbejdsordre");
+
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.anchor = GridBagConstraints.SOUTH;
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
