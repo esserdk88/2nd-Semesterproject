@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import Controller.WorkOrderController;
 import Controller.WorkOrderControllerIF;
 import gui.components.JRoundedButton;
+import gui.dialogBoxes.SimpleDialogBox;
 
 
 public class SwitchEmployeeWorkorders extends JFrame {
@@ -150,6 +151,8 @@ public class SwitchEmployeeWorkorders extends JFrame {
 		
 		lblHowTo = new JLabel("Vælg to opgave id'er, hvor medearbejderne skal skifte opgaver");
 		center_panel.add(lblHowTo);
+		
+		checkConfirmGreyout();
 	}
 	
 	private boolean checkForValidWorkorder(JTextField textField) {
@@ -194,12 +197,13 @@ public class SwitchEmployeeWorkorders extends JFrame {
 				this.dispose();
 			}
 			else {
-				//do nothing because something went wrong without giving an exception
+				//give user error message
+				SimpleDialogBox simpleDialog = new SimpleDialogBox(this, "Der gik noget galt.    prøv igen", false, true, true);
+				simpleDialog.setVisible(true);
 			}
 		}
 		catch (Exception e) {
-			//temp needs JDialog box
-			System.out.println("One or more values were changed or curropted");
+			SimpleDialogBox simpleDialog = new SimpleDialogBox(this, "En eller flere værdier blev korruptet under handling", false, true, true);
 			e.printStackTrace();
 		}
 	}
