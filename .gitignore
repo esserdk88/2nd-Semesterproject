@@ -24,3 +24,4 @@ src/other/Login.java
 hs_err_pid*
 replay_pid*
 .classpath
+/bin/
