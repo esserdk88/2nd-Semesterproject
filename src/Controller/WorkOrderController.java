@@ -47,10 +47,10 @@ public class WorkOrderController implements WorkOrderControllerIF {
 	
 	//TODO we need a method to return a single generic workorder
 	public Workorder getWorkorderByID(int workorderId) {
-		return workOrderDB.getWorkordersById(new int[] {workorderId}).get(0);
+		Workorder workorder = workOrderDB.getWorkordersById(new int[] {workorderId}).get(0);
+		return workorder;
 	}
 
-	//TODO use throws instead. handle in gui
 	@Override
 	public boolean switchEmployeeWorkorders(Workorder firstWorkorder, Workorder secoundWorkorder) throws Exception {
 		boolean success = false;
@@ -76,7 +76,9 @@ public class WorkOrderController implements WorkOrderControllerIF {
 			Connection con = DatabaseConnection.getInstance().getConnection();
 			con.setAutoCommit(false);
 			workOrderDB.updateWorkorder(workorderOne);
-			workOrderDB.updateWorkorder(workorderTwo);	
+			workOrderDB.updateWorkorder(workorderTwo);
+			con.commit();
+			con.setAutoCommit(true);
 			success = true;
 		}
 		else {

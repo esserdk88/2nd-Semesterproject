@@ -7,29 +7,22 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import Controller.WorkOrderController;
 import Controller.WorkOrderControllerIF;
-import dal.WorkOrderDB;
-import dal.WorkOrderDBIF;
-import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
-import model.Workorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 
 public class SwitchEmployeeWorkorders extends JFrame {
@@ -37,10 +30,7 @@ public class SwitchEmployeeWorkorders extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldWoOne;
 	private JTextField textFieldWoTwo;
-	private JTable table_assets;
-	
-	private boolean workorderOneFound;
-	private boolean workorderTwoFound;
+
 	private JButton btnConfirm;
 	private JButton btnNewButton;
 	private JLabel lblHowTo;

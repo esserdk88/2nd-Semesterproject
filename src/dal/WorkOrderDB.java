@@ -17,7 +17,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	public static final String FIELDS_COMMON_WITH_ID = "workorder_id_PK, workorder_title, workorder_type, workorder_startdate, workorder_enddate, "
 			+ "workorder_priority, workorder_description, workorder_finished, workorder_asset_id_FK, workorder_employee_id_FK";
-	
+		
 	//Without ID and employee.
 	public static final String FIELDS_INSERT_COMMON = "workorder_title, workorder_type, workorder_startdate, workorder_enddate, "
 						+ "workorder_priority, workorder_description, workorder_finished, workorder_asset_id_FK";
