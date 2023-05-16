@@ -221,7 +221,6 @@ public class ReadAsset extends JPanel {
     	List<SparepartUsed> sparepartList = new ArrayList<>();
 		WorkOrderController workOrderController = new WorkOrderController();
     	sparepartList = workOrderController.getAllSparepartsUsedInWorkOrder(id);
-    	
     	Object[][] data = new Object[sparepartList.size()][2]; // create a 2D array with 2 columns
 
     	for (int i = 0; i < sparepartList.size(); i++) {

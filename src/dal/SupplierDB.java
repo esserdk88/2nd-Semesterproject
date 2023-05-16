@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Address;
 import model.Supplier;
 
 public class SupplierDB implements SupplierDBIF {
@@ -44,9 +45,16 @@ public class SupplierDB implements SupplierDBIF {
 	}
 
 	public Supplier buildObjectFromResultset(ResultSet rs) throws SQLException {
-		if(rs.getInt("supplier_CVR_PK") == 0) {
-			return null;
-		}else return buildObject(rs);
+		boolean check = false;
+        int count = rs.getMetaData().getColumnCount();
+        for (int i = 1; i <=count; i++) {
+               if(rs.getMetaData().getColumnName(i).equals("supplier_CVR_PK")) {
+                  check = true;
+               }
+            }
+        if(!check || rs.getInt("supplier_CVR_PK") == 0) {
+            return new Supplier();
+        }else return buildObject(rs);
 	}
 	private Supplier buildObject(ResultSet rs) throws SQLException {
 		// Create a new Supplier object
