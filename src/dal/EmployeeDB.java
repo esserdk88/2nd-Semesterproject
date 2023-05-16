@@ -1,22 +1,15 @@
 package dal;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import model.Employee;
 
 public class EmployeeDB implements EmployeeDBIF {
-	
-//	public static final String FIELDS = "employee_id_PK, employee_start_date, employee_cpr, employee_position, employee_phone,"
-//										+ "employee_email, employee_name, employee_address_id_FK";
-//	public static final String SELECT_EMPLOYEE_BY_ID = "SELECT " + FIELDS + " FROM Employee Where employee_id_PK = ?";
-//	public static final String SELECT_ALL_EMPLOYEES = "SELECT " + FIELDS + " FROM Employee";
 	
 	public static final String SELECT_EMPLOYEE_BY_ID = "SELECT * FROM EmployeeView Where employee_id_PK = ?";
 	public static final String SELECT_ALL_EMPLOYEES = "SELECT * FROM EmployeeView";
@@ -60,7 +53,7 @@ public class EmployeeDB implements EmployeeDBIF {
 		// Set the properties of the Employee object based on the values in the ResultSet
 		result.setEmployeeID(rs.getInt("employee_id_PK"));
 		result.setCprNumber(rs.getString("employee_cpr"));
-		result.setStartDate(convertSqlDateToCalendar(rs.getDate("employee_start_date"))); //Convert date to calendar
+		result.setStartDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("employee_start_date"))); //Convert date to calendar
 		result.setPosition(rs.getString("employee_position"));
 		result.setName(rs.getString("employee_name"));
 		result.setPhone(rs.getString("employee_phone"));
@@ -97,10 +90,4 @@ public class EmployeeDB implements EmployeeDBIF {
 		return list;
 	}
 	
-	private Calendar convertSqlDateToCalendar(Date sqlDate) { 
-		Calendar calendar = Calendar.getInstance(); 
-		calendar.setTime(sqlDate); 
-		
-		return calendar; 
-	}
 }

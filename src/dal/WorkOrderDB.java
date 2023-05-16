@@ -1,12 +1,10 @@
 package dal;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import model.Employee;
@@ -85,8 +83,8 @@ public class WorkOrderDB implements WorkOrderDBIF {
 			//prepare statement
 			psAddMaintenance.setString(1, workOrder.getTitle());
 			psAddMaintenance.setString(2, "Maintenance");
-			psAddMaintenance.setDate(3, convertCalendarToSqlDate(workOrder.getStartDate()));
-			psAddMaintenance.setDate(4, convertCalendarToSqlDate(workOrder.getEndDate()));
+			psAddMaintenance.setDate(3, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getStartDate()));
+			psAddMaintenance.setDate(4, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getEndDate()));
 			psAddMaintenance.setShort(5, workOrder.getPriority());
 			psAddMaintenance.setString(6, workOrder.getDescription());
 			psAddMaintenance.setBoolean(7, workOrder.isFinished());
@@ -116,8 +114,8 @@ public class WorkOrderDB implements WorkOrderDBIF {
 			//prepare statement
 			psAddService.setString(1, workOrder.getTitle());
 			psAddService.setString(2, "Service");
-			psAddService.setDate(3, convertCalendarToSqlDate(workOrder.getStartDate()));
-			psAddService.setDate(4, convertCalendarToSqlDate(workOrder.getEndDate()));
+			psAddService.setDate(3, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getStartDate()));
+			psAddService.setDate(4, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getEndDate()));
 			psAddService.setShort(5, workOrder.getPriority());
 			psAddService.setString(6, workOrder.getDescription());
 			psAddService.setBoolean(7, workOrder.isFinished());
@@ -145,8 +143,8 @@ public class WorkOrderDB implements WorkOrderDBIF {
 			//prepare statement
 			psAddRepair.setString(1, workOrder.getTitle());
 			psAddRepair.setString(2, "Repair");
-			psAddRepair.setDate(3, convertCalendarToSqlDate(workOrder.getStartDate()));
-			psAddRepair.setDate(4, convertCalendarToSqlDate(workOrder.getEndDate()));
+			psAddRepair.setDate(3, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getStartDate()));
+			psAddRepair.setDate(4, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getEndDate()));
 			psAddRepair.setShort(5, workOrder.getPriority());
 			psAddRepair.setString(6, workOrder.getDescription());
 			psAddRepair.setBoolean(7, workOrder.isFinished());
@@ -171,7 +169,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		
 		Maintenance maintenance = null;
 		
-		// establish database connection
+		
 		try (PreparedStatement psFindMaintenance = con.prepareStatement(SELECT_MAINTENANCE_BY_ID)) {
 			
 			//prepare statement
@@ -195,7 +193,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public Service findServiceWorkOrderByID(int workOrderID) {
 		Service service = null;
 		
-		// establish database connection
+		
 		try (PreparedStatement psFindService = con.prepareStatement(SELECT_SERVICE_BY_ID)) {
 			
 			//prepare statement
@@ -219,7 +217,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public Repair findRepairWorkOrderByID(int workOrderID) {
 		Repair repair = null;
 		
-		// establish database connection
+		
 		try (PreparedStatement psFindRepair = con.prepareStatement(SELECT_REPAIR_BY_ID)) {
 			
 			//prepare statement
@@ -244,7 +242,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public List<Maintenance> getAllMaintenanceWorkOrders() {
 		List<Maintenance> list = new ArrayList<>();
 		
-		// establish database connection
+		
 		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_MAINTENANCE)) {
 			
 			//prepare statement
@@ -270,7 +268,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public List<Service> getAllServiceWorkOrders() {
 		List<Service> list = new ArrayList<>();
 		
-		// establish database connection
+		
 		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_SERVICE)) {
 			
 			//prepare statement
@@ -295,7 +293,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public List<Repair> getAllRepairWorkOrders() {
 		List<Repair> list = new ArrayList<>();
 		
-		// establish database connection
+		
 		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_REPAIR)) {
 			
 			//prepare statement
@@ -320,7 +318,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public List<Workorder> getAllUnfinishedWorkOrders() {
 		List<Workorder> list = new ArrayList<>();
 		
-		// establish database connection
+		
 		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_UNFINISHED_WORKORDERS)) {
 			
 			//prepare statement
@@ -356,7 +354,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID){
 		List<Workorder> list = new ArrayList<>();
 		
-		// establish database connection
+		
 		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_WORKORDERS_BY_ASSET_ID)) {
 			
 			//prepare statement
@@ -393,7 +391,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		
 		boolean success = false;
 		
-		// establish database connection
+		
 		try (PreparedStatement psDeleteWorkOrder = con.prepareStatement(DELETE_WORK_ORDER_BY_ID)) {
 			
 			//prepare statement
@@ -435,23 +433,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	//Converters
-	private Calendar convertSqlDateToCalendar(Date sqlDate) { 
-		Calendar calendar = Calendar.getInstance(); 
-		if(sqlDate != null) {
-			calendar.setTime(sqlDate); 
-		} else {
-			calendar = null;
-		}
-		
-		return calendar; 
-	}
-	
-	private Date convertCalendarToSqlDate(Calendar cal) {
-        long timeInMillis = cal.getTimeInMillis();
-        return new Date(timeInMillis);
-    }
 	public Maintenance buildMaintenanceObjectFromResultset(ResultSet rs) throws SQLException {
 		if(DataBaseUtilities.check(rs, null, "workorder_id_PK")){
 			return buildMaintenanceObject(rs);
@@ -476,8 +457,8 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		result.setIntervalDayCount(rs.getInt("workorder_interval"));
 		
 		//Dates
-		result.setStartDate(convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
-		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
+		result.setStartDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
+		result.setEndDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
 		
 		//Objects
 //		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
@@ -512,8 +493,8 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		result.setReference(referenceDB.buildObjectFromResultset(rs));
 		
 		//Dates
-		result.setStartDate(convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
-		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
+		result.setStartDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
+		result.setEndDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
 		
 		//Objects
 //		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
@@ -546,8 +527,8 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		result.setReference(referenceDB.buildObjectFromResultset(rs));
 		
 		//Dates
-		result.setStartDate(convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
-		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
+		result.setStartDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
+		result.setEndDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
 		
 		//Objects
 //		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
@@ -563,7 +544,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		
 		int outputKey = -1;
 		
-		// establish database connection
 		try (PreparedStatement psFindLatestKey = con.prepareStatement(SELECT_LATEST_KEY)) {
 			
 			//prepare statement left empty
@@ -572,7 +552,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 			ResultSet rs = psFindLatestKey.executeQuery();
 			
 			if (rs != null && rs.next()) {
-				//build Maintenance object from result set
 				outputKey = rs.getInt(1);
 			}
 		} catch (SQLException e) {

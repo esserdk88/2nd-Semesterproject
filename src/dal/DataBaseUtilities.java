@@ -1,7 +1,9 @@
 package dal;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 
 public class DataBaseUtilities {
@@ -24,5 +26,21 @@ public class DataBaseUtilities {
             success = false;
         }
 		return success;
+	}
+	
+	public static Date convertCalendarToSqlDate(Calendar cal) {
+        long timeInMillis = cal.getTimeInMillis();
+        return new Date(timeInMillis);
+    }
+	
+	public static Calendar convertSqlDateToCalendar(Date sqlDate) { 
+		Calendar calendar = Calendar.getInstance(); 
+		if(sqlDate != null) {
+			calendar.setTime(sqlDate); 
+		} else {
+			calendar = null;
+		}
+		
+		return calendar; 
 	}
 }

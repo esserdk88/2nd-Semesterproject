@@ -1,12 +1,10 @@
 package dal;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import model.Asset;
@@ -57,7 +55,7 @@ public class AssetDB implements AssetDBIF {
 		// Set the properties of the Asset object based on the values in the ResultSet
 		result.setAssetID(rs.getInt("asset_id_PK"));
 		result.setName(rs.getString("asset_name"));
-		result.setAquisitionDate(convertSqlDateToCalendar(rs.getDate("asset_acquisitiondate")));
+		result.setAquisitionDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("asset_acquisitiondate")));
 		result.setDescription(rs.getString("asset_description"));
 		result.setStatus(rs.getString("asset_status"));
 		result.setManufacturer(rs.getString("asset_manufacturer"));
@@ -93,12 +91,5 @@ public class AssetDB implements AssetDBIF {
 		
 		return list;
 	}
-	
-	//Converter
-	private Calendar convertSqlDateToCalendar(Date sqlDate) { 
-		Calendar calendar = Calendar.getInstance(); 
-		calendar.setTime(sqlDate); 
-		
-		return calendar; 
-	}
+
 }
