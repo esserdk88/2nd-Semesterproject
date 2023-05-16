@@ -13,14 +13,11 @@ import model.Reference;
 
 public class ReferenceDB implements ReferenceDBIF {
 	
-//	public static final String FIELDS = "reference_CVR_PK, reference_name, reference_phone, reference_email, reference_contact, reference_address_id_FK";
-//	public static final String SELECT_REFERENCE_BY_CVR = "SELECT " + FIELDS + " FROM Reference Where reference_CVR_PK = ?";
-//	public static final String SELECT_ALL_REFERENCES = "SELECT " + FIELDS + " FROM Reference";
-	
 	public static final String SELECT_REFERENCE_BY_CVR = "SELECT * FROM ReferenceView Where reference_CVR_PK = ?";
 	public static final String SELECT_ALL_REFERENCES = "SELECT * FROM ReferenceView";
 
 	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
+	private Connection con = DatabaseConnection.getInstance().getConnection();
 
 	@Override
 	public Reference findReferenceByID(int referenceCVR) {
@@ -28,8 +25,7 @@ public class ReferenceDB implements ReferenceDBIF {
 		Reference reference = null;
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindReference = con.prepareStatement(SELECT_REFERENCE_BY_CVR)) {
+		try (PreparedStatement psFindReference = con.prepareStatement(SELECT_REFERENCE_BY_CVR)) {
 			
 			//prepare statement
 			psFindReference.setInt(1, referenceCVR);
@@ -64,7 +60,6 @@ public class ReferenceDB implements ReferenceDBIF {
 		result.setPhone(rs.getString("reference_phone"));
 		result.setEmail(rs.getString("reference_email"));
 		result.setAddress(addressDB.buildObjectFromResultset(rs,prefix));
-		//result.setAddress(addressDB.findAddressByID(rs.getInt("reference_address_id_FK")));
 		
 		// return the Reference object
 		return result;
@@ -75,8 +70,7 @@ public class ReferenceDB implements ReferenceDBIF {
 		List<Reference> list = new ArrayList<>();
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindReference = con.prepareStatement(SELECT_ALL_REFERENCES)) {
+		try (PreparedStatement psFindReference = con.prepareStatement(SELECT_ALL_REFERENCES)) {
 			
 			//prepare statement
 			// Left empty. 

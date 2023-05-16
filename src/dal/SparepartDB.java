@@ -16,14 +16,14 @@ public class SparepartDB implements SparepartDBIF {
 	public static final String SELECT_ALL_SPAREPARTS = "SELECT " + FIELDS + " FROM Sparepart";
 
 	private SupplierDBIF supplierDB = Database.getInstance().getSupplierDataBase();
+	private Connection con = DatabaseConnection.getInstance().getConnection();
 
 	@Override
 	public Sparepart findSparePartbyID(int sparePartID) {
 		Sparepart sparepart = null;
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindSparepart = con.prepareStatement(SELECT_SPAREPART_BY_ID)) {
+		try (PreparedStatement psFindSparepart = con.prepareStatement(SELECT_SPAREPART_BY_ID)) {
 			
 			//prepare statement
 			psFindSparepart.setInt(1, sparePartID);
@@ -57,7 +57,6 @@ public class SparepartDB implements SparepartDBIF {
 		result.setStockAmount(rs.getInt("sparepart_stock_amount"));
 		result.setPrice(rs.getDouble("sparepart_price"));
 		result.setSupplier(supplierDB.buildObjectFromResultset(rs));
-		//result.setSupplier(supplierDB.findSupplierByID(rs.getInt("sparepart_supplier_CVR_FK")));
 		
 		// return the Sparepart object
 		return result;
@@ -68,8 +67,7 @@ public class SparepartDB implements SparepartDBIF {
 		List<Sparepart> list = new ArrayList<>();
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindSparepart = con.prepareStatement(SELECT_ALL_SPAREPARTS)) {
+		try (PreparedStatement psFindSparepart = con.prepareStatement(SELECT_ALL_SPAREPARTS)) {
 			
 			//prepare statement
 			// Left empty. 

@@ -18,11 +18,7 @@ class DatabaseConnectionTest {
 		Connection con = null;
 		
 		//Act
-		try {
-			con = DatabaseConnection.getInstance().getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		con = DatabaseConnection.getInstance().getConnection();
 		
 		//Assert
 		assertNotNull(con);

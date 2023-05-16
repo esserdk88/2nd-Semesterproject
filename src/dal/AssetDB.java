@@ -13,23 +13,19 @@ import model.Asset;
 
 public class AssetDB implements AssetDBIF {
 	
-	/*public static final String FIELDS = "asset_id_PK, asset_name, asset_acquisitiondate, asset_description, asset_status,"
-			+ "asset_manufacturer, asset_location_id_FK";
-	public static final String SELECT_ASSET_BY_ID = "SELECT " + FIELDS + " FROM Asset Where asset_id_PK = ?";
-	public static final String SELECT_ALL_ASSETS = "SELECT " + FIELDS + " FROM Asset";*/
 	
 	public static final String SELECT_ASSET_BY_ID = "SELECT * FROM Asset_Location_Address Where asset_id_PK = ?";
 	public static final String SELECT_ALL_ASSETS = "SELECT * FROM Asset_Location_Address";
 
 	private LocationDBIF locationDB = Database.getInstance().getLocationDataBase();
+	private Connection con = DatabaseConnection.getInstance().getConnection();
 	
 	@Override
 	public Asset findAssetByID(int assetID) {
 		Asset asset = null;
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindAsset = con.prepareStatement(SELECT_ASSET_BY_ID)) {
+		try (PreparedStatement psFindAsset = con.prepareStatement(SELECT_ASSET_BY_ID)) {
 			
 			//prepare statement
 			psFindAsset.setInt(1, assetID);
@@ -66,7 +62,6 @@ public class AssetDB implements AssetDBIF {
 		result.setStatus(rs.getString("asset_status"));
 		result.setManufacturer(rs.getString("asset_manufacturer"));
 		result.setLocation(locationDB.buildObjectFromResultset(rs));
-		//result.setLocation(locationDB.findLocationByID(rs.getInt("asset_location_id_FK")));
 		
 		// return the Asset object
 		return result;
@@ -78,8 +73,7 @@ public class AssetDB implements AssetDBIF {
 		List<Asset> list = new ArrayList<>();
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindAsset = con.prepareStatement(SELECT_ALL_ASSETS)) {
+		try (PreparedStatement psFindAsset = con.prepareStatement(SELECT_ALL_ASSETS)) {
 			
 			//prepare statement
 			// Left empty.

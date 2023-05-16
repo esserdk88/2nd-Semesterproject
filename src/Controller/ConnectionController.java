@@ -9,12 +9,7 @@ public class ConnectionController implements ConnectionControllerIF {
 	@Override
 	public boolean isConnected() {
 		boolean connected = false;
-		
-		try {
-			connected = DatabaseConnection.getInstance().getConnection() != null;
-		} catch (SQLException e) {
-			
-		}
+		connected = DatabaseConnection.getInstance().getConnection() != null;
 		return connected;
 	}
 

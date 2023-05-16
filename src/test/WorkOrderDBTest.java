@@ -1,28 +1,27 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import dal.AssetDB;
 import dal.AssetDBIF;
 import dal.Database;
-import dal.EmployeeDB;
-import dal.EmployeeDBIF;
-import dal.ReferenceDB;
+import dal.DatabaseConnection;
 import dal.ReferenceDBIF;
 import dal.WorkOrderDB;
 import dal.WorkOrderDBIF;
-import model.Address;
 import model.Asset;
 import model.Employee;
-import model.Location;
 import model.Maintenance;
 import model.Measurement;
 import model.Reference;
@@ -81,6 +80,15 @@ class WorkOrderDBTest {
 		service = new Service(reference, workOrderID, title, "Service", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
 		repair = new Repair(price, reference, workOrderID, title, "Repair", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
 	}
+	
+	@BeforeAll
+	static void startUp() throws SQLException {
+		DatabaseConnection.getInstance().startTransaction();
+	}
+	@AfterAll
+	static void tearDown() throws SQLException {
+		DatabaseConnection.getInstance().rollbackTransaction();
+	}
 			
 	@Test
 	void addMaintenanceWorkOrderTest() {
@@ -96,9 +104,6 @@ class WorkOrderDBTest {
 		
 		//Assert
 		assertEquals(true, success);
-		
-		//Clean up
-		workOrderDB.deleteWorkOrderTestData(testID);
 	}
 	
 	@Test
@@ -115,9 +120,6 @@ class WorkOrderDBTest {
 		
 		//Assert
 		assertEquals(true, success);
-		
-		//Clean up
-		workOrderDB.deleteWorkOrderTestData(testID);
 	}
 	
 	@Test
@@ -134,9 +136,6 @@ class WorkOrderDBTest {
 		
 		//Assert
 		assertEquals(true, success);
-		
-		//Clean up
-		workOrderDB.deleteWorkOrderTestData(testID);
 	}
 	
 	@Test
@@ -153,10 +152,6 @@ class WorkOrderDBTest {
 		
 		//Assert
 		assertEquals(true, foundMaintenance.equals(maintenance));
-		
-		//Clean up
-		workOrderDB.deleteWorkOrderTestData(testID);
-		
 	}
 	
 	@Test
@@ -172,9 +167,6 @@ class WorkOrderDBTest {
 		
 		//Assert
 		assertEquals(true, foundService.equals(service));
-		
-		//Clean up
-		workOrderDB.deleteWorkOrderTestData(testID);
 	}
 	
 	@Test
@@ -191,9 +183,6 @@ class WorkOrderDBTest {
 		
 		//Assert
 		assertEquals(true, foundRepair.equals(repair));
-		
-		//Clean up
-		workOrderDB.deleteWorkOrderTestData(testID);
 	}
 	
 	@Test
@@ -230,11 +219,6 @@ class WorkOrderDBTest {
 		assertEquals(maintenance.equals(workorders.get(0)), true);
 		assertEquals(repair.equals(workorders.get(1)), true);
 		assertEquals(service.equals(workorders.get(2)), true);
-		
-		for(Short s: priorities) {
-			workOrderDB.deleteWorkOrderTestData(s);
-		}
-		
 	}
 	
 	@Test

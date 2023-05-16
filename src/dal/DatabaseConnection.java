@@ -5,9 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    // Private constructor to prevent instantiation outside the class
-    private DatabaseConnection() {}
-
+    
     // Singleton instance variable
     private static DatabaseConnection instance;
 	private static Connection connection;
@@ -18,8 +16,20 @@ public class DatabaseConnection {
     		other.Login.DATABASENAME,
     		other.Login.USERNAME,
     		other.Login.PASSWORD);
+    
+    // Private constructor to prevent instantiation outside the class
+    private DatabaseConnection() {
+		DriverManager.setLoginTimeout(5);
+    	try {
+			connection = DriverManager.getConnection(CONNECTION_STRING);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+    }
+     
     // Method for getting the singleton instance of the class
-    public static DatabaseConnection getInstance() {
+    public synchronized static DatabaseConnection getInstance() {
         if (instance == null) {
             instance = new DatabaseConnection();
         }
@@ -27,12 +37,36 @@ public class DatabaseConnection {
     }
 
     // Method for getting the database connection
-    public synchronized Connection getConnection() throws SQLException {
-    		DriverManager.setLoginTimeout(5);
-        	connection = DriverManager.getConnection(CONNECTION_STRING);
+    public synchronized Connection getConnection(){
         return connection;
     }
     
+    public void startTransaction() throws SQLException{
+			connection.setAutoCommit(false);
+	}
+
+	public void commitTransaction() throws SQLException{
+			try {
+				connection.commit();
+			} catch (SQLException e) {} finally {
+				connection.setAutoCommit(true);
+			}
+	}
+
+	public void rollbackTransaction() throws SQLException{
+			try {
+				connection.rollback();
+			} catch (SQLException e) {} finally {
+				connection.setAutoCommit(true);
+			}
+	}
+	public void disconnect() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
     public boolean isConnected() {
 		boolean isOpen = false;
 		try {

@@ -21,6 +21,7 @@ public class MeasurementDB implements MeasurementDBIF {
 	public static final String SELECT_MEASUREMENTS_BY_WORKORDER_ID = "SELECT " + FIELDS + " FROM Measurement Where measurement_workorder_id_FK = ?";
 	public static final String SELECT_ALL_MEASUREMENTS = "SELECT " + FIELDS + " FROM Measurement";
 
+	private Connection con = DatabaseConnection.getInstance().getConnection();
 
 	@Override
 	public Measurement findMeasurementByID(int measurementID) {
@@ -28,8 +29,7 @@ public class MeasurementDB implements MeasurementDBIF {
 		Measurement measurement = null;
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindMeasurement = con.prepareStatement(SELECT_MEASUREMENT_BY_ID)) {
+		try (PreparedStatement psFindMeasurement = con.prepareStatement(SELECT_MEASUREMENT_BY_ID)) {
 			
 			//prepare statement
 			psFindMeasurement.setInt(1, measurementID);
@@ -67,8 +67,7 @@ public class MeasurementDB implements MeasurementDBIF {
 		List<Measurement> list = new ArrayList<>();
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindMeasurement = con.prepareStatement(SELECT_ALL_MEASUREMENTS)) {
+		try (PreparedStatement psFindMeasurement = con.prepareStatement(SELECT_ALL_MEASUREMENTS)) {
 			
 			//prepare statement
 			// Left empty. 

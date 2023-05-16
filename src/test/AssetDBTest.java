@@ -16,26 +16,29 @@ import org.junit.jupiter.api.Test;
 
 import Controller.AssetController;
 import dal.AssetDB;
+import dal.AssetDBIF;
+import dal.Database;
+import dal.DatabaseConnection;
 import model.Address;
 import model.Asset;
 import model.Location;
 
 class AssetDBTest {
 	
-	private static AssetDB assetDatabase;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
+		DatabaseConnection.getInstance().startTransaction();
 	}
 
 	@AfterAll
 	static void tearDownAfterClass() throws Exception {
+		DatabaseConnection.getInstance().rollbackTransaction();
 	}
 	
 	@Test
 	void getAllAssetsTest() throws SQLException {
 		//Arrange
-		assetDatabase = new AssetDB(); //TODO Set correct testing databases?
 		List<Asset> assetList = new ArrayList<Asset>();
 		AssetController assetCtrl = new AssetController(); 
 		

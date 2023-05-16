@@ -33,21 +33,16 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public static final String FIELDS_INSERT_SERVICE = FIELDS_INSERT_COMMON + ", workorder_reference_id_FK";
 	public static final String FIELDS_INSERT_REPAIR = FIELDS_INSERT_COMMON + ", workorder_reference_id_FK, workorder_price";
 	
-//	public static final String SELECT_MAINTENANCE_BY_ID = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Maintenance'";
-//	public static final String SELECT_SERVICE_BY_ID = "SELECT " + FIELDS_SERVICE_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Service'";
-//	public static final String SELECT_REPAIR_BY_ID = "SELECT " + FIELDS_REPAIR_WITH_ID + " FROM Workorder WHERE workorder_id_PK = ? AND workorder_type = 'Repair'";
 	public static final String SELECT_MAINTENANCE_BY_ID = "SELECT * FROM MaintenanceView WHERE workorder_id_PK = ?";
 	public static final String SELECT_SERVICE_BY_ID = "SELECT * FROM ServiceView WHERE workorder_id_PK = ?";
 	public static final String SELECT_REPAIR_BY_ID = "SELECT * FROM RepairView WHERE workorder_id_PK = ?";
 	
 	
-//	public static final String SELECT_UNFINISHED_WORKORDERS = "SELECT * from Workorder where workorder_finished = 0 and workorder_startdate <= GETDATE()";
+
 	public static final String SELECT_UNFINISHED_WORKORDERS = "SELECT * from WorkOrdersView where workorder_finished = 0 and workorder_startdate <= GETDATE()";
 	public static final String SELECT_ALL_WORKORDERS_BY_ASSET_ID = "SELECT * from WorkOrdersView where asset_id_PK = ?";
 	public static final String SELECT_ALL_WORKORDERS_BY_IDS = "SELECT * from WorkOrdersView where workorder_id_PK IN (";
-//	public static final String SELECT_ALL_MAINTENANCE = "SELECT " + FIELDS_MAINTENANCE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Maintenance'";
-//	public static final String SELECT_ALL_SERVICE = "SELECT " + FIELDS_SERVICE_WITH_ID + " FROM Workorder WHERE workorder_type = 'Service'";
-//	public static final String SELECT_ALL_REPAIR = "SELECT " + FIELDS_REPAIR_WITH_ID + " FROM Workorder WHERE workorder_type = 'Repair'";
+
 	//Used when selecting specific workorders. This script is not complete before being processed in select workordersById method.
 	public static final String SELECT_WORKORDERS_BY_ID = "SELECT " + FIELDS_COMMON_WITH_ID + " FROM Workorder WHERE workorder_id_PK IN (";
 	
@@ -73,28 +68,20 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	private MeasurementDBIF measurementDB = Database.getInstance().getMeasurementDataBase();
 	private ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 	
-	private Connection con;
+	private Connection con = DatabaseConnection.getInstance().getConnection();
 	
 	public WorkOrderDB(Connection con) {
 		this.con = con;
 	}
 	
-	public WorkOrderDB() {
-		try {
-			this.con = DatabaseConnection.getInstance().getConnection();
-		} catch (SQLException e) {
-			System.out.println("WorkOrderDB - instantiation of connection failed");
-			e.printStackTrace();
-		}
-	}
+	public WorkOrderDB() {}
 	
 	@Override
 	public boolean addMaintenanceWorkOrder(Maintenance workOrder) {
 		
 		boolean success = false;
 		
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psAddMaintenance = con.prepareStatement(INSERT_MAINTENANCE)) {
+		try (PreparedStatement psAddMaintenance = con.prepareStatement(INSERT_MAINTENANCE)) {
 			
 			//prepare statement
 			psAddMaintenance.setString(1, workOrder.getTitle());
@@ -125,8 +112,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		
 		boolean success = false;
 		
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psAddService = con.prepareStatement(INSERT_SERVICE)) {
+		try (PreparedStatement psAddService = con.prepareStatement(INSERT_SERVICE)) {
 			
 			//prepare statement
 			psAddService.setString(1, workOrder.getTitle());
@@ -155,8 +141,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public boolean addRepairWorkOrder (Repair workOrder) {
 		boolean success = false;
 		
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psAddRepair = con.prepareStatement(INSERT_REPAIR)) {
+		try (PreparedStatement psAddRepair = con.prepareStatement(INSERT_REPAIR)) {
 			
 			//prepare statement
 			psAddRepair.setString(1, workOrder.getTitle());
@@ -188,8 +173,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		Maintenance maintenance = null;
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindMaintenance = con.prepareStatement(SELECT_MAINTENANCE_BY_ID)) {
+		try (PreparedStatement psFindMaintenance = con.prepareStatement(SELECT_MAINTENANCE_BY_ID)) {
 			
 			//prepare statement
 			psFindMaintenance.setInt(1, workOrderID);
@@ -213,8 +197,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		Service service = null;
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindService = con.prepareStatement(SELECT_SERVICE_BY_ID)) {
+		try (PreparedStatement psFindService = con.prepareStatement(SELECT_SERVICE_BY_ID)) {
 			
 			//prepare statement
 			psFindService.setInt(1, workOrderID);
@@ -238,8 +221,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		Repair repair = null;
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindRepair = con.prepareStatement(SELECT_REPAIR_BY_ID)) {
+		try (PreparedStatement psFindRepair = con.prepareStatement(SELECT_REPAIR_BY_ID)) {
 			
 			//prepare statement
 			psFindRepair.setInt(1, workOrderID);
@@ -264,8 +246,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		List<Maintenance> list = new ArrayList<>();
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_MAINTENANCE)) {
+		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_MAINTENANCE)) {
 			
 			//prepare statement
 			// Left empty. 
@@ -291,8 +272,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		List<Service> list = new ArrayList<>();
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_SERVICE)) {
+		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_SERVICE)) {
 			
 			//prepare statement
 			// Left empty. 
@@ -317,8 +297,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		List<Repair> list = new ArrayList<>();
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_REPAIR)) {
+		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_REPAIR)) {
 			
 			//prepare statement
 			// Left empty. 
@@ -343,8 +322,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		List<Workorder> list = new ArrayList<>();
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_UNFINISHED_WORKORDERS)) {
+		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_UNFINISHED_WORKORDERS)) {
 			
 			//prepare statement
 			// Left empty.
@@ -380,8 +358,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		List<Workorder> list = new ArrayList<>();
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_WORKORDERS_BY_ASSET_ID)) {
+		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_WORKORDERS_BY_ASSET_ID)) {
 			
 			//prepare statement
 			psFindWorkorder.setInt(1, assetID);
@@ -418,8 +395,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		boolean success = false;
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psDeleteWorkOrder = con.prepareStatement(DELETE_WORK_ORDER_BY_ID)) {
+		try (PreparedStatement psDeleteWorkOrder = con.prepareStatement(DELETE_WORK_ORDER_BY_ID)) {
 			
 			//prepare statement
 			psDeleteWorkOrder.setInt(1, workOrderID);
@@ -443,8 +419,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		boolean success = false;
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psDeleteWorkOrder = con.prepareStatement(DELETE_WORK_ORDER_TEST_DATA)) {
+		try (PreparedStatement psDeleteWorkOrder = con.prepareStatement(DELETE_WORK_ORDER_TEST_DATA)) {
 			
 			//prepare statement
 			psDeleteWorkOrder.setInt(1, ID);
@@ -466,8 +441,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public boolean updateWorkorder(Workorder workorder) {
 		boolean success = false;
 		
-		try(Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psUpdateWorkorder = con.prepareStatement(UPDATE_WORK_ORDER_BY_ID)) {
+		try(PreparedStatement psUpdateWorkorder = con.prepareStatement(UPDATE_WORK_ORDER_BY_ID)) {
 			
 			psUpdateWorkorder.setInt(1, workorder.getWorkOrderID());
 			psUpdateWorkorder.executeUpdate();
@@ -531,8 +505,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
 		
 		//Objects
-//		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
-//		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
 //		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
 //		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
 		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
@@ -562,7 +534,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		result.setFinished(rs.getBoolean("workorder_finished"));
 		
 		//Service-specific
-//		result.setReference(referenceDB.findReferenceByID(rs.getInt("workorder_reference_id_FK")));
 		result.setReference(referenceDB.buildObjectFromResultset(rs));
 		
 		//Dates
@@ -570,8 +541,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
 		
 		//Objects
-//		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
-//		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
 //		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
 //		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
 		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
@@ -599,7 +568,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		
 		//Repair-specific
 		result.setPrice(rs.getDouble("workorder_price"));
-//		result.setReference(referenceDB.findReferenceByID(rs.getInt("workorder_reference_id_FK")));
 		result.setReference(referenceDB.buildObjectFromResultset(rs));
 		
 		//Dates
@@ -607,8 +575,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		result.setEndDate(convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
 		
 		//Objects
-//		result.setEmployee(employeeDB.findEmployeeByID(rs.getInt("workorder_employee_id_FK")));
-//		result.setAsset(assetDB.findAssetByID(rs.getInt("workorder_asset_id_FK")));
 //		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
 //		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
 		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
@@ -623,8 +589,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		int outputKey = -1;
 		
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindLatestKey = con.prepareStatement(SELECT_LATEST_KEY)) {
+		try (PreparedStatement psFindLatestKey = con.prepareStatement(SELECT_LATEST_KEY)) {
 			
 			//prepare statement left empty
 			
@@ -656,8 +621,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		}
 		finishedStatement += ")";
 		
-		try(Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psSelectWorkordersByIds = con.prepareStatement(finishedStatement)) {
+		try(PreparedStatement psSelectWorkordersByIds = con.prepareStatement(finishedStatement)) {
 			for(int i = 0; i < workorderIds.length; i++) {
 				psSelectWorkordersByIds.setInt(i + 1, workorderIds[i]);
 			}
