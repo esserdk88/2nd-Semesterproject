@@ -44,8 +44,8 @@ public class SupplierDB implements SupplierDBIF {
 
 	public Supplier buildObjectFromResultset(ResultSet rs) throws SQLException {
 		if(DataBaseUtilities.check(rs, null, "supplier_CVR_PK")){
-			return null;
-		}else return buildObject(rs);
+			return buildObject(rs);
+		}else return null;
 	}
 	private Supplier buildObject(ResultSet rs) throws SQLException {
 		// Create a new Supplier object

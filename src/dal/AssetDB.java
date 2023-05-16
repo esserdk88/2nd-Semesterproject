@@ -46,8 +46,8 @@ public class AssetDB implements AssetDBIF {
 
 	public Asset buildObjectFromResultset(ResultSet rs) throws SQLException {
 		if(DataBaseUtilities.check(rs, null, "asset_id_PK")){
-			return null;
-		}else return buildObject(rs);
+			return buildObject(rs);
+		}else return null;
 	}
 	private Asset buildObject(ResultSet rs) throws SQLException {
 		

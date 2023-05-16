@@ -43,8 +43,8 @@ public class SparepartDB implements SparepartDBIF {
 	}
 	public Sparepart buildObjectFromResultset(ResultSet rs) throws SQLException {
 		if(DataBaseUtilities.check(rs, null, "sparepart_id_PK")){
-			return null;
-		}else return buildObject(rs);
+			return buildObject(rs);
+		}else return null;
 	}
 
 	private Sparepart buildObject(ResultSet rs) throws SQLException {

@@ -49,8 +49,8 @@ public class EmployeeDB implements EmployeeDBIF {
 	}
 	public Employee buildObjectFromResultset(ResultSet rs) throws SQLException {
 		if(DataBaseUtilities.check(rs, null, "employee_id_PK")){
-			return null;
-		}else return buildObject(rs);
+			return buildObject(rs);
+		}else return null;
 	}
 	private Employee buildObject(ResultSet rs) throws SQLException {
 		

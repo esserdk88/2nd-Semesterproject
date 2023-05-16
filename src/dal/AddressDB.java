@@ -49,8 +49,8 @@ public class AddressDB implements AddressDBIF {
 
 	public Address buildObjectFromResultset(ResultSet rs, String prefix) throws SQLException {
         if(DataBaseUtilities.check(rs, prefix, "address_id_PK")) {
-            return new Address();
-        }else return buildObject(rs,prefix);
+        	return buildObject(rs,prefix);
+        }else return new Address();
     }
 	
 	private Address buildObject(ResultSet rs, String prefix) throws SQLException {

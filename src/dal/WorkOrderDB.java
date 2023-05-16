@@ -454,8 +454,8 @@ public class WorkOrderDB implements WorkOrderDBIF {
     }
 	public Maintenance buildMaintenanceObjectFromResultset(ResultSet rs) throws SQLException {
 		if(DataBaseUtilities.check(rs, null, "workorder_id_PK")){
-			return null;
-		}else return buildMaintenanceObject(rs);
+			return buildMaintenanceObject(rs);
+		}else return null;
 	}
 		
 	//Builders
@@ -493,8 +493,8 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	public Service buildServiceObjectFromResultset(ResultSet rs) throws SQLException {
 		if(DataBaseUtilities.check(rs, null, "workorder_id_PK")){
-			return null;
-		}else return buildServiceObject(rs);
+			return buildServiceObject(rs);
+		}else return null;
 	}
 	private Service buildServiceObject(ResultSet rs) throws SQLException {
 		// create a new Service object
@@ -526,8 +526,8 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	public Repair buildRepairObjectFromResultset(ResultSet rs) throws SQLException {
 		if(DataBaseUtilities.check(rs, null, "workorder_id_PK")){
-			return null;
-		}else return buildRepairObject(rs);
+			return buildRepairObject(rs);
+		}else return null;
 	}
 	private Repair buildRepairObject(ResultSet rs) throws SQLException {
 		// create a new Repair object

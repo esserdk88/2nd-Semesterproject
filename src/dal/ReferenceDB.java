@@ -46,8 +46,8 @@ public class ReferenceDB implements ReferenceDBIF {
 
 	public Reference buildObjectFromResultset(ResultSet rs) throws SQLException {
 		if(DataBaseUtilities.check(rs, null, "reference_CVR_PK")){
-			return null;
-		}else return buildObject(rs, "reference_");
+			return buildObject(rs, "reference_");
+		}else return null;
 	}
 	private Reference buildObject(ResultSet rs, String prefix) throws SQLException {
 		// Create a new Reference object
