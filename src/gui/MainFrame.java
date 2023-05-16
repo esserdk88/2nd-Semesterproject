@@ -103,7 +103,7 @@ public class MainFrame extends JFrame {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		int dpi = toolkit.getScreenResolution();
 		double scaleFactor = dpi / 96.0;
-		int minWidth = (int) (975 * scaleFactor);
+		int minWidth = (int) (1000 * scaleFactor);
 		int minHeight = (int) (500 * scaleFactor);
 		setMinimumSize(new Dimension(minWidth, minHeight));
 		
