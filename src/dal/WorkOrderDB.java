@@ -58,7 +58,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	public static final String SELECT_LATEST_KEY = "SELECT MAX (workorder_id_PK) from Workorder";
 	
-
 	private EmployeeDBIF employeeDB = Database.getInstance().getEmployeeDataBase();
 	private AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
 	private SparepartUsedDBIF sparepartUsedDB = Database.getInstance().getSparepartUsedDataBase();

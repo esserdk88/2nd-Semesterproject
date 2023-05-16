@@ -64,10 +64,6 @@ class WorkOrderDBTest {
 	private static AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
 	private static ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 	
-	//Other
-	Random random = new Random();
-	short testID;
-	
 	@BeforeAll
 	static void startUp() throws SQLException {
 		DatabaseConnection.getInstance().startTransaction();
