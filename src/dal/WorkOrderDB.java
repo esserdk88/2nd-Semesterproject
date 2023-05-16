@@ -453,7 +453,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
         return new Date(timeInMillis);
     }
 	public Maintenance buildMaintenanceObjectFromResultset(ResultSet rs) throws SQLException {
-		if(rs.getInt("workorder_id_PK") == 0) {
+		if(DataBaseUtilities.check(rs, null, "workorder_id_PK")){
 			return null;
 		}else return buildMaintenanceObject(rs);
 	}
@@ -492,7 +492,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	}
 	
 	public Service buildServiceObjectFromResultset(ResultSet rs) throws SQLException {
-		if(rs.getInt("workorder_id_PK") == 0) {
+		if(DataBaseUtilities.check(rs, null, "workorder_id_PK")){
 			return null;
 		}else return buildServiceObject(rs);
 	}
@@ -525,7 +525,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	}
 	
 	public Repair buildRepairObjectFromResultset(ResultSet rs) throws SQLException {
-		if(rs.getInt("workorder_id_PK") == 0) {
+		if(DataBaseUtilities.check(rs, null, "workorder_id_PK")){
 			return null;
 		}else return buildRepairObject(rs);
 	}

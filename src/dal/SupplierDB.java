@@ -43,7 +43,7 @@ public class SupplierDB implements SupplierDBIF {
 	}
 
 	public Supplier buildObjectFromResultset(ResultSet rs) throws SQLException {
-		if(rs.getInt("supplier_CVR_PK") == 0) {
+		if(DataBaseUtilities.check(rs, null, "supplier_CVR_PK")){
 			return null;
 		}else return buildObject(rs);
 	}

@@ -43,7 +43,7 @@ public class LocationDB implements LocationDBIF {
 		return location;
 	}
 	public Location buildObjectFromResultset(ResultSet rs) throws SQLException {
-		if(rs.getInt("location_id_PK") == 0) {
+		if(DataBaseUtilities.check(rs, null, "location_id_PK")){
 			return null;
 		}else return buildObject(rs);
 	}
