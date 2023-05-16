@@ -85,7 +85,9 @@ public class DatabaseConnection {
 	        e.printStackTrace();
 	    }
 	}
-
+	public void setIsolationLevel(int level) throws SQLException {
+		connection.setTransactionIsolation(level);
+	}
     public boolean isConnected() {
 		boolean isOpen = false;
 		try {
