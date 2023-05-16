@@ -8,7 +8,7 @@ import java.util.Calendar;
 
 public class DataBaseUtilities {
 
-	//Should return false if no problems
+	//Should return true if successful
 	public static boolean check(ResultSet rs, String prefix, String columnName) throws SQLException {
 		boolean success = true;
 		if(prefix == null) {
