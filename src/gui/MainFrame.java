@@ -15,11 +15,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.Stack;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -299,6 +301,16 @@ public class MainFrame extends JFrame {
 		employeeButton.addActionListener(e -> setNewCenterPanel(new EmployeeOverview()));
 		returnButton.addActionListener(e -> {if(backwards.peek() != null) {backwardsButton();}});
 		nextButton.addActionListener(e -> {if(forward.isEmpty() != true) {forwardButton();}});
-		
+		exitButton.addActionListener(e -> closeWindow());
+	}
+	
+	private void closeWindow(){
+		int input = JOptionPane.showOptionDialog(this, "Er du sikkert på at du vil lukke programmet?", "Afslut program",
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+				new Object[] { "Ja", "Nej" }, JOptionPane.YES_OPTION);
+		if(input == 0) {			
+			frame.dispose();
+			System.exit(0);
+		}
 	}
 }
