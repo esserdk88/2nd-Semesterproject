@@ -8,10 +8,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -32,8 +30,8 @@ import gui.components.TableSwingWorker;
 import model.Asset;
 
 public class ReadAsset extends JPanel {
-	
-	//TextFields
+
+	// TextFields
 	private JTextField txtTitle;
 	private JTextField txtInterval;
 	private JTextField txtAssetID;
@@ -43,8 +41,8 @@ public class ReadAsset extends JPanel {
 	private JTextField txtRegNo;
 	private JTextField txtPriority;
 	private JTextField txtEmployeeID;
-	
-	//Button
+
+	// Button
 	private JRoundedButton btnNewWorkOrder;
 	private JRoundedButton btnDelete;
 	private JRoundedButton btnAdd;
@@ -53,8 +51,8 @@ public class ReadAsset extends JPanel {
 	private DefaultTable historyTable;
 	private DefaultTable sparepartTable;
 	private DefaultTable measurementTable;
-	
-	//Labels
+
+	// Labels
 	private JLabel lblNewLabel_5;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_8;
@@ -67,26 +65,25 @@ public class ReadAsset extends JPanel {
 	private JLabel lblAssetID;
 	private JLabel lblTitle;
 	private JLabel lblNewLabel;
-	
-	//Panels
+
+	// Panels
 	private JPanel centerPanel;
 	private JPanel southPanel;
-	
-	//Extra
+
+	// Extra
 	private Asset currentAsset;
 	private JTextArea textAreaDescription;
 	private JSpinner spinnerDate;
 	private JCheckBox chckDateBox;
 	private MainFrame mainFrame;
 	private JScrollPane measurementsScrollPane;
-	
 
 	/**
 	 * Create the panel.
 	 */
 	public ReadAsset(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
-		
+
 		setLayout(new BorderLayout(0, 0));
 
 		setPanels();
@@ -100,13 +97,12 @@ public class ReadAsset extends JPanel {
 	public void createNewWorkOrder() {
 		mainFrame.setNewCenterPanel(new CreateWorkOrder(this.currentAsset));
 	}
-	
+
 	public void initialize(Asset currentAsset) {
 		this.currentAsset = currentAsset;
 		txtAssetID.setText(Integer.toString(currentAsset.getAssetID()));
 		txtName.setText(currentAsset.getName());
 		textAreaDescription.setText(currentAsset.getDescription());
-
 
 		// Change text color to gray
 		txtAssetID.setDisabledTextColor(Color.gray);
@@ -136,24 +132,16 @@ public class ReadAsset extends JPanel {
 		spinnerDate.setEnabled(false);
 		chckDateBox.setEnabled(false);
 	}
-	
+
 	public DefaultTable getHistoryTable() {
 		return historyTable;
 	}
-	
-	public DefaultTable getSparepartTable() {
-		return sparepartTable;
-	}
-	
-	public DefaultTable getMeasurementTable() {
-		return measurementTable;
-	}
-	
+
 	private void setButtons() {
 		btnNewWorkOrder = new JRoundedButton("Opret ny arbejdsordre");
 		btnNewWorkOrder.addActionListener(e -> createNewWorkOrder());
 		southPanel.add(btnNewWorkOrder);
-		
+
 		btnAdd = new JRoundedButton("Tilføj ny");
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
 		gbc_btnAdd.fill = GridBagConstraints.HORIZONTAL;
@@ -169,7 +157,7 @@ public class ReadAsset extends JPanel {
 		gbc_btnDelete.gridx = 9;
 		gbc_btnDelete.gridy = 10;
 		centerPanel.add(btnDelete, gbc_btnDelete);
-		
+
 	}
 
 	private void setSpinnerAndComboBox() {
@@ -183,7 +171,7 @@ public class ReadAsset extends JPanel {
 		gbc_chckDateBox.gridy = 6;
 		centerPanel.add(chckDateBox, gbc_chckDateBox);
 
-		SimpleDateFormat spinnerModel = new SimpleDateFormat("dd.MM.yyyy");
+		SimpleDateFormat spinnerModel = new SimpleDateFormat("dd/MM/yyyy");
 		spinnerDate = new JSpinner();
 		spinnerDate.setModel(new SpinnerDateModel());
 		spinnerDate.setEditor(new JSpinner.DateEditor(spinnerDate, spinnerModel.toPattern()));
@@ -193,7 +181,7 @@ public class ReadAsset extends JPanel {
 		gbc_spinnerDate.gridx = 8;
 		gbc_spinnerDate.gridy = 6;
 		centerPanel.add(spinnerDate, gbc_spinnerDate);
-		
+
 	}
 
 	private void setTables() {
@@ -207,33 +195,34 @@ public class ReadAsset extends JPanel {
 		gbc_historyScollPane.gridx = 1;
 		gbc_historyScollPane.gridy = 7;
 		centerPanel.add(historyScollPane, gbc_historyScollPane);
-		
-		String[] columnsHistory = { "ID", "Emne", "Type", "Dato", "Slut Dato", "Prioritet", "Beskrivelse", "Færdig", "AssetID", "Medarbejder"};
+
+		String[] columnsHistory = { "ID", "Emne", "Type", "Dato", "Slut Dato", "Prioritet", "Beskrivelse", "Færdig",
+				"AssetID", "Medarbejder" };
 		boolean[] activeColumns = new boolean[] { true, true, false, true, false, false, false, false, false, false };
 		historyTable = new DefaultTable(null, columnsHistory, activeColumns);
 		historyScollPane.setViewportView(historyTable);
-		
+
 		historyTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-		    public void valueChanged(ListSelectionEvent event) {
-		        if (event.getValueIsAdjusting()) {
-		            return;
-		        }
+			public void valueChanged(ListSelectionEvent event) {
+				if (event.getValueIsAdjusting()) {
+					return;
+				}
 
-		        int selectedRow = historyTable.getSelectedRow();
-		        if (selectedRow == -1) {
-		            return;
-		        }
+				int selectedRow = historyTable.getSelectedRow();
+				if (selectedRow == -1) {
+					return;
+				}
 
-		        Object isMarked = historyTable.getValueAt(selectedRow, 0);
-		        int priority = Integer.parseInt(historyTable.getModel().getValueAt(selectedRow, 5).toString());
-		        String priorityType = "";
-		        if (isMarked != null) {
-		        	txtTitle.setText(historyTable.getModel().getValueAt(selectedRow, 1).toString());
-		        	txtEmployeeID.setText(historyTable.getModel().getValueAt(selectedRow, 9).toString());
-		        	txtType.setText(historyTable.getModel().getValueAt(selectedRow, 2).toString());
-		        	txtRegNo.setText(historyTable.getModel().getValueAt(selectedRow, 0).toString());
-		        	
-		        	switch (priority) {
+				Object isMarked = historyTable.getValueAt(selectedRow, 0);
+				int priority = Integer.parseInt(historyTable.getModel().getValueAt(selectedRow, 5).toString());
+				String priorityType = "";
+				if (isMarked != null) {
+					txtTitle.setText(historyTable.getModel().getValueAt(selectedRow, 1).toString());
+					txtEmployeeID.setText(historyTable.getModel().getValueAt(selectedRow, 9).toString());
+					txtType.setText(historyTable.getModel().getValueAt(selectedRow, 2).toString());
+					txtRegNo.setText(historyTable.getModel().getValueAt(selectedRow, 0).toString());
+
+					switch (priority) {
 					case 1:
 						priorityType = "Lav";
 						break;
@@ -246,38 +235,28 @@ public class ReadAsset extends JPanel {
 					default:
 						priorityType = "Ikke angivet";
 					}
-		        	txtPriority.setText(priorityType);
-		        	
-		        	/*SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		        	Object dateObj = historyTable.getModel().getValueAt(selectedRow, 4);
-		        	System.out.println(dateObj.toString());
-		        	Date date = null;
-		        	try {
-			        	date = sdf.parse(dateObj.toString());
-					} catch (ParseException  e) {
-						 e.printStackTrace();
-					}
-		        	Calendar calendar = Calendar.getInstance();
-		        	calendar.setTime(date);
-		        	spinnerDate.getModel().setValue(calendar.getTime());*/
-		        	String[][] loadingStatus = { { "Henter data..." } };
-		        	sparepartTable.setNewData(loadingStatus);
-		        	measurementTable.setNewData(loadingStatus);
-		        	int id = Integer.parseInt(isMarked.toString());
-		        	Thread workerThread = new Thread(() -> {
-		    			TableSwingWorker dataFetcherSparePart = null;
-		    			TableSwingWorker dataFetcherMeasurement = null;
-		    			WorkOrderController workOrderController = new WorkOrderController();
-						dataFetcherSparePart = new TableSwingWorker(sparepartTable, workOrderController.getAllSparepartsUsedInWorkOrder(id));
-						dataFetcherMeasurement = new TableSwingWorker(measurementTable, workOrderController.getAllMeasurementsUsedInWorkOrder(id));
-		    			dataFetcherSparePart.execute();
-		    			dataFetcherMeasurement.execute();
-		    		});
-		    		workerThread.start();
-		        }
-		    }
+					txtPriority.setText(priorityType);
+					String[][] loadingStatus = { { "Henter data..." } };
+					sparepartTable.setNewData(loadingStatus);
+					measurementTable.setNewData(loadingStatus);
+					int id = Integer.parseInt(isMarked.toString());
+
+					Thread workerThread = new Thread(() -> {
+						TableSwingWorker dataFetcherSparePart = null;
+						TableSwingWorker dataFetcherMeasurement = null;
+						WorkOrderController workOrderController = new WorkOrderController();
+						dataFetcherSparePart = new TableSwingWorker(sparepartTable,
+								workOrderController.getAllSparepartsUsedInWorkOrder(id));
+						dataFetcherMeasurement = new TableSwingWorker(measurementTable,
+								workOrderController.getAllMeasurementsUsedInWorkOrder(id));
+						dataFetcherSparePart.execute();
+						dataFetcherMeasurement.execute();
+					});
+					workerThread.start();
+				}
+			}
 		});
-		
+
 		sparePartsScrollPane = new JScrollPane();
 		GridBagConstraints gbc_sparePartsScrollPane = new GridBagConstraints();
 		gbc_sparePartsScrollPane.gridheight = 3;
@@ -291,7 +270,7 @@ public class ReadAsset extends JPanel {
 		String[] sparepartsColumns = new String[] { "Reservedel", "Mængde" };
 		sparepartTable = new DefaultTable(null, sparepartsColumns);
 		sparePartsScrollPane.setViewportView(sparepartTable);
-		
+
 		measurementsScrollPane = new JScrollPane();
 		GridBagConstraints gbc_measurementsScrollPane = new GridBagConstraints();
 		gbc_measurementsScrollPane.gridheight = 3;
@@ -301,7 +280,7 @@ public class ReadAsset extends JPanel {
 		gbc_measurementsScrollPane.gridx = 7;
 		gbc_measurementsScrollPane.gridy = 9;
 		centerPanel.add(measurementsScrollPane, gbc_measurementsScrollPane);
-		
+
 		String[] columnsMeasurements = new String[] { "ID", "Titel", "Måling" };
 		measurementTable = new DefaultTable(null, columnsMeasurements);
 		measurementsScrollPane.setViewportView(measurementTable);
@@ -312,7 +291,7 @@ public class ReadAsset extends JPanel {
 		FlowLayout fl_southPanel = (FlowLayout) southPanel.getLayout();
 		fl_southPanel.setAlignment(FlowLayout.RIGHT);
 		add(southPanel, BorderLayout.SOUTH);
-		
+
 		centerPanel = new JPanel();
 		add(centerPanel, BorderLayout.NORTH);
 		GridBagLayout gbl_centerPanel = new GridBagLayout();
@@ -323,7 +302,7 @@ public class ReadAsset extends JPanel {
 		gbl_centerPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
 				Double.MIN_VALUE };
 		centerPanel.setLayout(gbl_centerPanel);
-		
+
 	}
 
 	private void setLabelsAndTextFields() {
@@ -381,7 +360,7 @@ public class ReadAsset extends JPanel {
 		gbc_descriptionScrollPane.gridx = 4;
 		gbc_descriptionScrollPane.gridy = 2;
 		centerPanel.add(descriptionScrollPane, gbc_descriptionScrollPane);
-		
+
 		lblNewLabel_2 = new JLabel("Navn");
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.fill = GridBagConstraints.HORIZONTAL;
@@ -476,7 +455,7 @@ public class ReadAsset extends JPanel {
 		gbc_txtRegNo.gridy = 6;
 		centerPanel.add(txtRegNo, gbc_txtRegNo);
 		txtRegNo.setColumns(10);
-		
+
 		lblNewLabel_8 = new JLabel("Prioritering");
 		GridBagConstraints gbc_lblNewLabel_8 = new GridBagConstraints();
 		gbc_lblNewLabel_8.anchor = GridBagConstraints.WEST;
@@ -519,6 +498,6 @@ public class ReadAsset extends JPanel {
 		gbc_lblNewLabel_5.gridx = 4;
 		gbc_lblNewLabel_5.gridy = 8;
 		centerPanel.add(lblNewLabel_5, gbc_lblNewLabel_5);
-		
+
 	}
 }
