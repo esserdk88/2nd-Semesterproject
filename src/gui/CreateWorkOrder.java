@@ -38,6 +38,7 @@ import model.Reference;
 import model.Repair;
 import model.Service;
 import model.Workorder;
+import java.awt.event.ActionListener;
 
 public class CreateWorkOrder extends JPanel {
 	
@@ -514,6 +515,7 @@ public class CreateWorkOrder extends JPanel {
 		typeComboBox.addActionListener(e -> setMaintenanceFields());
 		
 		createWorkOrderButton = new JRoundedButton("Opret arbejdsordre");
+
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.anchor = GridBagConstraints.SOUTH;
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);

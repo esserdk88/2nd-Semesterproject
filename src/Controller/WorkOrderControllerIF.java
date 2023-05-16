@@ -21,6 +21,10 @@ public interface WorkOrderControllerIF {
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID);
 	
 	//Switch Employee workOrders
-	public boolean switchEmployeeWorkorders(int[] workOrderIds);
+	public boolean switchEmployeeWorkorders(Workorder workorderOne, Workorder workorderTwo) throws Exception;
+	
+	//probably needs to throw exceptions
+	public boolean workorderHasEmployee(int workorderId);
+	public Workorder getWorkorderByID(int workorderId);
 	
 }

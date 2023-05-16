@@ -21,8 +21,13 @@ public class WorkOrderDB implements WorkOrderDBIF {
 			+ "workorder_priority, workorder_description, workorder_finished, workorder_asset_id_FK, workorder_employee_id_FK";
 	
 	//Without ID and employee.
-	public static final String FIELDS_INSERT_COMMON = "workorder_title, workorder_type, workorder_startdate, workorder_enddate,"
+	public static final String FIELDS_INSERT_COMMON = "workorder_title, workorder_type, workorder_startdate, workorder_enddate, "
 						+ "workorder_priority, workorder_description, workorder_finished, workorder_asset_id_FK";
+	
+	public static final String FIELDS_UPDATE_COMMON = "workorder_title = ?, workorder_type = ?, workorder_startdate = ?, workorder_enddate = ?, " 
+			+ "workorder_priority = ?, workorder_description = ?, workorder_finished = ?, workorder_asset_id_FK = ?";
+	
+	public static final String FIELDS_UPDATE_COMMON_WITH_EMPLOYEE = FIELDS_UPDATE_COMMON + ", workorder_employee_id_FK = ?";
 	
 	
 	public static final String FIELDS_MAINTENANCE_WITH_ID = FIELDS_COMMON_WITH_ID + ", workorder_interval, workorder_repeatable";
@@ -62,7 +67,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public static final String DELETE_WORK_ORDER_BY_ID = "DELETE FROM Workorder where workorder_id_PK = ?";
 	public static final String DELETE_WORK_ORDER_TEST_DATA = "DELETE FROM Workorder where workorder_priority = ?";
 	
-	public static final String UPDATE_WORK_ORDER_BY_ID = "UPDATE Workorder SET " + FIELDS_INSERT_COMMON + " WHERE workoerd_id_PK = ?";
+	public static final String UPDATE_WORK_ORDER_BY_ID = "UPDATE Workorder SET " + FIELDS_INSERT_COMMON + " WHERE workorder_id_PK = ?";
 	
 	public static final String SELECT_LATEST_KEY = "SELECT MAX (workorder_id_PK) from Workorder";
 	
@@ -465,14 +470,33 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	public boolean updateWorkorder(Workorder workorder) {
 		boolean success = false;
-		
+		String finishedStatement = "UPDATE Workorder SET " + FIELDS_UPDATE_COMMON_WITH_EMPLOYEE + " WHERE workorder_id_PK = ?";
 		try(Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psUpdateWorkorder = con.prepareStatement(UPDATE_WORK_ORDER_BY_ID)) {
-			
-			psUpdateWorkorder.setInt(1, workorder.getWorkOrderID());
+				PreparedStatement psUpdateWorkorder = con.prepareStatement(finishedStatement)) {
+			psUpdateWorkorder.setString(1, workorder.getTitle());
+			psUpdateWorkorder.setString(2, workorder.getType());
+			if(workorder.getStartDate() != null) {
+				psUpdateWorkorder.setDate(3, convertCalendarToSqlDate(workorder.getStartDate()));
+			}
+			else {
+				psUpdateWorkorder.setDate(3, null);
+			}
+			if(workorder.getEndDate() != null) {
+				psUpdateWorkorder.setDate(4, convertCalendarToSqlDate(workorder.getEndDate()));
+			}
+			else {
+				psUpdateWorkorder.setDate(4, null);
+			}
+			psUpdateWorkorder.setInt(5, workorder.getPriority());
+			psUpdateWorkorder.setString(6,  workorder.getDescription());
+			psUpdateWorkorder.setBoolean(7, workorder.isFinished());
+			psUpdateWorkorder.setInt(8, workorder.getAsset().getAssetID());
+			psUpdateWorkorder.setInt(9, workorder.getEmployee().getEmployeeID());
+			psUpdateWorkorder.setInt(10, workorder.getWorkOrderID());
 			psUpdateWorkorder.executeUpdate();
 			
 			success = true;
+			
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM UPDATING WORKORDER");
 			e.printStackTrace();

@@ -29,6 +29,7 @@ import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
 import model.Asset;
+import java.awt.Component;
 
 public class AssetOverview extends JPanel {
 	
@@ -82,6 +83,8 @@ public class AssetOverview extends JPanel {
 	private JSpinner spinner;
 	private MainFrame mainFrame;
 	private AssetController assetCtrl;
+	private JRoundedButton btnSwitchEmployeeWorkorders;
+	private Component verticalStrut;
 	/**
 	 * Create the panel.
 	 * @throws SQLException 
@@ -285,6 +288,21 @@ public class AssetOverview extends JPanel {
 		addNewButton.setMaximumSize(new Dimension(110, 23));
 		addNewButton.setPreferredSize(new Dimension(110, 23));
 		addNewButton.setMinimumSize(new Dimension(30, 5));
+		
+		verticalStrut = Box.createVerticalStrut(4);
+		workOrderButtonPanel.add(verticalStrut);
+		
+		btnSwitchEmployeeWorkorders = new JRoundedButton("Tilføj ny");
+		btnSwitchEmployeeWorkorders.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnSwitchEmployeeWorkordersPressed();
+			}
+		});
+		btnSwitchEmployeeWorkorders.setText("Skift ejer");
+		btnSwitchEmployeeWorkorders.setPreferredSize(new Dimension(110, 23));
+		btnSwitchEmployeeWorkorders.setMinimumSize(new Dimension(30, 5));
+		btnSwitchEmployeeWorkorders.setMaximumSize(new Dimension(110, 23));
+		workOrderButtonPanel.add(btnSwitchEmployeeWorkorders);
 		workOrderButtonPanel.add(Box.createVerticalStrut(4));
 		
 		editButton = new JRoundedButton("Rediger");
@@ -332,7 +350,7 @@ public class AssetOverview extends JPanel {
 
 		extraPanel = new JPanel();
 		textFieldPanel.add(extraPanel);
-		extraPanel.setLayout(new GridLayout(2, 2, 6, 3));	
+		extraPanel.setLayout(new GridLayout(2, 2, 6, 3));
 		
 		workOrderPanel = new JPanel();
 		centerPanel.add(workOrderPanel);
@@ -342,6 +360,10 @@ public class AssetOverview extends JPanel {
 		workOrderButtonPanel = new JPanel();
 		workOrderPanel.add(workOrderButtonPanel, BorderLayout.EAST);
 		workOrderButtonPanel.setLayout(new BoxLayout(workOrderButtonPanel, BoxLayout.Y_AXIS));
+		
+	}
+	
+	private void btnSwitchEmployeeWorkordersPressed() {
 		
 	}
 
