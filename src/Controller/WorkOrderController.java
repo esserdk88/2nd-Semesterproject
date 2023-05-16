@@ -70,16 +70,23 @@ public class WorkOrderController implements WorkOrderControllerIF {
 		    //Setting Second Workorder to Temporay Employee From Workorder one
 		    secondWorkorder.setEmployee(tempEmployee);
 			
-		    
+		    boolean first = false;
+		    boolean second = false;
 		    //Starting Transaction
-			DatabaseConnection.getInstance().startTransaction();
-			
-			//Updating both workorders
-			boolean first = workOrderDB.updateWorkorder(firstWorkorder);
-			boolean second = workOrderDB.updateWorkorder(secondWorkorder);
-			
-			//If nothing failed commitTransaction;
-			DatabaseConnection.getInstance().commitTransaction();
+		    try {
+		    	DatabaseConnection.getInstance().startTransaction();
+				
+				//Updating both workorders
+				first = workOrderDB.updateWorkorder(firstWorkorder);
+				second = workOrderDB.updateWorkorder(secondWorkorder);
+				
+				//If nothing failed commitTransaction;
+				DatabaseConnection.getInstance().commitTransaction();
+		    }
+			catch (Exception e) {
+				//if something failed rollbackTransaction
+				DatabaseConnection.getInstance().rollbackTransaction();
+			}
 		return first && second;
 	}
 	
