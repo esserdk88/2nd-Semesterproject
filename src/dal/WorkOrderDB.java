@@ -73,6 +73,21 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	private MeasurementDBIF measurementDB = Database.getInstance().getMeasurementDataBase();
 	private ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 	
+	private Connection con;
+	
+	public WorkOrderDB(Connection con) {
+		this.con = con;
+	}
+	
+	public WorkOrderDB() {
+		try {
+			this.con = DatabaseConnection.getInstance().getConnection();
+		} catch (SQLException e) {
+			System.out.println("WorkOrderDB - instantiation of connection failed");
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public boolean addMaintenanceWorkOrder(Maintenance workOrder) {
 		
