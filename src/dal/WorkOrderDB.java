@@ -39,6 +39,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	public static final String SELECT_MAINTENANCE_BY_ID = "SELECT * FROM MaintenanceView WHERE workorder_id_PK = ?";
 	public static final String SELECT_SERVICE_BY_ID = "SELECT * FROM ServiceView WHERE workorder_id_PK = ?";
 	public static final String SELECT_REPAIR_BY_ID = "SELECT * FROM RepairView WHERE workorder_id_PK = ?";
+	public static final String SELECT_WORKORDER_BY_ID = "SELECT * from WorkOrdersView WHERE workorder_id_PK = ?";
 	
 	
 
@@ -595,6 +596,33 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		}
 		
 		return outputKey;
+	}
+	
+	@Override
+	public Workorder getWorkorderById(int workorderId) throws SQLException {
+		Workorder workorder = null;
+		Connection con = DatabaseConnection.getInstance().getConnection();
+		try (PreparedStatement psGetWorkorderById = con.prepareStatement(SELECT_WORKORDER_BY_ID)) {
+			psGetWorkorderById.setInt(1, workorderId);
+			ResultSet rs = psGetWorkorderById.executeQuery();
+			
+			if(rs != null && rs.next()) {
+				switch (rs.getString("workorder_type")) {
+				case "Maintenance":  
+					workorder= buildMaintenanceObject(rs);
+					break;
+				case "Service":  
+					workorder = buildServiceObject(rs);
+					break;	
+				case "Repair":  
+					workorder = buildRepairObject(rs);
+					break;	
+				default:
+					//Left empty.
+				}
+			}
+		}
+		return workorder;
 	}
 
 	@Override

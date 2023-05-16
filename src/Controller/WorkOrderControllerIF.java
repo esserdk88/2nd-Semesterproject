@@ -1,5 +1,6 @@
 package Controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import model.Asset;
@@ -24,7 +25,7 @@ public interface WorkOrderControllerIF {
 	public boolean switchEmployeeWorkorders(Workorder workorderOne, Workorder workorderTwo) throws Exception;
 	
 	//probably needs to throw exceptions
-	public boolean workorderHasEmployee(int workorderId);
-	public Workorder getWorkorderByID(int workorderId);
+	public boolean workorderHasEmployee(int workorderId) throws SQLException;
+	public Workorder getWorkorderByID(int workorderId) throws SQLException;
 	
 }

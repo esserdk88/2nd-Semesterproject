@@ -1,6 +1,7 @@
 package dal;
 
 
+import java.sql.SQLException;
 import java.util.List;
 
 import model.Employee;
@@ -31,6 +32,7 @@ public interface WorkOrderDBIF {
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID);
 	//Swtich employee Workorders
 	public List<Workorder> getWorkordersById(int[] workorderIds);
+	public Workorder getWorkorderById(int workorderId) throws SQLException;
 	
 	public boolean updateWorkorder(Workorder workorder);
 	
