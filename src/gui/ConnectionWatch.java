@@ -12,7 +12,7 @@ import gui.components.GUIPopUpMessages;
 
 public class ConnectionWatch extends SwingWorker<Void, Boolean> {
 	
-	private ConnectionControllerIF connectionController = new ConnectionController();
+	private ConnectionController connectionController = new ConnectionController();
 	
 	private JLabel connectionLabel;
 	private int keepAlive = 1500;

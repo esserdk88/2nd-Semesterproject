@@ -92,8 +92,8 @@ public class MeasurementDB implements MeasurementDBIF {
 		List<Measurement> list = new ArrayList<>();
 
 		// establish database connection
-		try (Connection con = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement psFindMeasurement = con.prepareStatement(SELECT_MEASUREMENTS_BY_WORKORDER_ID)) {
+		Connection con = DatabaseConnection.getInstance().getConnection();
+		try (PreparedStatement psFindMeasurement = con.prepareStatement(SELECT_MEASUREMENTS_BY_WORKORDER_ID)) {
 
 			// prepare statement
 			psFindMeasurement.setInt(1, workOrderID);
