@@ -259,7 +259,7 @@ public class ReadAsset extends JPanel {
 		Thread workerThread = new Thread(() -> {
 			TableSwingWorker dataFetcherSparePart = null;
 			TableSwingWorker dataFetcherMeasurement = null;
-			WorkOrderController workOrderController = new WorkOrderController();
+			WorkOrderController workOrderController = new WorkOrderController(); //TODO: Change to field and instantiate in constructor
 			dataFetcherSparePart = new TableSwingWorker(sparepartTable,
 					workOrderController.getAllSparepartsUsedInWorkOrder(id));
 			dataFetcherMeasurement = new TableSwingWorker(measurementTable,
@@ -280,7 +280,7 @@ public class ReadAsset extends JPanel {
 		
 		String type = historyTable.getModel().getValueAt(selectedRow, 2).toString();
 		if (type.contains("Maintenance")) {
-			MaintenanceController maintanenceController = new MaintenanceController();
+			MaintenanceController maintanenceController = new MaintenanceController(); //TODO: Change to field and instantiate in constructor
 			Maintenance maintanenceOrder = null;
 			maintanenceOrder = maintanenceController.findWorkOrderByID(Integer.parseInt(historyTable.getCellData("ID")));
 			txtInterval.setText(String.valueOf(maintanenceOrder.getIntervalDayCount()) + " dage");
