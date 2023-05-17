@@ -24,6 +24,10 @@ public class WorkOrderController implements WorkOrderControllerIF {
 	protected SparepartUsedDBIF sparePartUsedDB = Database.getInstance().getSparepartUsedDataBase();
 	protected MeasurementDBIF measurementDB = Database.getInstance().getMeasurementDataBase();
 	
+	public WorkOrderController(WorkOrderDBIF workorderDB) {
+		this.workOrderDB = workorderDB;
+	}
+	
 	@Override
 	public Asset findAssetByID(int id) {
 		// TODO Auto-generated method stub
@@ -59,7 +63,7 @@ public class WorkOrderController implements WorkOrderControllerIF {
 	}
 
 	@Override
-	public boolean switchEmployeeWorkorders(Workorder firstWorkorder, Workorder secondWorkorder) throws Exception {
+	public boolean switchEmployeeWorkorders(Workorder firstWorkorder, Workorder secondWorkorder, boolean concurrencyTest) throws Exception {
 		//Make sure that both workorders aren't null
 		if(firstWorkorder == null || secondWorkorder == null) {
 			throw new Exception("One or both workorders are null"); 
@@ -81,6 +85,9 @@ public class WorkOrderController implements WorkOrderControllerIF {
 		    boolean second = false;
 		    //Starting Transaction
 		    try {
+		    	if(concurrencyTest) {
+		    		Thread.sleep(3000);
+		    	}
 		    	DatabaseConnection.getInstance().startTransaction();
 				
 				//Updating both workorders

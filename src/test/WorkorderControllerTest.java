@@ -17,6 +17,7 @@ import controller.interfaces.WorkOrderControllerIF;
 import dal.interfaces.AssetDBIF;
 import dal.interfaces.ReferenceDBIF;
 import dal.interfaces.WorkOrderDBIF;
+import dalStubs.StubWorkOrderDB;
 import dao.Database;
 import dao.DatabaseConnection;
 import model.Address;
@@ -94,7 +95,7 @@ class WorkorderControllerTest {
 		private WorkOrderDBIF workOrderDB = Database.getInstance().getWorkOrderDataBase();
 		private static AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
 		private static ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
-		private static WorkOrderControllerIF workorderController = new WorkOrderController();
+		private static WorkOrderControllerIF workorderController = new WorkOrderController(new StubWorkOrderDB());
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -110,16 +111,18 @@ class WorkorderControllerTest {
 	
 	@AfterAll
 	static void tearDown() throws SQLException {
-		//DatabaseConnection.getInstance().commitTransaction();
+		//good practice
 		DatabaseConnection.getInstance().rollbackTransaction();
-		System.out.println("Rollback");
 	}
 
 	@Test
 	void switchEmployeeWorkordersTest() {
 		//Arrange
-		System.out.println(workOrderDB.addMaintenanceWorkOrder(maintenance));
-		System.out.println(workOrderDB.addRepairWorkOrder(repair));
+		workOrderDB.addMaintenanceWorkOrder(maintenance);
+		workOrderDB.addRepairWorkOrder(repair);
+		
+		repair.setWorkOrderID(2);
+		maintenance.setWorkOrderID(1);
 		
 		Employee emp1 = maintenance.getEmployee();
 		Employee emp2 = service.getEmployee();
@@ -131,7 +134,7 @@ class WorkorderControllerTest {
 		
 		//Act
 		try {
-			workorderController.switchEmployeeWorkorders(repair, maintenance);
+			workorderController.switchEmployeeWorkorders(repair, maintenance, true);
 			switchedEmployees = true;
 		} catch (Exception e) {
 			//Something stupid happened

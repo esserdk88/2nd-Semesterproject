@@ -24,6 +24,7 @@ import javax.swing.event.ListSelectionListener;
 
 import controller.MaintenanceController;
 import controller.WorkOrderController;
+import dao.Database;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
@@ -79,6 +80,9 @@ public class ReadAsset extends JPanel {
 	private MainFrame mainFrame;
 	private JScrollPane measurementsScrollPane;
 	private String[][] loadingDataMessage;
+	
+	private MaintenanceController maintenanceController = new MaintenanceController(Database.getInstance().getWorkOrderDataBase());
+	private WorkOrderController workOrderController = new WorkOrderController(Database.getInstance().getWorkOrderDataBase());
 
 	/**
 	 * Create the panel.
@@ -259,7 +263,6 @@ public class ReadAsset extends JPanel {
 		Thread workerThread = new Thread(() -> {
 			TableSwingWorker dataFetcherSparePart = null;
 			TableSwingWorker dataFetcherMeasurement = null;
-			WorkOrderController workOrderController = new WorkOrderController(); //TODO: Change to field and instantiate in constructor
 			dataFetcherSparePart = new TableSwingWorker(sparepartTable,
 					workOrderController.getAllSparepartsUsedInWorkOrder(id));
 			dataFetcherMeasurement = new TableSwingWorker(measurementTable,
@@ -280,9 +283,8 @@ public class ReadAsset extends JPanel {
 		
 		String type = historyTable.getModel().getValueAt(selectedRow, 2).toString();
 		if (type.contains("Maintenance")) {
-			MaintenanceController maintanenceController = new MaintenanceController(); //TODO: Change to field and instantiate in constructor
 			Maintenance maintanenceOrder = null;
-			maintanenceOrder = maintanenceController.findWorkOrderByID(Integer.parseInt(historyTable.getCellData("ID")));
+			maintanenceOrder = maintenanceController.findWorkOrderByID(Integer.parseInt(historyTable.getCellData("ID")));
 			txtInterval.setText(String.valueOf(maintanenceOrder.getIntervalDayCount()) + " dage");
 		} else {
 			txtInterval.setText("Ingen");

@@ -5,12 +5,17 @@ import java.util.Calendar;
 import java.util.List;
 
 import controller.interfaces.ServiceControllerIF;
+import dal.interfaces.WorkOrderDBIF;
 import model.Asset;
 import model.Reference;
 import model.Service;
 import model.Workorder;
 
 public class ServiceController extends WorkOrderController implements ServiceControllerIF {
+	
+	public ServiceController(WorkOrderDBIF workorderDB) {
+		super(workorderDB);
+	}
 	
 	@Override
 	public boolean createWorkOrder(Service service) {

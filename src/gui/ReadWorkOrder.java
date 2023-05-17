@@ -21,6 +21,7 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
 import controller.MaintenanceController;
+import dao.Database;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import model.Maintenance;
@@ -75,11 +76,13 @@ public class ReadWorkOrder extends JPanel {
 	private JCheckBox checkDate;
 	private JSpinner spinner;
 	private Workorder current;
-
+	
+	private MaintenanceController maintenanceController;
 	/**
 	 * Create the panel.
 	 */
 	public ReadWorkOrder() {
+		maintenanceController = new MaintenanceController(Database.getInstance().getWorkOrderDataBase());
 		setLayout(new BorderLayout(0, 0));
 		this.setName("Se Arbejdsopgave");
 		setPanels();
@@ -117,7 +120,6 @@ public class ReadWorkOrder extends JPanel {
 		txtPriority.setText(priorityType);
 
 		if (current.getType().equals("Maintenance")) {
-			MaintenanceController maintenanceController = new MaintenanceController();
 			Maintenance maintenanceorder = null;
 			maintenanceorder = maintenanceController.findWorkOrderByID(current.getWorkOrderID());
 			txtInterval.setText(maintenanceorder.getIntervalDayCount() + " dage");
