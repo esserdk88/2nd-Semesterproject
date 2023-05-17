@@ -92,16 +92,18 @@ class WorkorderControllerTest {
 		private static Repair repair;
 		
 		//Instances
-		private WorkOrderDBIF workOrderDB = Database.getInstance().getWorkOrderDataBase();
+		private static WorkOrderDBIF workOrderDB;
 		private static AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
 		private static ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 		
-		private static WorkOrderControllerIF workorderController = new WorkOrderController();
+		private static WorkOrderController workorderController;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		DatabaseConnection.setTestingEnvironment();
 		Database.getInstance().setWorkOrderDataBase(new StubWorkOrderDB());
+		workOrderDB = Database.getInstance().getWorkOrderDataBase();
+		workorderController = new WorkOrderController();
 		asset = assetDB.findAssetByID(1);
 		reference = referenceDB.findReferenceByID(11111111);
 		maintenance = new Maintenance(repeated, intervalDayCount, 0, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
@@ -119,6 +121,7 @@ class WorkorderControllerTest {
 
 	@Test
 	void switchEmployeeWorkordersTest() {
+		System.out.println("Method start");
 		//Arrange
 		workOrderDB.addMaintenanceWorkOrder(maintenance);
 		workOrderDB.addRepairWorkOrder(repair);
@@ -150,14 +153,13 @@ class WorkorderControllerTest {
 			Workorder tempWorkorder2 = workOrderDB.getWorkorderById(repair.getWorkOrderID());
 			success1 = tempWorkorder1.getEmployee().equals(emp2);
 			success2 = tempWorkorder2.getEmployee().equals(emp1);
-			
 			if(switchedEmployees) {
 				assertEquals(success1, success2);
 			}
 			else {
 				fail();
 			}
-				
+					
 		} catch (SQLException e) {
 			//something stupid happened
 			fail();

@@ -63,6 +63,7 @@ public class WorkOrderController implements WorkOrderControllerIF {
 
 	@Override
 	public boolean switchEmployeeWorkorders(Workorder firstWorkorder, Workorder secondWorkorder, boolean concurrencyTest) throws Exception {
+		System.out.println("Switching Employee");
 		//Make sure that both workorders aren't null
 		if(firstWorkorder == null || secondWorkorder == null) {
 			throw new Exception("One or both workorders are null"); 

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import dal.WorkOrderDB;
 import dal.interfaces.AssetDBIF;
 import dal.interfaces.ReferenceDBIF;
 import dal.interfaces.WorkOrderDBIF;
@@ -32,11 +33,13 @@ class WorkOrderDBTest {
 	private static Repair repair;
 	
 	//Instances
-	private WorkOrderDBIF workOrderDB = Database.getInstance().getWorkOrderDataBase();
+	private static WorkOrderDBIF workOrderDB;
 	
 	@BeforeAll
 	static void startUp() throws SQLException {
 		DatabaseConnection.setTestingEnvironment();
+		Database.getInstance().setWorkOrderDataBase(new WorkOrderDB());
+		workOrderDB = Database.getInstance().getWorkOrderDataBase();
 		maintenance = TestingUtilities.getMaintenanceWorkOrder();
 		service = TestingUtilities.getServiceWorkOrder();
 		repair = TestingUtilities.getRepairWorkOrder();
