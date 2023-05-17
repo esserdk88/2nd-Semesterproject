@@ -45,7 +45,7 @@ public class EmployeeOverview extends JPanel {
 	}
 
 	private void setEmployeeOnStartUp() {
-		employeeCtr = new EmployeeController();
+		employeeCtr = new EmployeeController(); //TODO: instantiate in constructor
 		Thread workerThread = new Thread(() -> {
 		    TableSwingWorker dataFetcher = null;
 			try {

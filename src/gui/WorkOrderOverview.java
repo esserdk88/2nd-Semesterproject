@@ -141,7 +141,7 @@ public class WorkOrderOverview extends JPanel {
 
 	}
 	private void readWorkOrderButton() {
-		ReadWorkOrder panel = new ReadWorkOrder();
+		ReadWorkOrder panel = new ReadWorkOrder(); //TODO: Change to field and instantiate in constructor
 		frame.setNewCenterPanel(panel);
 		Thread workerThread = new Thread(() -> {
 			panel.setCurrentWorkorderInfo(getController(workOrderTable.getCellData(columns[2])));
@@ -177,11 +177,11 @@ public class WorkOrderOverview extends JPanel {
 		int workOrderID = Integer.valueOf(workOrderTable.getCellData(columns[0]));
 		switch(type) {
 		case"Maintenance":
-			return new MaintenanceController().findWorkOrderByID(workOrderID);
+			return new MaintenanceController().findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
 		case"Repair":
-			return new RepairController().findWorkOrderByID(workOrderID);
+			return new RepairController().findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
 		case"Service":
-			return new ServiceController().findWorkOrderByID(workOrderID);
+			return new ServiceController().findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
 		}
 		return null;
 	}
@@ -228,7 +228,7 @@ public class WorkOrderOverview extends JPanel {
 	public void setWorkOrderOnStartUp() {
 		String[][] loadingStatus = { { "Henter arbejdsordrer..." } };
 		workOrderTable.setNewData(loadingStatus);
-		workOrderCtrl = new WorkOrderController();
+		workOrderCtrl = new WorkOrderController(); //TODO: instantiate in constructor
 		Thread workerThread = new Thread(() -> {
 			TableSwingWorker dataFetcher = null;
 			dataFetcher = new TableSwingWorker(workOrderTable, workOrderCtrl.getAllUnfinishedWorkOrders());

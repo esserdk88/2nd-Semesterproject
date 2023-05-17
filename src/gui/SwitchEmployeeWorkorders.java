@@ -159,7 +159,7 @@ public class SwitchEmployeeWorkorders extends JFrame {
 		boolean validId = false;
 		if(!textField.getText().isBlank()) {
 			int workorderId = -1;
-			WorkOrderControllerIF workOrderController = new WorkOrderController();
+			WorkOrderControllerIF workOrderController = new WorkOrderController(); //TODO: Change to field and instantiate in constructor
 			try {
 				workorderId = Integer.valueOf(textField.getText());
 				if(workOrderController.workorderHasEmployee(workorderId)) {
@@ -189,7 +189,7 @@ public class SwitchEmployeeWorkorders extends JFrame {
 	}
 	
 	private void btnConfirmPressed() {
-		WorkOrderControllerIF workOrderController = new WorkOrderController();
+		WorkOrderControllerIF workOrderController = new WorkOrderController(); //TODO: Change to field and instantiate in constructor
 		try {
 			int workorderIdOne = Integer.valueOf(textFieldWoOne.getText());
 			int workorderIdTwo = Integer.valueOf(textFieldWoTwo.getText());

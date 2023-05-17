@@ -8,6 +8,7 @@ import dal.interfaces.AssetDBIF;
 import dao.Database;
 import model.Asset;
 import model.Measurement;
+import model.Workorder;
 
 public class AssetController implements AssetControllerIF {
 	
@@ -34,6 +35,11 @@ public class AssetController implements AssetControllerIF {
 		assetList = assetDatabase.getAllAssets();
 		
 		return assetList;
+	}
+	
+	public List<Workorder> getAllWorkOrdersForAssetByID(int assetID){
+		WorkOrderController workOrderController = new WorkOrderController();
+		return workOrderController.getAllWorkOrdersByAssetID(assetID);
 	}
 
 }
