@@ -151,7 +151,7 @@ public class CreateWorkOrder extends JPanel {
 	    
 	    	//Creating WorkOrder of type Repair/Reperation
 	        case "Reparation":
-	            RepairController repairController = new RepairController();
+	            RepairController repairController = new RepairController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return repairController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 														Integer.valueOf(referenceCVR));
@@ -160,7 +160,7 @@ public class CreateWorkOrder extends JPanel {
 			
 			//Creating WorkOrder of type Service/Serviceaftale
 	        case "Serviceaftale":
-	            ServiceController serviceController = new ServiceController();
+	            ServiceController serviceController = new ServiceController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return serviceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 	            										Integer.valueOf(referenceCVR));
@@ -169,7 +169,7 @@ public class CreateWorkOrder extends JPanel {
 			
 			//Creating WorkOrder of type Maintenance/Vedligeholdelse
 	        case "Vedligeholdelse":
-	            MaintenanceController maintenanceController = new MaintenanceController();
+	            MaintenanceController maintenanceController = new MaintenanceController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return maintenanceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 	            											(int) intervalSpinner.getValue(),
@@ -215,7 +215,6 @@ public class CreateWorkOrder extends JPanel {
 			break;
 		}
 	}
-	
 	/**
 	 * A generic method to check an entity based on user input.
 	 *

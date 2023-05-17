@@ -146,7 +146,7 @@ public class AssetOverview extends JPanel {
 	private void setAssetOnStartUp() {
 		String[][] loadingStatus = { { "Henter assets..." } };
 		assetTable.setNewData(loadingStatus);
-		assetCtrl = new AssetController();
+		assetCtrl = new AssetController(); //TODO: instantiate in constructor
 		Thread workerThread = new Thread(() -> {
 			TableSwingWorker dataFetcher = null;
 			try {
@@ -182,9 +182,9 @@ public class AssetOverview extends JPanel {
 		if (index == -1) {
 			GUIPopUpMessages.informationMessage("Intet asset valgt", "Fejl");
 		} else {
-			assetCtrl = new AssetController();
+			assetCtrl = new AssetController(); //TODO: instantiate in constructor?
 			Object value = assetTable.getModel().getValueAt(index, 0);
-			ReadAsset readAsset = new ReadAsset(mainFrame);
+			ReadAsset readAsset = new ReadAsset(mainFrame); //TODO: Change to field and instantiate in constructor
 			int assetID = Integer.parseInt(value.toString());
 			mainFrame.setNewCenterPanel(readAsset);
 			Thread workerThread = new Thread(() -> {
