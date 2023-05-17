@@ -6,6 +6,7 @@ import java.util.List;
 import dal.AssetDBIF;
 import dal.Database;
 import model.Asset;
+import model.Measurement;
 
 public class AssetController implements AssetControllerIF {
 	
