@@ -1,16 +1,17 @@
-package Controller;
+package controller;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dal.Database;
-import dal.DatabaseConnection;
+import controller.interfaces.WorkOrderControllerIF;
 import dal.WorkOrderDB;
-import dal.MeasurementDBIF;
-import dal.SparepartUsedDBIF;
-import dal.WorkOrderDBIF;
+import dal.interfaces.MeasurementDBIF;
+import dal.interfaces.SparepartUsedDBIF;
+import dal.interfaces.WorkOrderDBIF;
+import dao.Database;
+import dao.DatabaseConnection;
 import model.Asset;
 import model.Employee;
 import model.Measurement;

@@ -1,6 +1,7 @@
-package Controller;
+package controller;
 
-import dal.DatabaseConnection;
+import controller.interfaces.ConnectionControllerIF;
+import dao.DatabaseConnection;
 
 public class ConnectionController implements ConnectionControllerIF {
 

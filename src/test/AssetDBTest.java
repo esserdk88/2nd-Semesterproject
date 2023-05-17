@@ -14,11 +14,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import Controller.AssetController;
+import controller.AssetController;
 import dal.AssetDB;
-import dal.AssetDBIF;
-import dal.Database;
-import dal.DatabaseConnection;
+import dal.interfaces.AssetDBIF;
+import dao.Database;
+import dao.DatabaseConnection;
 import model.Address;
 import model.Asset;
 import model.Location;

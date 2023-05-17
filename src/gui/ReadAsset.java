@@ -22,8 +22,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import Controller.MaintenanceController;
-import Controller.WorkOrderController;
+import controller.MaintenanceController;
+import controller.WorkOrderController;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;

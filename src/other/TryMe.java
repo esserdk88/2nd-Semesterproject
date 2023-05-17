@@ -1,7 +1,7 @@
 package other;
 
 import dal.WorkOrderDB;
-import dal.WorkOrderDBIF;
+import dal.interfaces.WorkOrderDBIF;
 
 public class TryMe {
 

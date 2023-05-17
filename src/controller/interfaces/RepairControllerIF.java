@@ -1,4 +1,4 @@
-package Controller;
+package controller.interfaces;
 
 import model.Repair;
 

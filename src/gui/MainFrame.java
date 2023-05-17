@@ -29,7 +29,7 @@ import javax.swing.JSeparator;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import dal.Database;
+import dao.Database;
 import gui.components.ConnectionWatch;
 import gui.components.JRoundedButton;
 import gui.components.PageTracker;

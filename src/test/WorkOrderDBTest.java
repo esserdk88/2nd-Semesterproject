@@ -11,11 +11,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import dal.AssetDBIF;
-import dal.Database;
-import dal.DatabaseConnection;
-import dal.ReferenceDBIF;
-import dal.WorkOrderDBIF;
+import dal.interfaces.AssetDBIF;
+import dal.interfaces.ReferenceDBIF;
+import dal.interfaces.WorkOrderDBIF;
+import dao.Database;
+import dao.DatabaseConnection;
 import model.Asset;
 import model.Maintenance;
 import model.Measurement;

@@ -1,10 +1,11 @@
-package Controller;
+package controller;
 
 import java.sql.SQLException;
 import java.util.List;
 
-import dal.AssetDBIF;
-import dal.Database;
+import controller.interfaces.AssetControllerIF;
+import dal.interfaces.AssetDBIF;
+import dao.Database;
 import model.Asset;
 import model.Measurement;
 

@@ -21,11 +21,11 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import Controller.AssetController;
-import Controller.MaintenanceController;
-import Controller.RepairController;
-import Controller.ServiceController;
-import Controller.WorkOrderController;
+import controller.AssetController;
+import controller.MaintenanceController;
+import controller.RepairController;
+import controller.ServiceController;
+import controller.WorkOrderController;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;

@@ -7,6 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dal.interfaces.SparepartDBIF;
+import dal.interfaces.SupplierDBIF;
+import dao.DataBaseUtilities;
+import dao.Database;
+import dao.DatabaseConnection;
 import model.Sparepart;
 
 public class SparepartDB implements SparepartDBIF {

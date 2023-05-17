@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 
-import Controller.ConnectionController;
+import controller.ConnectionController;
 
 public class ConnectionWatch extends SwingWorker<Void, Boolean> {
 	

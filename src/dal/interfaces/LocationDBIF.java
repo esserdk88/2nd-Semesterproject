@@ -1,4 +1,4 @@
-package dal;
+package dal.interfaces;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

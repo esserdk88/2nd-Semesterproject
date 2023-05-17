@@ -1,4 +1,25 @@
-package dal;
+package dao;
+
+import dal.AddressDB;
+import dal.AssetDB;
+import dal.EmployeeDB;
+import dal.LocationDB;
+import dal.MeasurementDB;
+import dal.ReferenceDB;
+import dal.SparepartDB;
+import dal.SparepartUsedDB;
+import dal.SupplierDB;
+import dal.WorkOrderDB;
+import dal.interfaces.AddressDBIF;
+import dal.interfaces.AssetDBIF;
+import dal.interfaces.EmployeeDBIF;
+import dal.interfaces.LocationDBIF;
+import dal.interfaces.MeasurementDBIF;
+import dal.interfaces.ReferenceDBIF;
+import dal.interfaces.SparepartDBIF;
+import dal.interfaces.SparepartUsedDBIF;
+import dal.interfaces.SupplierDBIF;
+import dal.interfaces.WorkOrderDBIF;
 
 public class Database {
 

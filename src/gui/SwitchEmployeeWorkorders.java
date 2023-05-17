@@ -20,8 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import Controller.WorkOrderController;
-import Controller.WorkOrderControllerIF;
+import controller.WorkOrderController;
+import controller.interfaces.WorkOrderControllerIF;
 import gui.components.GUIPopUpMessages;
 import gui.components.JRoundedButton;
 

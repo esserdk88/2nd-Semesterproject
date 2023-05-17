@@ -4,13 +4,13 @@ import java.sql.SQLException;
 import java.util.Calendar;
 
 import dal.AssetDB;
-import dal.AssetDBIF;
 import dal.MeasurementDB;
-import dal.MeasurementDBIF;
 import dal.SparepartUsedDB;
-import dal.SparepartUsedDBIF;
 import dal.WorkOrderDB;
-import dal.WorkOrderDBIF;
+import dal.interfaces.AssetDBIF;
+import dal.interfaces.MeasurementDBIF;
+import dal.interfaces.SparepartUsedDBIF;
+import dal.interfaces.WorkOrderDBIF;
 import model.Maintenance;
 
 public class TryMe {

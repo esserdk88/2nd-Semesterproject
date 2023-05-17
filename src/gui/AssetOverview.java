@@ -23,8 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
-import Controller.AssetController;
-import Controller.WorkOrderController;
+import controller.AssetController;
+import controller.WorkOrderController;
 import gui.components.DefaultTable;
 import gui.components.GUIPopUpMessages;
 import gui.components.JRoundedButton;

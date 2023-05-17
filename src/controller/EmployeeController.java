@@ -1,10 +1,11 @@
-package Controller;
+package controller;
 
 import java.sql.SQLException;
 import java.util.List;
 
-import dal.Database;
-import dal.EmployeeDBIF;
+import controller.interfaces.EmployeeControllerIF;
+import dal.interfaces.EmployeeDBIF;
+import dao.Database;
 import model.Employee;
 
 
