@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import model.Employee;
 import model.Maintenance;
@@ -74,148 +76,127 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	
 	@Override
 	public boolean addMaintenanceWorkOrder(Maintenance workOrder) {
-		
+
 		boolean success = false;
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psAddMaintenance = con.prepareStatement(INSERT_MAINTENANCE)) {
-			
-			//prepare statement
-			psAddMaintenance.setString(1, workOrder.getTitle());
-			psAddMaintenance.setString(2, "Maintenance");
-			psAddMaintenance.setDate(3, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getStartDate()));
-			psAddMaintenance.setDate(4, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getEndDate()));
-			psAddMaintenance.setShort(5, workOrder.getPriority());
-			psAddMaintenance.setString(6, workOrder.getDescription());
-			psAddMaintenance.setBoolean(7, workOrder.isFinished());
-			psAddMaintenance.setInt(8, workOrder.getAsset().getAssetID());
+
+			// prepare statement
+			setGeneralFieldsCreateWorkOrder(psAddMaintenance, workOrder, "Maintenance");
 			psAddMaintenance.setInt(9, workOrder.getIntervalDayCount());
 			psAddMaintenance.setBoolean(10, workOrder.isRepeated());
-					
-			//execute statement
+
+			// execute statement
 			psAddMaintenance.executeUpdate();
-			
+
 			success = true;
-			
+
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM INSERTING MAINTENANCE WORKORDER:" + e.getMessage());
 		}
-		
+
 		return success;
 	}
-	
+
 	@Override
-	public boolean addServiceWorkOrder (Service workOrder) {
-		
+	public boolean addServiceWorkOrder(Service workOrder) {
+
 		boolean success = false;
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psAddService = con.prepareStatement(INSERT_SERVICE)) {
-			
-			//prepare statement
-			psAddService.setString(1, workOrder.getTitle());
-			psAddService.setString(2, "Service");
-			psAddService.setDate(3, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getStartDate()));
-			psAddService.setDate(4, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getEndDate()));
-			psAddService.setShort(5, workOrder.getPriority());
-			psAddService.setString(6, workOrder.getDescription());
-			psAddService.setBoolean(7, workOrder.isFinished());
-			psAddService.setInt(8, workOrder.getAsset().getAssetID());
+
+			// prepare statement
+			setGeneralFieldsCreateWorkOrder(psAddService, workOrder, "Service");
 			psAddService.setInt(9, workOrder.getReference().getCvr());
-					
-			//execute statement
+
+			// execute statement
 			psAddService.executeUpdate();
-			
+
 			success = true;
-			
+
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM INSERTING SERVICE WORKORDER:" + e.getMessage());
 		}
-		
+
 		return success;
 	}
-	
+
 	@Override
-	public boolean addRepairWorkOrder (Repair workOrder) {
+	public boolean addRepairWorkOrder(Repair workOrder) {
 		boolean success = false;
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psAddRepair = con.prepareStatement(INSERT_REPAIR)) {
-			
-			//prepare statement
-			psAddRepair.setString(1, workOrder.getTitle());
-			psAddRepair.setString(2, "Repair");
-			psAddRepair.setDate(3, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getStartDate()));
-			psAddRepair.setDate(4, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getEndDate()));
-			psAddRepair.setShort(5, workOrder.getPriority());
-			psAddRepair.setString(6, workOrder.getDescription());
-			psAddRepair.setBoolean(7, workOrder.isFinished());
-			psAddRepair.setInt(8, workOrder.getAsset().getAssetID());
+
+			// prepare statement
+			setGeneralFieldsCreateWorkOrder(psAddRepair, workOrder, "Repair");
 			psAddRepair.setInt(9, workOrder.getReference().getCvr());
 			psAddRepair.setDouble(10, workOrder.getPrice());
-					
-			//execute statement
+
+			// execute statement
 			psAddRepair.executeUpdate();
-			
+
 			success = true;
-			
+
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM INSERTING REPAIR WORKORDER:" + e.getMessage());
 		}
-		
+
 		return success;
 	}
-	
+
 	@Override
 	public Maintenance findMaintenanceWorkOrderByID(int workOrderID) {
-		
+
 		Maintenance maintenance = null;
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindMaintenance = con.prepareStatement(SELECT_MAINTENANCE_BY_ID)) {
-			
-			//prepare statement
+
+			// prepare statement
 			psFindMaintenance.setInt(1, workOrderID);
-			
-			//execute statement
+
+			// execute statement
 			ResultSet rs = psFindMaintenance.executeQuery();
-			
-			if (rs != null && rs.next()) {
-				//build Maintenance object from result set
+
+			if (rs.next()) {
+				// build Maintenance object from result set
 				maintenance = buildMaintenanceObject(rs);
 			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING MAINTENANCE WORKORDER:" + e.getMessage());
+			System.out.println("ERROR FROM RETRIEVING MAINTENANCE WORKORDER:" + e.getMessage());
 		}
-		
+
 		return maintenance;
 	}
-	
+
 	@Override
 	public Service findServiceWorkOrderByID(int workOrderID) {
 		Service service = null;
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindService = con.prepareStatement(SELECT_SERVICE_BY_ID)) {
-			
-			//prepare statement
+
+			// prepare statement
 			psFindService.setInt(1, workOrderID);
-			
-			//execute statement
+
+			// execute statement
 			ResultSet rs = psFindService.executeQuery();
-			
-			if (rs != null && rs.next()) {
-				//build Service object from result set
+
+			if (rs.next()) {
+				// build Service object from result set
 				service = buildServiceObject(rs);
 			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING SERVICE:" + e.getMessage());
-		
+			System.out.println("ERROR FROM RETRIEVING SERVICE:" + e.getMessage());
+
 		}
 		return service;
 	}
@@ -223,25 +204,25 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	@Override
 	public Repair findRepairWorkOrderByID(int workOrderID) {
 		Repair repair = null;
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindRepair = con.prepareStatement(SELECT_REPAIR_BY_ID)) {
-			
-			//prepare statement
+
+			// prepare statement
 			psFindRepair.setInt(1, workOrderID);
-			
-			//execute statement
+
+			// execute statement
 			ResultSet rs = psFindRepair.executeQuery();
-			
-			if (rs != null && rs.next()) {
-				//build Repair object from result set
+
+			if (rs.next()) {
+				// build Repair object from result set
 				repair = buildRepairObject(rs);
 			}
-			
+
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING REPAIR:" + e.getMessage());
-		
+			System.out.println("ERROR FROM RETRIEVING REPAIR:" + e.getMessage());
+
 		}
 		return repair;
 	}
@@ -249,52 +230,47 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	@Override
 	public List<Maintenance> getAllMaintenanceWorkOrders() {
 		List<Maintenance> list = new ArrayList<>();
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_MAINTENANCE)) {
-			
-			//prepare statement
-			// Left empty. 
-			
-			//execute statement
+
+			// prepare statement
+			// Left empty.
+
+			// execute statement
 			ResultSet rs = psFindWorkorder.executeQuery();
-			
-			if (rs != null) {
-				//build Maintenance object from result set
-				while(rs.next()) {
-					list.add(buildMaintenanceObject(rs));
-				}
-			} 
+
+			// build Maintenance object from result set
+			while (rs.next()) {
+				list.add(buildMaintenanceObject(rs));
+			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING MAINTENANCE WORKORDER:" + e.getMessage());
+			System.out.println("ERROR FROM RETRIEVING MAINTENANCE WORKORDER:" + e.getMessage());
 		}
 		return list;
 	}
-	
 
 	@Override
 	public List<Service> getAllServiceWorkOrders() {
 		List<Service> list = new ArrayList<>();
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_SERVICE)) {
-			
-			//prepare statement
-			// Left empty. 
-			
-			//execute statement
+
+			// prepare statement
+			// Left empty.
+
+			// execute statement
 			ResultSet rs = psFindWorkorder.executeQuery();
-			
-			if (rs != null) {
-				//build Service object from result set
-				while(rs.next()) {
-					list.add(buildServiceObject(rs));
-				}
-			} 
+
+			// build Service object from result set
+			while (rs.next()) {
+				list.add(buildServiceObject(rs));
+			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING SERVICE WORKORDER:" + e.getMessage());
+			System.out.println("ERROR FROM RETRIEVING SERVICE WORKORDER:" + e.getMessage());
 		}
 		return list;
 	}
@@ -302,324 +278,226 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	@Override
 	public List<Repair> getAllRepairWorkOrders() {
 		List<Repair> list = new ArrayList<>();
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_REPAIR)) {
-			
-			//prepare statement
-			// Left empty. 
-			
-			//execute statement
+
+			// prepare statement
+			// Left empty.
+
+			// execute statement
 			ResultSet rs = psFindWorkorder.executeQuery();
-			
-			if (rs != null) {
-				//build Repair object from result set
-				while(rs.next()) {
-					list.add(buildRepairObject(rs));
-				}
-			} 
+
+			// build Repair object from result set
+			while (rs.next()) {
+				list.add(buildRepairObject(rs));
+			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING REPAIR WORKORDER:" + e.getMessage());
+			System.out.println("ERROR FROM RETRIEVING REPAIR WORKORDER:" + e.getMessage());
 		}
 		return list;
 	}
-	
+
 	@Override
 	public List<Workorder> getAllUnfinishedWorkOrders() {
 		List<Workorder> list = new ArrayList<>();
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_UNFINISHED_WORKORDERS)) {
-			
-			//prepare statement
+
+			// prepare statement
 			// Left empty.
-			
-			//execute statement
+
+			// execute statement
 			ResultSet rs = psFindWorkorder.executeQuery();
-			
-			if (rs != null) {
-				//build WorkOrder object from result set
-				while(rs.next()) {
-					switch (rs.getString("workorder_type")) {
-					case "Maintenance":  
-						list.add(buildMaintenanceObject(rs));
-						break;
-					case "Service":  
-						list.add(buildServiceObject(rs));
-						break;	
-					case "Repair":  
-						list.add(buildRepairObject(rs));
-						break;	
-					default:
-						//Left empty.
-					}
-				}
+
+			// build WorkOrder object from result set
+			while (rs.next()) {
+				list.add(switchWorkorderBuilderFromResultSet(rs));
 			}
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM RETRIEVING UNFINISHED WORKORDER:" + e.getMessage());
 		}
 		return list;
 	}
+
 	@Override
-	public List<Workorder> getAllWorkOrdersByAssetID(int assetID){
+	public List<Workorder> getAllWorkOrdersByAssetID(int assetID) {
 		List<Workorder> list = new ArrayList<>();
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindWorkorder = con.prepareStatement(SELECT_ALL_WORKORDERS_BY_ASSET_ID)) {
-			
-			//prepare statement
+
+			// prepare statement
 			psFindWorkorder.setInt(1, assetID);
-			
-			//execute statement
+
+			// execute statement
 			ResultSet rs = psFindWorkorder.executeQuery();
-			
-			if (rs != null) {
-				//build WorkOrder object from result set
-				while(rs.next()) {
-					switch (rs.getString("workorder_type")) {
-					case "Maintenance":  
-						list.add(buildMaintenanceObject(rs));
-						break;
-					case "Service":  
-						list.add(buildServiceObject(rs));
-						break;	
-					case "Repair":  
-						list.add(buildRepairObject(rs));
-						break;	
-					default:
-						//Left empty.
-					}
-				}
+
+			// build WorkOrder object from result set
+			while (rs.next()) {
+				list.add(switchWorkorderBuilderFromResultSet(rs));
 			}
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM RETRIEVING UNFINISHED WORKORDER:" + e.getMessage());
 		}
 		return list;
 	}
-	
+
 	public boolean deleteWorkOrderByID(int workOrderID) {
-		
+
 		boolean success = false;
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psDeleteWorkOrder = con.prepareStatement(DELETE_WORK_ORDER_BY_ID)) {
-			
-			//prepare statement
+
+			// prepare statement
 			psDeleteWorkOrder.setInt(1, workOrderID);
-			
-			//execute statement
+
+			// execute statement
 			psDeleteWorkOrder.executeUpdate();
-			psDeleteWorkOrder.getUpdateCount(); 
-			if(psDeleteWorkOrder.getUpdateCount() > 0) {
-				success = true;
-			}
-			
+			success = psDeleteWorkOrder.getUpdateCount() > 0;
+
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM DELETING WORKORDER:" + e.getMessage());
 		}
-		
+
 		return success;
 	}
-	
+
 	public boolean updateWorkorder(Workorder workorder) {
 		boolean success = false;
-		String finishedStatement = "UPDATE Workorder SET " + FIELDS_UPDATE_COMMON_WITH_EMPLOYEE + " WHERE workorder_id_PK = ?";		
+		String finishedStatement = "UPDATE Workorder SET " + FIELDS_UPDATE_COMMON_WITH_EMPLOYEE
+				+ " WHERE workorder_id_PK = ?";
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
-		try(PreparedStatement psUpdateWorkorder = con.prepareStatement(finishedStatement)) {
+		try (PreparedStatement psUpdateWorkorder = con.prepareStatement(finishedStatement)) {
 			psUpdateWorkorder.setString(1, workorder.getTitle());
 			psUpdateWorkorder.setString(2, workorder.getType());
-			if(workorder.getStartDate() != null) {
+			if (workorder.getStartDate() != null) {
 				psUpdateWorkorder.setDate(3, DataBaseUtilities.convertCalendarToSqlDate(workorder.getStartDate()));
-			}
-			else {
+			} else {
 				psUpdateWorkorder.setDate(3, null);
 			}
-			if(workorder.getEndDate() != null) {
+			if (workorder.getEndDate() != null) {
 				psUpdateWorkorder.setDate(4, DataBaseUtilities.convertCalendarToSqlDate(workorder.getEndDate()));
-			}
-			else {
+			} else {
 				psUpdateWorkorder.setDate(4, null);
 			}
 			psUpdateWorkorder.setInt(5, workorder.getPriority());
-			psUpdateWorkorder.setString(6,  workorder.getDescription());
+			psUpdateWorkorder.setString(6, workorder.getDescription());
 			psUpdateWorkorder.setBoolean(7, workorder.isFinished());
 			psUpdateWorkorder.setInt(8, workorder.getAsset().getAssetID());
 			psUpdateWorkorder.setInt(9, workorder.getEmployee().getEmployeeID());
 			psUpdateWorkorder.setInt(10, workorder.getWorkOrderID());
 			psUpdateWorkorder.executeUpdate();
-			
+
 			success = true;
-			
+
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM UPDATING WORKORDER");
 			e.printStackTrace();
 		}
-				
+
 		return success;
 	}
-	
+
 	@Override
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	public Maintenance buildMaintenanceObjectFromResultset(ResultSet rs) throws SQLException {
-		if(DataBaseUtilities.check(rs, null, "workorder_id_PK")){
-			return buildMaintenanceObject(rs);
-		}else return null;
-	}
-		
-	//Builders
+
+	// Builders
 	private Maintenance buildMaintenanceObject(ResultSet rs) throws SQLException {
 		// create a new Maintenance object
 		Maintenance result = new Maintenance();
 
-		// set the properties of the Maintenance object based on the values in the ResultSet
-		result.setWorkOrderID(rs.getInt("workorder_id_PK"));
-		result.setTitle(rs.getString("workorder_title"));
-		result.setType(rs.getString("workorder_type"));
-		result.setDescription(rs.getString("workorder_description"));
-		result.setPriority(rs.getShort("workorder_priority"));
-		result.setFinished(rs.getBoolean("workorder_finished"));
-		
-		//Maintenance-specific
+		// Set WorkOrder General Fields
+		buildGeneralFields(result, rs);
+
+		// Maintenance-specific
 		result.setRepeated(rs.getBoolean("workorder_repeatable"));
 		result.setIntervalDayCount(rs.getInt("workorder_interval"));
-		
-		//Dates
-		result.setStartDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
-		result.setEndDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
-		
-		//Objects
-//		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
-//		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
-		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
-		result.setAsset(assetDB.buildObjectFromResultset(rs));
-		
 
 		// return the Maintenance object
-				
 		return result;
 	}
-	
-	public Service buildServiceObjectFromResultset(ResultSet rs) throws SQLException {
-		if(DataBaseUtilities.check(rs, null, "workorder_id_PK")){
-			return buildServiceObject(rs);
-		}else return null;
-	}
+
 	private Service buildServiceObject(ResultSet rs) throws SQLException {
 		// create a new Service object
 		Service result = new Service();
 
-		// set the properties of the Service object based on the values in the ResultSet
-		result.setWorkOrderID(rs.getInt("workorder_id_PK"));
-		result.setTitle(rs.getString("workorder_title"));
-		result.setType(rs.getString("workorder_type"));
-		result.setDescription(rs.getString("workorder_description"));
-		result.setPriority(rs.getShort("workorder_priority"));
-		result.setFinished(rs.getBoolean("workorder_finished"));
-		
-		//Service-specific
+		// Set WorkOrder General Fields
+		buildGeneralFields(result, rs);
+
+		// Service-specific
 		result.setReference(referenceDB.buildObjectFromResultset(rs));
-		
-		//Dates
-		result.setStartDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
-		result.setEndDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
-		
-		//Objects
-//		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
-//		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
-		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
-		result.setAsset(assetDB.buildObjectFromResultset(rs));
+
 		// return the Service object
 		return result;
 	}
-	
-	public Repair buildRepairObjectFromResultset(ResultSet rs) throws SQLException {
-		if(DataBaseUtilities.check(rs, null, "workorder_id_PK")){
-			return buildRepairObject(rs);
-		}else return null;
-	}
+
 	private Repair buildRepairObject(ResultSet rs) throws SQLException {
 		// create a new Repair object
 		Repair result = new Repair();
 
-		// set the properties of the Repair object based on the values in the ResultSet
-		result.setWorkOrderID(rs.getInt("workorder_id_PK"));
-		result.setTitle(rs.getString("workorder_title"));
-		result.setType(rs.getString("workorder_type"));
-		result.setDescription(rs.getString("workorder_description"));
-		result.setPriority(rs.getShort("workorder_priority"));
-		result.setFinished(rs.getBoolean("workorder_finished"));
-		
-		//Repair-specific
+		// Set WorkOrder General Fields
+		buildGeneralFields(result, rs);
+
+		// Repair-specific
 		result.setPrice(rs.getDouble("workorder_price"));
 		result.setReference(referenceDB.buildObjectFromResultset(rs));
-		
-		//Dates
-		result.setStartDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
-		result.setEndDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
-		
-		//Objects
-//		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
-//		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
-		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
-		result.setAsset(assetDB.buildObjectFromResultset(rs));
+
 		// return the Repair object
 		return result;
 	}
 
 	@Override
 	public int getLatestKey() {
-		
+
 		int outputKey = -1;
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindLatestKey = con.prepareStatement(SELECT_LATEST_KEY)) {
-			
-			//prepare statement left empty
-			
-			//execute statement
+
+			// prepare statement left empty
+
+			// execute statement
 			ResultSet rs = psFindLatestKey.executeQuery();
-			
-			if (rs != null && rs.next()) {
+
+			if (rs.next()) {
 				outputKey = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING LATEST KEY:" + e.getMessage());
+			System.out.println("ERROR FROM RETRIEVING LATEST KEY:" + e.getMessage());
 		}
-		
+
 		return outputKey;
 	}
-	
+
 	@Override
 	public Workorder getWorkorderById(int workorderId) throws SQLException {
 		Workorder workorder = null;
+
+		// Setting Connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psGetWorkorderById = con.prepareStatement(SELECT_WORKORDER_BY_ID)) {
+
+			// Prepare statement
 			psGetWorkorderById.setInt(1, workorderId);
+
+			// Execute Statement
 			ResultSet rs = psGetWorkorderById.executeQuery();
-			
-			if(rs != null && rs.next()) {
-				switch (rs.getString("workorder_type")) {
-				case "Maintenance":  
-					workorder= buildMaintenanceObject(rs);
-					break;
-				case "Service":  
-					workorder = buildServiceObject(rs);
-					break;	
-				case "Repair":  
-					workorder = buildRepairObject(rs);
-					break;	
-				default:
-					//Left empty.
-				}
+
+			// Build WorkOrder
+			if (rs.next()) {
+				workorder = switchWorkorderBuilderFromResultSet(rs);
 			}
 		}
 		return workorder;
@@ -627,50 +505,89 @@ public class WorkOrderDB implements WorkOrderDBIF {
 
 	@Override
 	public List<Workorder> getWorkordersById(int[] workorderIds) {
-		
+
 		List<Workorder> workorders = new ArrayList<>();
-		String finishedStatement = SELECT_ALL_WORKORDERS_BY_IDS;
-		
-		for (int i = 0; i < workorderIds.length; i++) {
-		    if (i != 0) {
-		        finishedStatement += ",";
-		    }
-		    finishedStatement += "?";
-		}
-		finishedStatement += ")";
-		
+
+		String placeholders = IntStream.range(0, workorderIds.length).mapToObj(i -> "?")
+				.collect(Collectors.joining(","));
+
+		String finishedStatement = SELECT_ALL_WORKORDERS_BY_IDS + placeholders + ")";
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
-		try(PreparedStatement psSelectWorkordersByIds = con.prepareStatement(finishedStatement)) {
-			for(int i = 0; i < workorderIds.length; i++) {
+		try (PreparedStatement psSelectWorkordersByIds = con.prepareStatement(finishedStatement)) {
+			for (int i = 0; i < workorderIds.length; i++) {
 				psSelectWorkordersByIds.setInt(i + 1, workorderIds[i]);
 			}
 			ResultSet rs = psSelectWorkordersByIds.executeQuery();
-			
-			if(rs != null) {
-				while(rs.next()) {
-					switch (rs.getString("workorder_type")) {
-					case "Maintenance":  
-						workorders.add(buildMaintenanceObject(rs));
-						break;
-					case "Service":  
-						workorders.add(buildServiceObject(rs));
-						break;	
-					case "Repair":  
-						workorders.add(buildRepairObject(rs));
-						break;	
-					default:
-						//Left empty.
-					}
-				}
+
+			while (rs.next()) {
+				workorders.add(switchWorkorderBuilderFromResultSet(rs));
 			}
-			
-		}
-		catch (Exception e) {
-			System.out.println("ERROR FROM RETRIEVING WORKORDERS BE MULTIBLE IDS: CHECK FOR VALID IDS");
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("ERROR FROM RETRIEVING WORKORDERS BY MULTIBLE IDS: CHECK FOR VALID IDS");
 		}
 		return workorders;
+	}
+
+	public Workorder buildWorkorderObjectFromResultset(ResultSet rs) throws SQLException {
+		if (DataBaseUtilities.check(rs, null, "workorder_id_PK")) {
+			return switchWorkorderBuilderFromResultSet(rs);
+		} else
+			return null;
+	}
+
+	private Workorder buildGeneralFields(Workorder result, ResultSet rs) throws SQLException {
+
+		// General Fields
+		result.setWorkOrderID(rs.getInt("workorder_id_PK"));
+		result.setTitle(rs.getString("workorder_title"));
+		result.setType(rs.getString("workorder_type"));
+		result.setDescription(rs.getString("workorder_description"));
+		result.setPriority(rs.getShort("workorder_priority"));
+		result.setFinished(rs.getBoolean("workorder_finished"));
+
+		// Dates
+		result.setStartDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
+		result.setEndDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
+
+//		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
+//		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
+		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
+		result.setAsset(assetDB.buildObjectFromResultset(rs));
+		return result;
+	}
+
+	private Workorder switchWorkorderBuilderFromResultSet(ResultSet rs) throws SQLException {
+		Workorder workorder;
+		switch (rs.getString("workorder_type")) {
+		case "Maintenance":
+			workorder = buildMaintenanceObject(rs);
+			break;
+		case "Service":
+			workorder = buildServiceObject(rs);
+			break;
+		case "Repair":
+			workorder = buildRepairObject(rs);
+			break;
+		default:
+			workorder = null;
+			break;
+		}
+		return workorder;
+
+	}
+
+	private void setGeneralFieldsCreateWorkOrder(PreparedStatement preparedStatement, Workorder workOrder, String type)
+			throws SQLException {
+		preparedStatement.setString(1, workOrder.getTitle());
+		preparedStatement.setString(2, type);
+		preparedStatement.setDate(3, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getStartDate()));
+		preparedStatement.setDate(4, DataBaseUtilities.convertCalendarToSqlDate(workOrder.getEndDate()));
+		preparedStatement.setShort(5, workOrder.getPriority());
+		preparedStatement.setString(6, workOrder.getDescription());
+		preparedStatement.setBoolean(7, workOrder.isFinished());
+		preparedStatement.setInt(8, workOrder.getAsset().getAssetID());
 	}
 	
 }

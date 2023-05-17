@@ -25,25 +25,25 @@ public class MeasurementDB implements MeasurementDBIF {
 	public Measurement findMeasurementByID(int measurementID) {
 
 		Measurement measurement = null;
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindMeasurement = con.prepareStatement(SELECT_MEASUREMENT_BY_ID)) {
-			
-			//prepare statement
+
+			// prepare statement
 			psFindMeasurement.setInt(1, measurementID);
-			
-			//execute statement
+
+			// execute statement
 			ResultSet rs = psFindMeasurement.executeQuery();
-			
-			if (rs != null && rs.next()) {
-				//build Measurement object from result set
+
+			if (rs.next()) {
+				// build Measurement object from result set
 				measurement = buildObject(rs);
 			}
 		} catch (SQLException e) {
 			System.out.println("ERROR FROM RETRIEVING MEASUREMENT:" + e.getMessage());
 		}
-		
+
 		return measurement;
 	}
 
@@ -51,65 +51,62 @@ public class MeasurementDB implements MeasurementDBIF {
 		// Create a new Measurement object
 		Measurement result = new Measurement();
 
-		// Set the properties of the Measurement object based on the values in the ResultSet
+		// Set the properties of the Measurement object based on the values in the
+		// ResultSet
 		result.setMeasurementID(rs.getInt("measurement_id_PK"));
 		result.setTitle(rs.getString("measurement_type"));
 		result.setValue(rs.getDouble("measurement_value"));
-		
+
 		// return the Measurement object
 		return result;
 	}
 
 	@Override
 	public List<Measurement> getAllMeasurements() {
-		
+
 		List<Measurement> list = new ArrayList<>();
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindMeasurement = con.prepareStatement(SELECT_ALL_MEASUREMENTS)) {
-			
-			//prepare statement
-			// Left empty. 
-			
-			//execute statement
+
+			// prepare statement
+			// Left empty.
+
+			// execute statement
 			ResultSet rs = psFindMeasurement.executeQuery();
-			
-			if (rs != null) {
-				//build Measurement object from result set
-				while(rs.next()) {
-					list.add(buildObject(rs));
-				}
-			} 
+
+			// build Measurement object from result set
+			while (rs.next()) {
+				list.add(buildObject(rs));
+			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING MEASUREMENT:" + e.getMessage());
+			System.out.println("ERROR FROM RETRIEVING MEASUREMENT:" + e.getMessage());
 		}
 		return list;
 	}
 
 	@Override
 	public List<Measurement> findMeasurementsByWorkOrderID(int workOrderID) {
-		
+
 		List<Measurement> list = new ArrayList<>();
-		
+
 		// establish database connection
 		try (Connection con = DatabaseConnection.getInstance().getConnection();
 				PreparedStatement psFindMeasurement = con.prepareStatement(SELECT_MEASUREMENTS_BY_WORKORDER_ID)) {
-			
-			//prepare statement
+
+			// prepare statement
 			psFindMeasurement.setInt(1, workOrderID);
-			
-			//execute statement
+
+			// execute statement
 			ResultSet rs = psFindMeasurement.executeQuery();
-			
-			if (rs != null) {
-				//build Measurement object from result set
-				while(rs.next()) {
-					list.add(buildObject(rs));
-				}
-			} 
+
+			// build Measurement object from result set
+			while (rs.next()) {
+				list.add(buildObject(rs));
+			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING MEASUREMENT:" + e.getMessage());
+			System.out.println("ERROR FROM RETRIEVING MEASUREMENT:" + e.getMessage());
 		}
 		return list;
 	}

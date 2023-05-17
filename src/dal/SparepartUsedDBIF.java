@@ -9,9 +9,11 @@ import model.SparepartUsed;
  */
 
 public interface SparepartUsedDBIF {
-	
+
 	public SparepartUsed findSparePartUsedByWorkorderIDAndSparepartID(int workOrderID, int sparepartID);
+
 	public List<SparepartUsed> findSparepartListByWorkorderID(int workOrderID);
+
 	public List<SparepartUsed> getAllSparepartUsed();
-	
+
 }

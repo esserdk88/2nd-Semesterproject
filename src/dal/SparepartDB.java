@@ -20,44 +20,47 @@ public class SparepartDB implements SparepartDBIF {
 	@Override
 	public Sparepart findSparePartbyID(int sparePartID) {
 		Sparepart sparepart = null;
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindSparepart = con.prepareStatement(SELECT_SPAREPART_BY_ID)) {
-			
-			//prepare statement
+
+			// prepare statement
 			psFindSparepart.setInt(1, sparePartID);
-			
-			//execute statement
+
+			// execute statement
 			ResultSet rs = psFindSparepart.executeQuery();
-			
-			if (rs != null && rs.next()) {
-				//build Sparepart object from result set
+
+			if (rs.next()) {
+				// build Sparepart object from result set
 				sparepart = buildObject(rs);
 			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING SPAREPART:" + e.getMessage());
+			System.out.println("ERROR FROM RETRIEVING SPAREPART:" + e.getMessage());
 		}
-		
+
 		return sparepart;
 	}
+
 	public Sparepart buildObjectFromResultset(ResultSet rs) throws SQLException {
-		if(DataBaseUtilities.check(rs, null, "sparepart_id_PK")){
+		if (DataBaseUtilities.check(rs, null, "sparepart_id_PK")) {
 			return buildObject(rs);
-		}else return null;
+		} else
+			return null;
 	}
 
 	private Sparepart buildObject(ResultSet rs) throws SQLException {
 		// Create a new Sparepart object
 		Sparepart result = new Sparepart();
 
-		// Set the properties of the Sparepart object based on the values in the ResultSet
+		// Set the properties of the Sparepart object based on the values in the
+		// ResultSet
 		result.setSparepartID(rs.getInt("sparepart_id_PK"));
 		result.setName(rs.getString("sparepart_name"));
 		result.setStockAmount(rs.getInt("sparepart_stock_amount"));
 		result.setPrice(rs.getDouble("sparepart_price"));
 		result.setSupplier(supplierDB.buildObjectFromResultset(rs));
-		
+
 		// return the Sparepart object
 		return result;
 	}
@@ -65,25 +68,23 @@ public class SparepartDB implements SparepartDBIF {
 	@Override
 	public List<Sparepart> getAllSpareparts() {
 		List<Sparepart> list = new ArrayList<>();
-		
+
 		// establish database connection
 		Connection con = DatabaseConnection.getInstance().getConnection();
 		try (PreparedStatement psFindSparepart = con.prepareStatement(SELECT_ALL_SPAREPARTS)) {
-			
-			//prepare statement
-			// Left empty. 
-			
-			//execute statement
+
+			// prepare statement
+			// Left empty.
+
+			// execute statement
 			ResultSet rs = psFindSparepart.executeQuery();
-			
-			if (rs != null) {
-				//build Sparepart object from result set
-				while(rs.next()) {
-					list.add(buildObject(rs));
-				}
-			} 
+
+			// build Sparepart object from result set
+			while (rs.next()) {
+				list.add(buildObject(rs));
+			}
 		} catch (SQLException e) {
-		System.out.println("ERROR FROM RETRIEVING SPAREPART:" + e.getMessage());
+			System.out.println("ERROR FROM RETRIEVING SPAREPART:" + e.getMessage());
 		}
 		return list;
 	}
