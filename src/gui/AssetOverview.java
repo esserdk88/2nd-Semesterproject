@@ -191,11 +191,9 @@ public class AssetOverview extends JPanel {
 				try {
 					readAsset.initialize(assetCtrl.findAssetByID(assetID));
 				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					GUIPopUpMessages.warningMessage("Only letters in ID textbox", "Error!");
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					GUIPopUpMessages.warningMessage("Database connection problems", "Error!");
 				}
 				TableSwingWorker dataFetcher = null;
 				dataFetcher = new TableSwingWorker(readAsset.getHistoryTable(),

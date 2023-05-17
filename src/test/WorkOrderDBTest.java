@@ -87,7 +87,6 @@ class WorkOrderDBTest {
 	
 	@Test
 	void findMaintenanceWorkOrderByIDTest() {
-		//TODO Finish this test
 		//Arrange
 		workOrderDB.addMaintenanceWorkOrder(maintenance);
 		Maintenance foundMaintenance = null;

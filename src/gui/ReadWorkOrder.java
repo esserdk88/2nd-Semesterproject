@@ -175,7 +175,6 @@ public class ReadWorkOrder extends JPanel {
 		gbc_historyScollPane.gridy = 9;
 		centerPanel.add(historyScollPane, gbc_historyScollPane);
 		
-		//TODO update historyScollPane
 		String[] columnsHistory = new String[] { "Reg. nr", "Start dato", "Lukket dato" };
 		historyTable = new DefaultTable(null, columnsHistory);
 		historyScollPane.setViewportView(historyTable);
@@ -190,7 +189,6 @@ public class ReadWorkOrder extends JPanel {
 		gbc_scrollPane.gridy = 9;
 		centerPanel.add(scrollPane, gbc_scrollPane);
 		
-		//TODO update completedActionsTable
 		String[] columnsCompletedActions = new String[] { "Reg. af", "Dato", "Bemærkning" };
 		completedActionsTable = new DefaultTable(null, columnsCompletedActions);
 		scrollPane.setViewportView(completedActionsTable);

@@ -66,9 +66,7 @@ public class DatabaseConnection {
 	public void startTransaction()  {
 		try {
 			connection.setAutoCommit(false);
-			System.out.println("Success 1");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

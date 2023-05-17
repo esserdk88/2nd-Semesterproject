@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 
 import controller.EmployeeController;
 import gui.components.DefaultTable;
+import gui.components.GUIPopUpMessages;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
 
@@ -51,7 +52,7 @@ public class EmployeeOverview extends JPanel {
 			try {
 				dataFetcher = new TableSwingWorker(employeeTable, employeeCtr.getAllEmployees());
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				GUIPopUpMessages.warningMessage("Error Connecting to database", "Error");
 				e.printStackTrace();
 			}
 		    dataFetcher.execute();
