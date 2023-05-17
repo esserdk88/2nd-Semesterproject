@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Address;
 import model.Supplier;
 
 public class SupplierDB implements SupplierDBIF {

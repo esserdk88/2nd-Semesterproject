@@ -132,11 +132,13 @@ public class DatabaseConnection {
 
 	/**
 	 * Set a new isolation level for your transactions
-	 * @param level, is your isolation in integer possible levels are as follows
-	 * Connection.TRANSACTION_READ_UNCOMMITTED,
-	 * Connection.TRANSACTION_READ_COMMITTED,
-	 * Connection.TRANSACTION_REPEATABLE_READ,
-	 * or Connection.TRANSACTION_SERIALIZABLE.
+	 * @param level one of the following {@code Connection} constants:
+     *        {@code Connection.TRANSACTION_READ_UNCOMMITTED},
+     *        {@code Connection.TRANSACTION_READ_COMMITTED},
+     *        {@code Connection.TRANSACTION_REPEATABLE_READ}, or
+     *        {@code Connection.TRANSACTION_SERIALIZABLE}.
+     *        (Note that {@code Connection.TRANSACTION_NONE} cannot be used
+     *        because it specifies that transactions are not supported.)
 	 * @throws SQLException
 	 */
 	public void setIsolationLevel(int level) throws SQLException {

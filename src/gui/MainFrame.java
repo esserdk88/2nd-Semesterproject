@@ -30,6 +30,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import dal.Database;
+import gui.components.ConnectionWatch;
 import gui.components.JRoundedButton;
 import gui.components.PageTracker;
 
@@ -357,6 +358,10 @@ public class MainFrame extends JFrame {
 		List<String> panels = pageTracker.getTop5VisitedPages();
 		for(int i = 0;i<panels.size();i++) {
 			createNewFrequentButton(panels.get(i), i);
+		}
+		if(panels.size() == 0) {
+			frequentLabel.setVisible(false);
+			separator.setVisible(false);
 		}
 	}
 	

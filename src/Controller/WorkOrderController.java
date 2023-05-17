@@ -8,14 +8,20 @@ import java.util.List;
 import dal.Database;
 import dal.DatabaseConnection;
 import dal.WorkOrderDB;
+import dal.MeasurementDBIF;
+import dal.SparepartUsedDBIF;
 import dal.WorkOrderDBIF;
 import model.Asset;
 import model.Employee;
+import model.Measurement;
+import model.SparepartUsed;
 import model.Workorder;
 
 public class WorkOrderController implements WorkOrderControllerIF {
 	
 	protected WorkOrderDBIF workOrderDB = Database.getInstance().getWorkOrderDataBase();
+	protected SparepartUsedDBIF sparePartUsedDB = Database.getInstance().getSparepartUsedDataBase();
+	protected MeasurementDBIF measurementDB = Database.getInstance().getMeasurementDataBase();
 	
 	@Override
 	public Asset findAssetByID(int id) {
@@ -37,7 +43,7 @@ public class WorkOrderController implements WorkOrderControllerIF {
 	
 	public List<Workorder> getAllUnfinishedWorkOrders() {
 		List<Workorder> tempList = new ArrayList<>();
-		tempList = Database.getInstance().getWorkOrderDataBase().getAllUnfinishedWorkOrders();
+		tempList = workOrderDB.getAllUnfinishedWorkOrders();
 		return tempList;
 	}
 
@@ -98,6 +104,19 @@ public class WorkOrderController implements WorkOrderControllerIF {
 		return hasEmployee;
 	}
 	
+	@Override
+	public List<Measurement> getAllMeasurementsUsedInWorkOrder(int workdOrderID) {
+		List<Measurement> tempList = new ArrayList<>();
+		tempList = measurementDB.findMeasurementsByWorkOrderID(workdOrderID);
+		return tempList;
+		
+	}
 	
-
+	@Override
+	public List<SparepartUsed> getAllSparepartsUsedInWorkOrder(int workOrderID) {
+		List<SparepartUsed> tempList = new ArrayList<>();
+		tempList = sparePartUsedDB.findSparepartListByWorkorderID(workOrderID);
+		return tempList;
+		
+	}
 }

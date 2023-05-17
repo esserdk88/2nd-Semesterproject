@@ -1,10 +1,12 @@
 package model;
 
+import gui.components.StringArrayConvertible;
+
 /*
  * 19-04-2023: Review done by Rasmus and Mikkel - Align DCD vs. code
  */
 
-public class SparepartUsed {
+public class SparepartUsed implements StringArrayConvertible{
 	
 	private int amount;
 	private Sparepart sparepart;
@@ -42,6 +44,11 @@ public class SparepartUsed {
 	@Override
 	public String toString() {
 		return sparepart.getName() + " : " + amount;
+	}
+
+	@Override
+	public String[] getObjectAsStringArray() {
+		return new String[] {getSparepart().getName(), String.valueOf(getAmount())};
 	}
 	
 	

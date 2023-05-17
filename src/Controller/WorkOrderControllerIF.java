@@ -5,6 +5,8 @@ import java.util.List;
 
 import model.Asset;
 import model.Employee;
+import model.Measurement;
+import model.SparepartUsed;
 import model.Workorder;
 
 /*
@@ -26,6 +28,10 @@ public interface WorkOrderControllerIF {
 	
 	//probably needs to throw exceptions
 	public boolean workorderHasEmployee(int workorderId) throws SQLException;
-	public Workorder getWorkorderByID(int workorderId) throws SQLException;
 	
+	public Workorder getWorkorderByID(int workorderId) throws SQLException;
+
+	public List<Measurement> getAllMeasurementsUsedInWorkOrder(int workdOrderID);
+	
+	public List<SparepartUsed> getAllSparepartsUsedInWorkOrder(int workOrderID);
 }

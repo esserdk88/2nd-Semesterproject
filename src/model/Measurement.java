@@ -1,10 +1,12 @@
 package model;
 
+import gui.components.StringArrayConvertible;
+
 /*
  * 19-04-2023: Reworked with alignment from DCD
  */
 
-public class Measurement {
+public class Measurement implements StringArrayConvertible {
 	
 	private int measurementID;
 	private String title;
@@ -63,6 +65,11 @@ public class Measurement {
 	@Override
 	public String toString() {
 		return "(" + measurementID + ") " + getTitle() + " : " + getValue();
+	}
+	
+	@Override
+	public String[] getObjectAsStringArray() {
+		return new String[] {String.valueOf(getMeasurementID()), getTitle(), String.valueOf(getValue())};
 	}
 	
 	
