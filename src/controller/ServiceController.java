@@ -13,8 +13,8 @@ import model.Workorder;
 
 public class ServiceController extends WorkOrderController implements ServiceControllerIF {
 	
-	public ServiceController(WorkOrderDBIF workorderDB) {
-		super(workorderDB);
+	public ServiceController() {
+		super();
 	}
 	
 	@Override

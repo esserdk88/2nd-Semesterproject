@@ -81,8 +81,8 @@ public class ReadAsset extends JPanel {
 	private JScrollPane measurementsScrollPane;
 	private String[][] loadingDataMessage;
 	
-	private MaintenanceController maintenanceController = new MaintenanceController(Database.getInstance().getWorkOrderDataBase());
-	private WorkOrderController workOrderController = new WorkOrderController(Database.getInstance().getWorkOrderDataBase());
+	private MaintenanceController maintenanceController = new MaintenanceController();
+	private WorkOrderController workOrderController = new WorkOrderController();
 
 	/**
 	 * Create the panel.

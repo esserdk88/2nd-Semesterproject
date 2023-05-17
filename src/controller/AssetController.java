@@ -16,7 +16,7 @@ public class AssetController implements AssetControllerIF {
 
 	public AssetController() {
 			this.assetDatabase = Database.getInstance().getAssetDataBase();
-			this.workorderController = new WorkOrderController(Database.getInstance().getWorkOrderDataBase());
+			this.workorderController = new WorkOrderController();
 	}
 
 	@Override

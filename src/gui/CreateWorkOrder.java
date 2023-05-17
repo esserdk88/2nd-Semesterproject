@@ -106,9 +106,9 @@ public class CreateWorkOrder extends JPanel {
 	 * Create the panel.
 	 */
 	public CreateWorkOrder() {
-		maintenanceController = new MaintenanceController(Database.getInstance().getWorkOrderDataBase());
-		repairController = new RepairController(Database.getInstance().getWorkOrderDataBase());
-		serviceController = new ServiceController(Database.getInstance().getWorkOrderDataBase());
+		maintenanceController = new MaintenanceController();
+		repairController = new RepairController();
+		serviceController = new ServiceController();
 		setLayout(new BorderLayout(0, 0));
 		this.setFocusable(true);
 		this.setName("Opret Arbejdsodre");

@@ -82,7 +82,7 @@ public class ReadWorkOrder extends JPanel {
 	 * Create the panel.
 	 */
 	public ReadWorkOrder() {
-		maintenanceController = new MaintenanceController(Database.getInstance().getWorkOrderDataBase());
+		maintenanceController = new MaintenanceController();
 		setLayout(new BorderLayout(0, 0));
 		this.setName("Se Arbejdsopgave");
 		setPanels();

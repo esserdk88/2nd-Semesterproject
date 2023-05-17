@@ -59,7 +59,7 @@ public class SwitchEmployeeWorkorders extends JFrame {
 	 * Create the frame.
 	 */
 	public SwitchEmployeeWorkorders() {
-		this.workOrderController = new WorkOrderController(Database.getInstance().getWorkOrderDataBase());
+		this.workOrderController = new WorkOrderController();
 		setTitle("Ombyt opgaver");
 		addFocusListener(new FocusAdapter() {
 			@Override

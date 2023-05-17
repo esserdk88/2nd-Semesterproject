@@ -95,11 +95,13 @@ class WorkorderControllerTest {
 		private WorkOrderDBIF workOrderDB = Database.getInstance().getWorkOrderDataBase();
 		private static AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
 		private static ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
-		private static WorkOrderControllerIF workorderController = new WorkOrderController(new StubWorkOrderDB());
+		
+		private static WorkOrderControllerIF workorderController = new WorkOrderController();
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		DatabaseConnection.setTestingEnvironment();
+		Database.getInstance().setWorkOrderDataBase(new StubWorkOrderDB());
 		asset = assetDB.findAssetByID(1);
 		reference = referenceDB.findReferenceByID(11111111);
 		maintenance = new Maintenance(repeated, intervalDayCount, 0, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);

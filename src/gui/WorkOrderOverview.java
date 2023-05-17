@@ -86,10 +86,10 @@ public class WorkOrderOverview extends JPanel {
 	 */
 	public WorkOrderOverview(MainFrame frame) {
 		this.frame = frame;
-		workorderController = new WorkOrderController(Database.getInstance().getWorkOrderDataBase());
-		maintenanceController = new MaintenanceController(Database.getInstance().getWorkOrderDataBase());
-		serviceController = new ServiceController(Database.getInstance().getWorkOrderDataBase());
-		repairController = new RepairController(Database.getInstance().getWorkOrderDataBase());
+		workorderController = new WorkOrderController();
+		maintenanceController = new MaintenanceController();
+		serviceController = new ServiceController();
+		repairController = new RepairController();
 		setLayout(new BorderLayout(0, 0));
 		this.setName("Arbejdsordre Oversigt");
 		setPanels();
