@@ -12,8 +12,8 @@ import model.Workorder;
 
 public class MaintenanceController extends WorkOrderController implements MaintenanceControllerIF {
 	
-	public MaintenanceController(WorkOrderDBIF workorderDB) {
-		super(workorderDB);
+	public MaintenanceController() {
+		super();
 	}
 	
 	@Override

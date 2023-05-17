@@ -24,8 +24,7 @@ public class WorkOrderController implements WorkOrderControllerIF {
 	protected SparepartUsedDBIF sparePartUsedDB = Database.getInstance().getSparepartUsedDataBase();
 	protected MeasurementDBIF measurementDB = Database.getInstance().getMeasurementDataBase();
 	
-	public WorkOrderController(WorkOrderDBIF workorderDB) {
-		this.workOrderDB = workorderDB;
+	public WorkOrderController() {
 	}
 	
 	@Override
