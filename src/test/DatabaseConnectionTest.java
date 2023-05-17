@@ -12,13 +12,13 @@ import dao.DatabaseConnection;
 class DatabaseConnectionTest {
 
 	@Test
-	void test() {
+	void test() throws SQLException {
 		
 		//Arrange
 		Connection con = null;
 		
 		//Act
-		con = DatabaseConnection.getInstance().getConnection();
+		con = DatabaseConnection.setTestingEnvironment().getConnection();
 		
 		//Assert
 		assertNotNull(con);

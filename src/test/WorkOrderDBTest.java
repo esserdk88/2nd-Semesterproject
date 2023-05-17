@@ -27,46 +27,19 @@ import model.Workorder;
 
 class WorkOrderDBTest {
 	
-	//Common fields for use 
-	private static String title = "Test opgave";
-	private static Calendar startDate = Calendar.getInstance();
-	private static Calendar endDate = Calendar.getInstance();
-	private static short priority = 3;
-	private static String description = "Test beskrivelse";
-	private static boolean finished = false;
-	
-	
-	private static List<SparepartUsed> sparepartsUsed = new ArrayList<>();
-	private static Asset asset;
-	private static List<Measurement> measurements = new ArrayList<>();
-	
-	//Maintenance fields
-	private static boolean repeated = true;
-	private static int intervalDayCount = 7;
-	
-	//Service fields
-	private static Reference reference;
-	
-	//Repair fields
-	private static double price = 100.43;
-	
 	private static Maintenance maintenance;
 	private static Service service;
 	private static Repair repair;
 	
 	//Instances
 	private WorkOrderDBIF workOrderDB = Database.getInstance().getWorkOrderDataBase();
-	private static AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
-	private static ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 	
 	@BeforeAll
 	static void startUp() throws SQLException {
-		DatabaseConnection.getInstance().setTestingEnvironment();
-		asset = assetDB.findAssetByID(1);
-		reference = referenceDB.findReferenceByID(11111111);
-		maintenance = new Maintenance(repeated, intervalDayCount, 0, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
-		service = new Service(reference, 0, title, "Service", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
-		repair = new Repair(price, reference, 0, title, "Repair", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
+		DatabaseConnection.setTestingEnvironment();
+		maintenance = TestingUtilities.getMaintenanceWorkOrder();
+		service = TestingUtilities.getServiceWorkOrder();
+		repair = TestingUtilities.getRepairWorkOrder();
 	}
 	@AfterAll
 	static void tearDown() throws SQLException {
@@ -114,12 +87,10 @@ class WorkOrderDBTest {
 	
 	@Test
 	void findMaintenanceWorkOrderByIDTest() {
-		//TODO Finish this test
 		//Arrange
 		workOrderDB.addMaintenanceWorkOrder(maintenance);
 		Maintenance foundMaintenance = null;
 		int latestKey = workOrderDB.getLatestKey();
-		
 		//Act
 		foundMaintenance = workOrderDB.findMaintenanceWorkOrderByID(latestKey);
 		

@@ -86,6 +86,7 @@ public class AssetOverview extends JPanel {
 	private AssetController assetCtrl;
 	private JRoundedButton btnSwitchEmployeeWorkorders;
 	private Component verticalStrut;
+
 	/**
 	 * Create the panel.
 	 * 
@@ -191,11 +192,9 @@ public class AssetOverview extends JPanel {
 				try {
 					readAsset.initialize(assetCtrl.findAssetByID(assetID));
 				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					GUIPopUpMessages.warningMessage("Only letters in ID textbox", "Error!");
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					GUIPopUpMessages.warningMessage("Database connection problems", "Error!");
 				}
 				TableSwingWorker dataFetcher = null;
 				dataFetcher = new TableSwingWorker(readAsset.getHistoryTable(),
@@ -291,10 +290,10 @@ public class AssetOverview extends JPanel {
 		addNewButton.setMaximumSize(new Dimension(110, 23));
 		addNewButton.setPreferredSize(new Dimension(110, 23));
 		addNewButton.setMinimumSize(new Dimension(30, 5));
-		
+
 		verticalStrut = Box.createVerticalStrut(4);
 		workOrderButtonPanel.add(verticalStrut);
-		
+
 		btnSwitchEmployeeWorkorders = new JRoundedButton("Tilføj ny");
 		btnSwitchEmployeeWorkorders.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -363,9 +362,9 @@ public class AssetOverview extends JPanel {
 		workOrderButtonPanel.setLayout(new BoxLayout(workOrderButtonPanel, BoxLayout.Y_AXIS));
 
 	}
-	
+
 	private void btnSwitchEmployeeWorkordersPressed() {
-		
+
 	}
 
 }

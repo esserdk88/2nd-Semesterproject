@@ -11,6 +11,7 @@ import dal.interfaces.AssetDBIF;
 import dal.interfaces.MeasurementDBIF;
 import dal.interfaces.SparepartUsedDBIF;
 import dal.interfaces.WorkOrderDBIF;
+import gui.components.GUIPopUpMessages;
 import model.Maintenance;
 
 public class TryMe {
@@ -29,7 +30,7 @@ public class TryMe {
 		try {
 			test.setAsset(assetDB.findAssetByID(1));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			GUIPopUpMessages.warningMessage("Error Connection to database", "Error");
 			e.printStackTrace();
 		}
 		test.setDescription("HelloWorld");

@@ -28,7 +28,7 @@ class AssetDBTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		DatabaseConnection.getInstance().setTestingEnvironment();
+		DatabaseConnection.setTestingEnvironment();
 	}
 
 	@AfterAll

@@ -399,9 +399,6 @@ public class MainFrame extends JFrame {
 			panel = new WorkOrderOverview(this);
 			break;
 		default:
-			
-			//No panel found set to main menu
-			//TODO add error? Check before adding button?
 			panel = centerPanel;
 			break;
 		}
