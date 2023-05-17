@@ -148,7 +148,7 @@ public class CreateWorkOrder extends JPanel {
 	    
 	    	//Creating WorkOrder of type Repair/Reperation
 	        case "Reparation":
-	            RepairController repairController = new RepairController();
+	            RepairController repairController = new RepairController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return repairController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 														Integer.valueOf(referenceCVR));
@@ -157,7 +157,7 @@ public class CreateWorkOrder extends JPanel {
 			
 			//Creating WorkOrder of type Service/Serviceaftale
 	        case "Serviceaftale":
-	            ServiceController serviceController = new ServiceController();
+	            ServiceController serviceController = new ServiceController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return serviceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 	            										Integer.valueOf(referenceCVR));
@@ -166,7 +166,7 @@ public class CreateWorkOrder extends JPanel {
 			
 			//Creating WorkOrder of type Maintenance/Vedligeholdelse
 	        case "Vedligeholdelse":
-	            MaintenanceController maintenanceController = new MaintenanceController();
+	            MaintenanceController maintenanceController = new MaintenanceController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return maintenanceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 	            											(int) intervalSpinner.getValue(),
@@ -219,7 +219,7 @@ public class CreateWorkOrder extends JPanel {
 				Thread workerThread = new Thread(() -> {
 				assetID = txtAssetID.getText();
 				Asset assetCheck = null;
-				AssetController assetCtr = new AssetController();
+				AssetController assetCtr = new AssetController(); //TODO: Change to field and instantiate in constructor
 					try {
 						assetCheck = assetCtr.findAssetByID(Integer.parseInt(assetID));
 					} catch (NumberFormatException e1) {
@@ -250,7 +250,7 @@ public class CreateWorkOrder extends JPanel {
 				Thread workerThread = new Thread(() -> {
 				referenceCVR = referenceTextField.getText();
 				Reference referenceCheck = null;
-				ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
+				ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase(); //TODO: Must go through controller
 					try {
 						referenceCheck = referenceDB.findReferenceByID(Integer.parseInt(referenceCVR));
 					} catch (NumberFormatException e1) {
@@ -278,7 +278,7 @@ public class CreateWorkOrder extends JPanel {
 				Thread workerThread = new Thread(() -> {
 				employeeID = employeeTextField.getText();
 				Employee employeeCheck = null;
-				EmployeeDBIF employeeDB = Database.getInstance().getEmployeeDataBase();
+				EmployeeDBIF employeeDB = Database.getInstance().getEmployeeDataBase(); //TODO: Must use controller
 					try {
 						employeeCheck = employeeDB.findEmployeeByID(Integer.parseInt(employeeID));
 					} catch (NumberFormatException e1) {
