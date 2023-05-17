@@ -36,7 +36,7 @@ class WorkOrderDBTest {
 	
 	@BeforeAll
 	static void startUp() throws SQLException {
-		DatabaseConnection.getInstance().setTestingEnvironment();
+		DatabaseConnection.setTestingEnvironment();
 		maintenance = TestingUtilities.getMaintenanceWorkOrder();
 		service = TestingUtilities.getServiceWorkOrder();
 		repair = TestingUtilities.getRepairWorkOrder();
@@ -91,7 +91,6 @@ class WorkOrderDBTest {
 		workOrderDB.addMaintenanceWorkOrder(maintenance);
 		Maintenance foundMaintenance = null;
 		int latestKey = workOrderDB.getLatestKey();
-		
 		//Act
 		foundMaintenance = workOrderDB.findMaintenanceWorkOrderByID(latestKey);
 		

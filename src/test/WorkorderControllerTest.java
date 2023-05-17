@@ -98,7 +98,7 @@ class WorkorderControllerTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		DatabaseConnection.getInstance().setTestingEnvironment();
+		DatabaseConnection.setTestingEnvironment();
 		asset = assetDB.findAssetByID(1);
 		reference = referenceDB.findReferenceByID(11111111);
 		maintenance = new Maintenance(repeated, intervalDayCount, 0, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
