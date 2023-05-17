@@ -5,13 +5,17 @@ import java.util.Calendar;
 import java.util.List;
 
 import controller.interfaces.MaintenanceControllerIF;
+import dal.interfaces.WorkOrderDBIF;
 import model.Asset;
 import model.Maintenance;
 import model.Workorder;
 
 public class MaintenanceController extends WorkOrderController implements MaintenanceControllerIF {
 	
-
+	public MaintenanceController(WorkOrderDBIF workorderDB) {
+		super(workorderDB);
+	}
+	
 	@Override
 	public boolean createWorkOrder(Maintenance maintenance) {
 		// we have to check if the asset is null.

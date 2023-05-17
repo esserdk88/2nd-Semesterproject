@@ -22,9 +22,9 @@ import javax.swing.border.EmptyBorder;
 
 import controller.WorkOrderController;
 import controller.interfaces.WorkOrderControllerIF;
+import dao.Database;
 import gui.components.GUIPopUpMessages;
 import gui.components.JRoundedButton;
-
 
 public class SwitchEmployeeWorkorders extends JFrame {
 
@@ -35,6 +35,9 @@ public class SwitchEmployeeWorkorders extends JFrame {
 	private JButton btnConfirm;
 	private JButton btnNewButton;
 	private JLabel lblHowTo;
+	
+	//Controllers
+	WorkOrderController workOrderController;
 
 	/**
 	 * Launch the application.
@@ -56,6 +59,7 @@ public class SwitchEmployeeWorkorders extends JFrame {
 	 * Create the frame.
 	 */
 	public SwitchEmployeeWorkorders() {
+		this.workOrderController = new WorkOrderController(Database.getInstance().getWorkOrderDataBase());
 		setTitle("Ombyt opgaver");
 		addFocusListener(new FocusAdapter() {
 			@Override
@@ -159,7 +163,6 @@ public class SwitchEmployeeWorkorders extends JFrame {
 		boolean validId = false;
 		if(!textField.getText().isBlank()) {
 			int workorderId = -1;
-			WorkOrderControllerIF workOrderController = new WorkOrderController(); //TODO: Change to field and instantiate in constructor
 			try {
 				workorderId = Integer.valueOf(textField.getText());
 				if(workOrderController.workorderHasEmployee(workorderId)) {
@@ -189,11 +192,10 @@ public class SwitchEmployeeWorkorders extends JFrame {
 	}
 	
 	private void btnConfirmPressed() {
-		WorkOrderControllerIF workOrderController = new WorkOrderController(); //TODO: Change to field and instantiate in constructor
 		try {
 			int workorderIdOne = Integer.valueOf(textFieldWoOne.getText());
 			int workorderIdTwo = Integer.valueOf(textFieldWoTwo.getText());
-			if(workOrderController.switchEmployeeWorkorders(workOrderController.getWorkorderByID(workorderIdOne), workOrderController.getWorkorderByID(workorderIdTwo))) {
+			if(workOrderController.switchEmployeeWorkorders(workOrderController.getWorkorderByID(workorderIdOne), workOrderController.getWorkorderByID(workorderIdTwo), false)) {
 				this.dispose();
 			}
 			else {

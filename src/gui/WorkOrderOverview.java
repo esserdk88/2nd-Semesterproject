@@ -26,6 +26,7 @@ import controller.MaintenanceController;
 import controller.RepairController;
 import controller.ServiceController;
 import controller.WorkOrderController;
+import dao.Database;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
@@ -73,13 +74,22 @@ public class WorkOrderOverview extends JPanel {
 	private Component rigidArea;
 	private Component rigidArea_2;
 	private MainFrame frame;
-	private WorkOrderController workOrderCtrl;
+	
+	//Controllers
+	private WorkOrderController workorderController;
+	private MaintenanceController  maintenanceController; 
+	private ServiceController serviceController;
+	private RepairController repairController;
 
 	/**
 	 * Create the panel.
 	 */
 	public WorkOrderOverview(MainFrame frame) {
 		this.frame = frame;
+		workorderController = new WorkOrderController(Database.getInstance().getWorkOrderDataBase());
+		maintenanceController = new MaintenanceController(Database.getInstance().getWorkOrderDataBase());
+		serviceController = new ServiceController(Database.getInstance().getWorkOrderDataBase());
+		repairController = new RepairController(Database.getInstance().getWorkOrderDataBase());
 		setLayout(new BorderLayout(0, 0));
 		this.setName("Arbejdsordre Oversigt");
 		setPanels();
@@ -177,11 +187,11 @@ public class WorkOrderOverview extends JPanel {
 		int workOrderID = Integer.valueOf(workOrderTable.getCellData(columns[0]));
 		switch(type) {
 		case"Maintenance":
-			return new MaintenanceController().findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
+			return maintenanceController.findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
 		case"Repair":
-			return new RepairController().findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
+			return  repairController.findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
 		case"Service":
-			return new ServiceController().findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
+			return serviceController.findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
 		}
 		return null;
 	}
@@ -228,10 +238,9 @@ public class WorkOrderOverview extends JPanel {
 	public void setWorkOrderOnStartUp() {
 		String[][] loadingStatus = { { "Henter arbejdsordrer..." } };
 		workOrderTable.setNewData(loadingStatus);
-		workOrderCtrl = new WorkOrderController(); //TODO: instantiate in constructor
 		Thread workerThread = new Thread(() -> {
 			TableSwingWorker dataFetcher = null;
-			dataFetcher = new TableSwingWorker(workOrderTable, workOrderCtrl.getAllUnfinishedWorkOrders());
+			dataFetcher = new TableSwingWorker(workOrderTable, workorderController.getAllUnfinishedWorkOrders());
 			dataFetcher.execute();
 		});
 		workerThread.start();

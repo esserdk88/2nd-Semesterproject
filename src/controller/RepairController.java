@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import controller.interfaces.RepairControllerIF;
+import dal.interfaces.WorkOrderDBIF;
 import model.Asset;
 import model.Reference;
 import model.Repair;
@@ -12,6 +13,10 @@ import model.Service;
 import model.Workorder;
 
 public class RepairController extends WorkOrderController implements RepairControllerIF {
+	
+	public RepairController(WorkOrderDBIF workorderDB) {
+		super(workorderDB);
+	}
 	
 	@Override
 	public boolean createWorkOrder(Repair repair) {

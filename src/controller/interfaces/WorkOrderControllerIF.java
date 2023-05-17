@@ -24,7 +24,7 @@ public interface WorkOrderControllerIF {
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID);
 	
 	//Switch Employee workOrders
-	public boolean switchEmployeeWorkorders(Workorder workorderOne, Workorder workorderTwo) throws Exception;
+	public boolean switchEmployeeWorkorders(Workorder workorderOne, Workorder workorderTwo, boolean concurrencyTest) throws Exception;
 	
 	//probably needs to throw exceptions
 	public boolean workorderHasEmployee(int workorderId) throws SQLException;

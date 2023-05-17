@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.swing.DefaultComboBoxModel;
@@ -31,8 +30,6 @@ import controller.AssetController;
 import controller.MaintenanceController;
 import controller.RepairController;
 import controller.ServiceController;
-import dal.interfaces.EmployeeDBIF;
-import dal.interfaces.ReferenceDBIF;
 import dao.Database;
 import gui.components.GUIPopUpMessages;
 import gui.components.JRoundedButton;
@@ -99,11 +96,18 @@ public class CreateWorkOrder extends JPanel {
 	private JLabel repeatedLabel;
 	private JCheckBox repeatedCheckBox;
 	
+	//Controller
+	MaintenanceController maintenanceController;
+	RepairController repairController;
+	ServiceController serviceController;
 
 	/**
 	 * Create the panel.
 	 */
 	public CreateWorkOrder() {
+		maintenanceController = new MaintenanceController(Database.getInstance().getWorkOrderDataBase());
+		repairController = new RepairController(Database.getInstance().getWorkOrderDataBase());
+		serviceController = new ServiceController(Database.getInstance().getWorkOrderDataBase());
 		setLayout(new BorderLayout(0, 0));
 		this.setFocusable(true);
 		this.setName("Opret Arbejdsodre");
@@ -151,7 +155,6 @@ public class CreateWorkOrder extends JPanel {
 	    
 	    	//Creating WorkOrder of type Repair/Reperation
 	        case "Reparation":
-	            RepairController repairController = new RepairController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return repairController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 														Integer.valueOf(referenceCVR));
@@ -160,7 +163,6 @@ public class CreateWorkOrder extends JPanel {
 			
 			//Creating WorkOrder of type Service/Serviceaftale
 	        case "Serviceaftale":
-	            ServiceController serviceController = new ServiceController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return serviceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 	            										Integer.valueOf(referenceCVR));
@@ -169,7 +171,6 @@ public class CreateWorkOrder extends JPanel {
 			
 			//Creating WorkOrder of type Maintenance/Vedligeholdelse
 	        case "Vedligeholdelse":
-	            MaintenanceController maintenanceController = new MaintenanceController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return maintenanceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 	            											(int) intervalSpinner.getValue(),
