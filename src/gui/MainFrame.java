@@ -358,6 +358,10 @@ public class MainFrame extends JFrame {
 		for(int i = 0;i<panels.size();i++) {
 			createNewFrequentButton(panels.get(i), i);
 		}
+		if(panels.size() == 0) {
+			frequentLabel.setVisible(false);
+			separator.setVisible(false);
+		}
 	}
 	
 	private void createNewFrequentButton(String name, int position) {
