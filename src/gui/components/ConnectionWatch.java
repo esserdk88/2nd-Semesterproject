@@ -1,4 +1,4 @@
-package gui;
+package gui.components;
 
 import java.awt.Color;
 import java.util.List;
@@ -7,8 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingWorker;
 
 import Controller.ConnectionController;
-import Controller.ConnectionControllerIF;
-import gui.components.GUIPopUpMessages;
 
 public class ConnectionWatch extends SwingWorker<Void, Boolean> {
 	

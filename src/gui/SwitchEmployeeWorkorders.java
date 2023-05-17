@@ -24,7 +24,6 @@ import Controller.WorkOrderController;
 import Controller.WorkOrderControllerIF;
 import gui.components.GUIPopUpMessages;
 import gui.components.JRoundedButton;
-import gui.dialogBoxes.SimpleDialogBox;
 
 
 public class SwitchEmployeeWorkorders extends JFrame {
