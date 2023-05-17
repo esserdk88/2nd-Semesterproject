@@ -62,8 +62,14 @@ public class DatabaseConnection {
 	 * Sets Auto Commit to false for the connection 
 	 * @throws SQLException
 	 */
-	public void startTransaction() throws SQLException {
-		connection.setAutoCommit(false);
+	public void startTransaction()  {
+		try {
+			connection.setAutoCommit(false);
+			System.out.println("Success 1");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -75,6 +81,7 @@ public class DatabaseConnection {
 		try {
 			connection.commit();
 		} catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
 			connection.setAutoCommit(true);
 		}
@@ -89,6 +96,7 @@ public class DatabaseConnection {
 		try {
 			connection.rollback();
 		} catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
 			connection.setAutoCommit(true);
 		}
