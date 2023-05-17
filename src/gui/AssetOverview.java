@@ -183,7 +183,6 @@ public class AssetOverview extends JPanel {
 			GUIPopUpMessages.informationMessage("Intet asset valgt", "Fejl");
 		} else {
 			assetCtrl = new AssetController();
-			WorkOrderController controller = new WorkOrderController();
 			Object value = assetTable.getModel().getValueAt(index, 0);
 			ReadAsset readAsset = new ReadAsset(mainFrame);
 			int assetID = Integer.parseInt(value.toString());
@@ -200,7 +199,7 @@ public class AssetOverview extends JPanel {
 				}
 				TableSwingWorker dataFetcher = null;
 				dataFetcher = new TableSwingWorker(readAsset.getHistoryTable(),
-						controller.getAllWorkOrdersByAssetID(assetID));
+						assetCtrl.getAllWorkOrdersForAssetByID(assetID));
 				dataFetcher.execute();
 			});
 			workerThread.start();
