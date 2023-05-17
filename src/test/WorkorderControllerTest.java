@@ -121,7 +121,6 @@ class WorkorderControllerTest {
 
 	@Test
 	void switchEmployeeWorkordersTest() {
-		System.out.println("Method start");
 		//Arrange
 		workOrderDB.addMaintenanceWorkOrder(maintenance);
 		workOrderDB.addRepairWorkOrder(repair);
@@ -139,7 +138,7 @@ class WorkorderControllerTest {
 		
 		//Act
 		try {
-			workorderController.switchEmployeeWorkorders(repair, maintenance, true);
+			workorderController.switchEmployeeWorkorders(repair, maintenance, false);
 			switchedEmployees = true;
 		} catch (Exception e) {
 			//Something stupid happened
