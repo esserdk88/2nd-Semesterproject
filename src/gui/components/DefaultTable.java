@@ -20,8 +20,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import gui.GUIPopUpMessages;
-
 public class DefaultTable extends JTable {
 	
 	//Table Fields

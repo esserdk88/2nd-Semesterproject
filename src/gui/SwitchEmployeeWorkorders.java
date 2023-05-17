@@ -22,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 
 import Controller.WorkOrderController;
 import Controller.WorkOrderControllerIF;
+import gui.components.GUIPopUpMessages;
 import gui.components.JRoundedButton;
 import gui.dialogBoxes.SimpleDialogBox;
 
@@ -198,12 +199,11 @@ public class SwitchEmployeeWorkorders extends JFrame {
 			}
 			else {
 				//give user error message
-				SimpleDialogBox simpleDialog = new SimpleDialogBox(this, "Der gik noget galt.    prøv igen", false, true, true);
-				simpleDialog.setVisible(true);
+				GUIPopUpMessages.informationMessage("En eller flere værdier blev korruptet under handling" , "Database fejl");
 			}
 		}
 		catch (Exception e) {
-			SimpleDialogBox simpleDialog = new SimpleDialogBox(this, "En eller flere værdier blev korruptet under handling", false, true, true);
+			GUIPopUpMessages.informationMessage("En eller flere værdier blev korruptet under handling" , "Database fejl");
 			e.printStackTrace();
 		}
 	}
