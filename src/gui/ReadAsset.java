@@ -9,7 +9,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.SimpleDateFormat;
-import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -23,11 +22,13 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import Controller.MaintenanceController;
 import Controller.WorkOrderController;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
 import model.Asset;
+import model.Maintenance;
 
 public class ReadAsset extends JPanel {
 
@@ -186,6 +187,59 @@ public class ReadAsset extends JPanel {
 
 	}
 
+	private void setWorkorderTablesWithData(int selectedRow) {
+		Object markedRow = historyTable.getValueAt(selectedRow, 0);
+		int priority = Integer.parseInt(historyTable.getModel().getValueAt(selectedRow, 5).toString());
+		String priorityType = "";
+		if (markedRow != null) {
+			txtTitle.setText(historyTable.getModel().getValueAt(selectedRow, 1).toString());
+			txtEmployeeID.setText(historyTable.getModel().getValueAt(selectedRow, 9).toString());
+			String type = historyTable.getModel().getValueAt(selectedRow, 2).toString();
+			if (type.contains("Maintenance")) {
+				MaintenanceController maintanenceController = new MaintenanceController();
+				Maintenance maintanenceOrder = null;
+				maintanenceOrder = maintanenceController.findWorkOrderByID(Integer.parseInt(markedRow.toString()));
+				txtInterval.setText(String.valueOf(maintanenceOrder.getIntervalDayCount()) + " dage");
+			} else {
+				txtInterval.setText("Ingen");
+			}
+			txtType.setText(historyTable.getModel().getValueAt(selectedRow, 2).toString());
+			txtRegNo.setText(historyTable.getModel().getValueAt(selectedRow, 0).toString());
+
+			switch (priority) {
+			case 1:
+				priorityType = "Lav";
+				break;
+			case 2:
+				priorityType = "Mellem";
+				break;
+			case 3:
+				priorityType = "Høj";
+				break;
+			default:
+				priorityType = "Ikke angivet";
+			}
+			txtPriority.setText(priorityType);
+			String[][] loadingStatus = { { "Henter data..." } };
+			sparepartTable.setNewData(loadingStatus);
+			measurementTable.setNewData(loadingStatus);
+			int id = Integer.parseInt(markedRow.toString());
+
+			Thread workerThread = new Thread(() -> {
+				TableSwingWorker dataFetcherSparePart = null;
+				TableSwingWorker dataFetcherMeasurement = null;
+				WorkOrderController workOrderController = new WorkOrderController();
+				dataFetcherSparePart = new TableSwingWorker(sparepartTable,
+						workOrderController.getAllSparepartsUsedInWorkOrder(id));
+				dataFetcherMeasurement = new TableSwingWorker(measurementTable,
+						workOrderController.getAllMeasurementsUsedInWorkOrder(id));
+				dataFetcherSparePart.execute();
+				dataFetcherMeasurement.execute();
+			});
+			workerThread.start();
+		}
+	}
+
 	private void setTables() {
 		historyScollPane = new JScrollPane();
 		historyScollPane.setPreferredSize(new Dimension(350, 0)); // Changes size of table
@@ -203,11 +257,27 @@ public class ReadAsset extends JPanel {
 		boolean[] activeColumns = new boolean[] { true, true, false, true, false, false, false, false, false, false };
 		historyTable = new DefaultTable(null, columnsHistory, activeColumns);
 		historyScollPane.setViewportView(historyTable);
+		historyTable.getTableHeader().setReorderingAllowed(false);
 
 		historyTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+<<<<<<< Updated upstream
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				setHistoryTable(e);
+=======
+			public void valueChanged(ListSelectionEvent event) {
+				if (event.getValueIsAdjusting()) {
+					return;
+				}
+
+				int selectedRow = historyTable.getSelectedRow();
+				if (selectedRow == -1) {
+					return;
+				}
+
+				setWorkorderTablesWithData(selectedRow);
+
+>>>>>>> Stashed changes
 			}
 		});
 
@@ -224,6 +294,7 @@ public class ReadAsset extends JPanel {
 		String[] sparepartsColumns = new String[] { "Reservedel", "Mængde" };
 		sparepartTable = new DefaultTable(null, sparepartsColumns);
 		sparePartsScrollPane.setViewportView(sparepartTable);
+		sparepartTable.getTableHeader().setReorderingAllowed(false);
 
 		measurementsScrollPane = new JScrollPane();
 		GridBagConstraints gbc_measurementsScrollPane = new GridBagConstraints();
@@ -238,6 +309,7 @@ public class ReadAsset extends JPanel {
 		String[] columnsMeasurements = new String[] { "ID", "Titel", "Måling" };
 		measurementTable = new DefaultTable(null, columnsMeasurements);
 		measurementsScrollPane.setViewportView(measurementTable);
+		measurementTable.getTableHeader().setReorderingAllowed(false);
 	}
 	
 	private void setHistoryTable(ListSelectionEvent event) {
