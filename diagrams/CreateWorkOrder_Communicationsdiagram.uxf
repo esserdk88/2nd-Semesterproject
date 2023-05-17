@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>380</x>
-      <y>30</y>
+      <x>400</x>
+      <y>70</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -15,8 +15,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>20</x>
-      <y>180</y>
+      <x>40</x>
+      <y>220</y>
       <w>110</w>
       <h>30</h>
     </coordinates>
@@ -26,8 +26,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>370</x>
-      <y>180</y>
+      <x>390</x>
+      <y>220</y>
       <w>150</w>
       <h>30</h>
     </coordinates>
@@ -37,8 +37,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>780</x>
-      <y>180</y>
+      <x>800</x>
+      <y>220</y>
       <w>150</w>
       <h>30</h>
     </coordinates>
@@ -48,8 +48,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>380</x>
-      <y>310</y>
+      <x>400</x>
+      <y>350</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
@@ -59,8 +59,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>420</x>
-      <y>50</y>
+      <x>440</x>
+      <y>90</y>
       <w>350</w>
       <h>150</h>
     </coordinates>
@@ -73,8 +73,8 @@ intervalDayCount:int, repeated:boolean):boolean</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>420</x>
-      <y>200</y>
+      <x>440</x>
+      <y>240</y>
       <w>450</w>
       <h>130</h>
     </coordinates>
@@ -87,8 +87,8 @@ Asset, title, startDate,priority,description, intervalDayCount, repeated</panel_
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>510</x>
-      <y>170</y>
+      <x>530</x>
+      <y>210</y>
       <w>290</w>
       <h>50</h>
     </coordinates>
@@ -100,8 +100,8 @@ Asset, title, startDate,priority,description, intervalDayCount, repeated</panel_
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>60</x>
-      <y>20</y>
+      <x>80</x>
+      <y>60</y>
       <w>280</w>
       <h>60</h>
     </coordinates>
@@ -113,8 +113,8 @@ Usecase: Create work order</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>20</x>
-      <y>320</y>
+      <x>40</x>
+      <y>360</y>
       <w>110</w>
       <h>30</h>
     </coordinates>
@@ -124,8 +124,8 @@ Usecase: Create work order</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>70</x>
-      <y>200</y>
+      <x>90</x>
+      <y>240</y>
       <w>230</w>
       <h>140</h>
     </coordinates>
@@ -136,8 +136,8 @@ Usecase: Create work order</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>120</x>
-      <y>170</y>
+      <x>140</x>
+      <y>210</y>
       <w>270</w>
       <h>50</h>
     </coordinates>

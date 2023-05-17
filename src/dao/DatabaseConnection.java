@@ -9,6 +9,7 @@ public class DatabaseConnection {
 	// Singleton instance variable
 	private static DatabaseConnection instance;
 	private static Connection connection;
+	private boolean testingEnvironment;
 
 	// Connection string for connecting to SQL Server
 	private static final String CONNECTION_STRING = String.format(
@@ -62,8 +63,14 @@ public class DatabaseConnection {
 	 * Sets Auto Commit to false for the connection 
 	 * @throws SQLException
 	 */
-	public void startTransaction() throws SQLException {
-		connection.setAutoCommit(false);
+	public void startTransaction()  {
+		try {
+			connection.setAutoCommit(false);
+			System.out.println("Success 1");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -73,10 +80,15 @@ public class DatabaseConnection {
 	 */
 	public void commitTransaction() throws SQLException {
 		try {
-			connection.commit();
+			if(!testingEnvironment) {
+				connection.commit();
+			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
-			connection.setAutoCommit(true);
+			if(!testingEnvironment) {
+				connection.setAutoCommit(true);
+			}
 		}
 	}
 
@@ -89,8 +101,11 @@ public class DatabaseConnection {
 		try {
 			connection.rollback();
 		} catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
-			connection.setAutoCommit(true);
+			if(!testingEnvironment) {
+				connection.setAutoCommit(true);
+			}
 		}
 	}
 
@@ -125,6 +140,9 @@ public class DatabaseConnection {
 		DriverManager.setLoginTimeout(5);
 		try {
 			connection = DriverManager.getConnection(CONNECTION_STRING);
+			if(testingEnvironment) {
+				connection.setAutoCommit(false);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -158,6 +176,15 @@ public class DatabaseConnection {
 			isOpen = false;
 		}
 		return isOpen;
+	}
+	
+	/**
+	 * This is ONLY for testing and shouldn't be used for anything else
+	 * @throws SQLException 
+	 */
+	public void setTestingEnvironment() throws SQLException {
+		testingEnvironment = true;
+		connection.setAutoCommit(false);
 	}
 
 }

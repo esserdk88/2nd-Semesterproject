@@ -11,6 +11,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
@@ -148,7 +151,7 @@ public class CreateWorkOrder extends JPanel {
 	    
 	    	//Creating WorkOrder of type Repair/Reperation
 	        case "Reparation":
-	            RepairController repairController = new RepairController();
+	            RepairController repairController = new RepairController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return repairController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 														Integer.valueOf(referenceCVR));
@@ -157,7 +160,7 @@ public class CreateWorkOrder extends JPanel {
 			
 			//Creating WorkOrder of type Service/Serviceaftale
 	        case "Serviceaftale":
-	            ServiceController serviceController = new ServiceController();
+	            ServiceController serviceController = new ServiceController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return serviceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 	            										Integer.valueOf(referenceCVR));
@@ -166,7 +169,7 @@ public class CreateWorkOrder extends JPanel {
 			
 			//Creating WorkOrder of type Maintenance/Vedligeholdelse
 	        case "Vedligeholdelse":
-	            MaintenanceController maintenanceController = new MaintenanceController();
+	            MaintenanceController maintenanceController = new MaintenanceController(); //TODO: Change to field and instantiate in constructor
 			try {
 				return maintenanceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 	            											(int) intervalSpinner.getValue(),
@@ -212,94 +215,81 @@ public class CreateWorkOrder extends JPanel {
 			break;
 		}
 	}
+	/**
+	 * A generic method to check an entity based on user input.
+	 *
+	 * @param <T> The type of the entity.
+	 * @param textField The text field to check.
+	 * @param storedId The stored ID to compare the input to.
+	 * @param fetcher A function that fetches the entity based on an integer ID.
+	 * @param setter A consumer that sets the entity and storedId.
+	 * @param errorMsg The error message to display if a NumberFormatException occurs.
+	 */
+	private <T> void checkEntity(JTextField textField, String storedId, Function<Integer, T> fetcher, BiConsumer<T, Integer> setter, String errorMsg) {
+	    if (textField.getText().length() > 0) {
+	        if (!textField.getText().equals(storedId)) {
+	            storedId = textField.getText();
+	            int id = Integer.parseInt(textField.getText());
+	            Thread workerThread = new Thread(() -> {
+	                T entityCheck = null;
+	                try {
+	                    entityCheck = fetcher.apply(id);
+	                } catch (NumberFormatException e1) {
+	                    GUIPopUpMessages.warningMessage(errorMsg, "Error!");
+	                }
+	                if (entityCheck == null) {
+	                    textField.setBackground(Color.red);
+	                } else {
+	                    textField.setBackground(Color.green);
+	                    setter.accept(entityCheck, id);
+	                }
+	            });
+	            workerThread.start();
+	        }
+	    }
+	}
 
+	/**
+	 * Checks the asset id field for a valid Asset
+	 */
 	private void checkAsset() {
-		if(txtAssetID.getText().length()>0) {
-			if(!txtAssetID.getText().equals(assetID)) {
-				Thread workerThread = new Thread(() -> {
-				assetID = txtAssetID.getText();
-				Asset assetCheck = null;
-				AssetController assetCtr = new AssetController();
-					try {
-						assetCheck = assetCtr.findAssetByID(Integer.parseInt(assetID));
-					} catch (NumberFormatException e1) {
-						GUIPopUpMessages.warningMessage("Only Number in AssetID Field", "Error!");
-						System.out.println("Letter in Asset Text Field");
-					} catch (SQLException e1) {
-						GUIPopUpMessages.warningMessage("Error retrieving data from database", "Error!");
-					}
-
-				if(assetCheck == null) {
-					txtAssetID.setBackground(Color.red);
-					assetID = "";
-					txtName.setText("");
-				}else {
-					txtAssetID.setBackground(Color.green);
-					txtName.setText(assetCheck.getName());
-					asset = assetCheck;
-					}
-				});
-				workerThread.start();
-				
-			}
-		}
+	    checkEntity(txtAssetID, assetID, id -> {
+	        try {
+	            return new AssetController().findAssetByID(id);
+	        } catch (SQLException e1) {
+	            GUIPopUpMessages.warningMessage("Error retrieving data from database", "Error!");
+	            return null;
+	        }
+	    }, (assetCheck, newAssetID) -> {
+	        txtName.setText(assetCheck.getName());
+	        asset = assetCheck;
+	        assetID = newAssetID.toString();
+	    }, "Only Number in AssetID Field");
 	}
+
+	/**
+	 * Checks the reference text field for a valid Reference
+	 */
 	private void checkReference() {
-		if(referenceTextField.getText().length()>0) {
-			if(!referenceTextField.getText().equals(referenceCVR)) {
-				Thread workerThread = new Thread(() -> {
-				referenceCVR = referenceTextField.getText();
-				Reference referenceCheck = null;
-				ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
-					try {
-						referenceCheck = referenceDB.findReferenceByID(Integer.parseInt(referenceCVR));
-					} catch (NumberFormatException e1) {
-						GUIPopUpMessages.warningMessage("Only Number in reference Field", "Error!");
-						System.out.println("Letter in Reference Text Field");
-					}
-
-				if(referenceCheck == null) {
-					referenceTextField.setBackground(Color.red);
-					reference.setCvr(0);
-				}else {
-					referenceTextField.setBackground(Color.green);
-					reference = referenceCheck;
-					reference.setCvr(Integer.parseInt(referenceCVR));
-					}
-				});
-				workerThread.start();
-				
-			}
-		}
+	    checkEntity(referenceTextField, referenceCVR, id -> Database.getInstance().getReferenceDataBase().findReferenceByID(id), (referenceCheck, newReferenceCVR) -> {
+	        reference = referenceCheck;
+	        reference.setCvr(newReferenceCVR);
+	        referenceCVR = newReferenceCVR.toString();
+	    }, "Only Number in reference Field");
 	}
+
+	/**
+	 * Checks the employee text field for a valid Employee
+	 */
 	private void checkEmployee() {
-		if(employeeTextField.getText().length()>0) {
-			if(!employeeTextField.getText().equals(employeeID)) {
-				Thread workerThread = new Thread(() -> {
-				employeeID = employeeTextField.getText();
-				Employee employeeCheck = null;
-				EmployeeDBIF employeeDB = Database.getInstance().getEmployeeDataBase();
-					try {
-						employeeCheck = employeeDB.findEmployeeByID(Integer.parseInt(employeeID));
-					} catch (NumberFormatException e1) {
-						GUIPopUpMessages.warningMessage("Only Number in employee Field", "Error!");
-						System.out.println("Letter in Reference Text Field");
-					}
-
-				if(employeeCheck == null) {
-					employeeTextField.setBackground(Color.red);
-				}else {
-					employeeTextField.setBackground(Color.green);
-					employee = employeeCheck;
-					employee.setCprNumber(employeeID);
-					}
-				});
-				workerThread.start();
-				
-			}
-		}
+	    checkEntity(employeeTextField, employeeID, id -> Database.getInstance().getEmployeeDataBase().findEmployeeByID(id), (employeeCheck, newEmployeeID) -> {
+	        employee = employeeCheck;
+	        employee.setCprNumber(newEmployeeID.toString());
+	        employeeID = newEmployeeID.toString();
+	    }, "Only Number in employee Field");
 	}
-	
+
+
 	private void setMaintenanceFields() {
 		if(typeComboBox.getSelectedItem().toString().equals("Vedligeholdelse")) {
 			intervalSpinner.setEnabled(true);
@@ -340,7 +330,6 @@ public class CreateWorkOrder extends JPanel {
 		
 	}
 	private void setButtons() {
-		
 		employeeTextField = new JTextField();
 		employeeTextField.addFocusListener(new FocusAdapter() {
 			@Override

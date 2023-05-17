@@ -1,17 +1,16 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.CalendarConversion;
 
 import controller.WorkOrderController;
 import controller.interfaces.WorkOrderControllerIF;
@@ -29,6 +28,7 @@ import model.Reference;
 import model.Repair;
 import model.Service;
 import model.SparepartUsed;
+import model.Workorder;
 
 class WorkorderControllerTest {
 	
@@ -98,7 +98,7 @@ class WorkorderControllerTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		DatabaseConnection.getInstance().startTransaction();
+		DatabaseConnection.getInstance().setTestingEnvironment();
 		asset = assetDB.findAssetByID(1);
 		reference = referenceDB.findReferenceByID(11111111);
 		maintenance = new Maintenance(repeated, intervalDayCount, 0, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
@@ -107,27 +107,57 @@ class WorkorderControllerTest {
 		maintenance.setEmployee(new Employee(employeeID, cpr, startDateEmp, position, name, phone, email, address));
 		repair.setEmployee(new Employee(employeeID2, cpr2, startDateEmp2, position2, name2, phone2, email2, address2));
 	}
+	
+	@AfterAll
+	static void tearDown() throws SQLException {
+		//DatabaseConnection.getInstance().commitTransaction();
+		DatabaseConnection.getInstance().rollbackTransaction();
+		System.out.println("Rollback");
+	}
 
 	@Test
 	void switchEmployeeWorkordersTest() {
 		//Arrange
-		workOrderDB.addMaintenanceWorkOrder(maintenance);
-		workOrderDB.addRepairWorkOrder(repair);
+		System.out.println(workOrderDB.addMaintenanceWorkOrder(maintenance));
+		System.out.println(workOrderDB.addRepairWorkOrder(repair));
 		
 		Employee emp1 = maintenance.getEmployee();
 		Employee emp2 = service.getEmployee();
 		
+		boolean success1 = false;
+		boolean success2 = false;
+		//made to make sure that if both switches fails, that the assert equals does not return true. because they're both false thus the same.
+		boolean switchedEmployees = false;
+		
 		//Act
 		try {
 			workorderController.switchEmployeeWorkorders(repair, maintenance);
+			switchedEmployees = true;
 		} catch (Exception e) {
-			//Something stupid happened);
+			//Something stupid happened
 			fail();
 			e.printStackTrace();
 		}
 		
 		//Assert
-		
+		try {
+			Workorder tempWorkorder1 = workOrderDB.getWorkorderById(maintenance.getWorkOrderID());
+			Workorder tempWorkorder2 = workOrderDB.getWorkorderById(repair.getWorkOrderID());
+			success1 = tempWorkorder1.getEmployee().equals(emp2);
+			success2 = tempWorkorder2.getEmployee().equals(emp1);
+			
+			if(switchedEmployees) {
+				assertEquals(success1, success2);
+			}
+			else {
+				fail();
+			}
+				
+		} catch (SQLException e) {
+			//something stupid happened
+			fail();
+			e.printStackTrace();
+		}
 	}
 
 }
