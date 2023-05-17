@@ -117,6 +117,7 @@ public class CreateWorkOrder extends JPanel {
 	public CreateWorkOrder(Asset currentAsset) {
 		this();
 		asset = currentAsset;
+		assetID = Integer.toString(currentAsset.getAssetID());
 		setupTextFields();
 	}
 	
@@ -605,6 +606,7 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(spinnerStartDate, gbc_spinner);
 		
 		spinnerEndDate = new JSpinner();
+		spinnerEndDate.setEnabled(false);
 		spinnerEndDate.setModel(new SpinnerDateModel());
 		GridBagConstraints gbc_spinner_1 = new GridBagConstraints();
 		gbc_spinner_1.weighty = 0;

@@ -77,6 +77,7 @@ public class ReadAsset extends JPanel {
 	private JCheckBox chckDateBox;
 	private MainFrame mainFrame;
 	private JScrollPane measurementsScrollPane;
+	private String[][] loadingDataMessage;
 
 	/**
 	 * Create the panel.
@@ -84,6 +85,7 @@ public class ReadAsset extends JPanel {
 	public ReadAsset(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		this.setName("Se Aktiv");
+		loadingDataMessage = new String[][]{ { "Henter data..." } };
 		setLayout(new BorderLayout(0, 0));
 
 		setPanels();
@@ -203,57 +205,9 @@ public class ReadAsset extends JPanel {
 		historyScollPane.setViewportView(historyTable);
 
 		historyTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent event) {
-				if (event.getValueIsAdjusting()) {
-					return;
-				}
-
-				int selectedRow = historyTable.getSelectedRow();
-				if (selectedRow == -1) {
-					return;
-				}
-
-				Object isMarked = historyTable.getValueAt(selectedRow, 0);
-				int priority = Integer.parseInt(historyTable.getModel().getValueAt(selectedRow, 5).toString());
-				String priorityType = "";
-				if (isMarked != null) {
-					txtTitle.setText(historyTable.getModel().getValueAt(selectedRow, 1).toString());
-					txtEmployeeID.setText(historyTable.getModel().getValueAt(selectedRow, 9).toString());
-					txtType.setText(historyTable.getModel().getValueAt(selectedRow, 2).toString());
-					txtRegNo.setText(historyTable.getModel().getValueAt(selectedRow, 0).toString());
-
-					switch (priority) {
-					case 1:
-						priorityType = "Lav";
-						break;
-					case 2:
-						priorityType = "Mellem";
-						break;
-					case 3:
-						priorityType = "Høj";
-						break;
-					default:
-						priorityType = "Ikke angivet";
-					}
-					txtPriority.setText(priorityType);
-					String[][] loadingStatus = { { "Henter data..." } };
-					sparepartTable.setNewData(loadingStatus);
-					measurementTable.setNewData(loadingStatus);
-					int id = Integer.parseInt(isMarked.toString());
-
-					Thread workerThread = new Thread(() -> {
-						TableSwingWorker dataFetcherSparePart = null;
-						TableSwingWorker dataFetcherMeasurement = null;
-						WorkOrderController workOrderController = new WorkOrderController();
-						dataFetcherSparePart = new TableSwingWorker(sparepartTable,
-								workOrderController.getAllSparepartsUsedInWorkOrder(id));
-						dataFetcherMeasurement = new TableSwingWorker(measurementTable,
-								workOrderController.getAllMeasurementsUsedInWorkOrder(id));
-						dataFetcherSparePart.execute();
-						dataFetcherMeasurement.execute();
-					});
-					workerThread.start();
-				}
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				setHistoryTable(e);
 			}
 		});
 
@@ -285,7 +239,62 @@ public class ReadAsset extends JPanel {
 		measurementTable = new DefaultTable(null, columnsMeasurements);
 		measurementsScrollPane.setViewportView(measurementTable);
 	}
+	
+	private void setHistoryTable(ListSelectionEvent event) {
+		int selectedRow = historyTable.findElement();
+		if (event.getValueIsAdjusting() || selectedRow == -1) {return;}
 
+		Object isMarked = Integer.parseInt(historyTable.getCellData("ID"));
+		if (isMarked != null) {
+			sparepartTable.setNewData(loadingDataMessage);
+			measurementTable.setNewData(loadingDataMessage);
+			setTextFieldsForHistoryTable(selectedRow);
+			int id = Integer.parseInt(isMarked.toString());
+			createWorkerThreadsHistoryTable(id);
+		}
+	}
+	
+	private void createWorkerThreadsHistoryTable(int id) {
+		Thread workerThread = new Thread(() -> {
+			TableSwingWorker dataFetcherSparePart = null;
+			TableSwingWorker dataFetcherMeasurement = null;
+			WorkOrderController workOrderController = new WorkOrderController();
+			dataFetcherSparePart = new TableSwingWorker(sparepartTable,
+					workOrderController.getAllSparepartsUsedInWorkOrder(id));
+			dataFetcherMeasurement = new TableSwingWorker(measurementTable,
+					workOrderController.getAllMeasurementsUsedInWorkOrder(id));
+			dataFetcherSparePart.execute();
+			dataFetcherMeasurement.execute();
+		});
+		workerThread.start();
+	}
+	
+	private void setTextFieldsForHistoryTable(int selectedRow) {
+		txtTitle.setText(historyTable.getModel().getValueAt(selectedRow, 1).toString());
+		txtEmployeeID.setText(historyTable.getModel().getValueAt(selectedRow, 9).toString());
+		txtType.setText(historyTable.getModel().getValueAt(selectedRow, 2).toString());
+		txtRegNo.setText(historyTable.getModel().getValueAt(selectedRow, 0).toString());
+		int priority = Integer.parseInt(historyTable.getModel().getValueAt(selectedRow, 5).toString());
+		txtPriority.setText(convertPriorityToString(priority));
+	}
+	
+	private String convertPriorityToString(int priority) {
+		String priorityString;
+		switch (priority) {
+		case 1:
+			priorityString = "Lav";
+			break;
+		case 2:
+			priorityString = "Mellem";
+			break;
+		case 3:
+			priorityString = "Høj";
+			break;
+		default:
+			priorityString = "Ikke angivet";
+		}
+		return priorityString;
+	}
 	private void setPanels() {
 		southPanel = new JPanel();
 		FlowLayout fl_southPanel = (FlowLayout) southPanel.getLayout();
