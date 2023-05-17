@@ -8,6 +8,7 @@ import javax.swing.SwingWorker;
 
 import Controller.ConnectionController;
 import Controller.ConnectionControllerIF;
+import gui.components.GUIPopUpMessages;
 
 public class ConnectionWatch extends SwingWorker<Void, Boolean> {
 	
