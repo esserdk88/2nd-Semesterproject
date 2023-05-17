@@ -20,14 +20,15 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
+import controller.MaintenanceController;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import model.Maintenance;
 import model.Workorder;
 
 public class ReadWorkOrder extends JPanel {
-	
-	//Textfields
+
+	// Textfields
 	private JTextField txtTitle;
 	private JTextField txtInterval;
 	private JTextField txtAssetID;
@@ -37,18 +38,18 @@ public class ReadWorkOrder extends JPanel {
 	private JTextField txtRegNo;
 	private JTextField txtPriority;
 	private JTextField txtEmployeeID;
-	
-	//Panels
+
+	// Panels
 	private JPanel southPanel;
 	private JPanel centerPanel;
-	
-	//Buttons
+
+	// Buttons
 	private JButton btnCancel;
 	private JButton btnSave;
 	private JButton btnAdd;
 	private JButton btnDelete;
-	
-	//Labels
+
+	// Labels
 	private JLabel lblDescription;
 	private JLabel lblTitle;
 	private JLabel lblAssetID;
@@ -61,20 +62,20 @@ public class ReadWorkOrder extends JPanel {
 	private JLabel lblPrioritize;
 	private JLabel lblClosedBy;
 	private JLabel lblActionsPerformed;
-	
-	//Tabel
+
+	// Tabel
 	private JScrollPane historyScollPane;
 	private DefaultTable historyTable;
 	private JScrollPane scrollPane;
 	private DefaultTable completedActionsTable;
-	
-	//Extra
+
+	// Extra
 	private JScrollPane descriptionScrollPane;
 	private JTextArea textArea;
 	private JCheckBox checkDate;
 	private JSpinner spinner;
 	private Workorder current;
-	
+
 	/**
 	 * Create the panel.
 	 */
@@ -88,7 +89,7 @@ public class ReadWorkOrder extends JPanel {
 		setSpinners();
 		setCheckBoxes();
 	}
-	
+
 	public void setCurrentWorkorderInfo(Workorder current) {
 		this.current = current;
 		txtTitle.setText(current.getTitle());
@@ -96,16 +97,43 @@ public class ReadWorkOrder extends JPanel {
 		txtName.setText(current.getAsset().getName());
 		txtType.setText(current.getType());
 		textArea.setText(current.getDescription());
-		if(current.getType().equals("Maintenance")) {
-			//Set Interval??
-//			private JTextField txtInterval;
+		txtRegNo.setText(String.valueOf(current.getWorkOrderID()));
+
+		int priorityID = current.getPriority();
+		String priorityType = "";
+		switch (priorityID) {
+		case 1:
+			priorityType = "Lav";
+			break;
+		case 2:
+			priorityType = "Mellem";
+			break;
+		case 3:
+			priorityType = "Høj";
+			break;
+		default:
+			priorityType = "";
 		}
-		txtPriority.setText(Short.toString(current.getPriority()));
-		txtEmployeeID.setText(Integer.toString(current.getEmployee().getEmployeeID()));
+		txtPriority.setText(priorityType);
+
+		if (current.getType().equals("Maintenance")) {
+			MaintenanceController maintenanceController = new MaintenanceController();
+			Maintenance maintenanceorder = null;
+			maintenanceorder = maintenanceController.findWorkOrderByID(current.getWorkOrderID());
+			txtInterval.setText(maintenanceorder.getIntervalDayCount() + " dage");
+		} else {
+			txtInterval.setText("Ingen");
+		}
+
+		if (current.getEmployee() != null) {
+			txtEmployeeID.setText(current.getEmployee().getName());
+		} else {
+			txtEmployeeID.setText("Ingen medarbejder");
+		}
 
 //		private JTextField txtSerialNumber;
 //		private JTextField txtRegNo;
-		
+
 	}
 
 	private void setCheckBoxes() {
@@ -134,13 +162,13 @@ public class ReadWorkOrder extends JPanel {
 	}
 
 	private void setButtons() {
-		
+
 		btnCancel = new JRoundedButton("Udskyd arbejdsordre");
 		southPanel.add(btnCancel);
-		
+
 		btnSave = new JRoundedButton("Færddiggør arbejdsordre");
 		southPanel.add(btnSave);
-		
+
 		btnAdd = new JRoundedButton("Tilføj ny");
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
 		gbc_btnAdd.fill = GridBagConstraints.HORIZONTAL;
@@ -148,7 +176,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_btnAdd.gridx = 9;
 		gbc_btnAdd.gridy = 9;
 		centerPanel.add(btnAdd, gbc_btnAdd);
-		
+
 		btnDelete = new JRoundedButton("Slet");
 		GridBagConstraints gbc_btnDelete = new GridBagConstraints();
 		gbc_btnDelete.insets = new Insets(0, 0, 5, 5);
@@ -156,16 +184,16 @@ public class ReadWorkOrder extends JPanel {
 		gbc_btnDelete.gridx = 9;
 		gbc_btnDelete.gridy = 10;
 		centerPanel.add(btnDelete, gbc_btnDelete);
-		
-		//btnCancel.addActionListener(e -> AddMethodToCallHere);
-		//btnSave.addActionListener(e -> AddMethodToCallHere);
-		//btnAdd.addActionListener(e -> AddMethodToCallHere);
-		//btnDelete.addActionListener(e -> AddMethodToCallHere);
+
+		// btnCancel.addActionListener(e -> AddMethodToCallHere);
+		// btnSave.addActionListener(e -> AddMethodToCallHere);
+		// btnAdd.addActionListener(e -> AddMethodToCallHere);
+		// btnDelete.addActionListener(e -> AddMethodToCallHere);
 	}
 
 	private void setTables() {
 		historyScollPane = new JScrollPane();
-		historyScollPane.setPreferredSize(new Dimension(10, 0)); //Changes size of table
+		historyScollPane.setPreferredSize(new Dimension(10, 0)); // Changes size of table
 		GridBagConstraints gbc_historyScollPane = new GridBagConstraints();
 		gbc_historyScollPane.gridheight = 3;
 		gbc_historyScollPane.gridwidth = 2;
@@ -174,11 +202,11 @@ public class ReadWorkOrder extends JPanel {
 		gbc_historyScollPane.gridx = 1;
 		gbc_historyScollPane.gridy = 9;
 		centerPanel.add(historyScollPane, gbc_historyScollPane);
-		
-		String[] columnsHistory = new String[] { "Reg. nr", "Start dato", "Lukket dato" };
+
+		String[] columnsHistory = new String[] { "ID", "Åbnet", "Lukket" };
 		historyTable = new DefaultTable(null, columnsHistory);
 		historyScollPane.setViewportView(historyTable);
-		
+
 		scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.gridheight = 3;
@@ -188,14 +216,14 @@ public class ReadWorkOrder extends JPanel {
 		gbc_scrollPane.gridx = 4;
 		gbc_scrollPane.gridy = 9;
 		centerPanel.add(scrollPane, gbc_scrollPane);
-		
+
 		String[] columnsCompletedActions = new String[] { "Reg. af", "Dato", "Bemærkning" };
 		completedActionsTable = new DefaultTable(null, columnsCompletedActions);
 		scrollPane.setViewportView(completedActionsTable);
 	}
 
 	private void setLabelsAndTextFields() {
-		
+
 		textArea = new JTextArea();
 		textArea.setWrapStyleWord(true);
 		textArea.setLineWrap(true);
@@ -208,7 +236,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_descriptionScrollPane.gridx = 4;
 		gbc_descriptionScrollPane.gridy = 2;
 		centerPanel.add(descriptionScrollPane, gbc_descriptionScrollPane);
-		
+
 		lblDescription = new JLabel("Beskrivelse");
 		GridBagConstraints gbc_lblDescription = new GridBagConstraints();
 		gbc_lblDescription.anchor = GridBagConstraints.WEST;
@@ -216,7 +244,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblDescription.gridx = 4;
 		gbc_lblDescription.gridy = 1;
 		centerPanel.add(lblDescription, gbc_lblDescription);
-		
+
 		lblTitle = new JLabel("Emne");
 		GridBagConstraints gbc_lblTitle = new GridBagConstraints();
 		gbc_lblTitle.anchor = GridBagConstraints.WEST;
@@ -224,7 +252,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblTitle.gridx = 1;
 		gbc_lblTitle.gridy = 2;
 		centerPanel.add(lblTitle, gbc_lblTitle);
-		
+
 		txtTitle = new JTextField();
 		GridBagConstraints gbc_txtTitle = new GridBagConstraints();
 		gbc_txtTitle.insets = new Insets(0, 0, 5, 5);
@@ -233,7 +261,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtTitle.gridy = 2;
 		centerPanel.add(txtTitle, gbc_txtTitle);
 		txtTitle.setColumns(10);
-		
+
 		lblAssetID = new JLabel("Maskine ID");
 		GridBagConstraints gbc_lblAssetID = new GridBagConstraints();
 		gbc_lblAssetID.anchor = GridBagConstraints.WEST;
@@ -241,7 +269,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblAssetID.gridx = 1;
 		gbc_lblAssetID.gridy = 3;
 		centerPanel.add(lblAssetID, gbc_lblAssetID);
-		
+
 		txtAssetID = new JTextField();
 		txtAssetID.setColumns(10);
 		txtAssetID.setEnabled(false);
@@ -251,7 +279,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtAssetID.gridx = 2;
 		gbc_txtAssetID.gridy = 3;
 		centerPanel.add(txtAssetID, gbc_txtAssetID);
-		
+
 		lblName = new JLabel("Navn");
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.WEST;
@@ -259,7 +287,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblName.gridx = 1;
 		gbc_lblName.gridy = 4;
 		centerPanel.add(lblName, gbc_lblName);
-		
+
 		txtName = new JTextField();
 		txtName.setEnabled(false);
 		txtName.setColumns(10);
@@ -269,7 +297,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtName.gridx = 2;
 		gbc_txtName.gridy = 4;
 		centerPanel.add(txtName, gbc_txtName);
-		
+
 		lblSerialNumber = new JLabel("Serienr.");
 		GridBagConstraints gbc_lblSerialNumber = new GridBagConstraints();
 		gbc_lblSerialNumber.anchor = GridBagConstraints.WEST;
@@ -277,7 +305,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblSerialNumber.gridx = 1;
 		gbc_lblSerialNumber.gridy = 5;
 		centerPanel.add(lblSerialNumber, gbc_lblSerialNumber);
-		
+
 		txtSerialNumber = new JTextField();
 		GridBagConstraints gbc_txtSerialNumber = new GridBagConstraints();
 		gbc_txtSerialNumber.insets = new Insets(0, 0, 5, 5);
@@ -286,7 +314,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtSerialNumber.gridy = 5;
 		centerPanel.add(txtSerialNumber, gbc_txtSerialNumber);
 		txtSerialNumber.setColumns(10);
-		
+
 		lblPrioritize = new JLabel("Prioritering");
 		GridBagConstraints gbc_lblPrioritize = new GridBagConstraints();
 		gbc_lblPrioritize.anchor = GridBagConstraints.WEST;
@@ -294,7 +322,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblPrioritize.gridx = 1;
 		gbc_lblPrioritize.gridy = 6;
 		centerPanel.add(lblPrioritize, gbc_lblPrioritize);
-		
+
 		txtPriority = new JTextField();
 		GridBagConstraints gbc_txtPriority = new GridBagConstraints();
 		gbc_txtPriority.insets = new Insets(0, 0, 5, 5);
@@ -303,7 +331,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtPriority.gridy = 6;
 		centerPanel.add(txtPriority, gbc_txtPriority);
 		txtPriority.setColumns(10);
-		
+
 		lblType = new JLabel("Type");
 		GridBagConstraints gbc_lblType = new GridBagConstraints();
 		gbc_lblType.anchor = GridBagConstraints.WEST;
@@ -311,7 +339,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblType.gridx = 4;
 		gbc_lblType.gridy = 6;
 		centerPanel.add(lblType, gbc_lblType);
-		
+
 		txtType = new JTextField();
 		GridBagConstraints gbc_txtType = new GridBagConstraints();
 		gbc_txtType.insets = new Insets(0, 0, 5, 5);
@@ -320,7 +348,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtType.gridy = 6;
 		centerPanel.add(txtType, gbc_txtType);
 		txtType.setColumns(10);
-		
+
 		lblRegNumber = new JLabel("Reg nr.");
 		GridBagConstraints gbc_lblRegNumber = new GridBagConstraints();
 		gbc_lblRegNumber.anchor = GridBagConstraints.WEST;
@@ -328,7 +356,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblRegNumber.gridx = 1;
 		gbc_lblRegNumber.gridy = 7;
 		centerPanel.add(lblRegNumber, gbc_lblRegNumber);
-		
+
 		txtRegNo = new JTextField();
 		GridBagConstraints gbc_txtRegNo = new GridBagConstraints();
 		gbc_txtRegNo.insets = new Insets(0, 0, 5, 5);
@@ -337,7 +365,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtRegNo.gridy = 7;
 		centerPanel.add(txtRegNo, gbc_txtRegNo);
 		txtRegNo.setColumns(10);
-		
+
 		lblInterval = new JLabel("Interval");
 		GridBagConstraints gbc_lblInterval = new GridBagConstraints();
 		gbc_lblInterval.anchor = GridBagConstraints.WEST;
@@ -345,7 +373,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblInterval.gridx = 4;
 		gbc_lblInterval.gridy = 7;
 		centerPanel.add(lblInterval, gbc_lblInterval);
-		
+
 		txtInterval = new JTextField();
 		GridBagConstraints gbc_txtInterval = new GridBagConstraints();
 		gbc_txtInterval.insets = new Insets(0, 0, 5, 5);
@@ -354,7 +382,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtInterval.gridy = 7;
 		centerPanel.add(txtInterval, gbc_txtInterval);
 		txtInterval.setColumns(10);
-		
+
 		lblClosedBy = new JLabel("Lukkes af");
 		GridBagConstraints gbc_lblClosedBy = new GridBagConstraints();
 		gbc_lblClosedBy.anchor = GridBagConstraints.WEST;
@@ -362,7 +390,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblClosedBy.gridx = 7;
 		gbc_lblClosedBy.gridy = 7;
 		centerPanel.add(lblClosedBy, gbc_lblClosedBy);
-		
+
 		txtEmployeeID = new JTextField();
 		GridBagConstraints gbc_txtEmployeeID = new GridBagConstraints();
 		gbc_txtEmployeeID.insets = new Insets(0, 0, 5, 5);
@@ -371,7 +399,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtEmployeeID.gridy = 7;
 		centerPanel.add(txtEmployeeID, gbc_txtEmployeeID);
 		txtEmployeeID.setColumns(10);
-		
+
 		lblHistory = new JLabel("Historik");
 		lblHistory.setFont(new Font("Tahoma", Font.BOLD, 12));
 		GridBagConstraints gbc_lblHistory = new GridBagConstraints();
@@ -380,7 +408,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblHistory.gridx = 1;
 		gbc_lblHistory.gridy = 8;
 		centerPanel.add(lblHistory, gbc_lblHistory);
-		
+
 		lblActionsPerformed = new JLabel("Aktioner udført");
 		lblActionsPerformed.setFont(new Font("Tahoma", Font.BOLD, 12));
 		GridBagConstraints gbc_lblActionsPerformed = new GridBagConstraints();
@@ -396,16 +424,16 @@ public class ReadWorkOrder extends JPanel {
 		FlowLayout fl_southPanel = (FlowLayout) southPanel.getLayout();
 		fl_southPanel.setAlignment(FlowLayout.RIGHT);
 		add(southPanel, BorderLayout.SOUTH);
-		
+
 		centerPanel = new JPanel();
 		add(centerPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_centerPanel = new GridBagLayout();
-		gbl_centerPanel.columnWidths = new int[]{0, 0, 101, 39, 55, 101, 59, 88, 0, 0, 0};
-		gbl_centerPanel.rowHeights = new int[] {30, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0};
-		gbl_centerPanel.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-		gbl_centerPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+		gbl_centerPanel.columnWidths = new int[] { 0, 0, 101, 39, 55, 101, 59, 88, 0, 0, 0 };
+		gbl_centerPanel.rowHeights = new int[] { 30, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_centerPanel.columnWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+		gbl_centerPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
 		centerPanel.setLayout(gbl_centerPanel);
-		
+
 	}
 
 }
