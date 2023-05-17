@@ -36,6 +36,7 @@ import gui.components.JRoundedButton;
 import model.Asset;
 import model.Employee;
 import model.Reference;
+import java.awt.event.ActionListener;
 
 
 public class CreateWorkOrder extends JPanel {
@@ -136,9 +137,14 @@ public class CreateWorkOrder extends JPanel {
 	}
 	
 	private boolean createWorkOrder() {
-		if(asset == null) {GUIPopUpMessages.warningMessage("No Asset selected!", "Error!"); return false;}
+		if(asset == null) {
+			GUIPopUpMessages.warningMessage("No Asset selected!", "Error!"); return false;
+		}
 		String type = typeComboBox.getSelectedItem().toString();
-		if(!type.equals("Vedligeholdelse") && reference.getCvr() == 0) {GUIPopUpMessages.warningMessage("No Reference selected!", "Error!"); return false;}
+		if(!type.equals("Vedligeholdelse") && reference.getCvr() == 0) {
+			GUIPopUpMessages.warningMessage("No Reference selected!", "Error!");
+			return false;
+		}
 		boolean success = callControllerOfType(type);
 	    return success;
 	}
@@ -313,11 +319,42 @@ public class CreateWorkOrder extends JPanel {
 		Thread workerThread = new Thread(() -> {
 		    boolean success = createWorkOrder();
 		    if(success) {
-		    	GUIPopUpMessages.informationMessage("Creation was successfull", "Success!");
+		    	resetTextFields();
+		    	resetSpinners();
+		    	resetComboboxes();
+		    	GUIPopUpMessages.informationMessage("Opgaven er blevet oprettet", "Success!");
 		    }
 		});
 		workerThread.start();
 	}
+	
+	private void resetTextFields() {
+		this.txtAssetID.setText("");
+		this.txtAssetID.setBackground(Color.white);
+		this.txtName.setText("");
+		this.txtWorkOrderID.setText("");
+		this.employeeTextField.setText("");
+		this.employeeTextField.setBackground(Color.white);
+		this.referenceTextField.setText("");
+		this.referenceTextField.setBackground(Color.white);
+		this.serieNrTextField.setText("");
+		this.topicTextField.setText("");
+		this.textArea.setText("");
+	}
+	
+	private void resetSpinners() {
+		setSpinners();
+		System.out.println("resetSpinners");
+	}
+	
+	private void resetComboboxes() {
+		priorityComboBox.setSelectedIndex(0);
+		typeComboBox.setSelectedIndex(0);
+		templatesComboBox.setSelectedIndex(0);
+		System.out.println("resetComboboxes");
+	}
+	
+	
 
 	private void setPanels() {
 		centerLeftPanel = new JPanel();
@@ -513,6 +550,8 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(repeatedCheckBox, gbc_repeatedCheckBox);
 		
 		createWorkOrderButton = new JRoundedButton("Opret arbejdsordre");
+//		createWorkOrderButton.addActionListener(new ActionListener() {
+//		});
 
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.anchor = GridBagConstraints.SOUTH;
@@ -704,7 +743,6 @@ public class CreateWorkOrder extends JPanel {
 		gbc_lblDescription.gridx = 1;
 		gbc_lblDescription.gridy = 9;
 		centerLeftPanel.add(lblDescription, gbc_lblDescription);
-		
 	}
 
 }
