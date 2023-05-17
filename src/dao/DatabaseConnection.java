@@ -9,6 +9,7 @@ public class DatabaseConnection {
 	// Singleton instance variable
 	private static DatabaseConnection instance;
 	private static Connection connection;
+	private boolean testingEnvironment;
 
 	// Connection string for connecting to SQL Server
 	private static final String CONNECTION_STRING = String.format(
@@ -73,10 +74,14 @@ public class DatabaseConnection {
 	 */
 	public void commitTransaction() throws SQLException {
 		try {
-			connection.commit();
+			if(!testingEnvironment) {
+				connection.commit();
+			}
 		} catch (SQLException e) {
 		} finally {
-			connection.setAutoCommit(true);
+			if(!testingEnvironment) {
+				connection.setAutoCommit(true);
+			}
 		}
 	}
 
@@ -90,7 +95,9 @@ public class DatabaseConnection {
 			connection.rollback();
 		} catch (SQLException e) {
 		} finally {
-			connection.setAutoCommit(true);
+			if(!testingEnvironment) {
+				connection.setAutoCommit(true);
+			}
 		}
 	}
 
@@ -125,6 +132,9 @@ public class DatabaseConnection {
 		DriverManager.setLoginTimeout(5);
 		try {
 			connection = DriverManager.getConnection(CONNECTION_STRING);
+			if(testingEnvironment) {
+				connection.setAutoCommit(false);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -158,6 +168,15 @@ public class DatabaseConnection {
 			isOpen = false;
 		}
 		return isOpen;
+	}
+	
+	/**
+	 * This is ONLY for testing and shouldn't be used for anything else
+	 * @throws SQLException 
+	 */
+	public void setTestingEnvironment() throws SQLException {
+		testingEnvironment = true;
+		connection.setAutoCommit(false);
 	}
 
 }
