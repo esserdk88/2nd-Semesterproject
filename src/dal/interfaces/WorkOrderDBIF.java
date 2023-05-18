@@ -50,5 +50,7 @@ public interface WorkOrderDBIF {
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder);
 
 	public int getLatestKey();
+	
+	public List<Workorder> searchWorkOrderDataBase(String name, List<Short> priority, String location);
 
 }

@@ -7,8 +7,11 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -21,12 +24,10 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import controller.AssetController;
 import controller.MaintenanceController;
 import controller.RepairController;
 import controller.ServiceController;
 import controller.WorkOrderController;
-import dao.Database;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
@@ -112,6 +113,7 @@ public class WorkOrderOverview extends JPanel {
 		leftTopPriorityPanel.add(rigidArea_2);
 
 		highJRadioButton = new JRadioButton("Høj");
+		highJRadioButton.setName("3");
 		leftTopPriorityPanel.add(highJRadioButton);
 		priorityButtons.add(highJRadioButton);
 
@@ -123,6 +125,7 @@ public class WorkOrderOverview extends JPanel {
 		departmentTextField.setColumns(10);
 
 		mediumJRadioButton = new JRadioButton("Mellem");
+		mediumJRadioButton.setName("2");
 		leftTopPriorityPanel.add(mediumJRadioButton);
 		priorityButtons.add(mediumJRadioButton);
 
@@ -134,6 +137,7 @@ public class WorkOrderOverview extends JPanel {
 		titleTextField.setColumns(10);
 
 		lowJRadioButton = new JRadioButton("Lav");
+		lowJRadioButton.setName("1");
 		leftTopPriorityPanel.add(lowJRadioButton);
 		priorityButtons.add(lowJRadioButton);
 		rigidArea = Box.createRigidArea(new Dimension(20, 20));
@@ -150,6 +154,27 @@ public class WorkOrderOverview extends JPanel {
 		searchTextField.setColumns(10);
 
 	}
+	private void searchWorkOrdersButton() {
+		String name = titleTextField.getText();
+		String location = departmentTextField.getText();
+		Enumeration<AbstractButton> buttons = priorityButtons.getElements();
+		List<Short> priority = new ArrayList<>();
+		buttons.asIterator().forEachRemaining(button -> {
+		    if (button.isSelected()) {
+		        priority.add(Short.valueOf(button.getName()));
+		    }
+		});
+		
+		String[][] loadingStatus = { { "Henter arbejdsordrer..." } };
+		workOrderTable.setNewData(loadingStatus);
+		Thread workerThread = new Thread(() -> {
+			TableSwingWorker dataFetcher = null;
+			dataFetcher = new TableSwingWorker(workOrderTable, workorderController.searchWorkorderDataBase(name, priority, location));
+			dataFetcher.execute();
+		});
+		workerThread.start();
+	}
+	
 	private void readWorkOrderButton() {
 		ReadWorkOrder panel = new ReadWorkOrder(); //TODO: Change to field and instantiate in constructor
 		frame.setNewCenterPanel(panel);
@@ -160,6 +185,7 @@ public class WorkOrderOverview extends JPanel {
 	}
 	private void setButtons() {
 		searchButton = new JRoundedButton("Søg");
+		searchButton.addActionListener((e) -> searchWorkOrdersButton());
 		rightTopPanel.add(searchButton);
 		openOrderButton = new JRoundedButton("Åben opgave");
 		openOrderButton.setEnabled(false);

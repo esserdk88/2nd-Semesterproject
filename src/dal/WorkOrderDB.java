@@ -545,7 +545,59 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		} else
 			return null;
 	}
-
+	
+	@Override
+	public List<Workorder> searchWorkOrderDataBase(String name, List<Short> priority, String location){
+		List<Workorder> workOrders = new ArrayList<>();
+		StringBuilder queryBuilder = new StringBuilder("SELECT * FROM WorkOrdersView WHERE 1=1");
+		List<Object> parameters = new ArrayList<>();
+		
+		if(name != null && !name.isEmpty()) {
+			queryBuilder.append(" AND workorder_title like ?");
+			parameters.add("%" + name + "%");
+		}
+		
+		if(priority != null && priority.size() != 0) {
+			queryBuilder.append(" AND workorder_priority IN (");
+			for (int i = 0; i < priority.size(); i++) {
+				queryBuilder.append("?");
+				if (i < priority.size() - 1) {
+                    queryBuilder.append(", ");
+                }
+                parameters.add(priority.get(i));
+			}
+			queryBuilder.append(")");
+		}
+		
+		if (location != null && !location.isEmpty()) {
+            queryBuilder.append(" AND location_id_PK = ?");
+            parameters.add(location);
+        }
+		
+		String query = queryBuilder.toString();
+		
+		Connection con = DatabaseConnection.getInstance().getConnection();
+		try (PreparedStatement psSearchWorkOrders = con.prepareStatement(query)) {
+			
+			for (int i = 0; i < parameters.size(); i++) {
+				psSearchWorkOrders.setObject(i + 1, parameters.get(i));
+            }
+			
+			ResultSet rs = psSearchWorkOrders.executeQuery();
+			while (rs.next()) {
+				workOrders.add(switchWorkorderBuilderFromResultSet(rs));
+			}
+			
+		}catch (Exception e) {
+			System.out.println("ERROR SEARCHING WORKORDER DATABASE: ");
+			System.out.println(query);
+		}
+		
+		
+		return workOrders;
+	}
+	
+	
 	private Workorder buildGeneralFields(Workorder result, ResultSet rs) throws SQLException {
 
 		// General Fields

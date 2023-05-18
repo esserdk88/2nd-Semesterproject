@@ -183,4 +183,10 @@ public class StubWorkOrderDB implements WorkOrderDBIF{
 		return 0;
 	}
 
+	@Override
+	public List<Workorder> searchWorkOrderDataBase(String name, List<Short> priority, String location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

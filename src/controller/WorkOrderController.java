@@ -50,6 +50,11 @@ public class WorkOrderController implements WorkOrderControllerIF {
 		tempList = workOrderDB.getAllUnfinishedWorkOrders();
 		return tempList;
 	}
+	public List<Workorder> searchWorkorderDataBase(String name, List<Short> priority, String location){
+		List<Workorder> tempList;
+		tempList = workOrderDB.searchWorkOrderDataBase(name, priority, location);
+		return tempList;
+	}
 
 	@Override
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID) {
