@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import dal.AssetDB;
 import dal.WorkOrderDB;
 import dal.interfaces.AssetDBIF;
 import dal.interfaces.ReferenceDBIF;
@@ -41,6 +42,7 @@ class WorkOrderDBTest {
 	static void startUp() throws SQLException {
 		DatabaseConnection.setTestingEnvironment();
 		Database.getInstance().setWorkOrderDataBase(new WorkOrderDB());
+		Database.getInstance().setAssetDataBase(new AssetDB());
 		workOrderDB = Database.getInstance().getWorkOrderDataBase();
 		maintenance = TestingUtilities.getMaintenanceWorkOrder();
 		service = TestingUtilities.getServiceWorkOrder();

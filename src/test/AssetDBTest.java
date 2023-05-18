@@ -25,9 +25,11 @@ import model.Location;
 
 class AssetDBTest {
 	
-
+	private static AssetController assetController;
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
+		Database.getInstance().setAssetDataBase(new AssetDB());
+		assetController = new AssetController();
 		DatabaseConnection.setTestingEnvironment();
 	}
 
@@ -40,10 +42,9 @@ class AssetDBTest {
 	void getAllAssetsTest() throws SQLException {
 		//Arrange
 		List<Asset> assetList = new ArrayList<Asset>();
-		AssetController assetCtrl = new AssetController(); 
 		
 		//Act
-		assetList = assetCtrl.getAllAssets();
+		assetList = assetController.getAllAssets();
 		
 		//Assert
 		assertNotNull(assetList);

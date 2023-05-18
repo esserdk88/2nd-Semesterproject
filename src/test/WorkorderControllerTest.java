@@ -1,5 +1,6 @@
 package test;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -12,24 +13,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import controller.WorkOrderController;
-import controller.interfaces.WorkOrderControllerIF;
+import controller.*;
 import dal.interfaces.AssetDBIF;
 import dal.interfaces.ReferenceDBIF;
 import dal.interfaces.WorkOrderDBIF;
+import dalStubs.StubAssetDB;
 import dalStubs.StubWorkOrderDB;
 import dao.Database;
 import dao.DatabaseConnection;
-import model.Address;
-import model.Asset;
-import model.Employee;
-import model.Maintenance;
-import model.Measurement;
-import model.Reference;
-import model.Repair;
-import model.Service;
-import model.SparepartUsed;
-import model.Workorder;
+import model.*;
 
 class WorkorderControllerTest {
 	
@@ -93,18 +85,25 @@ class WorkorderControllerTest {
 		
 		//Instances
 		private static WorkOrderDBIF workOrderDB;
-		private static AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
+		private static AssetDBIF assetDB;
 		private static ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 		
 		private static WorkOrderController workorderController;
+		private static MaintenanceController maintenanceController;
+		private static RepairController repairController;
+		private static ServiceController serviceController;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		DatabaseConnection.setTestingEnvironment();
 		Database.getInstance().setWorkOrderDataBase(new StubWorkOrderDB());
+		Database.getInstance().setAssetDataBase(new StubAssetDB());
 		workOrderDB = Database.getInstance().getWorkOrderDataBase();
+		assetDB = Database.getInstance().getAssetDataBase();
 		workorderController = new WorkOrderController();
-		asset = assetDB.findAssetByID(1);
+		maintenanceController = new MaintenanceController();
+		repairController = new RepairController();
+		serviceController = new ServiceController();
 		reference = referenceDB.findReferenceByID(11111111);
 		maintenance = new Maintenance(repeated, intervalDayCount, 0, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
 		service = new Service(reference, 0, title, "Service", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
@@ -164,6 +163,148 @@ class WorkorderControllerTest {
 			fail();
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	void addNewMaintenanceWorkOrderTest() throws SQLException {
+		//Arrange
+		boolean success = false;
+		
+		//Act
+		success = maintenanceController.createWorkOrder(1, title, startDate, priority, description, intervalDayCount, repeated);
+		
+		//Assert
+		assertEquals(true, success);
+	}
+	
+	@Test
+	void addNewMaintenanceWorkOrderExpectExceptionTest() throws SQLException {
+		//Arrange
+		
+		//Act & Assert
+		assertThrows(IllegalArgumentException.class, () -> {
+	        maintenanceController.createWorkOrder(2, title, startDate, priority, description, intervalDayCount, repeated);
+	    });
+	}
+	
+	@Test
+	void addNewRepairWorkOrderTest() throws SQLException {
+		//Arrange
+		boolean success = false;
+				
+		//Act
+		success = repairController.createWorkOrder(1, title, startDate, priority, description, 1);
+		
+		//Assert
+		assertEquals(true, success);
+	}
+	
+	@Test
+	void addNewRepairWorkOrderExpectExceptionTest() throws SQLException {
+		//Arrange
+		
+		//Act & Assert
+		assertThrows(IllegalArgumentException.class, () -> {
+			repairController.createWorkOrder(2, title, startDate, priority, description, 1);
+	    });
+	}
+	
+	@Test
+	void addNewServiceWorkOrderTest() throws SQLException {
+		//Arrange
+		boolean success = false;
+		
+		//Act
+		success = serviceController.createWorkOrder(1, title, startDate, priority, description, 1);
+		
+		//Assert
+		assertEquals(true, success);
+	}
+	
+	@Test
+	void addNewServiceWorkOrderExpectExceptionTest() throws SQLException {
+		//Arrange
+		
+		//Act & Assert
+		assertThrows(IllegalArgumentException.class, () -> {
+			serviceController.createWorkOrder(2, title, startDate, priority, description, 1);
+	    });
+		//Arrange
+	}
+	@Test
+	void findMaintenanceWorkOrderByIDTest() {
+		//Arrange
+		int workOrderID = 1;
+		Maintenance maintenanceTest;
+		
+		//Act
+		maintenanceTest = maintenanceController.findWorkOrderByID(workOrderID);
+		
+		//Assert
+		assertEquals(true, maintenanceTest != null);
+	}
+	
+	@Test
+	void findMaintenanceWorkOrderByIDExpectExceptionTest() {
+		//Arrange
+		int workOrderID = 2;
+		Maintenance maintenanceTest;
+		
+		//Act
+		maintenanceTest = maintenanceController.findWorkOrderByID(workOrderID);
+		
+		//Assert
+		assertEquals(true, maintenanceTest == null);
+	}
+	@Test
+	void findServiceWorkOrderByIDTest() {
+		//Arrange
+		int workOrderID = 1;
+		Service serviceTest;
+		
+		//Act
+		serviceTest = serviceController.findWorkOrderByID(workOrderID);
+		
+		//Assert
+		assertEquals(true, serviceTest != null);
+	}
+	
+	@Test
+	void findServiceWorkOrderByIDExpectExceptionTest() {
+		//Arrange
+		int workOrderID = 2;
+		Service serviceTest;
+		
+		//Act
+		serviceTest = serviceController.findWorkOrderByID(workOrderID);
+		
+		//Assert
+		assertEquals(true, serviceTest == null);
+	}
+	@Test
+	void findRepairWorkOrderByIDTest() {
+		//Arrange
+		int workOrderID = 1;
+		Repair repairTest;
+		
+		//Act
+		repairTest = repairController.findWorkOrderByID(workOrderID);
+		
+		//Assert
+		assertEquals(true, repairTest != null);
+	}
+	
+	@Test
+	void findRepairWorkOrderByIDExpectExceptionTest() {
+		//Arrange
+		int workOrderID = 2;
+		Repair repairTest;
+		
+		//Act
+		repairTest = repairController.findWorkOrderByID(workOrderID);
+		
+		//Assert
+		assertEquals(true, repairTest == null);
 	}
 
 }

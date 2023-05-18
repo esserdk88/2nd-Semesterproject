@@ -44,26 +44,26 @@ public class StubWorkOrderDB implements WorkOrderDBIF{
 	
 	//Employees
 	//Employee Fields 1
-			private static int employeeID = 1000000;
-			private static String cpr = "00000001";
-			private static Calendar startDateEmp = Calendar.getInstance();
-			private static String position = "Testpos";
-			private static String name = "TestName";
-			private static String phone = "00000001";
-			private static String email = "test@test.com";
-			//pls dont fuck up
-			private static Address address = null;
-			
-			//Employee Fields 1
-			private static int employeeID2 = 2000000;
-			private static String cpr2 = "00000002";
-			private static Calendar startDateEmp2 = Calendar.getInstance();
-			private static String position2 = "Testpos2";
-			private static String name2 = "TestNameTheThird";
-			private static String phone2 = "00000002";
-			private static String email2 = "test@test.com";
-			//pls dont fuck up
-			private static Address address2 = null;
+	private static int employeeID = 1000000;
+	private static String cpr = "00000001";
+	private static Calendar startDateEmp = Calendar.getInstance();
+	private static String position = "Testpos";
+	private static String name = "TestName";
+	private static String phone = "00000001";
+	private static String email = "test@test.com";
+	//pls dont fuck up
+	private static Address address = null;
+	
+	//Employee Fields 1
+	private static int employeeID2 = 2000000;
+	private static String cpr2 = "00000002";
+	private static Calendar startDateEmp2 = Calendar.getInstance();
+	private static String position2 = "Testpos2";
+	private static String name2 = "TestNameTheThird";
+	private static String phone2 = "00000002";
+	private static String email2 = "test@test.com";
+	//pls dont fuck up
+	private static Address address2 = null;
 	
 	private static ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 	
@@ -78,38 +78,35 @@ public class StubWorkOrderDB implements WorkOrderDBIF{
 
 	@Override
 	public boolean addMaintenanceWorkOrder(Maintenance workOrder) {
-		// TODO Auto-generated method stub
-		return false;
+		//Should Return true as adding the Workorder as a success
+		return true;
 	}
 
 	@Override
 	public boolean addServiceWorkOrder(Service workOrder) {
-		// TODO Auto-generated method stub
-		return false;
+		//Should Return true as adding the Workorder as a success
+		return true;
 	}
 
 	@Override
 	public boolean addRepairWorkOrder(Repair workOrder) {
-		// TODO Auto-generated method stub
-		return false;
+		//Should Return true as adding the Workorder as a success
+		return true;
 	}
 
 	@Override
 	public Maintenance findMaintenanceWorkOrderByID(int workOrderID) {
-		// TODO Auto-generated method stub
-		return null;
+		return (workOrderID == 1) ? new Maintenance() : null;
 	}
 
 	@Override
 	public Service findServiceWorkOrderByID(int workOrderID) {
-		// TODO Auto-generated method stub
-		return null;
+		return (workOrderID == 1) ? new Service() : null;
 	}
 
 	@Override
 	public Repair findRepairWorkOrderByID(int workOrderID) {
-		// TODO Auto-generated method stub
-		return null;
+		return (workOrderID == 1) ? new Repair() : null;
 	}
 
 	@Override
