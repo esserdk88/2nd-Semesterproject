@@ -8,7 +8,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import dal.WorkOrderDB;
@@ -48,6 +50,17 @@ class WorkOrderDBTest {
 	static void tearDown() throws SQLException {
 		DatabaseConnection.getInstance().rollbackTransaction();
 	}
+	
+	@BeforeEach
+	void beforeEach() throws SQLException {
+		DatabaseConnection.getInstance().startTransaction();
+	}
+	
+	@AfterEach
+	void afterEach() throws SQLException {
+		DatabaseConnection.getInstance().rollbackTransaction();
+	}
+	
 			
 	@Test
 	void addMaintenanceWorkOrderTest() {
@@ -117,7 +130,6 @@ class WorkOrderDBTest {
 	
 	@Test
 	void findRepairWorkOrderByIDTest() {
-		//TODO: this test will fail as long as the database workorder_price holde decimal number with 0 decimal points
 		//Arrange
 		workOrderDB.addRepairWorkOrder(repair);
 		Repair foundRepair = null;
@@ -156,62 +168,63 @@ class WorkOrderDBTest {
 	
 	@Test
 	void getAllMaintenanceWorkOrdersTest() {
-		//TODO: Write test case
 		//Arrange
-				
+		int maintenanceWorkOrderInDB = 2; //Testing in test database, contains 2 Maintenance Workorders
+		
 		//Act
+		int size = workOrderDB.getAllMaintenanceWorkOrders().size();
 		
 		//Assert
-		
-		//Clean up
+		assertEquals(maintenanceWorkOrderInDB, size);
 	}
 	
 	@Test
 	void getAllServiceWorkOrdersTest() {
-		//TODO: Write test case
 		//Arrange
+		int serviceWorkOrderInDB = 2; //Testing in test database, contains 2 Service Workorders
 		
 		//Act
-		
+		int size = workOrderDB.getAllServiceWorkOrders().size();
 		//Assert
-		
-		//Clean up
+		assertEquals(serviceWorkOrderInDB, size);
 	}
 	
 	@Test
 	void getAllRepairWorkOrdersTest() {
-		//TODO: Write test case
 		//Arrange
+		int repairWorkOrderInDB = 1; //Testing in test database, contains 1 Repair Workorders
 		
 		//Act
-		
+		int size = workOrderDB.getAllRepairWorkOrders().size();
 		//Assert
-		
-		//Clean up
+		assertEquals(repairWorkOrderInDB, size);
 	}
 	
 	@Test
 	void getAllUnfinishedWorkOrdersTest() {
-		//TODO: Write test case
 		//Arrange
+		int unfinishedWorkOrderInDB = 2; //Testing in test database, contains 2 UnfinishedWorkorders
 		
 		//Act
-		
+		int size = workOrderDB.getAllUnfinishedWorkOrders().size();
 		//Assert
-		
-		//Clean up
+		assertEquals(unfinishedWorkOrderInDB, size);
 	}
 	
 	@Test
-	void deleteWorkOrderByIDTest() {
-		//TODO: Write test case
+	void deleteWorkOrderByIDTest() throws SQLException {
 		//Arrange
+		int workOrderID = 5; //Testing on workorder 5 in test database, WorkOrder 5 contains no Spareparts used, or measurements
+		boolean deleteSuccess = false;
+		Workorder stillExistsCheck = new Maintenance();
 		
 		//Act
+		deleteSuccess = workOrderDB.deleteWorkOrderByID(workOrderID);
+		stillExistsCheck = workOrderDB.getWorkorderById(workOrderID);
 		
 		//Assert
-		
-		//Clean up
+		assertEquals(true, deleteSuccess);
+		assertEquals(null, stillExistsCheck);
 	}
 	
 }

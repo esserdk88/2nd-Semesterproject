@@ -68,7 +68,6 @@ public class StubWorkOrderDB implements WorkOrderDBIF{
 	private static ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 	
 	public StubWorkOrderDB() {
-		System.out.println("Stub WorkOrderDB");
 		reference = referenceDB.findReferenceByID(11111111);
 		maintenance = new Maintenance(repeated, intervalDayCount, 0, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
 		repair = new Repair(price, reference, 0, title, "Repair", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
