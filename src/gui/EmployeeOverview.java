@@ -38,6 +38,7 @@ public class EmployeeOverview extends JPanel {
 	 */
 	public EmployeeOverview() {
 		this.setName("Medarbejder Oversigt");
+		employeeCtr = new EmployeeController();
 		setLayout(new BorderLayout(0, 0));
 		setPanels();
 		setTables();
@@ -46,7 +47,6 @@ public class EmployeeOverview extends JPanel {
 	}
 
 	private void setEmployeeOnStartUp() {
-		employeeCtr = new EmployeeController(); //TODO: instantiate in constructor
 		Thread workerThread = new Thread(() -> {
 		    TableSwingWorker dataFetcher = null;
 			try {
