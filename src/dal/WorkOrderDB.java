@@ -61,6 +61,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	//Used when selecting specific workorders. This script is not complete before being processed in select workordersById method.
 	public static final String SELECT_WORKORDERS_BY_ID = "SELECT " + FIELDS_COMMON_WITH_ID + " FROM Workorder WHERE workorder_id_PK IN (";
 	
+	public static final String SELECT_ALL_WORKORDERS = "SELECT * from WorkOrdersView";
 	public static final String SELECT_ALL_MAINTENANCE = "SELECT * FROM MaintenanceView";
 	public static final String SELECT_ALL_SERVICE = "SELECT * FROM ServiceView";
 	public static final String SELECT_ALL_REPAIR = "SELECT * FROM RepairView";
@@ -234,6 +235,21 @@ public class WorkOrderDB implements WorkOrderDBIF {
 
 		}
 		return repair;
+	}
+	
+	public List<Workorder> getAllWorkorders() throws SQLException {
+		List<Workorder> workorders = new ArrayList<>();
+		
+		Connection con = DatabaseConnection.getInstance().getConnection();
+		try(PreparedStatement psFindAllWorkorders = con.prepareStatement(SELECT_ALL_WORKORDERS)) {
+			ResultSet rs = psFindAllWorkorders.executeQuery();
+			
+			while(rs.next()) {
+				workorders.add(buildWorkorderObjectFromResultset(rs));
+			}
+		}
+		
+		return workorders;
 	}
 
 	@Override

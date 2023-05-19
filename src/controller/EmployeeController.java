@@ -6,11 +6,12 @@ import java.util.List;
 import controller.interfaces.EmployeeControllerIF;
 import dal.interfaces.EmployeeDBIF;
 import dao.Database;
+import gui.components.ValueCheckerIF;
 import model.Employee;
 
 
 
-public class EmployeeController implements EmployeeControllerIF {
+public class EmployeeController implements EmployeeControllerIF, ValueCheckerIF {
 
 	private EmployeeDBIF employeeDatabase;
 
@@ -19,8 +20,7 @@ public class EmployeeController implements EmployeeControllerIF {
 	}
 	@Override
 	public Employee findEmployeeByID(int employeeID) {
-		// TODO Auto-generated method stub
-		return null;
+		return employeeDatabase.findEmployeeByID(employeeID);
 	}
 
 	@Override
@@ -30,6 +30,13 @@ public class EmployeeController implements EmployeeControllerIF {
 		employeeList = employeeDatabase.getAllEmployees();
 		
 		return employeeList;
+	}
+	@Override
+	public boolean validateValue(int value) {
+		if(employeeDatabase.findEmployeeByID(value) != null) {
+			return true;
+		}
+		return false;
 	}
 
 }

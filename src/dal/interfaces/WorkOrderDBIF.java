@@ -37,6 +37,8 @@ public interface WorkOrderDBIF {
 	public List<Workorder> getAllUnfinishedWorkOrders();
 
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID);
+	
+	public List<Workorder> getAllWorkorders() throws SQLException;
 
 	// Swtich employee Workorders
 	public List<Workorder> getWorkordersById(int[] workorderIds);
