@@ -162,6 +162,24 @@ public abstract class Workorder {
 	public void setMeasurements(List<Measurement> measurements) {
 		this.measurements = measurements;
 	}
+	
+	public String formatPriority(short input) {
+		String type = "";
+		switch (input) {
+		case 1:
+			type = "Lav";
+			break;
+		case 2:
+			type = "Mellem";
+			break;
+			
+		case 3:
+			type = "Høj";
+			break;
+		default:
+		}
+		return type;
+	}
 
 	@Override
 	public String toString() {
