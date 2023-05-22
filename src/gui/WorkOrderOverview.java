@@ -43,7 +43,8 @@ public class WorkOrderOverview extends JPanel {
 	// Table
 	private JScrollPane centerScrollPane;
 	private DefaultTable workOrderTable;
-	private final String[] columns = { "WorkOrderID", "Emne", "Type", "Start Dato", "Slut Dato", "Prioritet", "Beskrivelse", "Færdig", "AssetID", "Medarbejder"};
+	private final String[] columns = { "WorkOrderID", "Emne", "Type", "Start Dato", "Slut Dato", "Prioritet",
+			"Beskrivelse", "Færdig", "AssetID", "Medarbejder" };
 
 	// Button
 	private JButton createNewWorkOrder;
@@ -75,10 +76,10 @@ public class WorkOrderOverview extends JPanel {
 	private Component rigidArea;
 	private Component rigidArea_2;
 	private MainFrame frame;
-	
-	//Controllers
+
+	// Controllers
 	private WorkOrderController workorderController;
-	private MaintenanceController  maintenanceController; 
+	private MaintenanceController maintenanceController;
 	private ServiceController serviceController;
 	private RepairController repairController;
 
@@ -154,35 +155,38 @@ public class WorkOrderOverview extends JPanel {
 		searchTextField.setColumns(10);
 
 	}
+
 	private void searchWorkOrdersButton() {
 		String name = titleTextField.getText();
 		String location = departmentTextField.getText();
 		Enumeration<AbstractButton> buttons = priorityButtons.getElements();
 		List<Short> priority = new ArrayList<>();
 		buttons.asIterator().forEachRemaining(button -> {
-		    if (button.isSelected()) {
-		        priority.add(Short.valueOf(button.getName()));
-		    }
+			if (button.isSelected()) {
+				priority.add(Short.valueOf(button.getName()));
+			}
 		});
-		
+
 		String[][] loadingStatus = { { "Henter arbejdsordrer..." } };
 		workOrderTable.setNewData(loadingStatus);
 		Thread workerThread = new Thread(() -> {
 			TableSwingWorker dataFetcher = null;
-			dataFetcher = new TableSwingWorker(workOrderTable, workorderController.searchWorkorderDataBase(name, priority, location));
+			dataFetcher = new TableSwingWorker(workOrderTable,
+					workorderController.searchWorkorderDataBase(name, priority, location));
 			dataFetcher.execute();
 		});
 		workerThread.start();
 	}
-	
+
 	private void readWorkOrderButton() {
-		ReadWorkOrder panel = new ReadWorkOrder(); //TODO: Change to field and instantiate in constructor
+		ReadWorkOrder panel = new ReadWorkOrder(); // TODO: Change to field and instantiate in constructor
 		frame.setNewCenterPanel(panel);
 		Thread workerThread = new Thread(() -> {
 			panel.setCurrentWorkorderInfo(getController(workOrderTable.getCellData(columns[2])));
 		});
 		workerThread.start();
 	}
+
 	private void setButtons() {
 		searchButton = new JRoundedButton("Søg");
 		searchButton.addActionListener((e) -> searchWorkOrdersButton());
@@ -190,7 +194,7 @@ public class WorkOrderOverview extends JPanel {
 		openOrderButton = new JRoundedButton("Åben opgave");
 		openOrderButton.setEnabled(false);
 		openOrderButton.addActionListener((e) -> readWorkOrderButton());
-		
+
 		openOrderButton.setMinimumSize(new Dimension(145, 23));
 		openOrderButton.setMaximumSize(new Dimension(145, 23));
 		openOrderButton.setPreferredSize(new Dimension(145, 23));
@@ -208,16 +212,19 @@ public class WorkOrderOverview extends JPanel {
 		rightPanel.add(createNewWorkOrder);
 
 	}
-	
+
 	private Workorder getController(String type) {
 		int workOrderID = Integer.valueOf(workOrderTable.getCellData(columns[0]));
-		switch(type) {
-		case"Maintenance":
-			return maintenanceController.findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
-		case"Repair":
-			return  repairController.findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
-		case"Service":
-			return serviceController.findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
+		switch (type) {
+		case "Maintenance":
+			return maintenanceController.findWorkOrderByID(workOrderID); // TODO: Change to field and instantiate in
+																			// constructor
+		case "Repair":
+			return repairController.findWorkOrderByID(workOrderID); // TODO: Change to field and instantiate in
+																	// constructor
+		case "Service":
+			return serviceController.findWorkOrderByID(workOrderID); // TODO: Change to field and instantiate in
+																		// constructor
 		}
 		return null;
 	}
@@ -233,7 +240,7 @@ public class WorkOrderOverview extends JPanel {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				int[] rows = workOrderTable.getSelectedRows();
-				if(rows.length != 0) {
+				if (rows.length != 0) {
 					openOrderButton.setEnabled(true);
 				} else {
 					openOrderButton.setEnabled(false);
@@ -271,4 +278,5 @@ public class WorkOrderOverview extends JPanel {
 		});
 		workerThread.start();
 	}
+
 }
