@@ -278,8 +278,7 @@ public class ReadAsset extends JPanel {
 		txtEmployeeID.setText(historyTable.getModel().getValueAt(selectedRow, 9).toString());
 		txtType.setText(historyTable.getModel().getValueAt(selectedRow, 2).toString());
 		txtRegNo.setText(historyTable.getModel().getValueAt(selectedRow, 0).toString());
-		int priority = Integer.parseInt(historyTable.getModel().getValueAt(selectedRow, 5).toString());
-		txtPriority.setText(convertPriorityToString(priority));
+		txtPriority.setText(historyTable.getModel().getValueAt(selectedRow, 5).toString().toString());
 		
 		String type = historyTable.getModel().getValueAt(selectedRow, 2).toString();
 		if (type.contains("Maintenance")) {
@@ -291,23 +290,6 @@ public class ReadAsset extends JPanel {
 		}
 	}
 	
-	private String convertPriorityToString(int priority) {
-		String priorityString;
-		switch (priority) {
-		case 1:
-			priorityString = "Lav";
-			break;
-		case 2:
-			priorityString = "Mellem";
-			break;
-		case 3:
-			priorityString = "Høj";
-			break;
-		default:
-			priorityString = "Ikke angivet";
-		}
-		return priorityString;
-	}
 	private void setPanels() {
 		southPanel = new JPanel();
 		FlowLayout fl_southPanel = (FlowLayout) southPanel.getLayout();
