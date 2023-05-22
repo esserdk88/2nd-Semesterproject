@@ -142,10 +142,7 @@ public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 	}
 	
 	private void setAssignButtonText() {
-		if(this.txtEmployeeID.getText().equals("Ingen medarbejder") || this.txtEmployeeID.getText().isBlank() || txtEmployeeID.getText().isEmpty()) {
-			System.out.println("if: " + txtEmployeeID.getText());
-		}
-		else {
+		if (current.getEmployee() != null) {
 			this.btnAssignEmployee.setText("Skift");
 		}
 	}
