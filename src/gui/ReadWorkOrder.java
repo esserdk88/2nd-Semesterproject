@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
@@ -20,14 +22,22 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
+import controller.EmployeeController;
 import controller.MaintenanceController;
-import dao.Database;
+import controller.WorkOrderController;
+import controller.interfaces.EmployeeControllerIF;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
+import gui.components.ValueCheckerIF;
+import gui.components.VerifiableTextFieldValue;
+import gui.components.VerifiedValueRecieverIF;
+import model.Employee;
 import model.Maintenance;
 import model.Workorder;
+import javax.swing.UIManager;
+import java.awt.Color;
 
-public class ReadWorkOrder extends JPanel {
+public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 
 	// Textfields
 	private JTextField txtTitle;
@@ -77,12 +87,20 @@ public class ReadWorkOrder extends JPanel {
 	private JSpinner spinner;
 	private Workorder current;
 	
+	//used in when assigning new employee or other employee to current
+	private int employeeID;
+	
 	private MaintenanceController maintenanceController;
+	private WorkOrderController workorderController;
+	private EmployeeControllerIF employeeController;
+	private JButton btnAssignEmployee;
 	/**
 	 * Create the panel.
 	 */
 	public ReadWorkOrder() {
 		maintenanceController = new MaintenanceController();
+		employeeController = new EmployeeController();
+		workorderController = new WorkOrderController();
 		setLayout(new BorderLayout(0, 0));
 		this.setName("Se Arbejdsopgave");
 		setPanels();
@@ -129,13 +147,45 @@ public class ReadWorkOrder extends JPanel {
 
 		if (current.getEmployee() != null) {
 			txtEmployeeID.setText(current.getEmployee().getName());
+			employeeID = current.getEmployee().getEmployeeID();
 		} else {
 			txtEmployeeID.setText("Ingen medarbejder");
 		}
 
 //		private JTextField txtSerialNumber;
 //		private JTextField txtRegNo;
-
+		setAssignButtonText();
+	}
+	
+	private void setAssignButtonText() {
+		if(this.txtEmployeeID.getText().equals("Ingen medarbejder") || this.txtEmployeeID.getText().isBlank() || txtEmployeeID.getText().isEmpty()) {
+			System.out.println("if: " + txtEmployeeID.getText());
+		}
+		else {
+			this.btnAssignEmployee.setText("Skift");
+		}
+	}
+	
+	//Verified value is an employeeID which will then be assigned to current workorder
+		@Override
+		public void receiveVerifiedValue(int verifiedValue) {
+			if(verifiedValue > 0) {
+				boolean successbool = false;
+				Employee assignedEmployee = employeeController.findEmployeeByID(verifiedValue);
+				successbool = workorderController.assignEmployeeToWorkOrder(assignedEmployee, current);
+				this.txtEmployeeID.setText(assignedEmployee.getName());
+//				System.out.println("Employee was assigned: " + successbool);
+			}
+			else {
+				this.txtEmployeeID.setText("Ingen medarbejder");
+			}
+			setAssignButtonText();
+		}
+	
+	private void btnAssignEmployeePressed() {
+		//Open window to retrieve an employeeID, employeeIdSelected uses this instanses implementation of recieveVerifiedValue through the VerifiedValueRecieverIF interface
+		//I know it's stupid, but i don't know how else to do it. 
+		VerifiableTextFieldValue employeeIdSelecter = new VerifiableTextFieldValue((ValueCheckerIF) employeeController, "indtast et medarbejder id", "indtast et medarbejder id", this);
 	}
 
 	private void setCheckBoxes() {
@@ -394,6 +444,8 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(lblClosedBy, gbc_lblClosedBy);
 
 		txtEmployeeID = new JTextField();
+		txtEmployeeID.setBackground(new Color(255, 255, 255));
+		txtEmployeeID.setEditable(false);
 		GridBagConstraints gbc_txtEmployeeID = new GridBagConstraints();
 		gbc_txtEmployeeID.insets = new Insets(0, 0, 5, 5);
 		gbc_txtEmployeeID.fill = GridBagConstraints.HORIZONTAL;
@@ -401,6 +453,19 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtEmployeeID.gridy = 7;
 		centerPanel.add(txtEmployeeID, gbc_txtEmployeeID);
 		txtEmployeeID.setColumns(10);
+		
+		btnAssignEmployee = new JRoundedButton("Tildel");
+		btnAssignEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnAssignEmployeePressed();
+			}
+		});
+		GridBagConstraints gbc_btnAssignEmployee = new GridBagConstraints();
+		gbc_btnAssignEmployee.fill = GridBagConstraints.BOTH;
+		gbc_btnAssignEmployee.insets = new Insets(0, 0, 5, 5);
+		gbc_btnAssignEmployee.gridx = 9;
+		gbc_btnAssignEmployee.gridy = 7;
+		centerPanel.add(btnAssignEmployee, gbc_btnAssignEmployee);
 
 		lblHistory = new JLabel("Historik");
 		lblHistory.setFont(new Font("Tahoma", Font.BOLD, 12));

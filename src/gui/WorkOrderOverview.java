@@ -32,6 +32,12 @@ import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
 import model.Workorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class WorkOrderOverview extends JPanel {
 
@@ -71,8 +77,6 @@ public class WorkOrderOverview extends JPanel {
 
 	// Extra components
 	private ButtonGroup priorityButtons;
-	private Component rigidArea_1;
-	private Component rigidArea;
 	private Component rigidArea_2;
 	private MainFrame frame;
 	
@@ -81,6 +85,8 @@ public class WorkOrderOverview extends JPanel {
 	private MaintenanceController  maintenanceController; 
 	private ServiceController serviceController;
 	private RepairController repairController;
+	private JLabel lblUnfinishedWorkorders;
+	private JRadioButton unfinishedRadioButton;
 
 	/**
 	 * Create the panel.
@@ -114,6 +120,12 @@ public class WorkOrderOverview extends JPanel {
 
 		highJRadioButton = new JRadioButton("Høj");
 		highJRadioButton.setName("3");
+		highJRadioButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				 //TODO updateWorkOrderTable();
+			}
+		});
 		leftTopPriorityPanel.add(highJRadioButton);
 		priorityButtons.add(highJRadioButton);
 
@@ -126,6 +138,13 @@ public class WorkOrderOverview extends JPanel {
 
 		mediumJRadioButton = new JRadioButton("Mellem");
 		mediumJRadioButton.setName("2");
+		mediumJRadioButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				 //TODO updateWorkOrderTable();
+			}
+		});
+		mediumJRadioButton.setSelected(true);
 		leftTopPriorityPanel.add(mediumJRadioButton);
 		priorityButtons.add(mediumJRadioButton);
 
@@ -133,18 +152,44 @@ public class WorkOrderOverview extends JPanel {
 		leftTopPriorityPanel.add(searchTitleLabel);
 
 		titleTextField = new JTextField();
+		titleTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				//TODO event
+			}
+		});
+		titleTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				 //TODO updateWorkOrderTable();
+			}
+		});
 		leftTopPriorityPanel.add(titleTextField);
 		titleTextField.setColumns(10);
 
 		lowJRadioButton = new JRadioButton("Lav");
 		lowJRadioButton.setName("1");
+		lowJRadioButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				 //TODO updateWorkOrderTable();
+			}
+		});
+		lowJRadioButton.setSelected(true);
 		leftTopPriorityPanel.add(lowJRadioButton);
 		priorityButtons.add(lowJRadioButton);
-		rigidArea = Box.createRigidArea(new Dimension(20, 20));
-		leftTopPriorityPanel.add(rigidArea);
-
-		rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
-		leftTopPriorityPanel.add(rigidArea_1);
+		
+		lblUnfinishedWorkorders = new JLabel("Ikke færdige");
+		leftTopPriorityPanel.add(lblUnfinishedWorkorders);
+		
+		unfinishedRadioButton = new JRadioButton("");
+		unfinishedRadioButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				 //TODO updateWorkOrderTable();
+			}
+		});
+		leftTopPriorityPanel.add(unfinishedRadioButton);
 
 		searchLabel = new JLabel("Søg på ID");
 		rightTopPanel.add(searchLabel);
@@ -154,9 +199,10 @@ public class WorkOrderOverview extends JPanel {
 		searchTextField.setColumns(10);
 
 	}
-	private void searchWorkOrdersButton() {
+	private void btnSearchWorkOrdersPressed() {
 		String name = titleTextField.getText();
 		String location = departmentTextField.getText();
+		boolean isFinished = !unfinishedRadioButton.isSelected();
 		Enumeration<AbstractButton> buttons = priorityButtons.getElements();
 		List<Short> priority = new ArrayList<>();
 		buttons.asIterator().forEachRemaining(button -> {
@@ -169,7 +215,7 @@ public class WorkOrderOverview extends JPanel {
 		workOrderTable.setNewData(loadingStatus);
 		Thread workerThread = new Thread(() -> {
 			TableSwingWorker dataFetcher = null;
-			dataFetcher = new TableSwingWorker(workOrderTable, workorderController.searchWorkorderDataBase(name, priority, location));
+			dataFetcher = new TableSwingWorker(workOrderTable, workorderController.searchWorkorderDataBase(name, priority, location, isFinished));
 			dataFetcher.execute();
 		});
 		workerThread.start();
@@ -185,7 +231,7 @@ public class WorkOrderOverview extends JPanel {
 	}
 	private void setButtons() {
 		searchButton = new JRoundedButton("Søg");
-		searchButton.addActionListener((e) -> searchWorkOrdersButton());
+		searchButton.addActionListener((e) -> btnSearchWorkOrdersPressed());
 		rightTopPanel.add(searchButton);
 		openOrderButton = new JRoundedButton("Åben opgave");
 		openOrderButton.setEnabled(false);
@@ -271,4 +317,44 @@ public class WorkOrderOverview extends JPanel {
 		});
 		workerThread.start();
 	}
+	
+//	private void updateWorkOrderTable() {
+//		String[][] loadingStatus = { { "Henter arbejdsordrer..." } };
+//		workOrderTable.setNewData(loadingStatus);
+//		Thread workerThread = new Thread(() -> {
+//			TableSwingWorker dataFetcher = null;
+//			//TODO finish when select is made
+//			dataFetcher = new TableSwingWorker(workOrderTable, filterWorkorderList(workorderController.getAllWorkOrders()));
+//			dataFetcher.execute();
+//		});
+//		workerThread.start();
+//	}
+	
+	
+	//FILTERING IS NOT SUPPOSED TO WORK LIKE THIS
+	//THIS IS TEMPORARY AND IS ONLY USED BECAUSE IMPLEMENTING IT WOULD TAKE WAYY TOO LONG FOR IT TO MAKE SENCE FOR ONE USE CASE
+	//NORMALLY THIS WOULD BE IMPLEMENTED AS A PROCEDUALLY GENERATED SQL SCRIPT THAT WILL SPECIFY CHRITERIA FOR THE SELECTED ITEMS
+	//DOING IT LIKE THIS WONT WORK FOR THAT LONG BECAUSE OF THE SHERE AMOUNT OF OBJECT RETRIEVED INTO MEMORY AND NEEDS TO BE PROCESSES LOCALLY
+//	private List<Workorder> filterWorkorderList(List<Workorder> workorderList) {
+//		List<Workorder> filteredList = new ArrayList<>();
+//		
+//		boolean notFinished = unfinishedRadioButton.isSelected();
+//		
+//		for(Workorder w: workorderList) {
+//			if(!unfinishedRadioButton.isSelected() || !w.isFinished() == unfinishedRadioButton.isSelected()) {
+//				if(titleTextField.getText().isBlank() || titleTextField.getText().contains(w.getTitle())); {
+//					if(highJRadioButton.isSelected() && w.getPriority() == 3) {
+//						filteredList.add(w);
+//					}
+//					if (mediumJRadioButton.isSelected() && w.getPriority() == 2) {
+//						filteredList.add(w);
+//					}
+//					if(lowJRadioButton.isSelected() && w.getPriority() == 1) {
+//						filteredList.add(w);
+//					}
+//				}
+//			}
+//		}
+//		return filteredList;
+//	}
 }

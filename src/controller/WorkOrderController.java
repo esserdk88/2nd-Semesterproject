@@ -41,8 +41,8 @@ public class WorkOrderController implements WorkOrderControllerIF {
 
 	@Override
 	public boolean assignEmployeeToWorkOrder(Employee employee, Workorder workOrder) {
-		// TODO Auto-generated method stub
-		return false;
+		workOrder.setEmployee(employee);
+		return workOrderDB.updateWorkorder(workOrder);
 	}
 	
 	public List<Workorder> getAllUnfinishedWorkOrders() {
@@ -59,6 +59,15 @@ public class WorkOrderController implements WorkOrderControllerIF {
 	@Override
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID) {
 		return workOrderDB.getAllWorkOrdersByAssetID(assetID);
+	}
+	
+	public List<Workorder> getAllWorkOrders() {
+		try {
+			return workOrderDB.getAllWorkorders();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return new ArrayList<Workorder>();
+		}
 	}
 	
 	public Workorder getWorkorderByID(int workorderId) throws SQLException {
