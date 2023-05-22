@@ -50,9 +50,9 @@ public class WorkOrderController implements WorkOrderControllerIF {
 		tempList = workOrderDB.getAllUnfinishedWorkOrders();
 		return tempList;
 	}
-	public List<Workorder> searchWorkorderDataBase(String name, List<Short> priority, String location){
+	public List<Workorder> searchWorkorderDataBase(String name, List<Short> priority, String location, boolean isFinished){
 		List<Workorder> tempList;
-		tempList = workOrderDB.searchWorkOrderDataBase(name, priority, location);
+		tempList = workOrderDB.searchWorkOrderDataBase(name, priority, location, isFinished);
 		return tempList;
 	}
 

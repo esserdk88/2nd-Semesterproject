@@ -53,6 +53,6 @@ public interface WorkOrderDBIF {
 
 	public int getLatestKey();
 	
-	public List<Workorder> searchWorkOrderDataBase(String name, List<Short> priority, String location);
+	public List<Workorder> searchWorkOrderDataBase(String name, List<Short> priority, String location, boolean isFinished);
 
 }

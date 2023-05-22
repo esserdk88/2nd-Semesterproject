@@ -563,7 +563,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	}
 	
 	@Override
-	public List<Workorder> searchWorkOrderDataBase(String name, List<Short> priority, String location){
+	public List<Workorder> searchWorkOrderDataBase(String name, List<Short> priority, String location, boolean isFinished){
 		List<Workorder> workOrders = new ArrayList<>();
 		StringBuilder queryBuilder = new StringBuilder("SELECT * FROM WorkOrdersView WHERE 1=1");
 		List<Object> parameters = new ArrayList<>();
@@ -589,6 +589,13 @@ public class WorkOrderDB implements WorkOrderDBIF {
             queryBuilder.append(" AND location_id_PK = ?");
             parameters.add(location);
         }
+		
+		if(isFinished) {
+			queryBuilder.append(" AND workorder_finished = 1");
+		}
+		else {
+			queryBuilder.append(" AND workorder_finished = 0");
+		}
 		
 		String query = queryBuilder.toString();
 		
