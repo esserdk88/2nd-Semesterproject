@@ -466,6 +466,8 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(lblRegNr, gbc_lblRegNr);
 		
 		txtWorkOrderID = new JTextField();
+		txtWorkOrderID.setEnabled(false);
+		txtWorkOrderID.setText("ikke implementeret");
 		GridBagConstraints gbc_txtWorkOrderID = new GridBagConstraints();
 		gbc_txtWorkOrderID.weighty = 0;
 		gbc_txtWorkOrderID.weightx = 0;
@@ -498,6 +500,8 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(lblSerieNr, gbc_lblSerieNr);
 		
 		serieNrTextField = new JTextField();
+		serieNrTextField.setEnabled(false);
+		serieNrTextField.setText("ikke implementeret");
 		GridBagConstraints gbc_serieNrTextField = new GridBagConstraints();
 		gbc_serieNrTextField.weighty = 0;
 		gbc_serieNrTextField.weightx = 0;

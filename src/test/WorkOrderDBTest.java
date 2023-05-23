@@ -1,6 +1,7 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,20 +14,17 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import controller.WorkOrderController;
 import dal.AssetDB;
 import dal.WorkOrderDB;
-import dal.interfaces.AssetDBIF;
-import dal.interfaces.ReferenceDBIF;
 import dal.interfaces.WorkOrderDBIF;
 import dao.Database;
 import dao.DatabaseConnection;
-import model.Asset;
+import model.Address;
+import model.Employee;
 import model.Maintenance;
-import model.Measurement;
-import model.Reference;
 import model.Repair;
 import model.Service;
-import model.SparepartUsed;
 import model.Workorder;
 
 class WorkOrderDBTest {
@@ -35,8 +33,20 @@ class WorkOrderDBTest {
 	private static Service service;
 	private static Repair repair;
 	
+	//Employee Fields 1
+	private static int employeeID2 = 2000000;
+	private static String cpr2 = "00000002";
+	private static Calendar startDateEmp2 = Calendar.getInstance();
+	private static String position2 = "Testpos2";
+	private static String name2 = "TestNameTheThird";
+	private static String phone2 = "00000002";
+	private static String email2 = "test@test.com";
+	//pls dont fuck up
+	private static Address address2 = null;
+	
 	//Instances
 	private static WorkOrderDBIF workOrderDB;
+	private static WorkOrderController workorderController;
 	
 	@BeforeAll
 	static void startUp() throws SQLException {
@@ -44,10 +54,12 @@ class WorkOrderDBTest {
 		Database.getInstance().setWorkOrderDataBase(new WorkOrderDB());
 		Database.getInstance().setAssetDataBase(new AssetDB());
 		workOrderDB = Database.getInstance().getWorkOrderDataBase();
+		workorderController = new WorkOrderController();
 		maintenance = TestingUtilities.getMaintenanceWorkOrder();
 		service = TestingUtilities.getServiceWorkOrder();
 		repair = TestingUtilities.getRepairWorkOrder();
 	}
+	
 	@AfterAll
 	static void tearDown() throws SQLException {
 		DatabaseConnection.getInstance().rollbackTransaction();
@@ -227,6 +239,34 @@ class WorkOrderDBTest {
 		//Assert
 		assertEquals(true, deleteSuccess);
 		assertEquals(null, stillExistsCheck);
+	}
+	
+	void assignEmployeeToWorkorderTest() {
+		//Arrange
+		Workorder workorder = maintenance;
+		Employee employee = new Employee(employeeID2, cpr2, startDateEmp2, position2, name2, phone2, email2, address2);
+		int workorderId = maintenance.getWorkOrderID();
+		Workorder workorderConfirm = null;
+		
+		//Act
+		workorderController.assignEmployeeToWorkOrder(employee, workorder);
+		
+		
+		//Assert
+		try {
+			workorderConfirm = workOrderDB.getWorkorderById(workorderId);
+		} catch (SQLException e) {
+			System.out.println("WorkorderControllerTest - assignEmployeeToWorkorder - Some conncetion thingy failed");
+			e.printStackTrace();
+		}
+		
+		if(workorderConfirm != null) {
+			assertEquals(workorderConfirm.getEmployee().equals(employee), true);
+		}
+		else {
+			//Fail the test
+			fail();
+		}
 	}
 	
 }

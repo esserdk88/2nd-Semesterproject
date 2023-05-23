@@ -92,12 +92,20 @@ class WorkorderControllerTest {
 		private static MaintenanceController maintenanceController;
 		private static RepairController repairController;
 		private static ServiceController serviceController;
+		
+		//#############################################
+		//true = use stubs
+		//false = use database
+		private static boolean useStubs = true;
+		//#############################################
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		DatabaseConnection.setTestingEnvironment();
-		Database.getInstance().setWorkOrderDataBase(new StubWorkOrderDB());
-		Database.getInstance().setAssetDataBase(new StubAssetDB());
+		if(useStubs) {
+			Database.getInstance().setWorkOrderDataBase(new StubWorkOrderDB());
+			Database.getInstance().setAssetDataBase(new StubAssetDB());
+		}
 		workOrderDB = Database.getInstance().getWorkOrderDataBase();
 		assetDB = Database.getInstance().getAssetDataBase();
 		workorderController = new WorkOrderController();
@@ -136,11 +144,12 @@ class WorkorderControllerTest {
 		boolean switchedEmployees = false;
 		
 		//Act
+		//try catch segment only there because stub uses DBInterface
 		try {
 			workorderController.switchEmployeeWorkorders(repair, maintenance, false);
 			switchedEmployees = true;
 		} catch (Exception e) {
-			//Something stupid happened
+			//Some error has occured 
 			fail();
 			e.printStackTrace();
 		}
@@ -159,7 +168,7 @@ class WorkorderControllerTest {
 			}
 					
 		} catch (SQLException e) {
-			//something stupid happened
+			//in case of error when using actual DB
 			fail();
 			e.printStackTrace();
 		}
@@ -305,6 +314,34 @@ class WorkorderControllerTest {
 		
 		//Assert
 		assertEquals(true, repairTest == null);
+	}
+	
+	@Test
+	void assignEmployeeToWorkorderTest() {
+		//Arrange
+		Workorder workorder = maintenance;
+		Employee employee = new Employee(employeeID2, cpr2, startDateEmp2, position2, name2, phone2, email2, address2);
+		int workorderId = maintenance.getWorkOrderID();
+		Workorder workorderConfirm = null;
+		
+		//Act
+		workorderController.assignEmployeeToWorkOrder(employee, workorder);
+		
+		
+		//Assert
+		try {
+			workorderConfirm = workOrderDB.getWorkorderById(workorderId);
+		} catch (SQLException e) {
+			System.out.println("WorkorderControllerTest - assignEmployeeToWorkorder - Some conncetion thingy failed");
+			e.printStackTrace();
+		}
+		
+		if(workorderConfirm != null) {
+			assertEquals(workorderConfirm.getEmployee().equals(employee), true);
+		}
+		else {
+			fail();
+		}
 	}
 
 }
