@@ -44,11 +44,29 @@ public class Maintenance extends Workorder implements StringArrayConvertible {
 	public void setIntervalDayCount(int intervalDayCount) {
 		this.intervalDayCount = intervalDayCount;
 	}
+	
+	public String formatPriority(short input) {
+		String type = "";
+		switch (input) {
+		case 1:
+			type = "Lav";
+			break;
+		case 2:
+			type = "Mellem";
+			break;
+			
+		case 3:
+			type = "Høj";
+			break;
+		default:
+		}
+		return type;
+	}
 
 	@Override
 	public String[] getObjectAsStringArray() {
 		return new String[] { Integer.toString(getWorkOrderID()), getTitle(), getType(), calendarToString(getStartDate()), "",
-				Short.toString(getPriority()), getDescription(), Boolean.toString(isFinished()),
+				formatPriority(getPriority()), getDescription(), Boolean.toString(isFinished()),
 				Integer.toString(getAsset().getAssetID()),
 				(getEmployee() == null) ? "Ingen medarbejder" : getEmployee().getName() };
 	}

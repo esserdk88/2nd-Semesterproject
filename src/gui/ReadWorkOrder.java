@@ -119,23 +119,7 @@ public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 		txtType.setText(current.getType());
 		textArea.setText(current.getDescription());
 		txtRegNo.setText(String.valueOf(current.getWorkOrderID()));
-
-		int priorityID = current.getPriority();
-		String priorityType = "";
-		switch (priorityID) {
-		case 1:
-			priorityType = "Lav";
-			break;
-		case 2:
-			priorityType = "Mellem";
-			break;
-		case 3:
-			priorityType = "Høj";
-			break;
-		default:
-			priorityType = "";
-		}
-		txtPriority.setText(priorityType);
+		txtPriority.setText(current.formatPriority(current.getPriority()));
 
 		if (current.getType().equals("Maintenance")) {
 			Maintenance maintenanceorder = null;
@@ -158,10 +142,7 @@ public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 	}
 	
 	private void setAssignButtonText() {
-		if(this.txtEmployeeID.getText().equals("Ingen medarbejder") || this.txtEmployeeID.getText().isBlank() || txtEmployeeID.getText().isEmpty()) {
-			System.out.println("if: " + txtEmployeeID.getText());
-		}
-		else {
+		if (current.getEmployee() != null) {
 			this.btnAssignEmployee.setText("Skift");
 		}
 	}

@@ -344,14 +344,12 @@ public class CreateWorkOrder extends JPanel {
 	
 	private void resetSpinners() {
 		setSpinners();
-		System.out.println("resetSpinners");
 	}
 	
 	private void resetComboboxes() {
 		priorityComboBox.setSelectedIndex(0);
 		typeComboBox.setSelectedIndex(0);
 		templatesComboBox.setSelectedIndex(0);
-		System.out.println("resetComboboxes");
 	}
 	
 	

@@ -49,7 +49,8 @@ public class WorkOrderOverview extends JPanel {
 	// Table
 	private JScrollPane centerScrollPane;
 	private DefaultTable workOrderTable;
-	private final String[] columns = { "WorkOrderID", "Emne", "Type", "Start Dato", "Slut Dato", "Prioritet", "Beskrivelse", "Færdig", "AssetID", "Medarbejder"};
+	private final String[] columns = { "WorkOrderID", "Emne", "Type", "Start Dato", "Slut Dato", "Prioritet",
+			"Beskrivelse", "Færdig", "AssetID", "Medarbejder" };
 
 	// Button
 	private JButton createNewWorkOrder;
@@ -79,10 +80,10 @@ public class WorkOrderOverview extends JPanel {
 	private ButtonGroup priorityButtons;
 	private Component rigidArea_2;
 	private MainFrame frame;
-	
-	//Controllers
+
+	// Controllers
 	private WorkOrderController workorderController;
-	private MaintenanceController  maintenanceController; 
+	private MaintenanceController maintenanceController;
 	private ServiceController serviceController;
 	private RepairController repairController;
 	private JLabel lblUnfinishedWorkorders;
@@ -199,18 +200,20 @@ public class WorkOrderOverview extends JPanel {
 		searchTextField.setColumns(10);
 
 	}
+
 	private void btnSearchWorkOrdersPressed() {
+
 		String name = titleTextField.getText();
 		String location = departmentTextField.getText();
 		boolean isFinished = !unfinishedRadioButton.isSelected();
 		Enumeration<AbstractButton> buttons = priorityButtons.getElements();
 		List<Short> priority = new ArrayList<>();
 		buttons.asIterator().forEachRemaining(button -> {
-		    if (button.isSelected()) {
-		        priority.add(Short.valueOf(button.getName()));
-		    }
+			if (button.isSelected()) {
+				priority.add(Short.valueOf(button.getName()));
+			}
 		});
-		
+
 		String[][] loadingStatus = { { "Henter arbejdsordrer..." } };
 		workOrderTable.setNewData(loadingStatus);
 		Thread workerThread = new Thread(() -> {
@@ -220,15 +223,16 @@ public class WorkOrderOverview extends JPanel {
 		});
 		workerThread.start();
 	}
-	
+
 	private void readWorkOrderButton() {
-		ReadWorkOrder panel = new ReadWorkOrder(); //TODO: Change to field and instantiate in constructor
+		ReadWorkOrder panel = new ReadWorkOrder(); // TODO: Change to field and instantiate in constructor
 		frame.setNewCenterPanel(panel);
 		Thread workerThread = new Thread(() -> {
 			panel.setCurrentWorkorderInfo(getController(workOrderTable.getCellData(columns[2])));
 		});
 		workerThread.start();
 	}
+
 	private void setButtons() {
 		searchButton = new JRoundedButton("Søg");
 		searchButton.addActionListener((e) -> btnSearchWorkOrdersPressed());
@@ -236,7 +240,7 @@ public class WorkOrderOverview extends JPanel {
 		openOrderButton = new JRoundedButton("Åben opgave");
 		openOrderButton.setEnabled(false);
 		openOrderButton.addActionListener((e) -> readWorkOrderButton());
-		
+
 		openOrderButton.setMinimumSize(new Dimension(145, 23));
 		openOrderButton.setMaximumSize(new Dimension(145, 23));
 		openOrderButton.setPreferredSize(new Dimension(145, 23));
@@ -254,16 +258,19 @@ public class WorkOrderOverview extends JPanel {
 		rightPanel.add(createNewWorkOrder);
 
 	}
-	
+
 	private Workorder getController(String type) {
 		int workOrderID = Integer.valueOf(workOrderTable.getCellData(columns[0]));
-		switch(type) {
-		case"Maintenance":
-			return maintenanceController.findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
-		case"Repair":
-			return  repairController.findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
-		case"Service":
-			return serviceController.findWorkOrderByID(workOrderID); //TODO: Change to field and instantiate in constructor
+		switch (type) {
+		case "Maintenance":
+			return maintenanceController.findWorkOrderByID(workOrderID); // TODO: Change to field and instantiate in
+																			// constructor
+		case "Repair":
+			return repairController.findWorkOrderByID(workOrderID); // TODO: Change to field and instantiate in
+																	// constructor
+		case "Service":
+			return serviceController.findWorkOrderByID(workOrderID); // TODO: Change to field and instantiate in
+																		// constructor
 		}
 		return null;
 	}
@@ -279,7 +286,7 @@ public class WorkOrderOverview extends JPanel {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				int[] rows = workOrderTable.getSelectedRows();
-				if(rows.length != 0) {
+				if (rows.length != 0) {
 					openOrderButton.setEnabled(true);
 				} else {
 					openOrderButton.setEnabled(false);
@@ -317,44 +324,4 @@ public class WorkOrderOverview extends JPanel {
 		});
 		workerThread.start();
 	}
-	
-//	private void updateWorkOrderTable() {
-//		String[][] loadingStatus = { { "Henter arbejdsordrer..." } };
-//		workOrderTable.setNewData(loadingStatus);
-//		Thread workerThread = new Thread(() -> {
-//			TableSwingWorker dataFetcher = null;
-//			//TODO finish when select is made
-//			dataFetcher = new TableSwingWorker(workOrderTable, filterWorkorderList(workorderController.getAllWorkOrders()));
-//			dataFetcher.execute();
-//		});
-//		workerThread.start();
-//	}
-	
-	
-	//FILTERING IS NOT SUPPOSED TO WORK LIKE THIS
-	//THIS IS TEMPORARY AND IS ONLY USED BECAUSE IMPLEMENTING IT WOULD TAKE WAYY TOO LONG FOR IT TO MAKE SENCE FOR ONE USE CASE
-	//NORMALLY THIS WOULD BE IMPLEMENTED AS A PROCEDUALLY GENERATED SQL SCRIPT THAT WILL SPECIFY CHRITERIA FOR THE SELECTED ITEMS
-	//DOING IT LIKE THIS WONT WORK FOR THAT LONG BECAUSE OF THE SHERE AMOUNT OF OBJECT RETRIEVED INTO MEMORY AND NEEDS TO BE PROCESSES LOCALLY
-//	private List<Workorder> filterWorkorderList(List<Workorder> workorderList) {
-//		List<Workorder> filteredList = new ArrayList<>();
-//		
-//		boolean notFinished = unfinishedRadioButton.isSelected();
-//		
-//		for(Workorder w: workorderList) {
-//			if(!unfinishedRadioButton.isSelected() || !w.isFinished() == unfinishedRadioButton.isSelected()) {
-//				if(titleTextField.getText().isBlank() || titleTextField.getText().contains(w.getTitle())); {
-//					if(highJRadioButton.isSelected() && w.getPriority() == 3) {
-//						filteredList.add(w);
-//					}
-//					if (mediumJRadioButton.isSelected() && w.getPriority() == 2) {
-//						filteredList.add(w);
-//					}
-//					if(lowJRadioButton.isSelected() && w.getPriority() == 1) {
-//						filteredList.add(w);
-//					}
-//				}
-//			}
-//		}
-//		return filteredList;
-//	}
 }
