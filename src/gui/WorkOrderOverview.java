@@ -88,6 +88,8 @@ public class WorkOrderOverview extends JPanel {
 	private RepairController repairController;
 	private JLabel lblUnfinishedWorkorders;
 	private JRadioButton unfinishedRadioButton;
+	private Component verticalStrut;
+	private JRoundedButton btnSwitchEmployeeWorkorders;
 
 	/**
 	 * Create the panel.
@@ -256,6 +258,21 @@ public class WorkOrderOverview extends JPanel {
 			}
 		});
 		rightPanel.add(createNewWorkOrder);
+		
+		verticalStrut = Box.createVerticalStrut(4);
+		rightPanel.add(verticalStrut);
+		
+		btnSwitchEmployeeWorkorders = new JRoundedButton("Ny Opgave");
+		btnSwitchEmployeeWorkorders.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnSwitchEmployeeWorkordersPressed();
+			}
+		});
+		btnSwitchEmployeeWorkorders.setText("Skift ejer");
+		btnSwitchEmployeeWorkorders.setPreferredSize(new Dimension(145, 23));
+		btnSwitchEmployeeWorkorders.setMinimumSize(new Dimension(145, 23));
+		btnSwitchEmployeeWorkorders.setMaximumSize(new Dimension(145, 23));
+		rightPanel.add(btnSwitchEmployeeWorkorders);
 
 	}
 
@@ -323,5 +340,10 @@ public class WorkOrderOverview extends JPanel {
 			dataFetcher.execute();
 		});
 		workerThread.start();
+	}
+	
+	private void btnSwitchEmployeeWorkordersPressed() {
+		System.out.println("pressed");
+		SwitchEmployeeWorkorders sew = new SwitchEmployeeWorkorders();
 	}
 }

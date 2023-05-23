@@ -84,7 +84,6 @@ public class AssetOverview extends JPanel {
 	private JSpinner spinner;
 	private MainFrame mainFrame;
 	private AssetController assetCtrl;
-	private JRoundedButton btnSwitchEmployeeWorkorders;
 	private Component verticalStrut;
 
 	/**
@@ -293,19 +292,6 @@ public class AssetOverview extends JPanel {
 		verticalStrut = Box.createVerticalStrut(4);
 		workOrderButtonPanel.add(verticalStrut);
 
-		btnSwitchEmployeeWorkorders = new JRoundedButton("Tilføj ny");
-		btnSwitchEmployeeWorkorders.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnSwitchEmployeeWorkordersPressed();
-			}
-		});
-		btnSwitchEmployeeWorkorders.setText("Skift ejer");
-		btnSwitchEmployeeWorkorders.setPreferredSize(new Dimension(110, 23));
-		btnSwitchEmployeeWorkorders.setMinimumSize(new Dimension(30, 5));
-		btnSwitchEmployeeWorkorders.setMaximumSize(new Dimension(110, 23));
-		workOrderButtonPanel.add(btnSwitchEmployeeWorkorders);
-		workOrderButtonPanel.add(Box.createVerticalStrut(4));
-
 		editButton = new JRoundedButton("Rediger");
 		workOrderButtonPanel.add(editButton);
 		editButton.setMaximumSize(new Dimension(110, 23));
@@ -359,10 +345,6 @@ public class AssetOverview extends JPanel {
 		workOrderButtonPanel = new JPanel();
 		workOrderPanel.add(workOrderButtonPanel, BorderLayout.EAST);
 		workOrderButtonPanel.setLayout(new BoxLayout(workOrderButtonPanel, BoxLayout.Y_AXIS));
-
-	}
-
-	private void btnSwitchEmployeeWorkordersPressed() {
 
 	}
 

@@ -60,6 +60,7 @@ public class SwitchEmployeeWorkorders extends JFrame {
 	 */
 	public SwitchEmployeeWorkorders() {
 		this.workOrderController = new WorkOrderController();
+		this.setVisible(true);
 		setTitle("Ombyt opgaver");
 		addFocusListener(new FocusAdapter() {
 			@Override
@@ -141,6 +142,7 @@ public class SwitchEmployeeWorkorders extends JFrame {
 		south_panel.add(btnConfirm);
 		
 		btnNewButton = new JRoundedButton("Afbryd");
+		btnNewButton.setText("Luk");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnCanclePressed();
