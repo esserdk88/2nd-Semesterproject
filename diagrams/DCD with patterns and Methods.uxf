@@ -1,0 +1,1669 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1848</x>
+      <y>648</y>
+      <w>224</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>bg=green
+AssetController
+-
+-assetDatabase:AssetDBIF
+-workorderController:WorkOrderController
+-
++&lt;&lt;create&gt;&gt; AssetController()
++findAssetByID(assetID:int):Asset
++getAllAssets():List&lt;Asset&gt;
++getAllWorkOrdersForAssetByID
+(assetID:int):List&lt;Workorder&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1848</x>
+      <y>824</y>
+      <w>248</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+AssetDBIF
+-
++findAssetByID(assetID:int):Asset
++getAllAssets():List&lt;Asset&gt;
++buildObjectFromResultset(rs:ResultSet):Asset</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1848</x>
+      <y>944</y>
+      <w>144</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Data Access Object (DAO)
+AssetDB
+-
+-locationDB:LocationDBIF
+-
+-buildObject
+(rs:ResultSet):Asset</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1904</x>
+      <y>768</y>
+      <w>56</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+uses &gt;</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1784</x>
+      <y>744</y>
+      <w>80</w>
+      <h>232</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates &gt;</panel_attributes>
+    <additional_attributes>80.0;270.0;10.0;270.0;10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1808</x>
+      <y>1152</y>
+      <w>312</w>
+      <h>392</h>
+    </coordinates>
+    <panel_attributes>Asset
+-
+-assetID:int
+-name:String
+-description:String
+-aquisitionDate:Calendar
+-status:String
+-manufacturer:String
+-location:Location
+-
++&lt;&lt;create&gt;&gt; Asset()
++&lt;&lt;create&gt;&gt; Asset(assetID:int, name:String, description:String,
+aquisitionDate:Calendar, status:String, manufacturer:String,
+location:Location)
++getAssetID():int
++setAssetID(assetID:int):void
++getName():String
++setName(name:String):void
++getDescription():String
++setDescription(description:String):void
++getAquisitionDate():Calendar
++setAquisitionDate(aquisitionDate:Calendar):void
++getStatus():String
++setStatus(status:String):void
++getManufacturer():String
++setManufacturer(manufacturer:String):void
++getLocation():Location
++setLocation(location:Location):void
++toString():String
++getObjectAsStringArray():String[]
++equals(o:Object):boolean
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1904</x>
+      <y>896</y>
+      <w>24</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1904</x>
+      <y>1024</y>
+      <w>72</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>712</y>
+      <w>120</w>
+      <h>464</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+obtains/modifies &gt;</panel_attributes>
+    <additional_attributes>60.0;560.0;10.0;560.0;10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2720</x>
+      <y>656</y>
+      <w>264</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>bg=green
+EmployeeController
+--
+-employeeDatabase: EmployeeDBIF
+--
++EmployeeController(): ctor
++findEmployeeByID(employeeID:int): Employee
++getAllEmployees(): List&lt;Employee&gt;
++validateValue(value:int): boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2720</x>
+      <y>824</y>
+      <w>272</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+EmployeeDBIF
+--
++findEmployeeByID(EmployeeID:int): Employee
++getAllEmployees(): List&lt;Employee&gt;
++buildObjectFromResultset(rs:ResultSet): Employee</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2728</x>
+      <y>944</y>
+      <w>264</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Data Access Object (DAO)
+EmployeeDB
+-
+-addressDB:AddressDBIF
+--
+-buildObject(ResultSet rs, String prefix): Employee</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2816</x>
+      <y>752</y>
+      <w>56</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+uses &gt;</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2648</x>
+      <y>752</y>
+      <w>96</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>100.0;260.0;10.0;260.0;10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2816</x>
+      <y>896</y>
+      <w>24</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2816</x>
+      <y>1008</y>
+      <w>72</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>10.0;180.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2672</x>
+      <y>712</y>
+      <w>120</w>
+      <h>504</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+obtains/modifies v</panel_attributes>
+    <additional_attributes>70.0;610.0;10.0;610.0;10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2824</x>
+      <y>288</y>
+      <w>320</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>bg=green
+MaintenanceController
+--
++&lt;&lt;create&gt;&gt; MaintenanceController()
++createWorkOrder(maintenance:Maintenance): boolean
++createWorkOrder(assetID:int, title:String, startDate:Calendar, 
+priority:short, description:String, intervalDayCount:int, 
+repeated:boolean): boolean
++findWorkOrderByID(workOrderID:int): Maintenance
++getAllWorkOrdersByAssetID(assetID:int): List&lt;Workorder&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3200</x>
+      <y>520</y>
+      <w>344</w>
+      <h>312</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+WorkOrderDBIF
+--
++addMaintenanceWorkOrder(workOrder:Maintenance): boolean
++addServiceWorkOrder(workOrder:Service): boolean
++addRepairWorkOrder(workOrder:Repair): boolean
++findMaintenanceWorkOrderByID(workOrderID:int): Maintenance
++findServiceWorkOrderByID(workOrderID:int): Service
++findRepairWorkOrderByID(workOrderID:int): Repair
++getAllMaintenanceWorkOrders(): List&lt;Maintenance&gt;
++getAllServiceWorkOrders(): List&lt;Service&gt;
++getAllRepairWorkOrders(): List&lt;Repair&gt;
++getAllUnfinishedWorkOrders(): List&lt;Workorder&gt;
++getAllWorkOrdersByAssetID(assetID:int): List&lt;Workorder&gt;
++getAllWorkorders(): List&lt;Workorder&gt;
++getWorkordersById(workorderIds:int[]): List&lt;Workorder&gt;
++getWorkorderById(workorderId:int): Workorder
++updateWorkorder(workorder:Workorder): boolean
++deleteWorkOrderByID(workOrderID:int): boolean
++assignEmployeeToWorkOrder(employee:Employee, 
+workOrder:Maintenance): boolean
++getLatestKey(): int
++searchWorkOrderDataBase(name:String, priority:List&lt;Short&gt;, 
+location:String, isFinished:boolean): List&lt;Workorder&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3200</x>
+      <y>864</y>
+      <w>392</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>Data Access Object (DAO)
+WorkOrderDB
+--
++&lt;&lt;create&gt;&gt;WorkOrderDB()
+-buildMaintenanceObject(ResultSet rs): Maintenance
+-buildServiceObject(ResultSet rs): Service
+-buildRepairObject(ResultSet rs): Repair
+-buildGeneralFields(Workorder result, ResultSet rs): Workorder
+-switchWorkorderBuilderFromResultSet(ResultSet rs): Workorder
+-setGeneralFieldsCreateWorkOrder(PreparedStatement preparedStatement, 
+Workorder workOrder, String type): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3352</x>
+      <y>400</y>
+      <w>56</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+uses v</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3144</x>
+      <y>208</y>
+      <w>80</w>
+      <h>688</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>70.0;840.0;10.0;840.0;10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3256</x>
+      <y>824</y>
+      <w>24</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3064</x>
+      <y>1000</y>
+      <w>184</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt; creates</panel_attributes>
+    <additional_attributes>10.0;190.0;10.0;30.0;210.0;30.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2992</x>
+      <y>400</y>
+      <w>120</w>
+      <h>800</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+obtains/modifies &gt;</panel_attributes>
+    <additional_attributes>30.0;980.0;10.0;980.0;20.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3208</x>
+      <y>288</y>
+      <w>312</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>bg=green
+ServiceController
+--
++&lt;&lt;create&gt;&gt; ServiceController()
++createWorkOrder(service:Service): boolean
++createWorkOrder(assetID:int, title:String, 
+startDate:Calendar, priority:short, description:String, 
+referenceCVR:int): boolean
++findWorkOrderByID(workOrderID:int): Service
++getAllWorkOrdersByAssetID(assetID:int): List&lt;Workorder&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3544</x>
+      <y>288</y>
+      <w>312</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>bg=green
+RepairController
+--
++&lt;&lt;create&gt;&gt; RepairController()
++createWorkOrder(repair:Repair): boolean
++createWorkOrder(assetID:int, title:String, 
+startDate:Calendar, priority:short, description:String, 
+referenceCVR:int): boolean
++findWorkOrderByID(workOrderID:int): Repair
++getAllWorkOrdersByAssetID(assetID:int): List&lt;Workorder&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3072</x>
+      <y>400</y>
+      <w>176</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+uses &gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;200.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3448</x>
+      <y>400</y>
+      <w>168</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+uses v</panel_attributes>
+    <additional_attributes>10.0;150.0;190.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3208</x>
+      <y>0</y>
+      <w>624</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>bg=green
+/WorkOrderController/
+--
+#workOrderDB: WorkOrderDBIF
+#sparePartUsedDB: SparepartUsedDBIF
+#measurementDB: MeasurementDBIF
+--
++&lt;&lt;create&gt;&gt; WorkOrderController()
++findAssetByID(id:int): Asset
++findEmployeeByID(employeeID:int): Employee
++assignEmployeeToWorkOrder(employee:Employee, workOrder:Workorder): boolean
++getAllUnfinishedWorkOrders(): List&lt;Workorder&gt;
++searchWorkorderDataBase(name:String, priority:List&lt;Short&gt;, location:String, isFinished:boolean): List&lt;Workorder&gt;
++getAllWorkOrdersByAssetID(assetID:int): List&lt;Workorder&gt;
++getAllWorkOrders(): List&lt;Workorder&gt;
++getWorkorderByID(workorderId:int): Workorder
++switchEmployeeWorkorders(firstWorkorder:Workorder, secondWorkorder:Workorder, concurrencyTest:boolean): boolean
++workorderHasEmployee(workorderId:int): boolean
++getAllMeasurementsUsedInWorkOrder(workdOrderID:int): List&lt;Measurement&gt;
++getAllSparepartsUsedInWorkOrder(workOrderID:int): List&lt;SparepartUsed&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3704</x>
+      <y>232</y>
+      <w>24</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3256</x>
+      <y>1000</y>
+      <w>392</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates &gt;</panel_attributes>
+    <additional_attributes>470.0;190.0;470.0;80.0;10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3288</x>
+      <y>1000</y>
+      <w>800</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates &gt;</panel_attributes>
+    <additional_attributes>980.0;190.0;980.0;30.0;10.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3168</x>
+      <y>304</y>
+      <w>392</w>
+      <h>864</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+obtains/modifies v</panel_attributes>
+    <additional_attributes>470.0;1060.0;470.0;980.0;10.0;980.0;20.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3848</x>
+      <y>304</y>
+      <w>192</w>
+      <h>864</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+obtains/modifies &gt;</panel_attributes>
+    <additional_attributes>100.0;1060.0;100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2104</x>
+      <y>744</y>
+      <w>264</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+LocationDBIF
+-
++findLocationByID(locationID:int):Location
++getAllLocations():List&lt;Location&gt;
++buildObjectFromResultset(rs:ResultSet):Location</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2184</x>
+      <y>944</y>
+      <w>144</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>Data Access Object (DAO)
+LocationDB
+-
+-addressDB:AddressDBIF
+-
+-buildObject
+(rs:ResultSet):Address
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2136</x>
+      <y>1152</y>
+      <w>224</w>
+      <h>304</h>
+    </coordinates>
+    <panel_attributes>Location
+-
+-locationID:int
+-building:String
+-floor:String
+-room:String
+-address:Address
+-
++&lt;&lt;create&gt;&gt; Location()
++&lt;&lt;create&gt;&gt; Location
+(locationID:int, building:String, 
+floor:String, room:String, address:Address)
++getLocationID():int
++setLocationID(locationID:int):void
++getAddress():Address
++setAddress(address:Address):void
++getBuilding():String
++setBuilding(building:String):void
++getFloor():String
++setFloor(floor:String):void
++getRoom():String
++setRoom(room:String):void
++toString():String
++equals(o:Object):boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2240</x>
+      <y>856</y>
+      <w>24</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2240</x>
+      <y>1032</y>
+      <w>72</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2376</x>
+      <y>576</y>
+      <w>336</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+AddressDBIF
+--
++findAddressByID(int addressID): Address
++buildObjectFromResultset(ResultSet rs, String prefix): Address
++getAllAddresses(): List&lt;Address&gt;
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2376</x>
+      <y>992</y>
+      <w>256</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Data Access Object (DAO)
+AddressDB
+--
+-buildObject(ResultSet rs, String prefix): Address</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2384</x>
+      <y>1152</y>
+      <w>288</w>
+      <h>296</h>
+    </coordinates>
+    <panel_attributes>Address
+--
+-addressID: int
+-cityName: String
+-zipCode: String
+-streetName: String
+-streetNumber: String
+--
++Address(): ctor
++&lt;&lt;create&gt;&gt; Address(addressID:int, cityName:String, 
+zipCode:String, streetNameString, streetNumber:String )
++getAddressID(): int
++setAddressID(addressID:int): void
++getCityName(): String
++setCityName(cityName:String ): void
++getZipCode(): String
++setZipCode(zipCode:String): void
++getStreetName(): String
++setStreetName(streetName:String): void
++getStreetNumber(): String
++setStreetNumber(streetNumber:String): void
++toString(): String
++equals(o:Object): boolean
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2432</x>
+      <y>688</y>
+      <w>24</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;380.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2432</x>
+      <y>1056</y>
+      <w>72</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>3696</x>
+      <y>864</y>
+      <w>112</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Uses:
+EmployeeDBIF
+AssetDBIF
+SparepartDBIF
+MeasurementDBIF
+ReferenceDBIF</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3584</x>
+      <y>912</y>
+      <w>128</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+uses &gt;</panel_attributes>
+    <additional_attributes>140.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1456</x>
+      <y>760</y>
+      <w>232</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+MeasurementDBIF
+-
++findMeasurementByID
+(measurementID:int):Measurement
++findMeasurementsByWorkOrderID
+(workOrderID:int):List&lt;Measurement&gt;
++getAllMeasurements():List&lt;Measurement&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1456</x>
+      <y>944</y>
+      <w>144</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Data Access Object (DAO)
+MeasurementDB
+-
+-buildObject
+(rs:ResultSet):Reference</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1464</x>
+      <y>1176</y>
+      <w>296</w>
+      <h>264</h>
+    </coordinates>
+    <panel_attributes>Measurement
+-
+-measurementID:int
+-title:String
+-value:double
+-workorder:Workorder
+-
++&lt;&lt;create&gt;&gt; Measurement()
++&lt;&lt;create&gt;&gt; Measurement
+(measurementID:int, title:String, 
+value:double, workorder:Workorder)
++getMeasurementID():int
++setMeasurementID(measurement:int):void
++getTitle():String
++setTitle(title:String):void
++getValue():double
++setValue(value:double):void
++getWorkorder():Workorder
++setWorkorder(workroder:Workorder);void
++toString():String
++getObjectAsStringArray():String[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1512</x>
+      <y>872</y>
+      <w>24</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1512</x>
+      <y>1008</y>
+      <w>72</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>10.0;210.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1128</x>
+      <y>760</y>
+      <w>272</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+ReferenceDBIF
+-
++findReferenceByID(referenceID:int):Reference
++getAllReferences():List&lt;Reference&gt;
++buildObjectFromResultset(rs:ResultSet):Reference</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1256</x>
+      <y>944</y>
+      <w>184</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Data Access Object (DAO)
+ReferenceDB
+-
+-addressDB:AddressDBIF
+-
+-buildObject(rs:ResultSet, 
+prefix:String):Reference</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1200</x>
+      <y>1176</y>
+      <w>240</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>Reference:MasterData
+-
+-cvr:int
+-contact:String
+-
++&lt;&lt;create&gt;&gt; Reference()
++&lt;&lt;create&gt;&gt; Reference(cvr:int, contact:String, 
+name:String, phone:String, email:String, 
+address:Address)
++getCvr():int
++setCvr(cvr:int):void
++getContact():String
++setContact(contact:String):void
++toString():String
++equals(o:Object):boolean
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1312</x>
+      <y>872</y>
+      <w>24</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1312</x>
+      <y>1040</y>
+      <w>72</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1096</x>
+      <y>944</y>
+      <w>112</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Uses:
+AddressDBIF</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1200</x>
+      <y>952</y>
+      <w>72</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+&lt; uses</panel_attributes>
+    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>776</x>
+      <y>744</y>
+      <w>272</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+SparepartDBIF
+-
++findSparePartbyID(sparePartID:int):Sparepart
++getAllSpareparts():List&lt;Sparepart&gt;
++buildObjectFromResultset(rs:ResultSet):Sparepart</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>928</x>
+      <y>944</y>
+      <w>144</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Data Access Object (DAO)
+SparepartDB
+-
+-supplierDB:SupplierDBIF
+-
+-buildObject
+(rs:ResultSet):Sparepart</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>840</x>
+      <y>1176</y>
+      <w>352</w>
+      <h>264</h>
+    </coordinates>
+    <panel_attributes>Sparepart
+-
+-sparepartID:int
+-name:String
+-StockAmount:int
+-price:double
+-supplier:Supplier
+-
++&lt;&lt;create&gt;&gt; Sparepart()
++&lt;&lt;create&gt;&gt; Sparepart(sparepartID:int, name:String, stockAmount:int,
+price:double, supplier:Supplier)
++getSparepartID():int
++setSparepartID(sparepartID:int):void
++getName():String
++setName(name:String):void
++getStockAmount():int
++setStockAmount(stockAmount:int):void
++getPrice():double
++setPrice(price:double):void
++getSupplier():Supplier
++setSupplier(supplier:Supplier):void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>984</x>
+      <y>872</y>
+      <w>24</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>984</x>
+      <y>1024</y>
+      <w>72</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>10.0;190.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>768</x>
+      <y>944</y>
+      <w>112</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Uses:
+SupplierDBIF</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>872</x>
+      <y>952</y>
+      <w>72</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+&lt; uses</panel_attributes>
+    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>736</y>
+      <w>280</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+SparepartUsedDBIF
+-
++findSparePartUsedByWorkorderIDAndSparepartID
+(workOrderID:int, sparepartID:int):SparepartUsed
++findSparepartListByWorkorderID
+(workOrderID:int):List&lt;SparepartUsed&gt;
++getAllSparepartUsed(): List&lt;SparepartUsed&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>600</x>
+      <y>944</y>
+      <w>160</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>Data Access Object (DAO)
+SparepartUsedDB
+-
+-sparepartDB:SparepartDBIF
+-
+-buildObject
+(rs:ResultSet):SparepartUsed</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>504</x>
+      <y>1176</y>
+      <w>304</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>SparepartUsed
+-
+-amount:int
+-sparepart:Sparepart
+-
++&lt;&lt;create&gt;&gt;SparepartUsed()
++&lt;&lt;create&gt;&gt; SparepartUsed(amount:int, sparepart:Sparepart)
++getAmount():int
++setAmount(amount:int):void
++getSparepart():Sparepart
++setSparepart(sparepart:Sparepart):void
++toString():String
++getObjectAsStringArray():String[]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>656</x>
+      <y>872</y>
+      <w>24</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>656</x>
+      <y>1032</y>
+      <w>72</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>10.0;180.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>440</x>
+      <y>944</y>
+      <w>112</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Uses:
+SparepartDBIF</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>544</x>
+      <y>952</y>
+      <w>72</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+&lt; uses</panel_attributes>
+    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>88</x>
+      <y>816</y>
+      <w>256</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+SupplierDBIF
+-
++findSupplierByID(supplierID:int):Supplier
++getAllSuppliers():List&lt;Supplier&gt;
++buildObjectFromResultset(rs:ResultSet):Supplier</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>160</x>
+      <y>944</y>
+      <w>184</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Data Access Object (DAO)
+SupplierDB
+-
+-addressDB:AddressDBIF
+-
+-buildObject(rs:ResultSet):Supplier</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>80</x>
+      <y>1176</y>
+      <w>368</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>Supplier:MasterData
+-
+-cvr:String
+-contact:String
+-
++&lt;&lt;create&gt;&gt; Supplier()
++&lt;&lt;create&gt;&gt; Supplier(cvr:String, contact:String, name:String, phone:String, 
+email:String, address:Address)
++getCvr():String
++setCvr(cvr:String):void
++getContact():String
++setContact(contact:String):void
++toString():String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>224</x>
+      <y>888</y>
+      <w>24</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>216</x>
+      <y>1008</y>
+      <w>72</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+creates v</panel_attributes>
+    <additional_attributes>10.0;210.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>0</x>
+      <y>944</y>
+      <w>112</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Uses:
+AddressDBIF</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>104</x>
+      <y>952</y>
+      <w>72</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+&lt; uses</panel_attributes>
+    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1632</x>
+      <y>944</y>
+      <w>112</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Uses:
+LocationDBIF</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1736</x>
+      <y>960</y>
+      <w>128</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+&lt; uses</panel_attributes>
+    <additional_attributes>10.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>2024</x>
+      <y>944</y>
+      <w>112</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Uses:
+AddressDBIF</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2128</x>
+      <y>944</y>
+      <w>72</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+&lt; uses</panel_attributes>
+    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>2472</x>
+      <y>944</y>
+      <w>112</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Uses:
+AddressDBIF</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2576</x>
+      <y>960</y>
+      <w>168</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+&lt; uses</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>4264</x>
+      <y>1152</y>
+      <w>384</w>
+      <h>640</h>
+    </coordinates>
+    <panel_attributes>/Workorder/
+--
+-workOrderID: int
+-title: String
+-type: String
+-startDate: Calendar
+-endDate: Calendar
+-priority: short
+-description: String
+-finished: boolean
+-sparepartsUsed: List&lt;SparepartUsed&gt;
+-asset: Asset
+-employee: Employee
+-measurements: List&lt;Measurement&gt;
+--
++&lt;&lt;create&gt;&gt; Workorder()
++&lt;&lt;create&gt;&gt; Workorder(workOrderID:int, title:String, type:String, 
+startDate:Calendar, endDate:Calendar, priority:short, 
+description:String, finished:boolean, 
+sparepartsUsed:List&lt;SparepartUsed&gt;, asset:Asset, employee:Employee, 
+measurements:List&lt;Measurement&gt;)
++getWorkOrderID(): int
++setWorkOrderID(workOrderID:int): void
++getTitle(): String
++setTitle(title:String): void
++getType(): String
++setType(type:String): void
++getStartDate(): Calendar
++getStartDateString(): String
++setStartDate(startDate:Calendar): void
++getEndDate(): Calendar
++getEndDateString(): String
++setEndDate(endDate:Calendar): void
++getPriority(): short
++setPriority(priority:short): void
++getDescription(): String
++setDescription(description:String): void
++isFinished(): boolean
++setFinished(finishedboolean): void
++getSparepartsUsed(): List&lt;SparepartUsed&gt;
++setSparepartsUsed(sparepartsUsed:List&lt;SparepartUsed&gt;): void
++getAsset(): Asset
++setAsset(asset:Asset): void
++getEmployee(): Employee
++setEmployee(employee:Employee): void
++getMeasurements(): List&lt;Measurement&gt;
++setMeasurements(measurements:List&lt;Measurement&gt;): void
++formatPriority(input:short): String
++toString(): String
++calendarToString(calendar:Calendar): String
++equals(Object o): boolean
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3848</x>
+      <y>1152</y>
+      <w>392</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>Repair
+--
+-price: double
+-reference: Reference
+--
++&lt;&lt;create&gt;&gt; Repair()
++&lt;&lt;create&gt;&gt; Repair(price:double, reference:Reference, workOrderID:int, 
+title:String, type:String, startDate:Calendar, endDate:Calendar, priority:short, 
+description:String, finished:boolean, sparepartsUsed:List&lt;SparepartUsed&gt;, 
+asset:Asset, employee:Employee, measurements:List&lt;Measurement&gt;)
++getPrice(): double
++setPrice(price:double): void
++getReference(): Reference
++setReference(reference:Reference): void
++equals(o:Object): boolean
++formatPriority(input:short): String
++getObjectAsStringArray(): String[]
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3440</x>
+      <y>1152</y>
+      <w>384</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>Service
+--
+-reference: Reference
+--
++&lt;&lt;create&gt;&gt; Service()
++&lt;&lt;create&gt;&gt; Service(reference:Reference, workOrderID:int, title:String, 
+type:String, startDate:Calendar, endDate:Calendar, priority:short, 
+description:String, finished:boolean, sparepartsUsed:List&lt;SparepartUsed&gt;, 
+asset:Asset, employee:Employee, measurements:List&lt;Measurement&gt;)
++getReference(): Reference
++setReference(reference:Reference): void
++equals(o:Object): boolean
++formatPriority(input:short): String
++getObjectAsStringArray(): String[]
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>3016</x>
+      <y>1152</y>
+      <w>400</w>
+      <h>232</h>
+    </coordinates>
+    <panel_attributes>Maintenance
+--
+-repeated: boolean
+-intervalDayCount: int
+--
++&lt;&lt;create&gt;&gt; Maintenance()
++&lt;&lt;create&gt;&gt; Maintenance(repeated:boolean, intervalDayCount:int, 
+workOrderID:int, 
+title:String, type:String, startDate:Calendar, endDate:Calendar, priority:short, 
+description:String, finished:boolean, sparepartsUsed:List&lt;SparepartUsed&gt;, 
+asset:Asset, employee:Employee, measurements:List&lt;Measurement&gt;)
++isRepeated(): boolean
++setRepeated(repeated:boolean): void
++getIntervalDayCount(): int
++setIntervalDayCount(intervalDayCount:int): void
++formatPriority(input:short): String
++getObjectAsStringArray(): String[]
++equals(o:Object): boolean
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2728</x>
+      <y>1152</y>
+      <w>256</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>Employee
+--
+-employeeID: int
+-cprNumber: String
+-startDate: Calendar
+-position: String
+--
++&lt;&lt;create&gt;&gt; Employee()
++&lt;&lt;create&gt;&gt; Employee(employeeID:int, 
+cprNumber:String, startDate:Calendar, 
+position:String, name:String, 
+phone:String, email:String, address:Address)
++getEmployeeID(): int
++setEmployeeID(employeeID:int): void
++getCprNumber(): String
++setCprNumber(cprNumber:String): void
++getStartDate(): Calendar
++getStartDateString(): String
++setStartDate(startDate:Calendar): void
++getPosition(): String
++setPosition(position:String): void
+-calendarToString(calendar:Calendar): String
++toString(): String
++equals(o:Object): boolean
++getObjectAsStringArray(): String[]
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>4032</x>
+      <y>1368</y>
+      <w>248</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>290.0;60.0;10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3608</x>
+      <y>1320</y>
+      <w>672</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>820.0;170.0;10.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3152</x>
+      <y>1376</y>
+      <w>1128</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>1390.0;150.0;10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2584</x>
+      <y>1576</y>
+      <w>400</w>
+      <h>248</h>
+    </coordinates>
+    <panel_attributes>/MasterData/
+--
+-name: String
+-phone: String
+-email: String
+-address: Address
+--
++&lt;&lt;create&gt;&gt; MasterData()
++&lt;&lt;create&gt;&gt; MasterData(name:String, phone:String, email:String, 
+address:Address)
++getName(): String
++setName(name:String): void
++getPhone(): String
++setPhone(phone:String): void
++getEmail(): String
++setEmail(email:String): void
++getAddress(): Address
++setAddress(address:Address): void
++toString(): String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2840</x>
+      <y>1464</y>
+      <w>24</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1312</x>
+      <y>1368</y>
+      <w>1288</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>1590.0;330.0;10.0;330.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>248</x>
+      <y>1336</y>
+      <w>2352</w>
+      <h>368</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>2920.0;430.0;10.0;440.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2944</x>
+      <y>120</y>
+      <w>280</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>330.0;10.0;10.0;210.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>3352</x>
+      <y>232</y>
+      <w>24</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+</diagram>
