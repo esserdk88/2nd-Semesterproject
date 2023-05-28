@@ -6,6 +6,11 @@ import java.sql.SQLException;
 
 import other.Login;
 
+/**
+ * The DatabaseConnection class is a singleton class that manages connections to a SQL Server database,
+ * provides methods for starting, committing, and rolling back transactions, and checks the status of
+ * the connection.
+ */
 public class DatabaseConnection {
 
 	// Singleton instance variable
