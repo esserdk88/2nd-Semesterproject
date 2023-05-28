@@ -101,10 +101,21 @@ public class ReadAsset extends JPanel {
 
 	}
 
+	/**
+	 * This function creates a new work order and sets the main frame's center panel to display the form
+	 * for creating the work order.
+	 */
 	public void createNewWorkOrder() {
 		mainFrame.setNewCenterPanel(new CreateWorkOrder(this.currentAsset));
 	}
 
+	/**
+	 * This function initializes the fields of a form with data from an Asset object and disables editing
+	 * of the fields.
+	 * 
+	 * @param currentAsset an object of the Asset class that contains information about the current asset
+	 * being initialized.
+	 */
 	public void initialize(Asset currentAsset) {
 		this.currentAsset = currentAsset;
 		txtAssetID.setText(Integer.toString(currentAsset.getAssetID()));
@@ -140,10 +151,18 @@ public class ReadAsset extends JPanel {
 		chckDateBox.setEnabled(false);
 	}
 
+	/**
+	 * The function returns a DefaultTable object named historyTable.
+	 * 
+	 * @return A DefaultTable object named "historyTable" is being returned.
+	 */
 	public DefaultTable getHistoryTable() {
 		return historyTable;
 	}
 
+	/**
+	 * This function sets up and adds buttons to a graphical user interface.
+	 */
 	private void setButtons() {
 		btnNewWorkOrder = new JRoundedButton("Opret ny arbejdsordre");
 		btnNewWorkOrder.addActionListener(e -> createNewWorkOrder());
@@ -167,6 +186,9 @@ public class ReadAsset extends JPanel {
 
 	}
 
+	/**
+	 * This function sets up a JCheckBox and JSpinner with specific formatting for a GUI.
+	 */
 	private void setSpinnerAndComboBox() {
 		chckDateBox = new JCheckBox("Lukket dato");
 		chckDateBox.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -191,6 +213,10 @@ public class ReadAsset extends JPanel {
 
 	}
 
+	/**
+	 * This function sets up and populates three tables (historyTable, sparepartTable, and
+	 * measurementTable) within a graphical user interface.
+	 */
 	private void setTables() {
 		historyScollPane = new JScrollPane();
 		historyScollPane.setPreferredSize(new Dimension(200, 0)); // Changes size of table
@@ -245,6 +271,12 @@ public class ReadAsset extends JPanel {
 		measurementsScrollPane.setViewportView(measurementTable);
 	}
 	
+	/**
+	 * This function sets data in tables based on the selected row in a history table.
+	 * 
+	 * @param event A ListSelectionEvent object that represents a change in the selection of a list or
+	 * table.
+	 */
 	private void setHistoryTable(ListSelectionEvent event) {
 		int selectedRow = historyTable.findElement();
 		if (event.getValueIsAdjusting() || selectedRow == -1) {return;}
@@ -259,6 +291,12 @@ public class ReadAsset extends JPanel {
 		}
 	}
 	
+	/**
+	 * This function creates worker threads to fetch data for a history table in a Java Swing application.
+	 * 
+	 * @param id The parameter "id" is an integer value representing the ID of a work order. It is used to
+	 * fetch data related to spare parts and measurements used in that particular work order.
+	 */
 	private void createWorkerThreadsHistoryTable(int id) {
 		Thread workerThread = new Thread(() -> {
 			TableSwingWorker dataFetcherSparePart = null;
@@ -273,6 +311,12 @@ public class ReadAsset extends JPanel {
 		workerThread.start();
 	}
 	
+	/**
+	 * The function sets text fields for a history table based on the selected row and displays
+	 * maintenance order interval if the type is maintenance.
+	 * 
+	 * @param selectedRow The index of the selected row in the history table.
+	 */
 	private void setTextFieldsForHistoryTable(int selectedRow) {
 		txtTitle.setText(historyTable.getModel().getValueAt(selectedRow, 1).toString());
 		txtEmployeeID.setText(historyTable.getModel().getValueAt(selectedRow, 9).toString());
@@ -290,6 +334,10 @@ public class ReadAsset extends JPanel {
 		}
 	}
 	
+	/**
+	 * This function sets up the layout and components of a JPanel with a FlowLayout in the south and a
+	 * GridBagLayout in the center.
+	 */
 	private void setPanels() {
 		southPanel = new JPanel();
 		FlowLayout fl_southPanel = (FlowLayout) southPanel.getLayout();
@@ -309,6 +357,9 @@ public class ReadAsset extends JPanel {
 
 	}
 
+	/**
+	 * This function sets up labels and text fields for a graphical user interface.
+	 */
 	private void setLabelsAndTextFields() {
 		lblNewLabel = new JLabel("Beskrivelse");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();

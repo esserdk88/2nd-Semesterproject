@@ -16,6 +16,10 @@ import gui.components.GUIPopUpMessages;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
 
+/**
+ * The EmployeeOverview class creates a JPanel that displays employee data in a table and provides
+ * buttons for creating, editing, showing, and deleting employees.
+ */
 public class EmployeeOverview extends JPanel {
 
 	//Panels
@@ -46,6 +50,10 @@ public class EmployeeOverview extends JPanel {
 		setEmployeeOnStartUp();
 	}
 
+	/**
+	 * This function sets up a worker thread to fetch employee data from a database and display it in a
+	 * table on startup.
+	 */
 	private void setEmployeeOnStartUp() {
 		Thread workerThread = new Thread(() -> {
 		    TableSwingWorker dataFetcher = null;
@@ -59,6 +67,10 @@ public class EmployeeOverview extends JPanel {
 		});
 		workerThread.start();
 	}
+
+	/**
+	 * This function sets up four buttons with specific dimensions and adds them to a panel.
+	 */
 	private void setButtons() {
 		createButton = new JRoundedButton("Opret");
 		createButton.setMaximumSize(new Dimension(110, 23));
@@ -88,13 +100,11 @@ public class EmployeeOverview extends JPanel {
 		deleteButton.setMinimumSize(new Dimension(30, 5));
 		rightPanel.add(deleteButton);
 		
-		//createButton.addActionListener(e -> AddMethodToCallHere);
-		//editButton.addActionListener(e -> AddMethodToCallHere);
-		//showButton.addActionListener(e -> AddMethodToCallHere);
-		//deleteButton.addActionListener(e -> AddMethodToCallHere);
-		
 	}
 
+	/**
+	 * This function sets up a table with specific columns and visibility settings for an employee list.
+	 */
 	private void setTables() {
 		centerPanel = new JScrollPane();
 		add(centerPanel, BorderLayout.CENTER);
@@ -105,6 +115,9 @@ public class EmployeeOverview extends JPanel {
 		
 	}
 
+	/**
+	 * This function sets up a JPanel on the right side of the container.
+	 */
 	private void setPanels() {
 		rightPanel = new JPanel();
 		add(rightPanel, BorderLayout.EAST);

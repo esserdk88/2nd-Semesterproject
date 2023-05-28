@@ -33,19 +33,6 @@ public class VerifiableTextFieldValue extends JDialog {
 	private int storedValue = -1;
 
 	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		try {
-//			VerifiableTextFieldValue dialog = new VerifiableTextFieldValue();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	/**
 	 * Create the dialog.
 	 */
 	public VerifiableTextFieldValue(ValueCheckerIF valueChecker, String textFieldInfo, String contextInformation, VerifiedValueRecieverIF parent) {
@@ -152,6 +139,10 @@ public class VerifiableTextFieldValue extends JDialog {
 		this.setVisible(true);
 	}
 	
+	/**
+	 * The function searches for a valid value, stores it if it is valid, sends it to the parent, and
+	 * closes the window.
+	 */
 	private void btnOKPressed() {
 		searchForValidValue();
 		if(this.currentValueIsValid) {
@@ -164,11 +155,18 @@ public class VerifiableTextFieldValue extends JDialog {
 		closeWindow();
 	}
 	
+	/**
+	 * The function sets the stored value to -1 and disposes the current object.
+	 */
 	private void btnCancelPressed() {
 		this.storedValue = -1;
 		this.dispose();
 	}
 	
+	/**
+	 * The function checks if the value entered in a text field is valid and updates the background color
+	 * accordingly.
+	 */
 	private void searchForValidValue() {
 		boolean valueIsValid = false;
 		try {
@@ -188,11 +186,22 @@ public class VerifiableTextFieldValue extends JDialog {
 		}
 	}
 	
+	/**
+	 * This function sets the text of a label and a text area in a Java program.
+	 * 
+	 * @param textFieldInfo A string that contains information about the text field being updated. This
+	 * could be a label or a prompt for the user to enter information into the text field.
+	 * @param contextInformation The context information is the text that will be displayed in the text
+	 * area for providing additional information or context related to the text field.
+	 */
 	private void setTextFields(String textFieldInfo, String contextInformation) {
 		this.lblTextFieldInfo.setText(textFieldInfo);
 		this.textAreaContextInformation.setText(contextInformation);
 	}
 	
+	/**
+	 * The function closes the current window.
+	 */
 	public void closeWindow() {
 		this.dispose();
 	}

@@ -122,6 +122,9 @@ public class CreateWorkOrder extends JPanel {
 		reference = new Reference();
 	}
 	
+	// The above code is a constructor method for a class that creates a work order for a given asset. It
+	// takes in an instance of the Asset class as a parameter and sets it as the current asset for the
+	// work order. It also initializes some variables and calls a method called setupTextFields().
 	public CreateWorkOrder(Asset currentAsset) {
 		this();
 		asset = currentAsset;
@@ -129,6 +132,10 @@ public class CreateWorkOrder extends JPanel {
 		setupTextFields();
 	}
 	
+	/**
+	 * The function sets up text fields for an asset by disabling them and populating them with the
+	 * asset's ID and name.
+	 */
 	private void setupTextFields() {
 		txtAssetID.setEnabled(false);
 		txtName.setEnabled(false);
@@ -136,6 +143,13 @@ public class CreateWorkOrder extends JPanel {
 		txtName.setText(asset.getName());
 	}
 	
+	/**
+	 * This function creates a work order and checks if an asset and reference are selected before calling
+	 * a controller of a certain type.
+	 * 
+	 * @return The method is returning a boolean value, which is either true or false depending on the
+	 * success of calling the controller of a certain type.
+	 */
 	private boolean createWorkOrder() {
 		if(asset == null) {
 			GUIPopUpMessages.warningMessage("No Asset selected!", "Error!"); return false;
@@ -149,6 +163,14 @@ public class CreateWorkOrder extends JPanel {
 	    return success;
 	}
 	
+	/**
+	 * This function creates a work order of a specific type (repair, service, or maintenance) based on
+	 * user input and returns a boolean indicating success or failure.
+	 * 
+	 * @param type A string representing the type of work order to be created (either "Reparation",
+	 * "Serviceaftale", or "Vedligeholdelse").
+	 * @return The method is returning a boolean value.
+	 */
 	private boolean callControllerOfType(String type) {
 		int intAssetID = Integer.valueOf(assetID);
 		String topic = topicTextField.getText();
@@ -190,6 +212,13 @@ public class CreateWorkOrder extends JPanel {
 	    }
 	}
 	
+	/**
+	 * This function returns a short value representing the priority selected from a combo box.
+	 * 
+	 * @return The method is returning a short data type, which represents the priority level based on the
+	 * selected item in the priorityComboBox. The value returned depends on the selected item: 3 for
+	 * "Høj", 2 for "Mellem", and 1 for any other value.
+	 */
 	private short getPriorityFromComboBox() {
 	    String priority = priorityComboBox.getSelectedItem().toString();
 	    switch(priority) {
@@ -203,6 +232,9 @@ public class CreateWorkOrder extends JPanel {
 	}
 
 	
+	/**
+	 * The function sets the value of a spinner based on the selected item in a combo box.
+	 */
 	private void setIntervalFromTemplate() {
 		switch(templatesComboBox.getSelectedItem().toString()) {
 		case"2 uger":
@@ -297,6 +329,9 @@ public class CreateWorkOrder extends JPanel {
 	}
 
 
+	/**
+	 * This function enables or disables certain fields based on the selected item in a combo box.
+	 */
 	private void setMaintenanceFields() {
 		if(typeComboBox.getSelectedItem().toString().equals("Vedligeholdelse")) {
 			intervalSpinner.setEnabled(true);
@@ -315,6 +350,10 @@ public class CreateWorkOrder extends JPanel {
 		}
 	}
 	
+	/**
+	 * This function creates a new thread to execute the "createWorkOrder" method and displays a success
+	 * message if the method returns true.
+	 */
 	private void createWorkOrderButtonMethod() {
 		Thread workerThread = new Thread(() -> {
 		    boolean success = createWorkOrder();
@@ -328,6 +367,9 @@ public class CreateWorkOrder extends JPanel {
 		workerThread.start();
 	}
 	
+	/**
+	 * The function resets the values and background colors of several text fields.
+	 */
 	private void resetTextFields() {
 		this.txtAssetID.setText("");
 		this.txtAssetID.setBackground(Color.white);
@@ -342,18 +384,25 @@ public class CreateWorkOrder extends JPanel {
 		this.textArea.setText("");
 	}
 	
+	/**
+	 * The function resets spinners by calling the setSpinners() function.
+	 */
 	private void resetSpinners() {
 		setSpinners();
 	}
 	
+	/**
+	 * The function resets the selected index of three different comboboxes to zero.
+	 */
 	private void resetComboboxes() {
 		priorityComboBox.setSelectedIndex(0);
 		typeComboBox.setSelectedIndex(0);
 		templatesComboBox.setSelectedIndex(0);
 	}
-	
-	
 
+	/**
+	 * This function sets up a JPanel with a GridBagLayout and adds it to the center of the main panel.
+	 */
 	private void setPanels() {
 		centerLeftPanel = new JPanel();
 		add(centerLeftPanel, BorderLayout.CENTER);
@@ -365,6 +414,11 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.setLayout(gbl_centerLeftPanel);
 		
 	}
+
+	/**
+	 * This function sets up the GUI components for creating a work order, including text fields, buttons,
+	 * and labels.
+	 */
 	private void setButtons() {
 		employeeTextField = new JTextField();
 		employeeTextField.addFocusListener(new FocusAdapter() {
@@ -565,6 +619,9 @@ public class CreateWorkOrder extends JPanel {
 		createWorkOrderButton.addActionListener(e -> createWorkOrderButtonMethod());
 	}
 
+	/**
+	 * This function sets up various text fields and a text area with specific constraints in a Java GUI.
+	 */
 	private void setTextFields() {
 
 		topicTextField = new JTextField();
@@ -621,6 +678,10 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(scrollPane, gbc_scrollPane);
 		
 	}
+
+	/**
+	 * This function sets up JSpinners for selecting start and end dates and an interval.
+	 */
 	private void setSpinners() {
 		
 		spinnerModel = new SimpleDateFormat("dd.MM.yyyy");
@@ -661,6 +722,10 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(intervalSpinner, gbc_intervalTextField);
 		
 	}
+
+	/**
+	 * This function sets up a JComboBox with predefined options and adds it to a panel.
+	 */
 	private void setComboBoxes() {
 		
 		templatesComboBox = new JComboBox();
@@ -675,6 +740,10 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(templatesComboBox, gbc_templatesComboBox);
 		templatesComboBox.addActionListener(e -> setIntervalFromTemplate());
 	}
+
+	/**
+	 * This function sets the labels for a GUI interface using GridBagConstraints.
+	 */
 	private void setLabels() {
 		
 		lblTitle = new JLabel("Emne");

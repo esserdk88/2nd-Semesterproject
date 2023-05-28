@@ -111,6 +111,12 @@ public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 		setCheckBoxes();
 	}
 
+	/**
+	 * This function sets the current work order information and updates the corresponding text fields.
+	 * 
+	 * @param current an object of the Workorder class that contains information about the current work
+	 * order being displayed
+	 */
 	public void setCurrentWorkorderInfo(Workorder current) {
 		this.current = current;
 		txtTitle.setText(current.getTitle());
@@ -136,39 +142,51 @@ public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 			txtEmployeeID.setText("Ingen medarbejder");
 		}
 
-//		private JTextField txtSerialNumber;
-//		private JTextField txtRegNo;
 		setAssignButtonText();
 	}
 	
+	/**
+	 * This function sets the text of a button to "Skift" if the current employee is not null.
+	 */
 	private void setAssignButtonText() {
 		if (current.getEmployee() != null) {
 			this.btnAssignEmployee.setText("Skift");
 		}
 	}
 	
-	//Verified value is an employeeID which will then be assigned to current workorder
-		@Override
-		public void receiveVerifiedValue(int verifiedValue) {
-			if(verifiedValue > 0) {
-				boolean successbool = false;
-				Employee assignedEmployee = employeeController.findEmployeeByID(verifiedValue);
-				successbool = workorderController.assignEmployeeToWorkOrder(assignedEmployee, current);
-				this.txtEmployeeID.setText(assignedEmployee.getName());
-//				System.out.println("Employee was assigned: " + successbool);
-			}
-			else {
-				this.txtEmployeeID.setText("Ingen medarbejder");
-			}
-			setAssignButtonText();
+	/**
+		* This function assigns an employee to a work order and updates the text field with the employee's
+		* name or "Ingen medarbejder" if no employee is found.
+		* 
+		* @param verifiedValue an integer value that has been verified and is greater than 0. It is used to
+		* find an employee by their ID and assign them to a work order.
+		*/
+	@Override
+	public void receiveVerifiedValue(int verifiedValue) {
+		if(verifiedValue > 0) {
+			boolean successbool = false;
+			Employee assignedEmployee = employeeController.findEmployeeByID(verifiedValue);
+			successbool = workorderController.assignEmployeeToWorkOrder(assignedEmployee, current);
+			this.txtEmployeeID.setText(assignedEmployee.getName());
 		}
+		else {
+			this.txtEmployeeID.setText("Ingen medarbejder");
+		}
+		setAssignButtonText();
+	}
 	
+	/**
+	 * The function opens a window to retrieve an employee ID using a VerifiableTextFieldValue object.
+	 */
 	private void btnAssignEmployeePressed() {
 		//Open window to retrieve an employeeID, employeeIdSelected uses this instanses implementation of recieveVerifiedValue through the VerifiedValueRecieverIF interface
 		//I know it's stupid, but i don't know how else to do it. 
 		VerifiableTextFieldValue employeeIdSelecter = new VerifiableTextFieldValue((ValueCheckerIF) employeeController, "indtast et medarbejder id", "indtast et medarbejder id", this);
 	}
 
+	/**
+	 * This function sets up a JCheckBox with specific properties and adds it to a panel.
+	 */
 	private void setCheckBoxes() {
 		checkDate = new JCheckBox("Lukkes dato");
 		checkDate.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -181,6 +199,9 @@ public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 		centerPanel.add(checkDate, gbc_checkDate);
 	}
 
+	/**
+	 * This function sets up a JSpinner with a specific date format and adds it to a panel.
+	 */
 	private void setSpinners() {
 		SimpleDateFormat spinnerModel = new SimpleDateFormat("dd.MM.yyyy");
 		spinner = new JSpinner();
@@ -194,6 +215,9 @@ public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 		centerPanel.add(spinner, gbc_spinner);
 	}
 
+	/**
+	 * This function sets up and adds buttons to a graphical user interface.
+	 */
 	private void setButtons() {
 
 		btnCancel = new JRoundedButton("Udskyd arbejdsordre");
@@ -217,13 +241,12 @@ public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 		gbc_btnDelete.gridx = 9;
 		gbc_btnDelete.gridy = 10;
 		centerPanel.add(btnDelete, gbc_btnDelete);
-
-		// btnCancel.addActionListener(e -> AddMethodToCallHere);
-		// btnSave.addActionListener(e -> AddMethodToCallHere);
-		// btnAdd.addActionListener(e -> AddMethodToCallHere);
-		// btnDelete.addActionListener(e -> AddMethodToCallHere);
 	}
 
+	/**
+	 * This function sets up two tables with specific column names and adds them to a panel with specific
+	 * constraints.
+	 */
 	private void setTables() {
 		historyScollPane = new JScrollPane();
 		historyScollPane.setPreferredSize(new Dimension(10, 0)); // Changes size of table
@@ -255,6 +278,9 @@ public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 		scrollPane.setViewportView(completedActionsTable);
 	}
 
+	/**
+	 * This function sets up labels and text fields for a graphical user interface.
+	 */
 	private void setLabelsAndTextFields() {
 
 		textArea = new JTextArea();
@@ -467,6 +493,10 @@ public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
 		centerPanel.add(lblActionsPerformed, gbc_lblActionsPerformed);
 	}
 
+	/**
+	 * The function sets up two panels, one with a flow layout and the other with a grid bag layout, and
+	 * adds them to the main panel with specific constraints.
+	 */
 	private void setPanels() {
 		southPanel = new JPanel();
 		FlowLayout fl_southPanel = (FlowLayout) southPanel.getLayout();

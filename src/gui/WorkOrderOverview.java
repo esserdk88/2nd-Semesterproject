@@ -109,6 +109,10 @@ public class WorkOrderOverview extends JPanel {
 		setWorkOrderOnStartUp();
 	}
 
+	/**
+	 * This function sets up labels, text fields, and radio buttons for a search criteria panel in a Java
+	 * GUI.
+	 */
 	private void setLabelsAndTextFieldsAndRadioButtons() {
 		priorityButtons = new ButtonGroup();
 
@@ -203,6 +207,10 @@ public class WorkOrderOverview extends JPanel {
 
 	}
 
+	/**
+	 * This function searches for work orders based on user input and updates the work order table with
+	 * the results.
+	 */
 	private void btnSearchWorkOrdersPressed() {
 
 		String name = titleTextField.getText();
@@ -226,6 +234,10 @@ public class WorkOrderOverview extends JPanel {
 		workerThread.start();
 	}
 
+	/**
+	 * This function reads a work order and sets a new center panel with the current work order
+	 * information.
+	 */
 	private void readWorkOrderButton() {
 		ReadWorkOrder panel = new ReadWorkOrder(); // TODO: Change to field and instantiate in constructor
 		frame.setNewCenterPanel(panel);
@@ -235,6 +247,9 @@ public class WorkOrderOverview extends JPanel {
 		workerThread.start();
 	}
 
+	/**
+	 * This function sets up and adds various buttons to a GUI panel.
+	 */
 	private void setButtons() {
 		searchButton = new JRoundedButton("Søg");
 		searchButton.addActionListener((e) -> btnSearchWorkOrdersPressed());
@@ -276,6 +291,13 @@ public class WorkOrderOverview extends JPanel {
 
 	}
 
+	/**
+	 * This function returns a Workorder object based on the type of work order and its ID.
+	 * 
+	 * @param type A string representing the type of work order (either "Maintenance", "Repair", or
+	 * "Service").
+	 * @return The method is returning a Workorder object.
+	 */
 	private Workorder getController(String type) {
 		int workOrderID = Integer.valueOf(workOrderTable.getCellData(columns[0]));
 		switch (type) {
@@ -292,6 +314,10 @@ public class WorkOrderOverview extends JPanel {
 		return null;
 	}
 
+	/**
+	 * This function sets up a table with specific columns and enables a button based on the selected
+	 * rows.
+	 */
 	private void setTables() {
 		centerScrollPane = new JScrollPane();
 		add(centerScrollPane, BorderLayout.CENTER);
@@ -312,6 +338,10 @@ public class WorkOrderOverview extends JPanel {
 		});
 	}
 
+	/**
+	 * This function sets up various panels with specific layouts and adds them to the main panel using
+	 * BorderLayout.
+	 */
 	private void setPanels() {
 		topPanel = new JPanel();
 		add(topPanel, BorderLayout.NORTH);
@@ -331,6 +361,10 @@ public class WorkOrderOverview extends JPanel {
 
 	}
 
+	/**
+	 * This function sets the loading status of a work order table and fetches all unfinished work orders
+	 * in a separate thread.
+	 */
 	public void setWorkOrderOnStartUp() {
 		String[][] loadingStatus = { { "Henter arbejdsordrer..." } };
 		workOrderTable.setNewData(loadingStatus);
@@ -342,6 +376,10 @@ public class WorkOrderOverview extends JPanel {
 		workerThread.start();
 	}
 	
+	/**
+	 * This function creates an instance of the SwitchEmployeeWorkorders class when a button is pressed
+	 * and prints "pressed" to the console.
+	 */
 	private void btnSwitchEmployeeWorkordersPressed() {
 		System.out.println("pressed");
 		SwitchEmployeeWorkorders sew = new SwitchEmployeeWorkorders();
