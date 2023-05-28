@@ -14,6 +14,10 @@ import dao.Database;
 import dao.DatabaseConnection;
 import model.Reference;
 
+/**
+ * The ReferenceDB class implements the ReferenceDBIF interface and provides methods for retrieving
+ * references from a database.
+ */
 public class ReferenceDB implements ReferenceDBIF {
 
 	public static final String SELECT_REFERENCE_BY_CVR = "SELECT * FROM ReferenceView Where reference_CVR_PK = ?";
@@ -21,6 +25,13 @@ public class ReferenceDB implements ReferenceDBIF {
 
 	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
 
+	/**
+	 * This Java function retrieves a reference object from a database by its ID.
+	 * 
+	 * @param referenceCVR The parameter referenceCVR is an integer that represents the CVR (Central
+	 * Business Register) number of a reference.
+	 * @return The method is returning a Reference object.
+	 */
 	@Override
 	public Reference findReferenceByID(int referenceCVR) {
 
@@ -47,6 +58,14 @@ public class ReferenceDB implements ReferenceDBIF {
 		return reference;
 	}
 
+	/**
+	 * This function builds a reference object from a result set if the result set contains a primary key.
+	 * 
+	 * @param rs The ResultSet object containing the data retrieved from the database.
+	 * @return The method `buildObjectFromResultset` is returning a `Reference` object that is built from
+	 * the `ResultSet` `rs` if the `rs` contains a non-null value for the column `reference_CVR_PK`. If
+	 * the `rs` is null or the `reference_CVR_PK` column is null, then the method returns null.
+	 */
 	public Reference buildObjectFromResultset(ResultSet rs) throws SQLException {
 		if (DataBaseUtilities.check(rs, null, "reference_CVR_PK")) {
 			return buildObject(rs, "reference_");
@@ -54,6 +73,16 @@ public class ReferenceDB implements ReferenceDBIF {
 			return null;
 	}
 
+	/**
+	 * This Java function builds a Reference object from a ResultSet and sets its properties based on the
+	 * values in the ResultSet.
+	 * 
+	 * @param rs ResultSet object containing the data retrieved from the database
+	 * @param prefix The prefix parameter is a string that is used to specify a prefix for the column
+	 * names in the ResultSet. This is useful when the ResultSet contains columns with the same name from
+	 * multiple tables, and the prefix can be used to differentiate between them.
+	 * @return The method `buildObject` is returning a `Reference` object.
+	 */
 	private Reference buildObject(ResultSet rs, String prefix) throws SQLException {
 		// Create a new Reference object
 		Reference result = new Reference();
@@ -71,6 +100,12 @@ public class ReferenceDB implements ReferenceDBIF {
 		return result;
 	}
 
+	/**
+	 * This function retrieves all references from a database and returns them as a list of Reference
+	 * objects.
+	 * 
+	 * @return A list of all references from the database.
+	 */
 	@Override
 	public List<Reference> getAllReferences() {
 		List<Reference> list = new ArrayList<>();

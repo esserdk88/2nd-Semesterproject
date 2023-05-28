@@ -15,6 +15,9 @@ import dao.DatabaseConnection;
 import gui.components.ValueCheckerIF;
 import model.Employee;
 
+/**
+ * The EmployeeDB class implements methods to retrieve Employee objects from a database.
+ */
 public class EmployeeDB implements EmployeeDBIF {
 
 	public static final String SELECT_EMPLOYEE_BY_ID = "SELECT * FROM EmployeeView Where employee_id_PK = ?";
@@ -22,6 +25,13 @@ public class EmployeeDB implements EmployeeDBIF {
 
 	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
 
+	/**
+	 * This Java function retrieves an employee from a database by their ID.
+	 * 
+	 * @param employeeID an integer representing the unique identifier of the employee to be retrieved
+	 * from the database.
+	 * @return An Employee object is being returned.
+	 */
 	@Override
 	public Employee findEmployeeByID(int employeeID) {
 
@@ -48,6 +58,14 @@ public class EmployeeDB implements EmployeeDBIF {
 		return employee;
 	}
 
+	/**
+	 * This function builds an Employee object from a ResultSet if the ResultSet contains a valid employee
+	 * ID, otherwise it returns null.
+	 * 
+	 * @param rs The ResultSet object containing the data retrieved from the database.
+	 * @return The method `buildObjectFromResultset` is returning an object of type `Employee` or `null`
+	 * if the `ResultSet` does not contain a valid `employee_id_PK` value.
+	 */
 	public Employee buildObjectFromResultset(ResultSet rs) throws SQLException {
 		if (DataBaseUtilities.check(rs, null, "employee_id_PK")) {
 			return buildObject(rs);
@@ -55,6 +73,13 @@ public class EmployeeDB implements EmployeeDBIF {
 			return null;
 	}
 
+	/**
+	 * This function builds an Employee object by setting its properties based on the values in a
+	 * ResultSet.
+	 * 
+	 * @param rs A ResultSet object that contains the data retrieved from the database.
+	 * @return The method is returning an Employee object.
+	 */
 	private Employee buildObject(ResultSet rs) throws SQLException {
 
 		// Create a new Employee object
@@ -78,6 +103,12 @@ public class EmployeeDB implements EmployeeDBIF {
 		return result;
 	}
 
+	/**
+	 * This Java function retrieves all employees from a database and returns them as a list of Employee
+	 * objects.
+	 * 
+	 * @return A list of all employees from the database.
+	 */
 	@Override
 	public List<Employee> getAllEmployees() {
 
