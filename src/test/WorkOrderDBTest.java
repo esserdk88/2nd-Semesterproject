@@ -1,6 +1,7 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,70 +9,72 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import dal.interfaces.AssetDBIF;
-import dal.interfaces.ReferenceDBIF;
+import controller.WorkOrderController;
+import dal.AssetDB;
+import dal.WorkOrderDB;
 import dal.interfaces.WorkOrderDBIF;
 import dao.Database;
 import dao.DatabaseConnection;
-import model.Asset;
+import model.Address;
+import model.Employee;
 import model.Maintenance;
-import model.Measurement;
-import model.Reference;
 import model.Repair;
 import model.Service;
-import model.SparepartUsed;
 import model.Workorder;
 
 class WorkOrderDBTest {
-	
-	//Common fields for use 
-	private static String title = "Test opgave";
-	private static Calendar startDate = Calendar.getInstance();
-	private static Calendar endDate = Calendar.getInstance();
-	private static short priority = 3;
-	private static String description = "Test beskrivelse";
-	private static boolean finished = false;
-	
-	
-	private static List<SparepartUsed> sparepartsUsed = new ArrayList<>();
-	private static Asset asset;
-	private static List<Measurement> measurements = new ArrayList<>();
-	
-	//Maintenance fields
-	private static boolean repeated = true;
-	private static int intervalDayCount = 7;
-	
-	//Service fields
-	private static Reference reference;
-	
-	//Repair fields
-	private static double price = 100.43;
 	
 	private static Maintenance maintenance;
 	private static Service service;
 	private static Repair repair;
 	
+	//Employee Fields 1
+	private static int employeeID2 = 2000000;
+	private static String cpr2 = "00000002";
+	private static Calendar startDateEmp2 = Calendar.getInstance();
+	private static String position2 = "Testpos2";
+	private static String name2 = "TestNameTheThird";
+	private static String phone2 = "00000002";
+	private static String email2 = "test@test.com";
+	//pls dont fuck up
+	private static Address address2 = null;
+	
 	//Instances
-	private WorkOrderDBIF workOrderDB = Database.getInstance().getWorkOrderDataBase();
-	private static AssetDBIF assetDB = Database.getInstance().getAssetDataBase();
-	private static ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
+	private static WorkOrderDBIF workOrderDB;
+	private static WorkOrderController workorderController;
 	
 	@BeforeAll
 	static void startUp() throws SQLException {
-		DatabaseConnection.getInstance().startTransaction();
-		asset = assetDB.findAssetByID(1);
-		reference = referenceDB.findReferenceByID(11111111);
-		maintenance = new Maintenance(repeated, intervalDayCount, 0, title, "Maintenance", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
-		service = new Service(reference, 0, title, "Service", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
-		repair = new Repair(price, reference, 0, title, "Repair", startDate, endDate, priority, description, finished, sparepartsUsed, asset, null, measurements);
+		DatabaseConnection.setTestingEnvironment();
+		Database.getInstance().setWorkOrderDataBase(new WorkOrderDB());
+		Database.getInstance().setAssetDataBase(new AssetDB());
+		workOrderDB = Database.getInstance().getWorkOrderDataBase();
+		workorderController = new WorkOrderController();
+		maintenance = TestingUtilities.getMaintenanceWorkOrder();
+		service = TestingUtilities.getServiceWorkOrder();
+		repair = TestingUtilities.getRepairWorkOrder();
 	}
+	
 	@AfterAll
 	static void tearDown() throws SQLException {
 		DatabaseConnection.getInstance().rollbackTransaction();
 	}
+	
+	@BeforeEach
+	void beforeEach() throws SQLException {
+		DatabaseConnection.getInstance().startTransaction();
+	}
+	
+	@AfterEach
+	void afterEach() throws SQLException {
+		DatabaseConnection.getInstance().rollbackTransaction();
+	}
+	
 			
 	@Test
 	void addMaintenanceWorkOrderTest() {
@@ -114,12 +117,10 @@ class WorkOrderDBTest {
 	
 	@Test
 	void findMaintenanceWorkOrderByIDTest() {
-		//TODO Finish this test
 		//Arrange
 		workOrderDB.addMaintenanceWorkOrder(maintenance);
 		Maintenance foundMaintenance = null;
 		int latestKey = workOrderDB.getLatestKey();
-		
 		//Act
 		foundMaintenance = workOrderDB.findMaintenanceWorkOrderByID(latestKey);
 		
@@ -143,7 +144,6 @@ class WorkOrderDBTest {
 	
 	@Test
 	void findRepairWorkOrderByIDTest() {
-		//TODO: this test will fail as long as the database workorder_price holde decimal number with 0 decimal points
 		//Arrange
 		workOrderDB.addRepairWorkOrder(repair);
 		Repair foundRepair = null;
@@ -182,62 +182,91 @@ class WorkOrderDBTest {
 	
 	@Test
 	void getAllMaintenanceWorkOrdersTest() {
-		//TODO: Write test case
 		//Arrange
-				
+		int maintenanceWorkOrderInDB = 2; //Testing in test database, contains 2 Maintenance Workorders
+		
 		//Act
+		int size = workOrderDB.getAllMaintenanceWorkOrders().size();
 		
 		//Assert
-		
-		//Clean up
+		assertEquals(maintenanceWorkOrderInDB, size);
 	}
 	
 	@Test
 	void getAllServiceWorkOrdersTest() {
-		//TODO: Write test case
 		//Arrange
+		int serviceWorkOrderInDB = 2; //Testing in test database, contains 2 Service Workorders
 		
 		//Act
-		
+		int size = workOrderDB.getAllServiceWorkOrders().size();
 		//Assert
-		
-		//Clean up
+		assertEquals(serviceWorkOrderInDB, size);
 	}
 	
 	@Test
 	void getAllRepairWorkOrdersTest() {
-		//TODO: Write test case
 		//Arrange
+		int repairWorkOrderInDB = 1; //Testing in test database, contains 1 Repair Workorders
 		
 		//Act
-		
+		int size = workOrderDB.getAllRepairWorkOrders().size();
 		//Assert
-		
-		//Clean up
+		assertEquals(repairWorkOrderInDB, size);
 	}
 	
 	@Test
 	void getAllUnfinishedWorkOrdersTest() {
-		//TODO: Write test case
 		//Arrange
+		int unfinishedWorkOrderInDB = 2; //Testing in test database, contains 2 UnfinishedWorkorders
 		
 		//Act
-		
+		int size = workOrderDB.getAllUnfinishedWorkOrders().size();
 		//Assert
-		
-		//Clean up
+		assertEquals(unfinishedWorkOrderInDB, size);
 	}
 	
 	@Test
-	void deleteWorkOrderByIDTest() {
-		//TODO: Write test case
+	void deleteWorkOrderByIDTest() throws SQLException {
 		//Arrange
+		int workOrderID = 5; //Testing on workorder 5 in test database, WorkOrder 5 contains no Spareparts used, or measurements
+		boolean deleteSuccess = false;
+		Workorder stillExistsCheck = new Maintenance();
 		
 		//Act
+		deleteSuccess = workOrderDB.deleteWorkOrderByID(workOrderID);
+		stillExistsCheck = workOrderDB.getWorkorderById(workOrderID);
 		
 		//Assert
+		assertEquals(true, deleteSuccess);
+		assertEquals(null, stillExistsCheck);
+	}
+	
+	void assignEmployeeToWorkorderTest() {
+		//Arrange
+		Workorder workorder = maintenance;
+		Employee employee = new Employee(employeeID2, cpr2, startDateEmp2, position2, name2, phone2, email2, address2);
+		int workorderId = maintenance.getWorkOrderID();
+		Workorder workorderConfirm = null;
 		
-		//Clean up
+		//Act
+		workorderController.assignEmployeeToWorkOrder(employee, workorder);
+		
+		
+		//Assert
+		try {
+			workorderConfirm = workOrderDB.getWorkorderById(workorderId);
+		} catch (SQLException e) {
+			System.out.println("WorkorderControllerTest - assignEmployeeToWorkorder - Some conncetion thingy failed");
+			e.printStackTrace();
+		}
+		
+		if(workorderConfirm != null) {
+			assertEquals(workorderConfirm.getEmployee().equals(employee), true);
+		}
+		else {
+			//Fail the test
+			fail();
+		}
 	}
 	
 }

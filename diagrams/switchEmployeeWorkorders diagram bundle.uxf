@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>376</x>
+      <y>0</y>
+      <w>48</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>Actor</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>392</x>
+      <y>72</y>
+      <w>24</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;200.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>656</x>
+      <y>64</y>
+      <w>24</w>
+      <h>184</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;210.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>624</x>
+      <y>48</y>
+      <w>80</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>System</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>392</x>
+      <y>96</y>
+      <w>288</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+SwitchEmployeeWorkorders(workorderIds)</panel_attributes>
+    <additional_attributes>340.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>392</x>
+      <y>136</y>
+      <w>288</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+Confirmation</panel_attributes>
+    <additional_attributes>10.0;20.0;340.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>784</x>
+      <y>48</y>
+      <w>280</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>Operationcontract
+-
+Operation: swtichEmployeeWorkorders(workorderIds)
+-
+Reference: Switch Employee Workorders
+-
+Precondidtion:
+- There exists at least two instances w1 &amp; w2 - 
+of Workorder in the system
+- Both instances w1 &amp; w2 is associated with - 
+instance e1 or e2 of employee
+-
+Postcondition:
+- An instance e1 of Employee was associated with -
+instance w2 of Workorder
+- An instance e2 of Employee was associated with -
+instance w1 of Workorder</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>648</x>
+      <y>320</y>
+      <w>80</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>:GUI
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>632</x>
+      <y>416</y>
+      <w>112</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>:WorkorderController
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>232</x>
+      <y>416</y>
+      <w>88</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>:WorkOrderDB
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>232</x>
+      <y>480</y>
+      <w>88</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>:Workorder
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>240</y>
+      <w>248</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1 - switchEmployeeWorkorders(workorderIds)
+2 - confirm()</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>312</x>
+      <y>416</y>
+      <w>336</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.1: getWorkorderByID(workorderId1:int): Workorder
+1.2.1: getWorkorderByID(workorderId2:int): Workorder
+2.1.1: updateWorkorder(workorder1:Workorder): boolean
+2.1.2: updateWorkorder(workorder2:Workorder): boolean
+</panel_attributes>
+    <additional_attributes>10.0;20.0;400.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>312</x>
+      <y>432</y>
+      <w>392</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1.1.1: getEmployee(): Employee
+1.2.1.1: getEmployee(): Employee</panel_attributes>
+    <additional_attributes>10.0;80.0;470.0;80.0;470.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>336</y>
+      <w>464</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1.1: workorderHasEmployee(workorderId1:int): boolean
+1.2: workorderHasEmployee(workorderId2:int): boolean
+2.1: switchEmployeeWorkorders(workorder1:Workorder, workorder2:Workorder): boolean
+
+</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>896</x>
+      <y>400</y>
+      <w>440</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Added methods
+-
+Workorder controller 
++ workorderHasEmployee(workorderId:int): boolean
++ switchEmployeeWorkorder(workorde1:Workorder, workorder2:Workorder2): boolean
+-
+WorkorderDB
++ getWorkorderByID(wokrorderId:int): Workorder
++ updateWorkorder(workorder:Workorder): boolean
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

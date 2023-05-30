@@ -37,6 +37,8 @@ public interface WorkOrderDBIF {
 	public List<Workorder> getAllUnfinishedWorkOrders();
 
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID);
+	
+	public List<Workorder> getAllWorkorders() throws SQLException;
 
 	// Swtich employee Workorders
 	public List<Workorder> getWorkordersById(int[] workorderIds);
@@ -50,5 +52,7 @@ public interface WorkOrderDBIF {
 	public boolean assignEmployeeToWorkOrder(Employee employee, Maintenance workOrder);
 
 	public int getLatestKey();
+	
+	public List<Workorder> searchWorkOrderDataBase(String name, List<Short> priority, String location, boolean isFinished);
 
 }

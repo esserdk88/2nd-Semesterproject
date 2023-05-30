@@ -14,6 +14,10 @@ import dao.Database;
 import dao.DatabaseConnection;
 import model.Asset;
 
+/**
+ * The AssetDB class implements the AssetDBIF interface and provides methods for retrieving assets from
+ * a database.
+ */
 public class AssetDB implements AssetDBIF {
 
 	public static final String SELECT_ASSET_BY_ID = "SELECT * FROM Asset_Location_Address Where asset_id_PK = ?";
@@ -21,6 +25,12 @@ public class AssetDB implements AssetDBIF {
 
 	private LocationDBIF locationDB = Database.getInstance().getLocationDataBase();
 
+	/**
+	 * This Java function retrieves an Asset object from a database by its ID.
+	 * 
+	 * @param assetID an integer representing the ID of the asset to be retrieved from the database.
+	 * @return The method is returning an Asset object.
+	 */
 	@Override
 	public Asset findAssetByID(int assetID) {
 		Asset asset = null;
@@ -46,6 +56,13 @@ public class AssetDB implements AssetDBIF {
 		return asset;
 	}
 
+	/**
+	 * This function builds an Asset object from a ResultSet if the ResultSet contains a valid
+	 * asset_id_PK.
+	 * 
+	 * @param rs The ResultSet object that contains the data retrieved from the database.
+	 * @return The method `buildObjectFromResultset` is returning an object of type `Asset` or `null`.
+	 */
 	public Asset buildObjectFromResultset(ResultSet rs) throws SQLException {
 		if (DataBaseUtilities.check(rs, null, "asset_id_PK")) {
 			return buildObject(rs);
@@ -53,6 +70,13 @@ public class AssetDB implements AssetDBIF {
 			return null;
 	}
 
+	/**
+	 * This Java function builds an Asset object by setting its properties based on values from a
+	 * ResultSet.
+	 * 
+	 * @param rs ResultSet object containing the data retrieved from the database query.
+	 * @return The method `buildObject` is returning an object of type `Asset`.
+	 */
 	private Asset buildObject(ResultSet rs) throws SQLException {
 
 		// Create a new Asset object
@@ -71,6 +95,12 @@ public class AssetDB implements AssetDBIF {
 		return result;
 	}
 
+	/**
+	 * This Java function retrieves all assets from a database and returns them as a list of Asset
+	 * objects.
+	 * 
+	 * @return A list of all assets from the database.
+	 */
 	@Override
 	public List<Asset> getAllAssets() {
 

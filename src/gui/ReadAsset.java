@@ -24,6 +24,7 @@ import javax.swing.event.ListSelectionListener;
 
 import controller.MaintenanceController;
 import controller.WorkOrderController;
+import dao.Database;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
 import gui.components.TableSwingWorker;
@@ -79,6 +80,9 @@ public class ReadAsset extends JPanel {
 	private MainFrame mainFrame;
 	private JScrollPane measurementsScrollPane;
 	private String[][] loadingDataMessage;
+	
+	private MaintenanceController maintenanceController = new MaintenanceController();
+	private WorkOrderController workOrderController = new WorkOrderController();
 
 	/**
 	 * Create the panel.
@@ -97,10 +101,21 @@ public class ReadAsset extends JPanel {
 
 	}
 
+	/**
+	 * This function creates a new work order and sets the main frame's center panel to display the form
+	 * for creating the work order.
+	 */
 	public void createNewWorkOrder() {
 		mainFrame.setNewCenterPanel(new CreateWorkOrder(this.currentAsset));
 	}
 
+	/**
+	 * This function initializes the fields of a form with data from an Asset object and disables editing
+	 * of the fields.
+	 * 
+	 * @param currentAsset an object of the Asset class that contains information about the current asset
+	 * being initialized.
+	 */
 	public void initialize(Asset currentAsset) {
 		this.currentAsset = currentAsset;
 		txtAssetID.setText(Integer.toString(currentAsset.getAssetID()));
@@ -136,10 +151,18 @@ public class ReadAsset extends JPanel {
 		chckDateBox.setEnabled(false);
 	}
 
+	/**
+	 * The function returns a DefaultTable object named historyTable.
+	 * 
+	 * @return A DefaultTable object named "historyTable" is being returned.
+	 */
 	public DefaultTable getHistoryTable() {
 		return historyTable;
 	}
 
+	/**
+	 * This function sets up and adds buttons to a graphical user interface.
+	 */
 	private void setButtons() {
 		btnNewWorkOrder = new JRoundedButton("Opret ny arbejdsordre");
 		btnNewWorkOrder.addActionListener(e -> createNewWorkOrder());
@@ -163,6 +186,9 @@ public class ReadAsset extends JPanel {
 
 	}
 
+	/**
+	 * This function sets up a JCheckBox and JSpinner with specific formatting for a GUI.
+	 */
 	private void setSpinnerAndComboBox() {
 		chckDateBox = new JCheckBox("Lukket dato");
 		chckDateBox.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -187,16 +213,20 @@ public class ReadAsset extends JPanel {
 
 	}
 
+	/**
+	 * This function sets up and populates three tables (historyTable, sparepartTable, and
+	 * measurementTable) within a graphical user interface.
+	 */
 	private void setTables() {
 		historyScollPane = new JScrollPane();
-		historyScollPane.setPreferredSize(new Dimension(350, 0)); // Changes size of table
+		historyScollPane.setPreferredSize(new Dimension(200, 0)); // Changes size of table
 		GridBagConstraints gbc_historyScollPane = new GridBagConstraints();
-		gbc_historyScollPane.gridheight = 5;
+		gbc_historyScollPane.gridheight = 3;
 		gbc_historyScollPane.gridwidth = 2;
 		gbc_historyScollPane.insets = new Insets(0, 0, 5, 5);
 		gbc_historyScollPane.fill = GridBagConstraints.BOTH;
 		gbc_historyScollPane.gridx = 1;
-		gbc_historyScollPane.gridy = 7;
+		gbc_historyScollPane.gridy = 9;
 		centerPanel.add(historyScollPane, gbc_historyScollPane);
 
 		String[] columnsHistory = { "ID", "Emne", "Type", "Dato", "Slut Dato", "Prioritet", "Beskrivelse", "Færdig",
@@ -241,6 +271,12 @@ public class ReadAsset extends JPanel {
 		measurementsScrollPane.setViewportView(measurementTable);
 	}
 	
+	/**
+	 * This function sets data in tables based on the selected row in a history table.
+	 * 
+	 * @param event A ListSelectionEvent object that represents a change in the selection of a list or
+	 * table.
+	 */
 	private void setHistoryTable(ListSelectionEvent event) {
 		int selectedRow = historyTable.findElement();
 		if (event.getValueIsAdjusting() || selectedRow == -1) {return;}
@@ -255,11 +291,16 @@ public class ReadAsset extends JPanel {
 		}
 	}
 	
+	/**
+	 * This function creates worker threads to fetch data for a history table in a Java Swing application.
+	 * 
+	 * @param id The parameter "id" is an integer value representing the ID of a work order. It is used to
+	 * fetch data related to spare parts and measurements used in that particular work order.
+	 */
 	private void createWorkerThreadsHistoryTable(int id) {
 		Thread workerThread = new Thread(() -> {
 			TableSwingWorker dataFetcherSparePart = null;
 			TableSwingWorker dataFetcherMeasurement = null;
-			WorkOrderController workOrderController = new WorkOrderController();
 			dataFetcherSparePart = new TableSwingWorker(sparepartTable,
 					workOrderController.getAllSparepartsUsedInWorkOrder(id));
 			dataFetcherMeasurement = new TableSwingWorker(measurementTable,
@@ -270,42 +311,33 @@ public class ReadAsset extends JPanel {
 		workerThread.start();
 	}
 	
+	/**
+	 * The function sets text fields for a history table based on the selected row and displays
+	 * maintenance order interval if the type is maintenance.
+	 * 
+	 * @param selectedRow The index of the selected row in the history table.
+	 */
 	private void setTextFieldsForHistoryTable(int selectedRow) {
 		txtTitle.setText(historyTable.getModel().getValueAt(selectedRow, 1).toString());
 		txtEmployeeID.setText(historyTable.getModel().getValueAt(selectedRow, 9).toString());
 		txtType.setText(historyTable.getModel().getValueAt(selectedRow, 2).toString());
 		txtRegNo.setText(historyTable.getModel().getValueAt(selectedRow, 0).toString());
-		int priority = Integer.parseInt(historyTable.getModel().getValueAt(selectedRow, 5).toString());
-		txtPriority.setText(convertPriorityToString(priority));
+		txtPriority.setText(historyTable.getModel().getValueAt(selectedRow, 5).toString().toString());
 		
 		String type = historyTable.getModel().getValueAt(selectedRow, 2).toString();
 		if (type.contains("Maintenance")) {
-			MaintenanceController maintanenceController = new MaintenanceController();
 			Maintenance maintanenceOrder = null;
-			maintanenceOrder = maintanenceController.findWorkOrderByID(Integer.parseInt(historyTable.getCellData("ID")));
+			maintanenceOrder = maintenanceController.findWorkOrderByID(Integer.parseInt(historyTable.getCellData("ID")));
 			txtInterval.setText(String.valueOf(maintanenceOrder.getIntervalDayCount()) + " dage");
 		} else {
 			txtInterval.setText("Ingen");
 		}
 	}
 	
-	private String convertPriorityToString(int priority) {
-		String priorityString;
-		switch (priority) {
-		case 1:
-			priorityString = "Lav";
-			break;
-		case 2:
-			priorityString = "Mellem";
-			break;
-		case 3:
-			priorityString = "Høj";
-			break;
-		default:
-			priorityString = "Ikke angivet";
-		}
-		return priorityString;
-	}
+	/**
+	 * This function sets up the layout and components of a JPanel with a FlowLayout in the south and a
+	 * GridBagLayout in the center.
+	 */
 	private void setPanels() {
 		southPanel = new JPanel();
 		FlowLayout fl_southPanel = (FlowLayout) southPanel.getLayout();
@@ -313,18 +345,21 @@ public class ReadAsset extends JPanel {
 		add(southPanel, BorderLayout.SOUTH);
 
 		centerPanel = new JPanel();
-		add(centerPanel, BorderLayout.NORTH);
+		add(centerPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_centerPanel = new GridBagLayout();
-		gbl_centerPanel.columnWidths = new int[] { 0, 0, 101, 67, 55, 101, 59, 88, 0, 0, 0 };
-		gbl_centerPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_centerPanel.columnWidths = new int[] { 0, 0, 101, 34, 55, 101, 30, 88, 0, 0, 0 };
+		gbl_centerPanel.rowHeights = new int[] {30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0};
 		gbl_centerPanel.columnWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
 				Double.MIN_VALUE };
-		gbl_centerPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+		gbl_centerPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
 				Double.MIN_VALUE };
 		centerPanel.setLayout(gbl_centerPanel);
 
 	}
 
+	/**
+	 * This function sets up labels and text fields for a graphical user interface.
+	 */
 	private void setLabelsAndTextFields() {
 		lblNewLabel = new JLabel("Beskrivelse");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -449,16 +484,6 @@ public class ReadAsset extends JPanel {
 		centerPanel.add(txtType, gbc_txtType);
 		txtType.setColumns(10);
 
-		lblNewLabel_4 = new JLabel("Historik");
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 12));
-		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
-		gbc_lblNewLabel_4.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lblNewLabel_4.gridwidth = 2;
-		gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_4.gridx = 1;
-		gbc_lblNewLabel_4.gridy = 6;
-		centerPanel.add(lblNewLabel_4, gbc_lblNewLabel_4);
-
 		lblNewLabel_7 = new JLabel("Reg nr.");
 		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
 		gbc_lblNewLabel_7.anchor = GridBagConstraints.WEST;
@@ -509,6 +534,16 @@ public class ReadAsset extends JPanel {
 		gbc_txtEmployeeID.gridy = 7;
 		centerPanel.add(txtEmployeeID, gbc_txtEmployeeID);
 		txtEmployeeID.setColumns(10);
+		
+				lblNewLabel_4 = new JLabel("Historik");
+				lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 12));
+				GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
+				gbc_lblNewLabel_4.fill = GridBagConstraints.HORIZONTAL;
+				gbc_lblNewLabel_4.gridwidth = 2;
+				gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
+				gbc_lblNewLabel_4.gridx = 1;
+				gbc_lblNewLabel_4.gridy = 8;
+				centerPanel.add(lblNewLabel_4, gbc_lblNewLabel_4);
 
 		lblNewLabel_5 = new JLabel("Aktioner udført");
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 12));

@@ -34,6 +34,10 @@ import gui.components.ConnectionWatch;
 import gui.components.JRoundedButton;
 import gui.components.PageTracker;
 
+/**
+ * The MainFrame class creates the main GUI window for an application and handles navigation between
+ * different panels.
+ */
 public class MainFrame extends JFrame {
 
 	//The Frame
@@ -120,6 +124,11 @@ public class MainFrame extends JFrame {
 		connectionWatch = new ConnectionWatch(connectionLabel);
 		connectionWatch.execute();
 	}
+
+	/**
+	 * The function sets listeners for keyboard and mouse events to trigger backwards and forwards
+	 * navigation in a program.
+	 */
 	private void setBackAndForwardsListeners() {
 		AWTEventListener keyEventListener = event -> {
             KeyEvent keyEvent = (KeyEvent) event;
@@ -153,6 +162,11 @@ public class MainFrame extends JFrame {
 		
 	}
 
+	/**
+	 * This function removes the current center panel, adds it to a backwards stack, sets the current
+	 * center panel to the top of a forward stack, adds it to the content pane, updates the menu label,
+	 * and sets the button status.
+	 */
 	private void forwardButton() {
 		contentPane.remove(currentCenterPanel);
 		backwards.add(currentCenterPanel);
@@ -164,6 +178,12 @@ public class MainFrame extends JFrame {
         addPageVisit(currentCenterPanel);
         setButtonStatus();
 	}
+
+	/**
+	 * This function removes the current center panel from the content pane, adds it to a forward stack,
+	 * sets the current center panel to the top of a backwards stack, adds it to the content pane, updates
+	 * the menu label, and sets the button status.
+	 */
 	private void backwardsButton() {
 		contentPane.remove(currentCenterPanel);
 		forward.add(currentCenterPanel);
@@ -176,6 +196,12 @@ public class MainFrame extends JFrame {
         setButtonStatus();
 	}
 	
+	/**
+	 * This function sets a new panel as the center panel of a content pane and updates the navigation
+	 * stack accordingly.
+	 * 
+	 * @param newPanel a JPanel that will replace the current center panel in the contentPane.
+	 */
 	public void setNewCenterPanel(JPanel newPanel) {
         contentPane.remove(currentCenterPanel);
         backwards.add(currentCenterPanel);
@@ -188,6 +214,10 @@ public class MainFrame extends JFrame {
         addPageVisit(currentCenterPanel);
         setButtonStatus();
 	}
+
+	/**
+	 * This function sets the status of two buttons based on whether two lists are empty or not.
+	 */
 	private void setButtonStatus() {
 		if(forward.isEmpty() == true) {
 			nextButton.setEnabled(false);
@@ -201,10 +231,18 @@ public class MainFrame extends JFrame {
 		}
 	}
 	
+	/**
+	 * This function sets the text of a menu label to a new title.
+	 * 
+	 * @param newTitle a String variable that represents the new title to be set for a page.
+	 */
 	public void setPageTitle(String newTitle) {
 		menulabel.setText(newTitle);
 	}
 	
+	/**
+	 * This function sets up the layout and panels for a Java GUI.
+	 */
 	private void setPanels() {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -241,10 +279,19 @@ public class MainFrame extends JFrame {
 		gbl_bottomPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		bottomPanel.setLayout(gbl_bottomPanel);
 	}
+
+	/**
+	 * This function sets a new center panel to display an asset overview.
+	 */
 	private void assetButtonMethod() {
 		AssetOverview panel = new AssetOverview(frame);
 		setNewCenterPanel(panel);
 	}
+
+	/**
+	 * This function sets up and adds various buttons and labels to the left and bottom panels of a
+	 * graphical user interface.
+	 */
 	private void setButtons() {
 		assetButton = new JRoundedButton("Asset");
 		assetButton.setMargin(new Insets(4, 26, 4, 26));
@@ -349,11 +396,22 @@ public class MainFrame extends JFrame {
 		nextButton.addActionListener(e -> {if(forward.isEmpty() != true) {forwardButton();}});
 		exitButton.addActionListener(e -> closeWindow());
 	}
+
+	/**
+	 * The function adds a page visit to a page tracker if the current panel is not the main menu.
+	 * 
+	 * @param panel A JPanel object that represents the panel that the user has visited.
+	 */
 	private void addPageVisit(JPanel panel) {
 		if(!panel.getName().equals("HovedMenu")) {
 			pageTracker.pageVisited(currentCenterPanel);
 		}
 	}
+
+	/**
+	 * This function creates buttons for the top 5 frequently visited pages and hides the frequent label
+	 * and separator if there are no frequently visited pages.
+	 */
 	private void frequentlyVisitedPagesButtons() {
 		List<String> panels = pageTracker.getTop5VisitedPages();
 		for(int i = 0;i<panels.size();i++) {
@@ -365,6 +423,16 @@ public class MainFrame extends JFrame {
 		}
 	}
 	
+	/**
+	 * This function creates a new button with a given name and position, adds it to a panel, and sets an
+	 * action listener to change the center panel when clicked.
+	 * 
+	 * @param name The name of the frequent button that will be created.
+	 * @param position The position parameter is an integer value that determines the vertical position of
+	 * the button in the leftPanel. It is used to calculate the value of the gridy parameter in the
+	 * GridBagConstraints object, which is then used to add the button to the leftPanel at the specified
+	 * position.
+	 */
 	private void createNewFrequentButton(String name, int position) {
 		JButton button = new JRoundedButton(name);
 		button.setMargin(new Insets(4, 26, 4, 26));
@@ -377,6 +445,18 @@ public class MainFrame extends JFrame {
 		
 		button.addActionListener((e) -> setNewCenterPanel(findPanelFromName(name)));
 	}
+
+	/**
+	 * The function finds a JPanel based on a given name and returns it.
+	 * 
+	 * @param name A string representing the name of a panel to be found. The method searches for a panel
+	 * with a matching name and returns it. If no matching panel is found, it returns the default center
+	 * panel.
+	 * @return The method is returning a JPanel object. The specific JPanel object being returned depends
+	 * on the value of the input parameter "name". If "name" matches one of the cases in the switch
+	 * statement, a new JPanel object is created and returned. If "name" does not match any of the cases,
+	 * the method returns the JPanel object "centerPanel".
+	 */
 	private JPanel findPanelFromName(String name) {
 		JPanel panel = null;
 		switch(name) {
@@ -399,14 +479,15 @@ public class MainFrame extends JFrame {
 			panel = new WorkOrderOverview(this);
 			break;
 		default:
-			
-			//No panel found set to main menu
-			//TODO add error? Check before adding button?
 			panel = centerPanel;
 			break;
 		}
 		return panel;
 	}
+
+	/**
+	 * This function displays a confirmation dialog and closes the window if the user chooses to do so.
+	 */
 	private void closeWindow(){
 		int input = JOptionPane.showOptionDialog(this, "Er du sikkert på at du vil lukke programmet?", "Afslut program",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,

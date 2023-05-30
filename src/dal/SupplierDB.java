@@ -15,6 +15,10 @@ import dao.DatabaseConnection;
 import model.Address;
 import model.Supplier;
 
+/**
+ * The SupplierDB class is a Java implementation of the SupplierDBIF interface, providing methods for
+ * retrieving Supplier objects from a database.
+ */
 public class SupplierDB implements SupplierDBIF {
 
 	public static final String FIELDS = "supplier_CVR_PK, supplier_name, supplier_phone, supplier_email, supplier_contact, supplier_address_id_FK";
@@ -23,6 +27,13 @@ public class SupplierDB implements SupplierDBIF {
 
 	private AddressDBIF addressDB = Database.getInstance().getAddressDataBase();
 
+	/**
+	 * This Java function retrieves a supplier from a database by their ID and returns a Supplier object.
+	 * 
+	 * @param supplierCVR The parameter supplierCVR is an integer representing the CVR (Central Business
+	 * Register) number of a supplier.
+	 * @return The method is returning a Supplier object.
+	 */
 	@Override
 	public Supplier findSupplierByID(int supplierCVR) {
 
@@ -49,6 +60,15 @@ public class SupplierDB implements SupplierDBIF {
 		return supplier;
 	}
 
+	/**
+	 * This function builds a Supplier object from a ResultSet if the ResultSet contains a non-null value
+	 * for the supplier_CVR_PK column.
+	 * 
+	 * @param rs ResultSet object containing the data retrieved from the database
+	 * @return The method `buildObjectFromResultset` is returning a `Supplier` object that is built from
+	 * the `ResultSet` `rs`. If the `ResultSet` does not contain a valid primary key (`supplier_CVR_PK`),
+	 * then `null` is returned.
+	 */
 	public Supplier buildObjectFromResultset(ResultSet rs) throws SQLException {
 		if (DataBaseUtilities.check(rs, null, "supplier_CVR_PK")) {
 			return buildObject(rs);
@@ -56,6 +76,13 @@ public class SupplierDB implements SupplierDBIF {
 			return null;
 	}
 
+	/**
+	 * This function builds a Supplier object by setting its properties based on the values in a
+	 * ResultSet.
+	 * 
+	 * @param rs ResultSet object containing the data retrieved from the database query.
+	 * @return A Supplier object is being returned.
+	 */
 	private Supplier buildObject(ResultSet rs) throws SQLException {
 		// Create a new Supplier object
 		Supplier result = new Supplier();
@@ -73,6 +100,12 @@ public class SupplierDB implements SupplierDBIF {
 		return result;
 	}
 
+	/**
+	 * This Java function retrieves all suppliers from a database and returns them as a list of Supplier
+	 * objects.
+	 * 
+	 * @return A list of all suppliers from the database.
+	 */
 	@Override
 	public List<Supplier> getAllSuppliers() {
 		List<Supplier> list = new ArrayList<>();

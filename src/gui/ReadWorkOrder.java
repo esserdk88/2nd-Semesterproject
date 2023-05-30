@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
@@ -20,14 +22,24 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
+import controller.EmployeeController;
+import controller.MaintenanceController;
+import controller.WorkOrderController;
+import controller.interfaces.EmployeeControllerIF;
 import gui.components.DefaultTable;
 import gui.components.JRoundedButton;
+import gui.components.ValueCheckerIF;
+import gui.components.VerifiableTextFieldValue;
+import gui.components.VerifiedValueRecieverIF;
+import model.Employee;
 import model.Maintenance;
 import model.Workorder;
+import javax.swing.UIManager;
+import java.awt.Color;
 
-public class ReadWorkOrder extends JPanel {
-	
-	//Textfields
+public class ReadWorkOrder extends JPanel implements VerifiedValueRecieverIF {
+
+	// Textfields
 	private JTextField txtTitle;
 	private JTextField txtInterval;
 	private JTextField txtAssetID;
@@ -37,18 +49,18 @@ public class ReadWorkOrder extends JPanel {
 	private JTextField txtRegNo;
 	private JTextField txtPriority;
 	private JTextField txtEmployeeID;
-	
-	//Panels
+
+	// Panels
 	private JPanel southPanel;
 	private JPanel centerPanel;
-	
-	//Buttons
+
+	// Buttons
 	private JButton btnCancel;
 	private JButton btnSave;
 	private JButton btnAdd;
 	private JButton btnDelete;
-	
-	//Labels
+
+	// Labels
 	private JLabel lblDescription;
 	private JLabel lblTitle;
 	private JLabel lblAssetID;
@@ -61,24 +73,34 @@ public class ReadWorkOrder extends JPanel {
 	private JLabel lblPrioritize;
 	private JLabel lblClosedBy;
 	private JLabel lblActionsPerformed;
-	
-	//Tabel
+
+	// Tabel
 	private JScrollPane historyScollPane;
 	private DefaultTable historyTable;
 	private JScrollPane scrollPane;
 	private DefaultTable completedActionsTable;
-	
-	//Extra
+
+	// Extra
 	private JScrollPane descriptionScrollPane;
 	private JTextArea textArea;
 	private JCheckBox checkDate;
 	private JSpinner spinner;
 	private Workorder current;
 	
+	//used in when assigning new employee or other employee to current
+	private int employeeID;
+	
+	private MaintenanceController maintenanceController;
+	private WorkOrderController workorderController;
+	private EmployeeControllerIF employeeController;
+	private JButton btnAssignEmployee;
 	/**
 	 * Create the panel.
 	 */
 	public ReadWorkOrder() {
+		maintenanceController = new MaintenanceController();
+		employeeController = new EmployeeController();
+		workorderController = new WorkOrderController();
 		setLayout(new BorderLayout(0, 0));
 		this.setName("Se Arbejdsopgave");
 		setPanels();
@@ -88,7 +110,13 @@ public class ReadWorkOrder extends JPanel {
 		setSpinners();
 		setCheckBoxes();
 	}
-	
+
+	/**
+	 * This function sets the current work order information and updates the corresponding text fields.
+	 * 
+	 * @param current an object of the Workorder class that contains information about the current work
+	 * order being displayed
+	 */
 	public void setCurrentWorkorderInfo(Workorder current) {
 		this.current = current;
 		txtTitle.setText(current.getTitle());
@@ -96,18 +124,69 @@ public class ReadWorkOrder extends JPanel {
 		txtName.setText(current.getAsset().getName());
 		txtType.setText(current.getType());
 		textArea.setText(current.getDescription());
-		if(current.getType().equals("Maintenance")) {
-			//Set Interval??
-//			private JTextField txtInterval;
-		}
-		txtPriority.setText(Short.toString(current.getPriority()));
-		txtEmployeeID.setText(Integer.toString(current.getEmployee().getEmployeeID()));
+		txtRegNo.setText(String.valueOf(current.getWorkOrderID()));
+		txtPriority.setText(current.formatPriority(current.getPriority()));
 
-//		private JTextField txtSerialNumber;
-//		private JTextField txtRegNo;
-		
+		if (current.getType().equals("Maintenance")) {
+			Maintenance maintenanceorder = null;
+			maintenanceorder = maintenanceController.findWorkOrderByID(current.getWorkOrderID());
+			txtInterval.setText(maintenanceorder.getIntervalDayCount() + " dage");
+		} else {
+			txtInterval.setText("Ingen");
+		}
+
+		if (current.getEmployee() != null) {
+			txtEmployeeID.setText(current.getEmployee().getName());
+			employeeID = current.getEmployee().getEmployeeID();
+		} else {
+			txtEmployeeID.setText("Ingen medarbejder");
+		}
+
+		setAssignButtonText();
+	}
+	
+	/**
+	 * This function sets the text of a button to "Skift" if the current employee is not null.
+	 */
+	private void setAssignButtonText() {
+		if (current.getEmployee() != null) {
+			this.btnAssignEmployee.setText("Skift");
+		}
+	}
+	
+	/**
+		* This function assigns an employee to a work order and updates the text field with the employee's
+		* name or "Ingen medarbejder" if no employee is found.
+		* 
+		* @param verifiedValue an integer value that has been verified and is greater than 0. It is used to
+		* find an employee by their ID and assign them to a work order.
+		*/
+	@Override
+	public void receiveVerifiedValue(int verifiedValue) {
+		if(verifiedValue > 0) {
+			boolean successbool = false;
+			Employee assignedEmployee = employeeController.findEmployeeByID(verifiedValue);
+			successbool = workorderController.assignEmployeeToWorkOrder(assignedEmployee, current);
+			this.txtEmployeeID.setText(assignedEmployee.getName());
+		}
+		else {
+			this.txtEmployeeID.setText("Ingen medarbejder");
+		}
+		setAssignButtonText();
+	}
+	
+	/**
+	 * The function opens a window to retrieve an employee ID using a VerifiableTextFieldValue object.
+	 */
+	private void btnAssignEmployeePressed() {
+		//Open window to retrieve an employeeID, employeeIdSelected uses this instanses implementation of recieveVerifiedValue through the VerifiedValueRecieverIF interface
+		//I know it's stupid, but i don't know how else to do it. 
+		VerifiableTextFieldValue employeeIdSelecter = new VerifiableTextFieldValue((ValueCheckerIF) employeeController, "indtast et medarbejder id", "indtast et medarbejder id", this);
 	}
 
+	/**
+	 * This function sets up a JCheckBox with specific properties and adds it to a panel.
+	 */
 	private void setCheckBoxes() {
 		checkDate = new JCheckBox("Lukkes dato");
 		checkDate.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -120,6 +199,9 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(checkDate, gbc_checkDate);
 	}
 
+	/**
+	 * This function sets up a JSpinner with a specific date format and adds it to a panel.
+	 */
 	private void setSpinners() {
 		SimpleDateFormat spinnerModel = new SimpleDateFormat("dd.MM.yyyy");
 		spinner = new JSpinner();
@@ -133,14 +215,17 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(spinner, gbc_spinner);
 	}
 
+	/**
+	 * This function sets up and adds buttons to a graphical user interface.
+	 */
 	private void setButtons() {
-		
+
 		btnCancel = new JRoundedButton("Udskyd arbejdsordre");
 		southPanel.add(btnCancel);
-		
+
 		btnSave = new JRoundedButton("Færddiggør arbejdsordre");
 		southPanel.add(btnSave);
-		
+
 		btnAdd = new JRoundedButton("Tilføj ny");
 		GridBagConstraints gbc_btnAdd = new GridBagConstraints();
 		gbc_btnAdd.fill = GridBagConstraints.HORIZONTAL;
@@ -148,7 +233,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_btnAdd.gridx = 9;
 		gbc_btnAdd.gridy = 9;
 		centerPanel.add(btnAdd, gbc_btnAdd);
-		
+
 		btnDelete = new JRoundedButton("Slet");
 		GridBagConstraints gbc_btnDelete = new GridBagConstraints();
 		gbc_btnDelete.insets = new Insets(0, 0, 5, 5);
@@ -156,16 +241,15 @@ public class ReadWorkOrder extends JPanel {
 		gbc_btnDelete.gridx = 9;
 		gbc_btnDelete.gridy = 10;
 		centerPanel.add(btnDelete, gbc_btnDelete);
-		
-		//btnCancel.addActionListener(e -> AddMethodToCallHere);
-		//btnSave.addActionListener(e -> AddMethodToCallHere);
-		//btnAdd.addActionListener(e -> AddMethodToCallHere);
-		//btnDelete.addActionListener(e -> AddMethodToCallHere);
 	}
 
+	/**
+	 * This function sets up two tables with specific column names and adds them to a panel with specific
+	 * constraints.
+	 */
 	private void setTables() {
 		historyScollPane = new JScrollPane();
-		historyScollPane.setPreferredSize(new Dimension(10, 0)); //Changes size of table
+		historyScollPane.setPreferredSize(new Dimension(10, 0)); // Changes size of table
 		GridBagConstraints gbc_historyScollPane = new GridBagConstraints();
 		gbc_historyScollPane.gridheight = 3;
 		gbc_historyScollPane.gridwidth = 2;
@@ -174,12 +258,11 @@ public class ReadWorkOrder extends JPanel {
 		gbc_historyScollPane.gridx = 1;
 		gbc_historyScollPane.gridy = 9;
 		centerPanel.add(historyScollPane, gbc_historyScollPane);
-		
-		//TODO update historyScollPane
-		String[] columnsHistory = new String[] { "Reg. nr", "Start dato", "Lukket dato" };
+
+		String[] columnsHistory = new String[] { "ID", "Åbnet", "Lukket" };
 		historyTable = new DefaultTable(null, columnsHistory);
 		historyScollPane.setViewportView(historyTable);
-		
+
 		scrollPane = new JScrollPane();
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.gridheight = 3;
@@ -189,15 +272,17 @@ public class ReadWorkOrder extends JPanel {
 		gbc_scrollPane.gridx = 4;
 		gbc_scrollPane.gridy = 9;
 		centerPanel.add(scrollPane, gbc_scrollPane);
-		
-		//TODO update completedActionsTable
+
 		String[] columnsCompletedActions = new String[] { "Reg. af", "Dato", "Bemærkning" };
 		completedActionsTable = new DefaultTable(null, columnsCompletedActions);
 		scrollPane.setViewportView(completedActionsTable);
 	}
 
+	/**
+	 * This function sets up labels and text fields for a graphical user interface.
+	 */
 	private void setLabelsAndTextFields() {
-		
+
 		textArea = new JTextArea();
 		textArea.setWrapStyleWord(true);
 		textArea.setLineWrap(true);
@@ -210,7 +295,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_descriptionScrollPane.gridx = 4;
 		gbc_descriptionScrollPane.gridy = 2;
 		centerPanel.add(descriptionScrollPane, gbc_descriptionScrollPane);
-		
+
 		lblDescription = new JLabel("Beskrivelse");
 		GridBagConstraints gbc_lblDescription = new GridBagConstraints();
 		gbc_lblDescription.anchor = GridBagConstraints.WEST;
@@ -218,7 +303,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblDescription.gridx = 4;
 		gbc_lblDescription.gridy = 1;
 		centerPanel.add(lblDescription, gbc_lblDescription);
-		
+
 		lblTitle = new JLabel("Emne");
 		GridBagConstraints gbc_lblTitle = new GridBagConstraints();
 		gbc_lblTitle.anchor = GridBagConstraints.WEST;
@@ -226,7 +311,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblTitle.gridx = 1;
 		gbc_lblTitle.gridy = 2;
 		centerPanel.add(lblTitle, gbc_lblTitle);
-		
+
 		txtTitle = new JTextField();
 		GridBagConstraints gbc_txtTitle = new GridBagConstraints();
 		gbc_txtTitle.insets = new Insets(0, 0, 5, 5);
@@ -235,7 +320,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtTitle.gridy = 2;
 		centerPanel.add(txtTitle, gbc_txtTitle);
 		txtTitle.setColumns(10);
-		
+
 		lblAssetID = new JLabel("Maskine ID");
 		GridBagConstraints gbc_lblAssetID = new GridBagConstraints();
 		gbc_lblAssetID.anchor = GridBagConstraints.WEST;
@@ -243,7 +328,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblAssetID.gridx = 1;
 		gbc_lblAssetID.gridy = 3;
 		centerPanel.add(lblAssetID, gbc_lblAssetID);
-		
+
 		txtAssetID = new JTextField();
 		txtAssetID.setColumns(10);
 		txtAssetID.setEnabled(false);
@@ -253,7 +338,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtAssetID.gridx = 2;
 		gbc_txtAssetID.gridy = 3;
 		centerPanel.add(txtAssetID, gbc_txtAssetID);
-		
+
 		lblName = new JLabel("Navn");
 		GridBagConstraints gbc_lblName = new GridBagConstraints();
 		gbc_lblName.anchor = GridBagConstraints.WEST;
@@ -261,7 +346,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblName.gridx = 1;
 		gbc_lblName.gridy = 4;
 		centerPanel.add(lblName, gbc_lblName);
-		
+
 		txtName = new JTextField();
 		txtName.setEnabled(false);
 		txtName.setColumns(10);
@@ -271,7 +356,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtName.gridx = 2;
 		gbc_txtName.gridy = 4;
 		centerPanel.add(txtName, gbc_txtName);
-		
+
 		lblSerialNumber = new JLabel("Serienr.");
 		GridBagConstraints gbc_lblSerialNumber = new GridBagConstraints();
 		gbc_lblSerialNumber.anchor = GridBagConstraints.WEST;
@@ -279,7 +364,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblSerialNumber.gridx = 1;
 		gbc_lblSerialNumber.gridy = 5;
 		centerPanel.add(lblSerialNumber, gbc_lblSerialNumber);
-		
+
 		txtSerialNumber = new JTextField();
 		GridBagConstraints gbc_txtSerialNumber = new GridBagConstraints();
 		gbc_txtSerialNumber.insets = new Insets(0, 0, 5, 5);
@@ -288,7 +373,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtSerialNumber.gridy = 5;
 		centerPanel.add(txtSerialNumber, gbc_txtSerialNumber);
 		txtSerialNumber.setColumns(10);
-		
+
 		lblPrioritize = new JLabel("Prioritering");
 		GridBagConstraints gbc_lblPrioritize = new GridBagConstraints();
 		gbc_lblPrioritize.anchor = GridBagConstraints.WEST;
@@ -296,7 +381,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblPrioritize.gridx = 1;
 		gbc_lblPrioritize.gridy = 6;
 		centerPanel.add(lblPrioritize, gbc_lblPrioritize);
-		
+
 		txtPriority = new JTextField();
 		GridBagConstraints gbc_txtPriority = new GridBagConstraints();
 		gbc_txtPriority.insets = new Insets(0, 0, 5, 5);
@@ -305,7 +390,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtPriority.gridy = 6;
 		centerPanel.add(txtPriority, gbc_txtPriority);
 		txtPriority.setColumns(10);
-		
+
 		lblType = new JLabel("Type");
 		GridBagConstraints gbc_lblType = new GridBagConstraints();
 		gbc_lblType.anchor = GridBagConstraints.WEST;
@@ -313,7 +398,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblType.gridx = 4;
 		gbc_lblType.gridy = 6;
 		centerPanel.add(lblType, gbc_lblType);
-		
+
 		txtType = new JTextField();
 		GridBagConstraints gbc_txtType = new GridBagConstraints();
 		gbc_txtType.insets = new Insets(0, 0, 5, 5);
@@ -322,7 +407,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtType.gridy = 6;
 		centerPanel.add(txtType, gbc_txtType);
 		txtType.setColumns(10);
-		
+
 		lblRegNumber = new JLabel("Reg nr.");
 		GridBagConstraints gbc_lblRegNumber = new GridBagConstraints();
 		gbc_lblRegNumber.anchor = GridBagConstraints.WEST;
@@ -330,7 +415,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblRegNumber.gridx = 1;
 		gbc_lblRegNumber.gridy = 7;
 		centerPanel.add(lblRegNumber, gbc_lblRegNumber);
-		
+
 		txtRegNo = new JTextField();
 		GridBagConstraints gbc_txtRegNo = new GridBagConstraints();
 		gbc_txtRegNo.insets = new Insets(0, 0, 5, 5);
@@ -339,7 +424,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtRegNo.gridy = 7;
 		centerPanel.add(txtRegNo, gbc_txtRegNo);
 		txtRegNo.setColumns(10);
-		
+
 		lblInterval = new JLabel("Interval");
 		GridBagConstraints gbc_lblInterval = new GridBagConstraints();
 		gbc_lblInterval.anchor = GridBagConstraints.WEST;
@@ -347,7 +432,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblInterval.gridx = 4;
 		gbc_lblInterval.gridy = 7;
 		centerPanel.add(lblInterval, gbc_lblInterval);
-		
+
 		txtInterval = new JTextField();
 		GridBagConstraints gbc_txtInterval = new GridBagConstraints();
 		gbc_txtInterval.insets = new Insets(0, 0, 5, 5);
@@ -356,7 +441,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_txtInterval.gridy = 7;
 		centerPanel.add(txtInterval, gbc_txtInterval);
 		txtInterval.setColumns(10);
-		
+
 		lblClosedBy = new JLabel("Lukkes af");
 		GridBagConstraints gbc_lblClosedBy = new GridBagConstraints();
 		gbc_lblClosedBy.anchor = GridBagConstraints.WEST;
@@ -364,8 +449,10 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblClosedBy.gridx = 7;
 		gbc_lblClosedBy.gridy = 7;
 		centerPanel.add(lblClosedBy, gbc_lblClosedBy);
-		
+
 		txtEmployeeID = new JTextField();
+		txtEmployeeID.setBackground(new Color(255, 255, 255));
+		txtEmployeeID.setEditable(false);
 		GridBagConstraints gbc_txtEmployeeID = new GridBagConstraints();
 		gbc_txtEmployeeID.insets = new Insets(0, 0, 5, 5);
 		gbc_txtEmployeeID.fill = GridBagConstraints.HORIZONTAL;
@@ -374,6 +461,19 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(txtEmployeeID, gbc_txtEmployeeID);
 		txtEmployeeID.setColumns(10);
 		
+		btnAssignEmployee = new JRoundedButton("Tildel");
+		btnAssignEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnAssignEmployeePressed();
+			}
+		});
+		GridBagConstraints gbc_btnAssignEmployee = new GridBagConstraints();
+		gbc_btnAssignEmployee.fill = GridBagConstraints.BOTH;
+		gbc_btnAssignEmployee.insets = new Insets(0, 0, 5, 5);
+		gbc_btnAssignEmployee.gridx = 9;
+		gbc_btnAssignEmployee.gridy = 7;
+		centerPanel.add(btnAssignEmployee, gbc_btnAssignEmployee);
+
 		lblHistory = new JLabel("Historik");
 		lblHistory.setFont(new Font("Tahoma", Font.BOLD, 12));
 		GridBagConstraints gbc_lblHistory = new GridBagConstraints();
@@ -382,7 +482,7 @@ public class ReadWorkOrder extends JPanel {
 		gbc_lblHistory.gridx = 1;
 		gbc_lblHistory.gridy = 8;
 		centerPanel.add(lblHistory, gbc_lblHistory);
-		
+
 		lblActionsPerformed = new JLabel("Aktioner udført");
 		lblActionsPerformed.setFont(new Font("Tahoma", Font.BOLD, 12));
 		GridBagConstraints gbc_lblActionsPerformed = new GridBagConstraints();
@@ -393,21 +493,25 @@ public class ReadWorkOrder extends JPanel {
 		centerPanel.add(lblActionsPerformed, gbc_lblActionsPerformed);
 	}
 
+	/**
+	 * The function sets up two panels, one with a flow layout and the other with a grid bag layout, and
+	 * adds them to the main panel with specific constraints.
+	 */
 	private void setPanels() {
 		southPanel = new JPanel();
 		FlowLayout fl_southPanel = (FlowLayout) southPanel.getLayout();
 		fl_southPanel.setAlignment(FlowLayout.RIGHT);
 		add(southPanel, BorderLayout.SOUTH);
-		
+
 		centerPanel = new JPanel();
 		add(centerPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_centerPanel = new GridBagLayout();
-		gbl_centerPanel.columnWidths = new int[]{0, 0, 101, 39, 55, 101, 59, 88, 0, 0, 0};
-		gbl_centerPanel.rowHeights = new int[] {30, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0};
-		gbl_centerPanel.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-		gbl_centerPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+		gbl_centerPanel.columnWidths = new int[] { 0, 0, 101, 39, 55, 101, 59, 88, 0, 0, 0 };
+		gbl_centerPanel.rowHeights = new int[] { 30, 0, 0, 0, 33, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_centerPanel.columnWeights = new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+		gbl_centerPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
 		centerPanel.setLayout(gbl_centerPanel);
-		
+
 	}
 
 }

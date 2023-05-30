@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
@@ -28,14 +30,13 @@ import controller.AssetController;
 import controller.MaintenanceController;
 import controller.RepairController;
 import controller.ServiceController;
-import dal.interfaces.EmployeeDBIF;
-import dal.interfaces.ReferenceDBIF;
 import dao.Database;
 import gui.components.GUIPopUpMessages;
 import gui.components.JRoundedButton;
 import model.Asset;
 import model.Employee;
 import model.Reference;
+import java.awt.event.ActionListener;
 
 
 public class CreateWorkOrder extends JPanel {
@@ -96,11 +97,18 @@ public class CreateWorkOrder extends JPanel {
 	private JLabel repeatedLabel;
 	private JCheckBox repeatedCheckBox;
 	
+	//Controller
+	MaintenanceController maintenanceController;
+	RepairController repairController;
+	ServiceController serviceController;
 
 	/**
 	 * Create the panel.
 	 */
 	public CreateWorkOrder() {
+		maintenanceController = new MaintenanceController();
+		repairController = new RepairController();
+		serviceController = new ServiceController();
 		setLayout(new BorderLayout(0, 0));
 		this.setFocusable(true);
 		this.setName("Opret Arbejdsodre");
@@ -114,6 +122,9 @@ public class CreateWorkOrder extends JPanel {
 		reference = new Reference();
 	}
 	
+	// The above code is a constructor method for a class that creates a work order for a given asset. It
+	// takes in an instance of the Asset class as a parameter and sets it as the current asset for the
+	// work order. It also initializes some variables and calls a method called setupTextFields().
 	public CreateWorkOrder(Asset currentAsset) {
 		this();
 		asset = currentAsset;
@@ -121,6 +132,10 @@ public class CreateWorkOrder extends JPanel {
 		setupTextFields();
 	}
 	
+	/**
+	 * The function sets up text fields for an asset by disabling them and populating them with the
+	 * asset's ID and name.
+	 */
 	private void setupTextFields() {
 		txtAssetID.setEnabled(false);
 		txtName.setEnabled(false);
@@ -128,14 +143,34 @@ public class CreateWorkOrder extends JPanel {
 		txtName.setText(asset.getName());
 	}
 	
+	/**
+	 * This function creates a work order and checks if an asset and reference are selected before calling
+	 * a controller of a certain type.
+	 * 
+	 * @return The method is returning a boolean value, which is either true or false depending on the
+	 * success of calling the controller of a certain type.
+	 */
 	private boolean createWorkOrder() {
-		if(asset == null) {GUIPopUpMessages.warningMessage("No Asset selected!", "Error!"); return false;}
+		if(asset == null) {
+			GUIPopUpMessages.warningMessage("No Asset selected!", "Error!"); return false;
+		}
 		String type = typeComboBox.getSelectedItem().toString();
-		if(!type.equals("Vedligeholdelse") && reference.getCvr() == 0) {GUIPopUpMessages.warningMessage("No Reference selected!", "Error!"); return false;}
+		if(!type.equals("Vedligeholdelse") && reference.getCvr() == 0) {
+			GUIPopUpMessages.warningMessage("No Reference selected!", "Error!");
+			return false;
+		}
 		boolean success = callControllerOfType(type);
 	    return success;
 	}
 	
+	/**
+	 * This function creates a work order of a specific type (repair, service, or maintenance) based on
+	 * user input and returns a boolean indicating success or failure.
+	 * 
+	 * @param type A string representing the type of work order to be created (either "Reparation",
+	 * "Serviceaftale", or "Vedligeholdelse").
+	 * @return The method is returning a boolean value.
+	 */
 	private boolean callControllerOfType(String type) {
 		int intAssetID = Integer.valueOf(assetID);
 		String topic = topicTextField.getText();
@@ -148,7 +183,6 @@ public class CreateWorkOrder extends JPanel {
 	    
 	    	//Creating WorkOrder of type Repair/Reperation
 	        case "Reparation":
-	            RepairController repairController = new RepairController();
 			try {
 				return repairController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 														Integer.valueOf(referenceCVR));
@@ -157,7 +191,6 @@ public class CreateWorkOrder extends JPanel {
 			
 			//Creating WorkOrder of type Service/Serviceaftale
 	        case "Serviceaftale":
-	            ServiceController serviceController = new ServiceController();
 			try {
 				return serviceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 	            										Integer.valueOf(referenceCVR));
@@ -166,7 +199,6 @@ public class CreateWorkOrder extends JPanel {
 			
 			//Creating WorkOrder of type Maintenance/Vedligeholdelse
 	        case "Vedligeholdelse":
-	            MaintenanceController maintenanceController = new MaintenanceController();
 			try {
 				return maintenanceController.createWorkOrder(intAssetID, topic, startDate, priority, description,
 	            											(int) intervalSpinner.getValue(),
@@ -180,6 +212,13 @@ public class CreateWorkOrder extends JPanel {
 	    }
 	}
 	
+	/**
+	 * This function returns a short value representing the priority selected from a combo box.
+	 * 
+	 * @return The method is returning a short data type, which represents the priority level based on the
+	 * selected item in the priorityComboBox. The value returned depends on the selected item: 3 for
+	 * "Høj", 2 for "Mellem", and 1 for any other value.
+	 */
 	private short getPriorityFromComboBox() {
 	    String priority = priorityComboBox.getSelectedItem().toString();
 	    switch(priority) {
@@ -193,6 +232,9 @@ public class CreateWorkOrder extends JPanel {
 	}
 
 	
+	/**
+	 * The function sets the value of a spinner based on the selected item in a combo box.
+	 */
 	private void setIntervalFromTemplate() {
 		switch(templatesComboBox.getSelectedItem().toString()) {
 		case"2 uger":
@@ -212,94 +254,84 @@ public class CreateWorkOrder extends JPanel {
 			break;
 		}
 	}
+	/**
+	 * A generic method to check an entity based on user input.
+	 *
+	 * @param <T> The type of the entity.
+	 * @param textField The text field to check.
+	 * @param storedId The stored ID to compare the input to.
+	 * @param fetcher A function that fetches the entity based on an integer ID.
+	 * @param setter A consumer that sets the entity and storedId.
+	 * @param errorMsg The error message to display if a NumberFormatException occurs.
+	 */
+	private <T> void checkEntity(JTextField textField, String storedId, Function<Integer, T> fetcher, BiConsumer<T, Integer> setter, String errorMsg) {
+	    if (textField.getText().length() > 0) {
+	        if (!textField.getText().equals(storedId)) {
+	            storedId = textField.getText();
+	            int id = Integer.parseInt(textField.getText());
+	            Thread workerThread = new Thread(() -> {
+	                T entityCheck = null;
+	                try {
+	                    entityCheck = fetcher.apply(id);
+	                } catch (NumberFormatException e1) {
+	                    GUIPopUpMessages.warningMessage(errorMsg, "Error!");
+	                }
+	                if (entityCheck == null) {
+	                    textField.setBackground(Color.red);
+	                } else {
+	                    textField.setBackground(Color.green);
+	                    setter.accept(entityCheck, id);
+	                }
+	            });
+	            workerThread.start();
+	        }
+	    }
+	}
 
+	/**
+	 * Checks the asset id field for a valid Asset
+	 */
 	private void checkAsset() {
-		if(txtAssetID.getText().length()>0) {
-			if(!txtAssetID.getText().equals(assetID)) {
-				Thread workerThread = new Thread(() -> {
-				assetID = txtAssetID.getText();
-				Asset assetCheck = null;
-				AssetController assetCtr = new AssetController();
-					try {
-						assetCheck = assetCtr.findAssetByID(Integer.parseInt(assetID));
-					} catch (NumberFormatException e1) {
-						GUIPopUpMessages.warningMessage("Only Number in AssetID Field", "Error!");
-						System.out.println("Letter in Asset Text Field");
-					} catch (SQLException e1) {
-						GUIPopUpMessages.warningMessage("Error retrieving data from database", "Error!");
-					}
-
-				if(assetCheck == null) {
-					txtAssetID.setBackground(Color.red);
-					assetID = "";
-					txtName.setText("");
-				}else {
-					txtAssetID.setBackground(Color.green);
-					txtName.setText(assetCheck.getName());
-					asset = assetCheck;
-					}
-				});
-				workerThread.start();
-				
-			}
-		}
+	    checkEntity(txtAssetID, assetID, id -> {
+	        try {
+	            return new AssetController().findAssetByID(id);
+	        } catch (SQLException e1) {
+	            GUIPopUpMessages.warningMessage("Error retrieving data from database", "Error!");
+	            return null;
+	        }
+	    }, (assetCheck, newAssetID) -> {
+	        txtName.setText(assetCheck.getName());
+	        asset = assetCheck;
+	        assetID = newAssetID.toString();
+	    }, "Only Number in AssetID Field");
 	}
+
+	/**
+	 * Checks the reference text field for a valid Reference
+	 */
 	private void checkReference() {
-		if(referenceTextField.getText().length()>0) {
-			if(!referenceTextField.getText().equals(referenceCVR)) {
-				Thread workerThread = new Thread(() -> {
-				referenceCVR = referenceTextField.getText();
-				Reference referenceCheck = null;
-				ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
-					try {
-						referenceCheck = referenceDB.findReferenceByID(Integer.parseInt(referenceCVR));
-					} catch (NumberFormatException e1) {
-						GUIPopUpMessages.warningMessage("Only Number in reference Field", "Error!");
-						System.out.println("Letter in Reference Text Field");
-					}
-
-				if(referenceCheck == null) {
-					referenceTextField.setBackground(Color.red);
-					reference.setCvr(0);
-				}else {
-					referenceTextField.setBackground(Color.green);
-					reference = referenceCheck;
-					reference.setCvr(Integer.parseInt(referenceCVR));
-					}
-				});
-				workerThread.start();
-				
-			}
-		}
+	    checkEntity(referenceTextField, referenceCVR, id -> Database.getInstance().getReferenceDataBase().findReferenceByID(id), (referenceCheck, newReferenceCVR) -> {
+	        reference = referenceCheck;
+	        reference.setCvr(newReferenceCVR);
+	        referenceCVR = newReferenceCVR.toString();
+	    }, "Only Number in reference Field");
 	}
+
+	/**
+	 * Checks the employee text field for a valid Employee
+	 */
 	private void checkEmployee() {
-		if(employeeTextField.getText().length()>0) {
-			if(!employeeTextField.getText().equals(employeeID)) {
-				Thread workerThread = new Thread(() -> {
-				employeeID = employeeTextField.getText();
-				Employee employeeCheck = null;
-				EmployeeDBIF employeeDB = Database.getInstance().getEmployeeDataBase();
-					try {
-						employeeCheck = employeeDB.findEmployeeByID(Integer.parseInt(employeeID));
-					} catch (NumberFormatException e1) {
-						GUIPopUpMessages.warningMessage("Only Number in employee Field", "Error!");
-						System.out.println("Letter in Reference Text Field");
-					}
-
-				if(employeeCheck == null) {
-					employeeTextField.setBackground(Color.red);
-				}else {
-					employeeTextField.setBackground(Color.green);
-					employee = employeeCheck;
-					employee.setCprNumber(employeeID);
-					}
-				});
-				workerThread.start();
-				
-			}
-		}
+	    checkEntity(employeeTextField, employeeID, id -> Database.getInstance().getEmployeeDataBase().findEmployeeByID(id), (employeeCheck, newEmployeeID) -> {
+	        employee = employeeCheck;
+	        employee.setCprNumber(newEmployeeID.toString());
+	        employeeID = newEmployeeID.toString();
+	    }, "Only Number in employee Field");
 	}
-	
+
+
+	/**
+	 * This function enables or disables certain fields based on the selected item in a combo box.
+	 */
 	private void setMaintenanceFields() {
 		if(typeComboBox.getSelectedItem().toString().equals("Vedligeholdelse")) {
 			intervalSpinner.setEnabled(true);
@@ -318,16 +350,59 @@ public class CreateWorkOrder extends JPanel {
 		}
 	}
 	
+	/**
+	 * This function creates a new thread to execute the "createWorkOrder" method and displays a success
+	 * message if the method returns true.
+	 */
 	private void createWorkOrderButtonMethod() {
 		Thread workerThread = new Thread(() -> {
 		    boolean success = createWorkOrder();
 		    if(success) {
-		    	GUIPopUpMessages.informationMessage("Creation was successfull", "Success!");
+		    	resetTextFields();
+		    	resetSpinners();
+		    	resetComboboxes();
+		    	GUIPopUpMessages.informationMessage("Opgaven er blevet oprettet", "Success!");
 		    }
 		});
 		workerThread.start();
 	}
+	
+	/**
+	 * The function resets the values and background colors of several text fields.
+	 */
+	private void resetTextFields() {
+		this.txtAssetID.setText("");
+		this.txtAssetID.setBackground(Color.white);
+		this.txtName.setText("");
+		this.txtWorkOrderID.setText("");
+		this.employeeTextField.setText("");
+		this.employeeTextField.setBackground(Color.white);
+		this.referenceTextField.setText("");
+		this.referenceTextField.setBackground(Color.white);
+		this.serieNrTextField.setText("");
+		this.topicTextField.setText("");
+		this.textArea.setText("");
+	}
+	
+	/**
+	 * The function resets spinners by calling the setSpinners() function.
+	 */
+	private void resetSpinners() {
+		setSpinners();
+	}
+	
+	/**
+	 * The function resets the selected index of three different comboboxes to zero.
+	 */
+	private void resetComboboxes() {
+		priorityComboBox.setSelectedIndex(0);
+		typeComboBox.setSelectedIndex(0);
+		templatesComboBox.setSelectedIndex(0);
+	}
 
+	/**
+	 * This function sets up a JPanel with a GridBagLayout and adds it to the center of the main panel.
+	 */
 	private void setPanels() {
 		centerLeftPanel = new JPanel();
 		add(centerLeftPanel, BorderLayout.CENTER);
@@ -339,8 +414,12 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.setLayout(gbl_centerLeftPanel);
 		
 	}
+
+	/**
+	 * This function sets up the GUI components for creating a work order, including text fields, buttons,
+	 * and labels.
+	 */
 	private void setButtons() {
-		
 		employeeTextField = new JTextField();
 		employeeTextField.addFocusListener(new FocusAdapter() {
 			@Override
@@ -439,6 +518,8 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(lblRegNr, gbc_lblRegNr);
 		
 		txtWorkOrderID = new JTextField();
+		txtWorkOrderID.setEnabled(false);
+		txtWorkOrderID.setText("ikke implementeret");
 		GridBagConstraints gbc_txtWorkOrderID = new GridBagConstraints();
 		gbc_txtWorkOrderID.weighty = 0;
 		gbc_txtWorkOrderID.weightx = 0;
@@ -471,6 +552,8 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(lblSerieNr, gbc_lblSerieNr);
 		
 		serieNrTextField = new JTextField();
+		serieNrTextField.setEnabled(false);
+		serieNrTextField.setText("ikke implementeret");
 		GridBagConstraints gbc_serieNrTextField = new GridBagConstraints();
 		gbc_serieNrTextField.weighty = 0;
 		gbc_serieNrTextField.weightx = 0;
@@ -523,6 +606,8 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(repeatedCheckBox, gbc_repeatedCheckBox);
 		
 		createWorkOrderButton = new JRoundedButton("Opret arbejdsordre");
+//		createWorkOrderButton.addActionListener(new ActionListener() {
+//		});
 
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.anchor = GridBagConstraints.SOUTH;
@@ -534,6 +619,9 @@ public class CreateWorkOrder extends JPanel {
 		createWorkOrderButton.addActionListener(e -> createWorkOrderButtonMethod());
 	}
 
+	/**
+	 * This function sets up various text fields and a text area with specific constraints in a Java GUI.
+	 */
 	private void setTextFields() {
 
 		topicTextField = new JTextField();
@@ -590,6 +678,10 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(scrollPane, gbc_scrollPane);
 		
 	}
+
+	/**
+	 * This function sets up JSpinners for selecting start and end dates and an interval.
+	 */
 	private void setSpinners() {
 		
 		spinnerModel = new SimpleDateFormat("dd.MM.yyyy");
@@ -630,6 +722,10 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(intervalSpinner, gbc_intervalTextField);
 		
 	}
+
+	/**
+	 * This function sets up a JComboBox with predefined options and adds it to a panel.
+	 */
 	private void setComboBoxes() {
 		
 		templatesComboBox = new JComboBox();
@@ -644,6 +740,10 @@ public class CreateWorkOrder extends JPanel {
 		centerLeftPanel.add(templatesComboBox, gbc_templatesComboBox);
 		templatesComboBox.addActionListener(e -> setIntervalFromTemplate());
 	}
+
+	/**
+	 * This function sets the labels for a GUI interface using GridBagConstraints.
+	 */
 	private void setLabels() {
 		
 		lblTitle = new JLabel("Emne");
@@ -714,7 +814,6 @@ public class CreateWorkOrder extends JPanel {
 		gbc_lblDescription.gridx = 1;
 		gbc_lblDescription.gridy = 9;
 		centerLeftPanel.add(lblDescription, gbc_lblDescription);
-		
 	}
 
 }

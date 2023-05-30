@@ -22,9 +22,9 @@ import javax.swing.border.EmptyBorder;
 
 import controller.WorkOrderController;
 import controller.interfaces.WorkOrderControllerIF;
+import dao.Database;
 import gui.components.GUIPopUpMessages;
 import gui.components.JRoundedButton;
-
 
 public class SwitchEmployeeWorkorders extends JFrame {
 
@@ -35,6 +35,9 @@ public class SwitchEmployeeWorkorders extends JFrame {
 	private JButton btnConfirm;
 	private JButton btnNewButton;
 	private JLabel lblHowTo;
+	
+	//Controllers
+	WorkOrderController workOrderController;
 
 	/**
 	 * Launch the application.
@@ -56,6 +59,8 @@ public class SwitchEmployeeWorkorders extends JFrame {
 	 * Create the frame.
 	 */
 	public SwitchEmployeeWorkorders() {
+		this.workOrderController = new WorkOrderController();
+		this.setVisible(true);
 		setTitle("Ombyt opgaver");
 		addFocusListener(new FocusAdapter() {
 			@Override
@@ -137,6 +142,7 @@ public class SwitchEmployeeWorkorders extends JFrame {
 		south_panel.add(btnConfirm);
 		
 		btnNewButton = new JRoundedButton("Afbryd");
+		btnNewButton.setText("Luk");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnCanclePressed();
@@ -155,11 +161,18 @@ public class SwitchEmployeeWorkorders extends JFrame {
 		checkConfirmGreyout();
 	}
 	
+	/**
+	 * This function checks if a work order ID entered in a text field is valid and has an associated
+	 * employee.
+	 * 
+	 * @param textField A JTextField object that contains the user input for a workorder ID.
+	 * @return The method is returning a boolean value, which indicates whether the work order ID entered
+	 * in the text field is valid or not.
+	 */
 	private boolean checkForValidWorkorder(JTextField textField) {
 		boolean validId = false;
 		if(!textField.getText().isBlank()) {
 			int workorderId = -1;
-			WorkOrderControllerIF workOrderController = new WorkOrderController();
 			try {
 				workorderId = Integer.valueOf(textField.getText());
 				if(workOrderController.workorderHasEmployee(workorderId)) {
@@ -179,6 +192,10 @@ public class SwitchEmployeeWorkorders extends JFrame {
 		return validId;
 	}
 	
+	/**
+	 * This function checks if two work order text fields are valid and enables or disables a confirm
+	 * button accordingly.
+	 */
 	private void checkConfirmGreyout() {
 		if(checkForValidWorkorder(textFieldWoOne) && checkForValidWorkorder(textFieldWoTwo)) {
 			btnConfirm.setEnabled(true);
@@ -188,12 +205,15 @@ public class SwitchEmployeeWorkorders extends JFrame {
 		}
 	}
 	
+	/**
+	 * This function switches two work orders for an employee and displays an error message if there is a
+	 * database error.
+	 */
 	private void btnConfirmPressed() {
-		WorkOrderControllerIF workOrderController = new WorkOrderController();
 		try {
 			int workorderIdOne = Integer.valueOf(textFieldWoOne.getText());
 			int workorderIdTwo = Integer.valueOf(textFieldWoTwo.getText());
-			if(workOrderController.switchEmployeeWorkorders(workOrderController.getWorkorderByID(workorderIdOne), workOrderController.getWorkorderByID(workorderIdTwo))) {
+			if(workOrderController.switchEmployeeWorkorders(workOrderController.getWorkorderByID(workorderIdOne), workOrderController.getWorkorderByID(workorderIdTwo), false)) {
 				this.dispose();
 			}
 			else {
@@ -207,6 +227,9 @@ public class SwitchEmployeeWorkorders extends JFrame {
 		}
 	}
 
+	/**
+	 * The function disposes of the current window when the "Cancel" button is pressed.
+	 */
 	private void btnCanclePressed() {
 		this.dispose();
 	}

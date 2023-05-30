@@ -61,6 +61,7 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	//Used when selecting specific workorders. This script is not complete before being processed in select workordersById method.
 	public static final String SELECT_WORKORDERS_BY_ID = "SELECT " + FIELDS_COMMON_WITH_ID + " FROM Workorder WHERE workorder_id_PK IN (";
 	
+	public static final String SELECT_ALL_WORKORDERS = "SELECT * from WorkOrdersView";
 	public static final String SELECT_ALL_MAINTENANCE = "SELECT * FROM MaintenanceView";
 	public static final String SELECT_ALL_SERVICE = "SELECT * FROM ServiceView";
 	public static final String SELECT_ALL_REPAIR = "SELECT * FROM RepairView";
@@ -81,8 +82,20 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	private MeasurementDBIF measurementDB = Database.getInstance().getMeasurementDataBase();
 	private ReferenceDBIF referenceDB = Database.getInstance().getReferenceDataBase();
 		
-	public WorkOrderDB() {}
+	// The above code is a constructor for a class called WorkOrderDB. It does not have any parameters or
+	// any code inside it. It is used to create an instance of the WorkOrderDB class.
+	public WorkOrderDB() {
+		//Left empty
+	}
 	
+	/**
+	 * This Java function adds a maintenance work order to a database.
+	 * 
+	 * @param workOrder an object of type Maintenance, which contains information about the maintenance
+	 * work order to be added to the database.
+	 * @return A boolean value indicating whether the addition of a maintenance work order was successful
+	 * or not.
+	 */
 	@Override
 	public boolean addMaintenanceWorkOrder(Maintenance workOrder) {
 
@@ -109,6 +122,14 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return success;
 	}
 
+	/**
+	 * This Java function adds a service work order to a database.
+	 * 
+	 * @param workOrder an object of type Service, which contains information about a service work order
+	 * that needs to be added to the database.
+	 * @return The method is returning a boolean value, which indicates whether the addition of a service
+	 * work order was successful or not.
+	 */
 	@Override
 	public boolean addServiceWorkOrder(Service workOrder) {
 
@@ -134,6 +155,14 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return success;
 	}
 
+	/**
+	 * This Java function adds a repair work order to a database.
+	 * 
+	 * @param workOrder an object of type Repair, which contains information about a repair work order
+	 * such as the date, description, and customer information.
+	 * @return The method is returning a boolean value indicating whether the addition of a repair work
+	 * order was successful or not.
+	 */
 	@Override
 	public boolean addRepairWorkOrder(Repair workOrder) {
 		boolean success = false;
@@ -159,6 +188,14 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return success;
 	}
 
+	/**
+	 * This Java function retrieves a maintenance work order from a database by its ID.
+	 * 
+	 * @param workOrderID an integer representing the ID of the maintenance work order that needs to be
+	 * retrieved from the database.
+	 * @return The method is returning a Maintenance object that corresponds to the work order ID passed
+	 * as a parameter. If no Maintenance object is found, it returns null.
+	 */
 	@Override
 	public Maintenance findMaintenanceWorkOrderByID(int workOrderID) {
 
@@ -185,6 +222,13 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return maintenance;
 	}
 
+	/**
+	 * This Java function retrieves a service work order by its ID from a database.
+	 * 
+	 * @param workOrderID an integer representing the ID of the work order for which the service needs to
+	 * be found.
+	 * @return The method is returning a Service object.
+	 */
 	@Override
 	public Service findServiceWorkOrderByID(int workOrderID) {
 		Service service = null;
@@ -210,6 +254,13 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return service;
 	}
 
+	/**
+	 * This Java function retrieves a repair work order from a database by its ID.
+	 * 
+	 * @param workOrderID an integer representing the ID of the repair work order that needs to be
+	 * retrieved from the database.
+	 * @return The method is returning a Repair object.
+	 */
 	@Override
 	public Repair findRepairWorkOrderByID(int workOrderID) {
 		Repair repair = null;
@@ -235,7 +286,35 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		}
 		return repair;
 	}
+	
+	/**
+	 * This function retrieves all workorders from a database and returns them as a list of Workorder
+	 * objects.
+	 * 
+	 * @return A list of Workorder objects is being returned.
+	 */
+	public List<Workorder> getAllWorkorders() throws SQLException {
+		List<Workorder> workorders = new ArrayList<>();
+		
+		Connection con = DatabaseConnection.getInstance().getConnection();
+		try(PreparedStatement psFindAllWorkorders = con.prepareStatement(SELECT_ALL_WORKORDERS)) {
+			ResultSet rs = psFindAllWorkorders.executeQuery();
+			
+			while(rs.next()) {
+				workorders.add(buildWorkorderObjectFromResultset(rs));
+			}
+		}
+		
+		return workorders;
+	}
 
+	/**
+	 * This Java function retrieves all maintenance work orders from a database and returns them as a list
+	 * of Maintenance objects.
+	 * 
+	 * @return A list of Maintenance objects, which are retrieved from the database using a prepared
+	 * statement.
+	 */
 	@Override
 	public List<Maintenance> getAllMaintenanceWorkOrders() {
 		List<Maintenance> list = new ArrayList<>();
@@ -260,6 +339,12 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return list;
 	}
 
+	/**
+	 * This Java function retrieves all service work orders from a database and returns them as a list of
+	 * Service objects.
+	 * 
+	 * @return A list of Service objects representing all service work orders retrieved from the database.
+	 */
 	@Override
 	public List<Service> getAllServiceWorkOrders() {
 		List<Service> list = new ArrayList<>();
@@ -284,6 +369,12 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return list;
 	}
 
+	/**
+	 * This function retrieves all repair work orders from a database and returns them as a list of Repair
+	 * objects.
+	 * 
+	 * @return A list of Repair objects, which are retrieved from the database using a prepared statement.
+	 */
 	@Override
 	public List<Repair> getAllRepairWorkOrders() {
 		List<Repair> list = new ArrayList<>();
@@ -308,6 +399,12 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return list;
 	}
 
+	/**
+	 * This Java function retrieves all unfinished work orders from a database and returns them as a list
+	 * of Workorder objects.
+	 * 
+	 * @return A list of unfinished work orders.
+	 */
 	@Override
 	public List<Workorder> getAllUnfinishedWorkOrders() {
 		List<Workorder> list = new ArrayList<>();
@@ -332,6 +429,13 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return list;
 	}
 
+	/**
+	 * This Java function retrieves all work orders associated with a given asset ID from a database and
+	 * returns them as a list.
+	 * 
+	 * @param assetID The ID of the asset for which we want to retrieve all work orders.
+	 * @return A list of Workorder objects that are associated with a specific asset ID.
+	 */
 	@Override
 	public List<Workorder> getAllWorkOrdersByAssetID(int assetID) {
 		List<Workorder> list = new ArrayList<>();
@@ -356,6 +460,15 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return list;
 	}
 
+	/**
+	 * This Java function deletes a work order from a database by its ID and returns a boolean indicating
+	 * whether the deletion was successful.
+	 * 
+	 * @param workOrderID an integer representing the ID of the work order that needs to be deleted from
+	 * the database.
+	 * @return The method is returning a boolean value indicating whether the deletion of the work order
+	 * with the specified ID was successful or not.
+	 */
 	public boolean deleteWorkOrderByID(int workOrderID) {
 
 		boolean success = false;
@@ -378,6 +491,13 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return success;
 	}
 
+	/**
+	 * This Java function updates a work order in a database with information provided in a Workorder
+	 * object.
+	 * 
+	 * @param workorder A Workorder object that contains the updated information for the work order.
+	 * @return A boolean value indicating whether the update of the workorder was successful or not.
+	 */
 	public boolean updateWorkorder(Workorder workorder) {
 		boolean success = false;
 		String finishedStatement = "UPDATE Workorder SET " + FIELDS_UPDATE_COMMON_WITH_EMPLOYEE
@@ -422,6 +542,17 @@ public class WorkOrderDB implements WorkOrderDBIF {
 	}
 
 	// Builders
+
+	/**
+	 * This function builds a Maintenance object by setting its general fields and specific fields related
+	 * to maintenance work orders.
+	 * 
+	 * @param rs The "rs" parameter is a ResultSet object, which is a table of data representing a
+	 * database result set. It is used to retrieve the data from the database query result. In this
+	 * method, the ResultSet object is used to retrieve the values of the columns in the current row of
+	 * the result set and
+	 * @return The method `buildMaintenanceObject` is returning a `Maintenance` object.
+	 */
 	private Maintenance buildMaintenanceObject(ResultSet rs) throws SQLException {
 		// create a new Maintenance object
 		Maintenance result = new Maintenance();
@@ -437,6 +568,16 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return result;
 	}
 
+	/**
+	 * This function builds a Service object by setting its general fields and a reference object from a
+	 * ResultSet.
+	 * 
+	 * @param rs The "rs" parameter is a ResultSet object, which is a table of data representing a
+	 * database result set. It is used to retrieve the data from the database query result. In this
+	 * method, the ResultSet object is used to build a Service object by setting its general fields and
+	 * service-specific fields.
+	 * @return The method `buildServiceObject` is returning a `Service` object.
+	 */
 	private Service buildServiceObject(ResultSet rs) throws SQLException {
 		// create a new Service object
 		Service result = new Service();
@@ -451,6 +592,15 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return result;
 	}
 
+	/**
+	 * This Java function builds a Repair object from a ResultSet object, setting its general fields and
+	 * specific fields.
+	 * 
+	 * @param rs rs is a ResultSet object that contains the data retrieved from a database query. It is
+	 * used to extract the values of the columns in the current row of the ResultSet and build a Repair
+	 * object from them.
+	 * @return The method `buildRepairObject` is returning a `Repair` object.
+	 */
 	private Repair buildRepairObject(ResultSet rs) throws SQLException {
 		// create a new Repair object
 		Repair result = new Repair();
@@ -466,6 +616,12 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return result;
 	}
 
+	/**
+	 * This Java function retrieves the latest key from a database connection.
+	 * 
+	 * @return The method is returning an integer value, which is the latest key retrieved from the
+	 * database. If there is an error while retrieving the latest key, the method returns -1.
+	 */
 	@Override
 	public int getLatestKey() {
 
@@ -490,6 +646,15 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return outputKey;
 	}
 
+	/**
+	 * This Java function retrieves a work order from a database by its ID and returns it as a Workorder
+	 * object.
+	 * 
+	 * @param workorderId an integer representing the ID of the workorder that needs to be retrieved from
+	 * the database.
+	 * @return This method returns a Workorder object with the details of a work order identified by the
+	 * given workorderId. If no work order is found with the given ID, it returns null.
+	 */
 	@Override
 	public Workorder getWorkorderById(int workorderId) throws SQLException {
 		Workorder workorder = null;
@@ -512,6 +677,13 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return workorder;
 	}
 
+	/**
+	 * This Java function retrieves a list of workorders by their IDs from a database.
+	 * 
+	 * @param workorderIds an array of integers representing the IDs of the workorders to retrieve from
+	 * the database.
+	 * @return A list of Workorder objects that match the given array of workorderIds.
+	 */
 	@Override
 	public List<Workorder> getWorkordersById(int[] workorderIds) {
 
@@ -539,13 +711,105 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		return workorders;
 	}
 
+	/**
+	 * This function builds a Workorder object from a ResultSet if the ResultSet contains a
+	 * workorder_id_PK column.
+	 * 
+	 * @param rs ResultSet object that contains the data retrieved from a database query. It represents a
+	 * set of rows retrieved from a database table or the result of any other database operation.
+	 * @return The method `buildWorkorderObjectFromResultset` returns a `Workorder` object that is built
+	 * from the data in the `ResultSet` parameter `rs`. If the `ResultSet` does not contain a valid
+	 * `workorder_id_PK` value, the method returns `null`.
+	 */
 	public Workorder buildWorkorderObjectFromResultset(ResultSet rs) throws SQLException {
 		if (DataBaseUtilities.check(rs, null, "workorder_id_PK")) {
 			return switchWorkorderBuilderFromResultSet(rs);
 		} else
 			return null;
 	}
-
+	
+	/**
+	 * This function searches a work order database based on various parameters and returns a list of
+	 * matching work orders.
+	 * 
+	 * @param name A string representing the title of the work order to search for.
+	 * @param priority A list of Short values representing the priority levels to search for in the work
+	 * order database.
+	 * @param location A string representing the location of the work orders to be searched.
+	 * @param isFinished A boolean value indicating whether to search for finished or unfinished work
+	 * orders. If true, the method will search for finished work orders, and if false, it will search for
+	 * unfinished work orders.
+	 * @return A list of Workorder objects that match the search criteria specified in the method
+	 * parameters.
+	 */
+	@Override
+	public List<Workorder> searchWorkOrderDataBase(String name, List<Short> priority, String location, boolean isFinished){
+		List<Workorder> workOrders = new ArrayList<>();
+		StringBuilder queryBuilder = new StringBuilder("SELECT * FROM WorkOrdersView WHERE 1=1");
+		List<Object> parameters = new ArrayList<>();
+		
+		if(name != null && !name.isEmpty()) {
+			queryBuilder.append(" AND workorder_title like ?");
+			parameters.add("%" + name + "%");
+		}
+		
+		if(priority != null && priority.size() != 0) {
+			queryBuilder.append(" AND workorder_priority IN (");
+			for (int i = 0; i < priority.size(); i++) {
+				queryBuilder.append("?");
+				if (i < priority.size() - 1) {
+                    queryBuilder.append(", ");
+                }
+                parameters.add(priority.get(i));
+			}
+			queryBuilder.append(")");
+		}
+		
+		if (location != null && !location.isEmpty()) {
+            queryBuilder.append(" AND location_id_PK = ?");
+            parameters.add(location);
+        }
+		
+		if(isFinished) {
+			queryBuilder.append(" AND workorder_finished = 1");
+		}
+		else {
+			queryBuilder.append(" AND workorder_finished = 0");
+		}
+		
+		String query = queryBuilder.toString();
+		
+		Connection con = DatabaseConnection.getInstance().getConnection();
+		try (PreparedStatement psSearchWorkOrders = con.prepareStatement(query)) {
+			
+			for (int i = 0; i < parameters.size(); i++) {
+				psSearchWorkOrders.setObject(i + 1, parameters.get(i));
+            }
+			
+			ResultSet rs = psSearchWorkOrders.executeQuery();
+			while (rs.next()) {
+				workOrders.add(switchWorkorderBuilderFromResultSet(rs));
+			}
+			
+		}catch (Exception e) {
+			System.out.println("ERROR SEARCHING WORKORDER DATABASE: ");
+			System.out.println(query);
+		}
+		
+		
+		return workOrders;
+	}
+	
+	
+	/**
+	 * This Java function builds a Workorder object by setting its general fields, dates, and related
+	 * objects from a ResultSet.
+	 * 
+	 * @param result an instance of the Workorder class that will be populated with data from the
+	 * ResultSet.
+	 * @param rs ResultSet object containing the data retrieved from the database query.
+	 * @return The method is returning a Workorder object.
+	 */
 	private Workorder buildGeneralFields(Workorder result, ResultSet rs) throws SQLException {
 
 		// General Fields
@@ -559,14 +823,18 @@ public class WorkOrderDB implements WorkOrderDBIF {
 		// Dates
 		result.setStartDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_startdate")));
 		result.setEndDate(DataBaseUtilities.convertSqlDateToCalendar(rs.getDate("workorder_enddate")));
-
-//		result.setSparepartsUsed(sparepartUsedDB.findSparepartListByWorkorderID(rs.getInt("workorder_id_PK")));
-//		result.setMeasurements(measurementDB.findMeasurementsByWorkOrderID(rs.getInt("workorder_id_PK")));
 		result.setEmployee(employeeDB.buildObjectFromResultset(rs));
 		result.setAsset(assetDB.buildObjectFromResultset(rs));
 		return result;
 	}
 
+	/**
+	 * The function switches between different types of workorders based on a string value and returns the
+	 * corresponding object.
+	 * 
+	 * @param rs ResultSet object that contains the data retrieved from a database query.
+	 * @return The method is returning a Workorder object.
+	 */
 	private Workorder switchWorkorderBuilderFromResultSet(ResultSet rs) throws SQLException {
 		Workorder workorder;
 		switch (rs.getString("workorder_type")) {
@@ -587,6 +855,16 @@ public class WorkOrderDB implements WorkOrderDBIF {
 
 	}
 
+	/**
+	 * This function sets the general fields of a work order in a prepared statement for insertion into a
+	 * database.
+	 * 
+	 * @param preparedStatement A prepared statement object that is used to execute a SQL statement with
+	 * parameters.
+	 * @param workOrder an object of the Workorder class that contains information about the work order
+	 * being created.
+	 * @param type The type of the work order (e.g. maintenance, repair, installation, etc.)
+	 */
 	private void setGeneralFieldsCreateWorkOrder(PreparedStatement preparedStatement, Workorder workOrder, String type)
 			throws SQLException {
 		preparedStatement.setString(1, workOrder.getTitle());

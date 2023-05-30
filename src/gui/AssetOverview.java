@@ -32,6 +32,10 @@ import gui.components.TableSwingWorker;
 import model.Asset;
 import java.awt.Component;
 
+/**
+ * The AssetOverview class is a JPanel that displays a table of assets and allows users to search, add,
+ * edit, and delete assets.
+ */
 public class AssetOverview extends JPanel {
 
 	// Textfields
@@ -84,8 +88,8 @@ public class AssetOverview extends JPanel {
 	private JSpinner spinner;
 	private MainFrame mainFrame;
 	private AssetController assetCtrl;
-	private JRoundedButton btnSwitchEmployeeWorkorders;
 	private Component verticalStrut;
+
 	/**
 	 * Create the panel.
 	 * 
@@ -94,6 +98,7 @@ public class AssetOverview extends JPanel {
 	public AssetOverview(MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		this.setName("Aktiv Oversigt");
+		assetCtrl = new AssetController();
 		setLayout(new BorderLayout(0, 0));
 		setPanels();
 		setLabelsAndTextfields();
@@ -103,12 +108,23 @@ public class AssetOverview extends JPanel {
 		setAssetOnStartUp();
 	}
 
+	/**
+	 * This function shows a pop-up menu when a mouse event is triggered.
+	 * 
+	 * @param e MouseEvent object that contains information about the mouse event that triggered the
+	 * method.
+	 */
 	private void showPopUp(MouseEvent e) {
 		if (e.isPopupTrigger()) {
 			popUp.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 
+	/**
+	 * The function handles the action performed when a specific option is selected from a pop-up menu.
+	 * 
+	 * @param e An ActionEvent object, which represents the user's action that triggered the event.
+	 */
 	private void popUpMenuAction(ActionEvent e) {
 		String s = e.getActionCommand();
 
@@ -117,6 +133,10 @@ public class AssetOverview extends JPanel {
 		}
 	}
 
+	/**
+	 * This function sets up a pop-up menu with a "Se asset" option that can be triggered by
+	 * right-clicking on a table.
+	 */
 	private void setPopUpMenu() {
 		popUp = new JPopupMenu();
 		JMenuItem details = new JMenuItem("Se asset");
@@ -143,10 +163,19 @@ public class AssetOverview extends JPanel {
 		assetTable.addMouseListener(ma);
 	}
 
+	/**
+	 * This function sets the loading status of assets and fetches asset data in a separate thread using a
+	 * SwingWorker.
+	 */
 	private void setAssetOnStartUp() {
 		String[][] loadingStatus = { { "Henter assets..." } };
 		assetTable.setNewData(loadingStatus);
-		assetCtrl = new AssetController();
+		// The above code is creating a new thread and defining its behavior using a lambda expression.
+		// Inside the thread, a new instance of the `TableSwingWorker` class is created with the `assetTable`
+		// and the result of calling the `getAllAssets()` method on the `assetCtrl` object as parameters. If
+		// a `SQLException` is thrown during this process, it will be printed to the console. Finally, the
+		// `execute()` method is called on the `dataFetcher` object to start the background task of fetching
+		// data and updating the `assetTable`.
 		Thread workerThread = new Thread(() -> {
 			TableSwingWorker dataFetcher = null;
 			try {
@@ -159,6 +188,9 @@ public class AssetOverview extends JPanel {
 		workerThread.start();
 	}
 
+	/**
+	 * The function sets up two tables with specified columns and adds them to their respective panels.
+	 */
 	private void setTables() {
 		String[] columns2 = new String[] { "Column", "Column1", "Column2", "Column3", "Column3" };
 		workOrderScrollPanel = new JScrollPane();
@@ -175,6 +207,12 @@ public class AssetOverview extends JPanel {
 		assetScrollPanel.setViewportView(assetTable);
 	}
 
+	/**
+	 * This function shows information about a selected asset and its work orders in a GUI.
+	 * 
+	 * @param editMode The editMode parameter is not used in the method and is therefore irrelevant. It is
+	 * likely a leftover parameter from previous versions of the code.
+	 */
 	@SuppressWarnings("unused")
 	private void showAsset(boolean editMode) {
 		int index = assetTable.findElement();
@@ -182,25 +220,21 @@ public class AssetOverview extends JPanel {
 		if (index == -1) {
 			GUIPopUpMessages.informationMessage("Intet asset valgt", "Fejl");
 		} else {
-			assetCtrl = new AssetController();
-			WorkOrderController controller = new WorkOrderController();
 			Object value = assetTable.getModel().getValueAt(index, 0);
-			ReadAsset readAsset = new ReadAsset(mainFrame);
+			ReadAsset readAsset = new ReadAsset(mainFrame); //TODO: Change to field and instantiate in constructor
 			int assetID = Integer.parseInt(value.toString());
 			mainFrame.setNewCenterPanel(readAsset);
 			Thread workerThread = new Thread(() -> {
 				try {
 					readAsset.initialize(assetCtrl.findAssetByID(assetID));
 				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					GUIPopUpMessages.warningMessage("Only letters in ID textbox", "Error!");
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					GUIPopUpMessages.warningMessage("Database connection problems", "Error!");
 				}
 				TableSwingWorker dataFetcher = null;
 				dataFetcher = new TableSwingWorker(readAsset.getHistoryTable(),
-						controller.getAllWorkOrdersByAssetID(assetID));
+						assetCtrl.getAllWorkOrdersForAssetByID(assetID));
 				dataFetcher.execute();
 			});
 			workerThread.start();
@@ -208,6 +242,9 @@ public class AssetOverview extends JPanel {
 		}
 	}
 
+	/**
+	 * This function sets up labels and text fields for a user interface in Java.
+	 */
 	private void setLabelsAndTextfields() {
 		lblNewLabel = new JLabel("Søg på ID");
 		topPanel.add(lblNewLabel);
@@ -277,6 +314,9 @@ public class AssetOverview extends JPanel {
 
 	}
 
+	/**
+	 * This function sets up and adds various buttons to different panels in a Java GUI.
+	 */
 	private void setButtons() {
 		searchButton = new JRoundedButton("Søg");
 		topPanel.add(searchButton);
@@ -292,22 +332,9 @@ public class AssetOverview extends JPanel {
 		addNewButton.setMaximumSize(new Dimension(110, 23));
 		addNewButton.setPreferredSize(new Dimension(110, 23));
 		addNewButton.setMinimumSize(new Dimension(30, 5));
-		
+
 		verticalStrut = Box.createVerticalStrut(4);
 		workOrderButtonPanel.add(verticalStrut);
-		
-		btnSwitchEmployeeWorkorders = new JRoundedButton("Tilføj ny");
-		btnSwitchEmployeeWorkorders.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnSwitchEmployeeWorkordersPressed();
-			}
-		});
-		btnSwitchEmployeeWorkorders.setText("Skift ejer");
-		btnSwitchEmployeeWorkorders.setPreferredSize(new Dimension(110, 23));
-		btnSwitchEmployeeWorkorders.setMinimumSize(new Dimension(30, 5));
-		btnSwitchEmployeeWorkorders.setMaximumSize(new Dimension(110, 23));
-		workOrderButtonPanel.add(btnSwitchEmployeeWorkorders);
-		workOrderButtonPanel.add(Box.createVerticalStrut(4));
 
 		editButton = new JRoundedButton("Rediger");
 		workOrderButtonPanel.add(editButton);
@@ -323,6 +350,9 @@ public class AssetOverview extends JPanel {
 		deleteButton.setMinimumSize(new Dimension(30, 5));
 	}
 
+	/**
+	 * This function sets up various panels with different layouts and adds them to the main frame.
+	 */
 	private void setPanels() {
 		topPanel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) topPanel.getLayout();
@@ -363,10 +393,6 @@ public class AssetOverview extends JPanel {
 		workOrderPanel.add(workOrderButtonPanel, BorderLayout.EAST);
 		workOrderButtonPanel.setLayout(new BoxLayout(workOrderButtonPanel, BoxLayout.Y_AXIS));
 
-	}
-	
-	private void btnSwitchEmployeeWorkordersPressed() {
-		
 	}
 
 }

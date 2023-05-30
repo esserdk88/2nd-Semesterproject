@@ -4,20 +4,31 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import other.Login;
+
+/**
+ * The DatabaseConnection class is a singleton class that manages connections to a SQL Server database,
+ * provides methods for starting, committing, and rolling back transactions, and checks the status of
+ * the connection.
+ */
 public class DatabaseConnection {
 
 	// Singleton instance variable
 	private static DatabaseConnection instance;
 	private static Connection connection;
+	private static boolean testingEnvironment;
 
 	// Connection string for connecting to SQL Server
-	private static final String CONNECTION_STRING = String.format(
-			"jdbc:sqlserver://%s:1433;encrypt=true;trustServerCertificate=true;databaseName=%s;user=%s;password=%s;",
-			other.Login.HOSTNAME,
-			other.Login.DATABASENAME,
-			other.Login.USERNAME,
-			other.Login.PASSWORD);
-
+	private String getConnectionString() {
+	    return String.format(
+	        "jdbc:sqlserver://%s:1433;encrypt=true;trustServerCertificate=true;databaseName=%s;user=%s;password=%s;",
+	        Login.HOSTNAME,
+	        testingEnvironment ? Login.TEST_DATABASE_NAME : Login.DATABASE_NAME,
+	        testingEnvironment ? Login.TEST_USERNAME : Login.USERNAME,
+	        Login.PASSWORD
+	    );
+	}
+	
 	
 	/**
 	 * Private constructor for the singleton pattern
@@ -36,6 +47,22 @@ public class DatabaseConnection {
 	public synchronized static DatabaseConnection getInstance() {
 		if (instance == null) {
 			instance = new DatabaseConnection();
+		}
+		return instance;
+	}
+	/**
+	 * FOR TESTING ONLY
+	 * The static instance for the DatabaseConnection
+	 * Used to access methods within the Singleton class when testing
+	 * Sets Database to testing database and commit is disabled
+	 * @return The Instance
+	 * @throws SQLException
+	 */
+	public synchronized static DatabaseConnection setTestingEnvironment() throws SQLException {
+		if (instance == null) {
+			testingEnvironment = true;
+			instance = new DatabaseConnection();
+			connection.setAutoCommit(false);
 		}
 		return instance;
 	}
@@ -62,8 +89,12 @@ public class DatabaseConnection {
 	 * Sets Auto Commit to false for the connection 
 	 * @throws SQLException
 	 */
-	public void startTransaction() throws SQLException {
-		connection.setAutoCommit(false);
+	public void startTransaction()  {
+		try {
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -73,10 +104,15 @@ public class DatabaseConnection {
 	 */
 	public void commitTransaction() throws SQLException {
 		try {
-			connection.commit();
+			if(!testingEnvironment) {
+				connection.commit();
+			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
-			connection.setAutoCommit(true);
+			if(!testingEnvironment) {
+				connection.setAutoCommit(true);
+			}
 		}
 	}
 
@@ -89,11 +125,13 @@ public class DatabaseConnection {
 		try {
 			connection.rollback();
 		} catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
-			connection.setAutoCommit(true);
+			if(!testingEnvironment) {
+				connection.setAutoCommit(true);
+			}
 		}
 	}
-
 	/**
 	 * Disconnected from the database
 	 * Closes your current connection
@@ -124,7 +162,11 @@ public class DatabaseConnection {
 
 		DriverManager.setLoginTimeout(5);
 		try {
-			connection = DriverManager.getConnection(CONNECTION_STRING);
+			System.out.println(getConnectionString());
+			connection = DriverManager.getConnection(getConnectionString());
+			if(testingEnvironment) {
+				connection.setAutoCommit(false);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -159,5 +201,4 @@ public class DatabaseConnection {
 		}
 		return isOpen;
 	}
-
 }
