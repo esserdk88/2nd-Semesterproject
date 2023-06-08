@@ -796,7 +796,6 @@ public class WorkOrderDB implements WorkOrderDBIF {
 			System.out.println(query);
 		}
 		
-		
 		return workOrders;
 	}
 	

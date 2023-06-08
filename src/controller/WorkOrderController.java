@@ -149,7 +149,7 @@ public class WorkOrderController implements WorkOrderControllerIF {
 	 * successfully updated in the database or not.
 	 */
 	@Override
-	public boolean switchEmployeeWorkorders(Workorder firstWorkorder, Workorder secondWorkorder, boolean concurrencyTest) throws Exception {
+	public synchronized boolean switchEmployeeWorkorders(Workorder firstWorkorder, Workorder secondWorkorder, boolean concurrencyTest) throws Exception {
 		//Make sure that both workorders aren't null
 		if(firstWorkorder == null || secondWorkorder == null) {
 			throw new Exception("One or both workorders are null"); 

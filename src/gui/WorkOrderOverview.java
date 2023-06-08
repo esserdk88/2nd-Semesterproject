@@ -212,7 +212,6 @@ public class WorkOrderOverview extends JPanel {
 	 * the results.
 	 */
 	private void btnSearchWorkOrdersPressed() {
-
 		String name = titleTextField.getText();
 		String location = departmentTextField.getText();
 		boolean isFinished = !unfinishedRadioButton.isSelected();

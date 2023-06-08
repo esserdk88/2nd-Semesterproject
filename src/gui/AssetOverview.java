@@ -64,6 +64,7 @@ public class AssetOverview extends JPanel {
 	private JPanel informationTextFieldPanel;
 	private JPanel workOrderPanel;
 	private JPanel workOrderButtonPanel;
+	private JPanel extraPanel;
 
 	// Labels
 	private JLabel lblNewLabel;
@@ -73,7 +74,6 @@ public class AssetOverview extends JPanel {
 	private JLabel subGroupLabel;
 	private JLabel serialNumberLabel;
 	private JLabel departmentLabel;
-	private JPanel extraPanel;
 	private JLabel maintenanceIntervalLabel;
 	private JLabel extraInfoLabel;
 
@@ -238,7 +238,6 @@ public class AssetOverview extends JPanel {
 				dataFetcher.execute();
 			});
 			workerThread.start();
-
 		}
 	}
 

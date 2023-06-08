@@ -535,15 +535,15 @@ public class ReadAsset extends JPanel {
 		centerPanel.add(txtEmployeeID, gbc_txtEmployeeID);
 		txtEmployeeID.setColumns(10);
 		
-				lblNewLabel_4 = new JLabel("Historik");
-				lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 12));
-				GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
-				gbc_lblNewLabel_4.fill = GridBagConstraints.HORIZONTAL;
-				gbc_lblNewLabel_4.gridwidth = 2;
-				gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
-				gbc_lblNewLabel_4.gridx = 1;
-				gbc_lblNewLabel_4.gridy = 8;
-				centerPanel.add(lblNewLabel_4, gbc_lblNewLabel_4);
+		lblNewLabel_4 = new JLabel("Historik");
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 12));
+		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
+		gbc_lblNewLabel_4.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblNewLabel_4.gridwidth = 2;
+		gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_4.gridx = 1;
+		gbc_lblNewLabel_4.gridy = 8;
+		centerPanel.add(lblNewLabel_4, gbc_lblNewLabel_4);
 
 		lblNewLabel_5 = new JLabel("Aktioner udført");
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -553,6 +553,5 @@ public class ReadAsset extends JPanel {
 		gbc_lblNewLabel_5.gridx = 4;
 		gbc_lblNewLabel_5.gridy = 8;
 		centerPanel.add(lblNewLabel_5, gbc_lblNewLabel_5);
-
 	}
 }
